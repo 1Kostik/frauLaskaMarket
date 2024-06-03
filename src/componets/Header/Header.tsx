@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from "react";
 import { containerStyles } from "@styles/variables";
-import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
+
 import { Section, LogoIcon } from "./Header.styled";
 
 const Header = () => {
@@ -9,7 +9,7 @@ const Header = () => {
     <Section>
       <div css={containerStyles}>
         
-          <Logo css={} />
+          <LogoIcon />
      
         <nav></nav>
       </div>
