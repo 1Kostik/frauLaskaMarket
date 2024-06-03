@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
+import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
 
-import { css } from "@emotion/react";
 export const Section = styled.header`
   width: 100vw;
   height: 72px;
@@ -16,13 +16,13 @@ export const Section = styled.header`
   }
 `;
 
-// export const LogoIcon = styled(Logo)`
-//   path {
-//     fill: black ;
-//   }
-// `;
-export const LogoIcon = css`
-  svg path {
-    fill: black; // Цвет, который вы хотите установить
+export const LogoIcon = styled(Logo)`
+  & path {
+    fill: red;
   }
 `;
+// export const LogoIcon = css`
+//   svg path {
+//     fill: black; // Цвет, который вы хотите установить
+//   }
+// `;
