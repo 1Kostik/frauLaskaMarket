@@ -5,6 +5,7 @@ import Header from "componets/Header/Header";
 import Footer from "componets/Footer/Footer";
 
 const SharedLayout = () => {
+ 
   return (
     <div>
       <Header />
