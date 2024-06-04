@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function StorePage() {
-  return (
-    <div>StorePage</div>
-  )
+  return <div>StorePage</div>;
 }
 
-export default StorePage
+export default StorePage;
