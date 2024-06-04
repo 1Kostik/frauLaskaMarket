@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const HealthyPage = () => {
-  return (
-    <div>HealthyPage</div>
-  )
-}
+  return <div>HealthyPage</div>;
+};
 
-export default HealthyPage
+export default HealthyPage;
