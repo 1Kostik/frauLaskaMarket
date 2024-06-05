@@ -59,8 +59,9 @@
   --btn-text-hover: (var(--text-grey));
   --btn-burger-hover: #b7b7b7;
   --border-color: #b7b7b7;
+  --text-silver: #b7b7b7;
   --fill-cart-hover: #b7b7b7;
-  
+
   --effectDuration: 0.3s ease;
 }
 *,
