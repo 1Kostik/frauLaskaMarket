@@ -19,7 +19,7 @@ export const Section = styled.header`
 `;
 
 export const LogoIcon = styled(Logo)`
-  width: 40px;
+  width: 49.5px;
   height: 40px;
   transition: var(--effectDuration);
   cursor: pointer;
@@ -56,11 +56,12 @@ export const Nav = styled(NavLink)`
   }
 `;
 export const Links = styled(Link)`
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   width: 222px;
   height: 40px;
+  padding: 6px 24px;
   text-decoration: none;
   border-radius: 100px;
   border: 1px solid var(--bg-light-grey);
@@ -70,7 +71,7 @@ export const Links = styled(Link)`
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
-  line-height: 24px; /* 133.333% */
+  line-height: 25px;
   letter-spacing: 0.15px;
   transition: var(--effectDuration);
   &:hover {
