@@ -34,7 +34,7 @@
   font-style: normal;
 }
 :root {
-  font-family: Inter, Arial; 
+  font-family: Inter, Arial;
   font-weight: 400;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -45,19 +45,22 @@
   padding: 0;
   scroll-behavior: smooth;
 
-  --bg-main-page:#e2e2e2;
+  --bg-main-page: #e2e2e2;
   --bg-black: #252525;
   --bg-light-grey: #d7d7d7;
   --text-black: #252525;
   --text-light-grey: #d7d7d7;
   --text-grey: #d9d9d9;
   --text-white: #fff;
-  --text-active-link-milk:#fffaef;
+  --text-active-link-milk: #fffaef;
   --bg-btn-grey: #d7d7d7;
   --bg-btn-grey-hover: #d9d9d9;
   --bg-btn-black: #252525;
   --btn-text-hover: (var(--text-grey));
-  --fill-cart-hover:#B7B7B7;
+  --btn-burger-hover: #b7b7b7;
+  --border-color: #b7b7b7;
+  --fill-cart-hover: #b7b7b7;
+  
   --effectDuration: 0.3s ease;
 }
 *,
