@@ -12,7 +12,7 @@ const Header = () => {
         <LogoIcon />
         <nav>
           <NavLink to={"/consultations"}>Консультації</NavLink>
-          <NavLink to={"/aroma-school"}>Школа ароматерапії</NavLink>        
+          <NavLink to={"/aroma-school"}>Школа ароматерапії</NavLink>
           <NavLink to={"/#target-section"}>Контакти</NavLink>
           <NavLink to={"/store"}>Магазин</NavLink>
           <Link to={"/cart"}>Корзина</Link>

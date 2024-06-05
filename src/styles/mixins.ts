@@ -7,7 +7,7 @@ export const onTablet = (styles: SerializedStyles) => css`
 `;
 
 export const onDesktop = (styles: SerializedStyles) => css`
-  @media (min-width: 1248px) {
+  @media (min-width: 1440px) {
     ${styles}
   }
 `;
