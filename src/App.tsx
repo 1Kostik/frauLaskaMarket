@@ -2,9 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import SharedLayout from "./SharedLayout/SharedLayout";
 import MainPage from "@pages/MainPage/MainPage";
 import HealthyPage from "@pages/HealthyPage/HealthyPage";
-import AromaSchool from "@pages/AromaSchool/SchoolPage";
+import AromaSchool from "@pages/SchoolPage/SchoolPage";
 import StorePage from "@pages/StorePage/StorePage";
-import CartPage from "@pages/BasketPage/CartPage";
+import CartPage from "@pages/CartPage/CartPage";
 
 function App() {
   return (
