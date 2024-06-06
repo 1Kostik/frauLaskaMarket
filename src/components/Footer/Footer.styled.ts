@@ -1,13 +1,13 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { onDesktop, onTablet } from "@styles/mixins";
+import { onDesktop } from "@styles/mixins";
 import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
 
 export const StyledLogo = styled(Logo)`
   & path {
     fill: var(--bg-light-grey);
   }
-  ${onTablet(css`
+  ${onDesktop(css`
     display: none;
   `)}
 `;
