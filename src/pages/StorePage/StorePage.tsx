@@ -1,7 +1,12 @@
-import React from "react";
+import HeroSection from "@components/HeroSection/HeroSection";
+
 
 function StorePage() {
-  return <div>StorePage</div>;
+  return (
+    <>
+      <HeroSection viewType={"other"}>Магазин</HeroSection>
+    </>
+  );
 }
 
 export default StorePage;
