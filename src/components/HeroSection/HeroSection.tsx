@@ -11,16 +11,18 @@ export interface HeroSectionProps {
   children?: ReactNode;
   bgImage?: string;
   viewType?: string;
+  id?:string;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
   children,
   bgImage,
   viewType,
+  id
 }) => {
 
   return (
-    <Section bgImage={bgImage} viewType={viewType}>
+    <Section bgImage={bgImage} viewType={viewType} id={id}>
       <Container css={containerStyles} viewType={viewType}>
         {Array.isArray(children) ? (
           <>

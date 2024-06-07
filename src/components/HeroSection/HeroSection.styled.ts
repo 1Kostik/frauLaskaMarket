@@ -22,8 +22,8 @@ export const Section = styled.section<HeroSectionProps>`
   }};
 
   background-repeat: no-repeat;
-  background-position: 50% 20px;
-  background-size: auto 800px;
+  background-position: 50%;
+  background-size: auto 820px;
 
   ${({ viewType }) =>
     viewType === "other" &&

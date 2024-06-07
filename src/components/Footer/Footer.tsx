@@ -20,7 +20,7 @@ import { ReactComponent as MCIcon } from "/src/assets/icons/master_card.svg";
 
 const Footer = () => {
   return (
-    <FooterStyled>
+    <FooterStyled id="footer">
       <Container css={containerStyles}>
         <StyledLogo />
         <Nav>
