@@ -2,9 +2,9 @@ import styled from "@emotion/styled";
 import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
 import { Link, NavLink } from "react-router-dom";
 import { css } from "@emotion/react";
-import { onDesktop } from "@styles/mixins";
+import { onDesktop, onTablet } from "@styles/mixins";
 interface SectionProps {
-  istrue?: boolean | string;
+  istrue?: string;
 }
 const combineStyles = (styles1: any, styles2: any) => css`
   ${styles1};
@@ -52,11 +52,11 @@ export const Button = styled.button<SectionProps>`
   }
   &:active {
     background-color: ${({ istrue }) =>
-      istrue ? "var(--bg-light-grey)" : "var(--bg-black)"};
+      istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
     ${burgerMenuStyles}:active {
       & path {
         fill: ${({ istrue }) =>
-          istrue ? "var(--bg-black)" : "var(--bg-light-grey)"};
+          istrue === "true" ? "var(--bg-black)" : "var(--bg-light-grey)"};
       }
     }
   }
@@ -88,7 +88,7 @@ export const Section = styled.header<SectionProps>`
   height: 72px;
   padding: 16px 0;
   background-color: ${({ istrue }) =>
-    istrue ? "var(--bg-black)" : "var(--bg-main-page)"};
+    istrue === "true" ? "var(--bg-black)" : "var(--bg-main-page)"};
   ${onDesktop(css`
     height: 80px;
     padding: 20px 0;
@@ -126,7 +126,9 @@ export const Nav = styled(NavLink)<SectionProps>`
     onDesktop(css`
       display: block;
       padding: 8px 16px;
-      color: ${istrue ? "var(--text-light-grey)" : "var(--text-black)"};
+      color: ${istrue === "true"
+        ? "var(--text-light-grey)"
+        : "var(--text-black)"};
       font-family: Fixel;
       font-size: 18px;
       font-style: normal;
@@ -156,8 +158,12 @@ export const Links = styled(Link)<SectionProps>`
       text-decoration: none;
       border-radius: 100px;
       border: 1px solid var(--bg-black);
-      background: ${istrue ? "var(--bg-light-grey)" : "var(--bg-black)"};
-      color: ${istrue ? "var(--text-black)" : "var(--text-light-grey)"};
+      background: ${istrue === "true"
+        ? "var(--bg-light-grey)"
+        : "var(--bg-black)"};
+      color: ${istrue === "true"
+        ? "var(--text-black)"
+        : "var(--text-light-grey)"};
       font-family: Fixel;
       font-size: 18px;
       font-style: normal;
@@ -166,9 +172,11 @@ export const Links = styled(Link)<SectionProps>`
       letter-spacing: 0.15px;
       transition: var(--effectDuration);
       &:hover {
-        color: ${istrue ? "var(--text-light-grey)" : "var(--text-black)"};
-        border: 1px solid ${istrue ? "var(--bg-light-grey)" : "var(--bg-black)"};
-        background: ${istrue ? "var(--bg-black)" : "var(--bg-light-grey)"};
+        border: 1px solid
+          ${istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
+        background: ${istrue === "true"
+          ? "var(--bg-black)"
+          : "var(--bg-light-grey)"};
       }
     `)}
 `;
@@ -178,6 +186,11 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  ${onTablet(css`    
+    width: 688px;
+    height: 40px;
+    gap: 8px;
+  `)}
   ${onDesktop(css`
     justify-content: unset;
     width: 1284px;
@@ -220,19 +233,21 @@ export const Cart = styled(Link)<SectionProps>`
   }
   &:active {
     background-color: ${({ istrue }) =>
-      istrue ? "var(--bg-light-grey)" : "var(--bg-black)"};
+      istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
     ${cartStyles}:active {
       & path {
         fill: ${({ istrue }) =>
-          istrue ? "var(--bg-black)" : "var(--bg-light-grey)"};
+          istrue === "true" ? "var(--bg-black)" : "var(--bg-light-grey)"};
       }
     }
   }
 `;
-export const cartStylesWithColor = (istrue:string) => css`
+export const cartStylesWithColor = (istrue: string) => css`
   ${cartStyles};
   &:active {
-    background-color: ${istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
+    background-color: ${istrue === "true"
+      ? "var(--bg-light-grey)"
+      : "var(--bg-black)"};
     & path {
       fill: ${istrue === "true" ? "var(--bg-black)" : "var(--bg-light-grey)"};
     }
@@ -242,32 +257,14 @@ export const cartStylesWithColor = (istrue:string) => css`
   }
 `;
 
-// export const cartStylesWithColor = (istrue: boolean) => css`
-//   ${combineStyles(
-//     cartStyles,
-//     css`
-//       &:active {
-//         background-color: ${istrue
-//           ? "var(--bg-light-grey)"
-//           : "var(--bg-black)"};
-//         & path {
-//           fill: ${istrue ? "var(--bg-black)" : "var(--bg-light-grey)"};
-//         }
-//       }
-
-//       path {
-//         fill: ${istrue ? "var(--bg-light-grey)" : "var(--bg-black)"};
-//       }
-//     `
-//   )};
-// `;
-
-export const anchorStyles = (istrue: boolean) => css`
+export const anchorStyles = (istrue: string) => css`
   display: none;
   ${onDesktop(css`
     display: block;
     padding: 8px 16px;
-    color: ${istrue ? "var(--text-light-grey)" : "var(--text-black)"};
+    color: ${istrue === "true"
+      ? "var(--text-light-grey)"
+      : "var(--text-black)"};
     font-family: Fixel;
     font-size: 18px;
     font-style: normal;

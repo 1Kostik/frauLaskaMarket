@@ -11,10 +11,10 @@ import plugImg3 from "/src/assets/images/humanitarian_aid.webp";
 const MainPage = () => {
   return (
     <>
-      <HeroSection bgImage={bgImage} viewType={"main"}>
+      <HeroSection bgImage={bgImage} viewType={"main"} id={"section1"}>
         Frau Laska
       </HeroSection>
-      <section style={{ backgroundColor: "#252525" }}>
+      <section style={{ backgroundColor: "#252525" }} id="section2">
         <ContentBox photo={plugImg1} contentGap={[16, 16, 20]} type={"type1"}>
           Більше 16 років я присвятила питанню оздоровлення та психологічного
           відновлення людей. З початком агресії країни терориста я почала
