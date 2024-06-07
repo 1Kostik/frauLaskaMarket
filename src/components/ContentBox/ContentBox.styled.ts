@@ -95,7 +95,7 @@ export const textContainer = (
 `;
 
 export const imgThumb = (
-  imgHeight: number | undefined,
+  textHeight: number | undefined,
   containerWidth: number | undefined,
   isHideMobileImg: boolean | undefined,
   type: string | undefined
@@ -103,7 +103,7 @@ export const imgThumb = (
   css`
     display: ${isHideMobileImg ? "none" : "block"};
     width: 100%;
-    height: ${imgHeight}px;
+    height: ${textHeight}px;
     border-radius: 32px;
     overflow: hidden;
 
