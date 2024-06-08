@@ -7,6 +7,8 @@ import bgImage from "/src/assets/images/hero_photo.webp";
 import plugImg1 from "/src/assets/images/plug1.svg";
 import plugImg2 from "/src/assets/images/plug2.svg";
 import plugImg3 from "/src/assets/images/humanitarian_aid.webp";
+import CardSlider from "@components/CardSlider/CardSlider";
+
 
 const MainPage = () => {
   return (
@@ -40,6 +42,7 @@ const MainPage = () => {
           натуропатії та практичної психології яку наразі розвиваю створюючи
           коло спеціалістів. З чого починається здоровя
         </ContentBox>
+        <CardSlider/>
         <ContentBox photo={plugImg3} contentGap={12} type={"type2"}>
           <h3>
             Добровольче обʼєднання патронатного супроводу військових «Sol»
@@ -53,6 +56,7 @@ const MainPage = () => {
           </p>
           <a href="#">Перейти</a>
         </ContentBox>
+        
       </section>
     </>
   );

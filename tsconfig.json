@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+    "typeRoots": ["node_modules/@types"],
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
@@ -9,7 +10,8 @@
     "paths": {
       "@styles/*": ["styles/*"],
       "@components/*": ["components/*"],
-      "@pages/*": ["pages/*"]
+      "@pages/*": ["pages/*"],
+      "@assets/*": ["assets/*"]
     },
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
