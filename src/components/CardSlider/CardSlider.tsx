@@ -1,193 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import cn from 'classnames';
-import SwiperCore, { Autoplay } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as SwiperClass } from 'swiper/types';
-import 'swiper/scss';
-import 'swiper/scss/navigation';
-import 'swiper/scss/pagination';
-import 'swiper/swiper-bundle.min.css';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { CardItem } from 'components/CardItem';
-import { Container, Content, Header, NavBtns, SliderSection, Title } from './CardSlider.styled';
-import { CommonBtn } from '@components/CommonBtn';
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { containerStyles } from "@styles/variables";
+import {
+  ArrowContainer,
+  Button,
+  Container,
+  H2,
+  TitleContainer,
+  arrowLeft,
+  arrowRight,
+  swiper,
+} from "./CardSlider.styled";
+import foto1 from "@assets/images/imagesSwiper/photo (2).png";
+import foto2 from "@assets/images/imagesSwiper/photo (1).png";
+import foto3 from "@assets/images/imagesSwiper/teleg (1).png";
+import foto4 from "@assets/images/imagesSwiper/teleg (2).png";
+import foto5 from "@assets/images/imagesSwiper/teleg (3).png";
+import { Swiper as SwiperClass } from "swiper/types";
+import { ReactComponent as ArrowRight } from "@assets/icons/arrow-right.svg";
+import { ReactComponent as ArrowLeft } from "@assets/icons/arrow-left.svg";
 
-SwiperCore.use([Autoplay]);
-
-interface Props {
-  title?: string;
-  cars?:[];
-}
-
-export const CardSlider: React.FC<Props> = ({ title, cars }) => {
+const CardSlider = () => {
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null);
-  const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
-  const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(false);
+
+  const updateNavigationState = (swiper: SwiperClass) => {
+    if (swiper.isBeginning) {
+      document.getElementById("prevButton")!.style.visibility = "hidden";
+    } else {
+      document.getElementById("prevButton")!.style.visibility = "visible";
+    }
+    if (swiper.isEnd) {
+      document.getElementById("nextButton")!.style.visibility = "hidden";
+    } else {
+      document.getElementById("nextButton")!.style.visibility = "visible";
+    }
+  };
 
   const handleClick = (direction: string) => {
-    if (direction === 'right') {
+    if (direction === "right") {
       swiperRef?.slideNext();
     } else {
       swiperRef?.slidePrev();
     }
-    setIsPrevBtnDisabled(() => swiperRef?.isBeginning as boolean);
-    setIsNextBtnDisabled(() => swiperRef?.isEnd as boolean);
   };
 
   useEffect(() => {
-    setIsNextBtnDisabled(
-      () => (swiperRef?.isBeginning as boolean) && (swiperRef?.isEnd as boolean),
-    );
-  }, [swiperRef?.isBeginning, swiperRef?.isEnd]);
+    if (swiperRef) {
+      updateNavigationState(swiperRef);
+      swiperRef.on("slideChange", () => updateNavigationState(swiperRef));
+    }
+  }, [swiperRef]);
 
   return (
-    <SliderSection>
+    <section css={containerStyles}>
       <Container>
-        <Header>
-          {title && <Title>{title}</Title>}
-          <NavBtns>
-            <CommonBtn
-              className={cn('squareBtn', 'squareBtn_left')}
-              isDisabled={isPrevBtnDisabled}
-              iconPath={<FaArrowLeft />}
-              onClick={() => handleClick('left')}
-            />
-            <CommonBtn
-              className={cn('squareBtn', 'squareBtn_right')}
-              isDisabled={isNextBtnDisabled}
-              iconPath={<FaArrowRight />}
-              onClick={() => handleClick('right')}
-            />
-          </NavBtns>
-        </Header>
-      </Container>
-      <Content>
+        <TitleContainer>
+          <H2>Діяльність у фотографіях</H2>
+          <ArrowContainer>
+            <Button id="prevButton" onClick={() => handleClick("left")}>
+              <ArrowLeft css={arrowLeft} />
+            </Button>
+            <Button id="nextButton" onClick={() => handleClick("right")}>
+              <ArrowRight css={arrowRight} />
+            </Button>
+          </ArrowContainer>
+        </TitleContainer>
         <Swiper
+          spaceBetween={12}
           onSwiper={setSwiperRef}
+          css={swiper}
           breakpoints={{
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 16,
+            360: {
+              slidesPerView: 1.06,
             },
             768: {
-              slidesPerView: 2,
-              spaceBetween: 20,
+              slidesPerView: 1.5,
             },
             1440: {
-              slidesPerView: 3,
-              spaceBetween: 24,
+              slidesPerView: 2.1,
             },
           }}
         >
-          {cars?.map((car, index) => (
-            <SwiperSlide className="slide" key={index}>
-              <CardItem car={car} key={car.id} />
-            </SwiperSlide>
-          ))}
+          <SwiperSlide>
+            <img src={foto1} alt="Фото 1" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={foto2} alt="Фото 2" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={foto3} alt="Фото 3" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={foto4} alt="Фото 4" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={foto5} alt="Фото 5" />
+          </SwiperSlide>
         </Swiper>
-      </Content>
-    </SliderSection>
+      </Container>
+    </section>
   );
 };
-// import React, { useEffect, useState } from 'react';
-// import cn from 'classnames';
-// import SwiperCore, { Autoplay } from 'swiper';
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import { Swiper as SwiperClass } from 'swiper/types';
-// import 'swiper/scss';
-// import 'swiper/scss/navigation';
-// import 'swiper/scss/pagination';
-// import 'swiper/swiper-bundle.min.css';
-// import '../../styles/blocks/_container.scss';
-// import styles from './CardSlider.module.scss';
-// import { CardItem } from 'components/CardItem';
-// import ArrowLeft from '../../assets/icons/arrow_left.svg';
-// import ArrowRight from '../../assets/icons/arrow_right.svg';
-// import { CommonBtn } from 'components/Buttons/CommonBtn';
-// import { ICar } from 'types/IСar';
 
-// SwiperCore.use([Autoplay]);
-
-// interface Props {
-//   title?: string;
-//   cars?: ICar[] | [];
-// }
-
-// export const CardSlider: React.FC<Props> = ({ title, cars }) => {
-//   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null);
-//   const [isPrevBtnDisabled, setIsPrevBtnDisabled] = useState(true);
-//   const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(false);
-//   const handleClick = (direction: string) => {
-//     if (direction === 'right') {
-//       swiperRef?.slideNext();
-//     } else {
-//       swiperRef?.slidePrev();
-//     }
-//     setIsPrevBtnDisabled(() => swiperRef?.isBeginning as boolean);
-//     setIsNextBtnDisabled(() => swiperRef?.isEnd as boolean);
-//   };
-//   useEffect(() => {
-//     setIsNextBtnDisabled(
-//       () =>
-//         (swiperRef?.isBeginning as boolean) && (swiperRef?.isEnd as boolean),
-//     );
-//   }, [swiperRef?.isBeginning, swiperRef?.isEnd]);
-
-//   return (
-//     <section className={styles.slider}>
-//       <div className="container">
-//         <div className={styles.header}>
-//           {title && <h2 className={styles.title}>{title}</h2>}
-//           <div className={styles.navBtns}>
-//             <CommonBtn
-//               className={cn(styles.squareBtn, styles.squareBtn_left)}
-//               isDisabled={isPrevBtnDisabled}
-//               iconPath={ArrowLeft}
-//               onClick={() => handleClick('left')}
-//             />
-
-//             <CommonBtn
-//               className={cn(styles.squareBtn, styles.squareBtn_right)}
-//               isDisabled={isNextBtnDisabled}
-//               iconPath={ArrowRight}
-//               onClick={() => handleClick('right')}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//       <div className={styles.content}>
-//         <Swiper
-//           // style={{ width: '100%' }}
-//           onSwiper={setSwiperRef}
-//           // slidesPerView={'auto'}
-//           // spaceBetween={24}
-//           className={styles.swiper}
-//           breakpoints={{
-//             320: {
-//               slidesPerView: 1,
-//               spaceBetween: 16,
-//             },
-//             768: {
-//               slidesPerView: 2,
-//               spaceBetween: 20,
-//             },
-//             1440: {
-//               slidesPerView: 3,
-//               spaceBetween: 24,
-//             },
-//           }}
-//         >
-//           {cars?.map((car, index) => (
-//             <SwiperSlide
-//               className={styles.slide}
-//               key={index}
-//               // style={{ width: '400px' }}
-//             >
-//               <CardItem car={car} key={car.id} />
-//             </SwiperSlide>
-//           ))}
-//         </Swiper>
-//       </div>
-//     </section>
-//   );
-// };
+export default CardSlider;

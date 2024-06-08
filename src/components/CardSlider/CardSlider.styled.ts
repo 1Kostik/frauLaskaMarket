@@ -1,247 +1,74 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { onDesktop, onTablet } from "@styles/mixins";
 
-export const SliderSection = styled.section`
-  width: 100%;
+export const swiper = css`
+  width: 340px;
+  height: 524px;
+
+  ${onTablet(css`
+    width: 728px;
+    height: 528px;
+  `)}
+
+  ${onDesktop(css`
+    width: 1360px;
+    height: 740px;
+  `)}
 `;
-
-export const Container = styled.div`
-  .container {
-    width: 100%;
-  }
-`;
-
-export const Header = styled.div`
+export const TitleContainer = styled.div`
   display: flex;
+  margin-bottom: 24px;
+  height: 40px;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  margin-block-end: 1.2rem;
+  ${onTablet(css``)}
+  ${onDesktop(css`
+    margin-bottom: 40px;
+  `)}
 `;
-
-export const Title = styled.h2`
-  font-size: var(--mobile-2xl);
-  font-weight: 700;
-  line-height: 120%;
-  color: var(--color-black);
-
-  @media (min-width: 768px) {
-    font-size: var(--tablet-2xl);
-    line-height: 100%;
-  }
-
-  @media (min-width: 1440px) {
-    font-size: var(--desktop-2xl);
-  }
+export const Container = styled.div`
+  width: 100%;
+  height: 640px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  ${onDesktop(css`
+    height: 900px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  `)}
 `;
-
-export const NavBtns = styled.div`
-  display: none;
-
-  @media (min-width: 768px) {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
+export const arrowLeft = css`
+  & path {
+    fill: var(--bg-light-grey);
   }
 `;
-
-export const Content = styled.div`
+export const arrowRight = css`
+  & path {
+    fill: var(--bg-light-grey);
+  }
+`;
+export const ArrowContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  user-select: none;
-  max-width: var(--mobile-min-width);
-  padding: 0 20px;
-  margin-inline: auto;
-
-  @media (min-width: 768px) {
-    max-width: var(--tablet-min-width);
-    box-sizing: border-box;
-    padding: 0 40px;
-  }
-
-  @media (min-width: 1440px) {
-    max-width: var(--desktop-min-width);
-    padding: 0 96px;
-  }
-
-  .swiper {
-    width: 320px;
-
-    @media (min-width: 768px) {
-      width: 688px;
-    }
-
-    @media (min-width: 1440px) {
-      width: 1248px;
-    }
-  }
-
-  .slide {
-    display: block;
-    box-sizing: border-box;
-
-    @media (min-width: 768px) {
-      max-width: 520px;
-      width: 100%;
-    }
-
-    &:first-child,
-    &:last-child {
-      @media (min-width: 768px) {
-        margin-inline: 0;
-      }
-    }
-  }
+  gap: 6px;
+  ${onTablet(css`
+    gap: 12px;
+  `)}
 `;
 
-export const squareBtn = css`
-  width: 32px;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  box-shadow: var(--shadow-btn);
-  border: none;
-
-  &:hover {
-    background-color: var(--bg-hover-btn);
-  }
-
-  img {
-    display: block;
-    width: 10px;
-    height: 20px;
-    object-fit: cover;
-  }
-
-  &.squareBtn_left img {
-    margin-inline-end: 2px;
-  }
-
-  &.squareBtn_right img {
-    margin-inline-start: 2px;
-  }
+export const Button = styled.button`
+  background: transparent;
 `;
-// @import '../../styles/utils/breakpoints';
-// @import '../../styles/utils/variables';
 
-// .slider {
-//   width: 100%;
-//   .swiper {
-//     width: 320px;
-//     // gap: 16px;
-//     @include onTablet {
-//       width: 688px;
-//     }
-//     @include onDesktop {
-//       width: 1248px;
-//     }
-//   }
-//   .content {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     gap: 1rem;
-//     user-select: none;
-//     max-width: $mobile-min-width;
-//     padding: 0 20px;
-//     margin-inline: auto;
-//     @include onTablet {
-//       max-width: $tablet-min-width;
-//       // margin-inline: auto;
-//       box-sizing: border-box;
-//       padding: 0 40px;
-//     }
-//     @include onDesktop {
-//       max-width: $desktop-min-width;
-//       padding: 0 96px;
-//     }
-//   }
-
-//   .header {
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     margin-block-end: 1.2rem;
-//   }
-
-//   .title {
-//     font-size: $mobile-2xl;
-//     font-weight: 700;
-//     line-height: 120%;
-//     color: $color-black;
-//     @include onTablet {
-//       font-size: $tablet-2xl;
-//       line-height: 100%;
-//     }
-//     @include onDesktop {
-//       font-size: $desctop-2xl;
-//     }
-//   }
-
-//   .navBtns {
-//     display: none;
-
-//     @include onTablet {
-//       display: flex;
-//       justify-content: center;
-//       gap: 0.5rem;
-//     }
-//   }
-
-//   .slide {
-//     display: block;
-//     box-sizing: border-box;
-//     // width: 264px;
-
-//     @include onTablet {
-//       max-width: 520px;
-//       width: 100%;
-//     }
-
-//     &:first-child {
-//       // margin-inline-start: $mobile-padding;
-//     }
-
-//     &:last-child {
-//       margin-inline-end: $mobile-padding;
-//     }
-
-//     &:first-child,
-//     &:last-child {
-//       @include onTablet {
-//         margin-inline: 0;
-//       }
-//     }
-//   }
-// }
-
-// .squareBtn {
-//   width: 32px;
-//   aspect-ratio: 1/1;
-//   border-radius: 50%;
-//   box-shadow: $shadow-btn;
-//   border: none;
-
-//   &:hover {
-//     background-color: $bg-hover-btn;
-//   }
-
-//   img {
-//     display: block;
-//     width: 10px;
-//     height: 20px;
-//     object-fit: cover;
-//   }
-
-//   &.squareBtn_left {
-//     img {
-//       margin-inline-end: 2px;
-//     }
-//   }
-
-//   &.squareBtn_right {
-//     img {
-//       margin-inline-start: 2px;
-//     }
-//   }
-// }
+export const H2 = styled.h2`
+  color: var(--text-light-grey);
+  font-size: 22px;
+  font-family: Fixel;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 100%; /* 22px */
+  letter-spacing: 0.44px;
+  ${onDesktop(css`
+    font-size: 32px;
+  `)}
+`;
