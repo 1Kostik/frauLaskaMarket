@@ -1,0 +1,47 @@
+import styled from "@emotion/styled";
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  /* width: 360; */
+  height: 456px;
+  border: 1px solid var(--bg-light-grey);
+  padding: 24px;
+  border-radius: 16px;
+`;
+export const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+`;
+export const P1 = styled.p`
+  width: 100%;
+  color: var(--text-light-grey);
+  font-family: Arial;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+`;
+export const H3 = styled.h3`
+  color: var(--text-light-grey);
+  font-family: Fixel;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 110%;
+  letter-spacing: 1.6px;
+`;
+export const P2 = styled.p`
+  color: var(--text-light-grey);
+  font-family: Arial;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+  letter-spacing: 1px;
+`;

@@ -1,11 +1,15 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
-
+interface Props {
+  isMainPage: boolean;
+}
 export const swiper = css`
   width: 340px;
   height: 524px;
-
+  img {
+    object-fit: cover;
+  }
   ${onTablet(css`
     width: 728px;
     height: 528px;
@@ -14,6 +18,22 @@ export const swiper = css`
   ${onDesktop(css`
     width: 1360px;
     height: 740px;
+  `)}
+`;
+export const reviews = css`
+  width: 343px;
+  height: 456px;
+  img {
+    object-fit: cover;
+  }
+  ${onTablet(css`
+    width: 728px;
+    height: 456px;
+  `)}
+
+  ${onDesktop(css`
+    width: 1360px;
+    height: 456px;
   `)}
 `;
 export const TitleContainer = styled.div`
@@ -27,16 +47,23 @@ export const TitleContainer = styled.div`
     margin-bottom: 40px;
   `)}
 `;
-export const Container = styled.div`
+export const Container = styled.div<Props>`
   width: 100%;
-  height: 640px;
+  height: ${({ isMainPage }) => (isMainPage ? "640px" : "563px")};
   padding-top: 24px;
   padding-bottom: 24px;
-  ${onDesktop(css`
-    height: 900px;
-    padding-top: 40px;
-    padding-bottom: 40px;
-  `)}
+  ${({ isMainPage }) =>
+    isMainPage
+      ? onDesktop(css`
+          height: 900px;
+          padding-top: 40px;
+          padding-bottom: 40px;
+        `)
+      : onDesktop(css`
+          height: 616px;
+          padding-top: 40px;
+          padding-bottom: 40px;
+        `)};
 `;
 export const arrowLeft = css`
   & path {
@@ -48,9 +75,9 @@ export const arrowRight = css`
     fill: var(--bg-light-grey);
   }
 `;
-export const ArrowContainer = styled.div`
+export const ArrowContainer = styled.div<Props>`
   display: flex;
-  gap: 6px;
+  gap: ${({ isMainPage }) => (isMainPage ? "6px" : "12px")};
   ${onTablet(css`
     gap: 12px;
   `)}
