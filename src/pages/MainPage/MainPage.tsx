@@ -1,23 +1,37 @@
 import React from "react";
 
 import HeroSection from "@components/HeroSection/HeroSection";
-import ContentBox from "@components/ContentBox/ContentBox";
-
-import bgImage from "/src/assets/images/hero_photo.webp";
-import plugImg1 from "/src/assets/images/plug1.svg";
-import plugImg2 from "/src/assets/images/plug2.svg";
-import plugImg3 from "/src/assets/images/humanitarian_aid.webp";
+import HistorySection from "./HistorySection/HistorySection";
+import ProjectsSection from "./ProjectsSection/ProjectsSection";
+import MyWaySection from "./MyWaySection/MyWaySection";
 import CardSlider from "@components/CardSlider/CardSlider";
 
+import bgImage from "/src/assets/images/hero_photo.webp";
+// import plugImg1 from "/src/assets/images/plug1.svg";
+// import plugImg2 from "/src/assets/images/plug2.svg";
+// import plugImg3 from "/src/assets/images/humanitarian_aid.webp";
+// import plugImg4 from "/src/assets/images/legs-in-stockings.webp";
+// import CardSlider from "@components/CardSlider/CardSlider";
 
 const MainPage = () => {
   return (
     <>
-      <HeroSection bgImage={bgImage} viewType={"main"} id={"section1"}>
+      <HeroSection bgImage={bgImage} viewType={"main"} id="section1">
         Frau Laska
       </HeroSection>
-      <section style={{ backgroundColor: "#252525" }} id="section2">
-        <ContentBox photo={plugImg1} contentGap={[16, 16, 20]} type={"type1"}>
+      <HistorySection />
+      <CardSlider />
+      <ProjectsSection />
+      <MyWaySection />
+    </>
+  );
+};
+
+export default MainPage;
+
+{
+  /* <section style={{ backgroundColor: "#252525" }} id="section2">
+        <ContentBox photo={plugImg1} contentGap={[16, 16, 20]} type={"info"}>
           Більше 16 років я присвятила питанню оздоровлення та психологічного
           відновлення людей. З початком агресії країни терориста я почала
           активно допомагати військовим в питаннях психологічної підтримки,
@@ -30,7 +44,7 @@ const MainPage = () => {
           contentGap={[16, 16, 20]}
           isHideMobileImg={true}
           changeDirection={true}
-          type={"type1"}
+          type={"info"}
         >
           За цей період яктивно вивчала психологію (в більшості роботу з
           метафоричними картами в період кризи, втрат, військових дій).
@@ -42,8 +56,8 @@ const MainPage = () => {
           натуропатії та практичної психології яку наразі розвиваю створюючи
           коло спеціалістів. З чого починається здоровя
         </ContentBox>
-        <CardSlider/>
-        <ContentBox photo={plugImg3} contentGap={12} type={"type2"}>
+        <CardSlider />
+        <ContentBox photo={plugImg3} contentGap={12} type={"projects"}>
           <h3>
             Добровольче обʼєднання патронатного супроводу військових «Sol»
           </h3>
@@ -56,10 +70,13 @@ const MainPage = () => {
           </p>
           <a href="#">Перейти</a>
         </ContentBox>
-        
-      </section>
-    </>
-  );
-};
-
-export default MainPage;
+        <ContentBox
+          photo={plugImg4}
+          type="myWay"
+          changeDirection={true}
+          isHideMobileImg={true}
+        >
+          Мій шлях
+        </ContentBox>
+      </section> */
+}
