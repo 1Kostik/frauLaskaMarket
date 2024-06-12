@@ -1,10 +1,10 @@
-import React from "react";
-import ContentBox from "@components/ContentBox/ContentBox";
-import plugImg1 from "/src/assets/images/plug1.svg";
- import plugImg2 from "/src/assets/images/plug2.svg";
-import plugImg3 from "/src/assets/images/humanitarian_aid.webp";
-import { projectsFlex, section } from "./ProjectsSection.styled";
+import ContentBox from "@components/ContentBox";
 import { containerStyles } from "@styles/variables";
+import { projectsFlex, section } from "./ProjectsSection.styled";
+
+import plugImg1 from "/src/assets/images/plug3.svg";
+import plugImg2 from "/src/assets/images/plug4.svg";
+import plugImg3 from "/src/assets/images/humanitarian_aid.webp";
 
 const ProjectsSection = () => {
   return (
