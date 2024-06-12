@@ -16,8 +16,10 @@ export const box = (
   padding: ${type === "info" ? "24px 0" : "0"};
   gap: ${Array.isArray(contentGap) ? contentGap[0] : contentGap}px;
 
-  border: ${type === "projects" ? "1px solid var(--border-grey);" : "none"};
-  border-radius: ${type === "myWay" ? "0" : "24px"};
+  border: ${type === "projects"
+    ? "1px solid var(--content-box-border);"
+    : "none"};
+  border-radius: ${type === "myWay" ? "0" : "12px"};
 
   ${onTablet(css`
     flex-direction: ${changeDirection ? " row-reverse" : "row"};
@@ -34,7 +36,12 @@ export const textContainer = (type: string | undefined) => css`
   padding: ${type === "projects" ? "24px" : "0"};
   color: var(--text-light-grey);
 
+  ${onTablet(css`
+    width: ${type === "projects" ? "338px" : "100%"};
+  `)}
+
   ${onDesktop(css`
+    width: ${type === "projects" ? "636px" : "100%"};
     padding: ${type === "projects" ? "32px" : "0"};
   `)}
 
@@ -80,19 +87,25 @@ export const textContainer = (type: string | undefined) => css`
   & a {
     position: relative;
     display: block;
-    width: 98px;
-    padding: 10px 0;
+    width: 50px;
+    padding: 8px 0;
+
     font-family: Fixel;
-    font-size: 22px;
-    line-height: 32px;
-    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.1px;
     color: inherit;
+
+    ${onDesktop(css`
+      width: 58px;
+      font-size: 14px;
+    `)}
     &::after {
       content: "";
       display: block;
       position: absolute;
       width: 100%;
-      border-bottom: 1px solid var(--text-light-grey);
+      border-bottom: 1px solid transparent;
     }
     &:hover::after {
       border-bottom: 2px solid var(--text-light-grey);
@@ -110,7 +123,7 @@ export const imgThumb = (
     display: ${isHideMobileImg ? "none" : "block"};
     width: 100%;
     height: ${textHeight || 0}px;
-    border-radius: ${type === "myWay" ? "0" : "32px"};
+    border-radius: ${type === "myWay" ? "0" : "12px"};
     overflow: hidden;
 
     background-image: url(${photo});
@@ -124,12 +137,15 @@ export const imgThumb = (
 
     ${type === "projects" &&
     css`
-      height: 320px;
+      height: 380px;
+
       ${onTablet(css`
-        height: 397px;
+        width: ${type === "projects" ? "338px" : "100%"};
+        height: auto;
       `)}
       ${onDesktop(css`
-        height: 636px;
+        width: ${type === "projects" ? "636px" : "100%"};
+        height: 380px;
       `)}
     `}
 

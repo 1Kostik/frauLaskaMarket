@@ -1,8 +1,9 @@
-import React from "react";
-import ContentBox from "@components/ContentBox/ContentBox";
-import plugImg4 from "/src/assets/images/legs-in-stockings.webp";
-import { containerStyles } from "@styles/variables";
 import { css } from "@emotion/react";
+
+import ContentBox from "@components/ContentBox";
+import { containerStyles } from "@styles/variables";
+
+import plugImg4 from "/src/assets/images/legs-in-stockings.webp";
 
 const MyWaySection = () => {
   return (
