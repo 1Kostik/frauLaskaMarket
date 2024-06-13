@@ -1,151 +1,85 @@
 import HeroSection from "@components/HeroSection/HeroSection";
+import ProductCard from "@components/ProductCard/ProductCard";
+import { useState } from "react";
+import {
+  Container,
+  SearchContainer,
+  Button,
+  Section,
+  MaineContainer,
+  Wrapper,
+  ProductListContainer,
+} from "./StorePage.styled";
+import StoreFilter from "@components/StoreFilter/StoreFilter";
+import SearchStore from "@components/SearchStore/SearchStore";
+import SortingItems from "@components/SortingItems/SortingItems";
+import Pagination from "@components/Pagination/Pagination";
 
 function StorePage() {
-  const arrNumders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const [openFilter, setOpenFilter] = useState(false);
+  const arrNumbers = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const countItemPages = 12;
+  const lastIndex = currentPage * countItemPages;
+  const firstIndex = lastIndex - countItemPages;
+  const currentItem = arrNumbers.slice(firstIndex, lastIndex);
+  const totalPage = arrNumbers.length;
+  const lastPage = Math.ceil(totalPage / countItemPages);
+
+  const paginate = (page: number) => setCurrentPage(page);
+  const nextPage = () =>
+    setCurrentPage((prev) => {
+      if (prev === lastPage) {
+        return prev;
+      }
+      return prev + 1;
+    });
+  const prevPage = () =>
+    setCurrentPage((prev) => {
+      if (prev === 1) {
+        return prev;
+      }
+      return prev - 1;
+    });
+  const handleOpenFilter = () => {
+    setOpenFilter((prev) => !prev);
+  };
   return (
     <>
       <HeroSection viewType={"other"}>Магазин</HeroSection>
-      <section
-        style={{
-          padding: "60px 78px",
-          background: "#252525",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            gap: "24px",
-            width:"1284px",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          <div
-            style={{
-              width: "312px",
-              height: "758px",
-              border: "1px solid #d7d7d7",
-              borderRadius: "16px",
-              padding: "20px 26px",
-            }}
-          >
-            <h2 style={{ color: "#d7d7d7" }}>Фільтр</h2>
-          </div>
-          <div
-            style={{
-              width: "948px",
-              height: "1708px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "24px",
-              }}
-            >
-              <input
-                type="text"
-                id="search"
-                placeholder="search"
-                style={{
-                  width: "200px",
-                  height: "40px",
-                  border: "1px solid #d7d7d7",
-                  borderRadius: "24px",
-                  padding: "8px 12px",
-                }}
-              />
-              <div style={{ display: "flex", gap: "24px" }}>
-                <button
-                  style={{
-                    border: "1px solid #d7d7d7",
-                    borderRadius: "24px",
-                    padding: "8px 12px",
-                  }}
-                >
-                  Фільтр
-                </button>
-                <div
-                  style={{ display: "flex", gap: "12px", alignItems: "center" }}
-                >
-                  <h4 style={{ color: "#d7d7d7" }}>Сортувати за</h4>
-                  <select
-                    name=""
-                    id=""
-                    style={{
-                      width: "311px",
-                      height: "40px",
-                      border: "1px solid #d7d7d7",
-                      borderRadius: "24px",
-                      padding: "8px 12px",
-                    }}
-                  ></select>
-                </div>
-              </div>
-            </div>
+      <Section>
+        <MaineContainer>
+          {openFilter && <StoreFilter closeFilter={setOpenFilter} />}
+          <Container>
+            <SearchContainer>
+              <SearchStore />
+              <Wrapper>
+                <Button onClick={handleOpenFilter}>Фільтр</Button>
+                <SortingItems />
+              </Wrapper>
+            </SearchContainer>
 
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "20px",
-                width: "100%",
-              }}
-            >
-              {arrNumders &&
-                arrNumders.map((item) => (
-                  <div
-                    style={{
-                      width: "302px",
-                      height: "396px",
-                      borderRadius: "16px",
-                    }}
-                    key={item}
-                  >
-                    <div
-                      style={{
-                        width: "302px",
-                        height: "336px",
-                        marginBottom: "8px",
-                        background: "#b7b7b7",
-                        borderRadius: "16px",
-                      }}
-                    >
-                      {/* <img src="" alt="" style={{ border:"none" }} /> */}
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "4px",
-                      }}
-                    >
-                      <h5
-                        style={{
-                          width: "100%",
-                          height: "24px",
-                          color: "#d7d7d7",
-                        }}
-                      >
-                        Назва продукту
-                      </h5>
-                      <p
-                        style={{
-                          width: "100%",
-                          height: "24px",
-                          color: "#d7d7d7",
-                        }}
-                      >
-                        324 грн
-                      </p>
-                    </div>
-                  </div>
+            <ProductListContainer>
+              {currentItem &&
+                currentItem.map((item) => (
+                  <ProductCard key={item} show={openFilter} />
                 ))}
-            </div>
-          </div>
-        </div>
-      </section>
+            </ProductListContainer>
+          </Container>
+        </MaineContainer>
+        <Pagination
+          totalPage={totalPage}
+          countItemPages={countItemPages}
+          paginate={paginate}
+          nextPage={nextPage}
+          prevPage={prevPage}
+          currentPage={currentPage}
+          lastPage={lastPage}
+        />
+      </Section>
     </>
   );
 }
