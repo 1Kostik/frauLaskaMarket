@@ -1,9 +1,9 @@
-export type myWay = {
+export type MyWay = {
   year: number;
   description: string;
 };
 
-export const myWayHistoryArr: myWay[] = [
+export const myWayHistoryArr: MyWay[] = [
   {
     year: 2005,
     description:

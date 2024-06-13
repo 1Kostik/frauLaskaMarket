@@ -226,6 +226,14 @@ export const titleContainer = css`
   }
 `;
 
+export const btnWrapper = css`
+  display: flex;
+  gap: 6px;
+  ${onTablet(css`
+    gap: 12px;
+  `)}
+`;
+
 export const swiperContainer = css`
   width: 340px;
   padding-top: 32px;

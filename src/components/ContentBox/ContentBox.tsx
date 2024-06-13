@@ -2,11 +2,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   box,
+  btnWrapper,
   imgThumb,
   linkStyle,
   linkWrapper,
   myWayContenContainer,
-  // paddingsForMyWay,
   slideStyle,
   swiperContainer,
   textContainer,
@@ -20,7 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import "swiper/css";
 
-import { myWay, myWayHistoryArr } from "@assets/myWayHistoryArr";
+import { MyWay, myWayHistoryArr } from "@assets/myWayHistoryArr";
 import { Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 
@@ -98,19 +98,20 @@ const ContentBox: React.FC<ContentBoxProps> = ({
   return (
     // <div
     //   css={[containerStyles, type === "myWay" && paddingsForMyWay]}
-      // ref={containerRef}
+    // ref={containerRef}
     // >
-      <div css={box(contentGap, changeDirection, type)}>
-        {(type === "projects" || type === "info") && (
-          <div css={textContainer(type)}>
-            {typeof children === "string" && <p ref={textRef}>{children}</p>}
-            {typeof children === "object" && children}
-          </div>
-        )}
-        {type === "myWay" && (
-          <div css={myWayContenContainer}>
-            <div css={titleContainer}>
-              <h2>{children}</h2>
+    <div css={box(contentGap, changeDirection, type)}>
+      {(type === "projects" || type === "info") && (
+        <div css={textContainer(type)}>
+          {typeof children === "string" && <p ref={textRef}>{children}</p>}
+          {typeof children === "object" && children}
+        </div>
+      )}
+      {type === "myWay" && (
+        <div css={myWayContenContainer}>
+          <div css={titleContainer}>
+            <h2>{children}</h2>
+            <div css={btnWrapper}>
               <button onClick={handlePrev} ref={refPrevBtn}>
                 <ArrowLeft />
               </button>
@@ -118,40 +119,41 @@ const ContentBox: React.FC<ContentBoxProps> = ({
                 <ArrowRight />
               </button>
             </div>
-            <Swiper
-              css={swiperContainer}
-              slidesPerView={1.088}
-              onSwiper={(swiper) => setSwiper(swiper)}
-              scrollbar={{ draggable: true }}
-              modules={[Navigation]}
-              navigation={{
-                prevEl: "#prevButton",
-                nextEl: "#nextButton",
-              }}
-              breakpoints={{
-                360: { slidesPerView: 1.088, spaceBetween: 16 },
-                1440: { slidesPerView: 2, spaceBetween: 20 },
-              }}
-            >
-              {myWayHistoryArr &&
-                myWayHistoryArr.map((item: myWay, i) => (
-                  <SwiperSlide key={i}>
-                    <div css={slideStyle}>
-                      <p>{item.year}</p>
-                      <p>{item.description}</p>
-                    </div>
-                  </SwiperSlide>
-                ))}
-            </Swiper>
-            <div css={linkWrapper}>
-              <Link to="/cart" css={linkStyle}>
-                Сертифікати
-              </Link>
-            </div>
           </div>
-        )}
-        <div css={imgThumb(textHeight, isHideMobileImg, type, photo)}></div>
-      </div>
+          <Swiper
+            css={swiperContainer}
+            slidesPerView={1.088}
+            onSwiper={(swiper) => setSwiper(swiper)}
+            scrollbar={{ draggable: true }}
+            modules={[Navigation]}
+            navigation={{
+              prevEl: "#prevButton",
+              nextEl: "#nextButton",
+            }}
+            breakpoints={{
+              360: { slidesPerView: 1.088, spaceBetween: 16 },
+              1440: { slidesPerView: 2, spaceBetween: 20 },
+            }}
+          >
+            {myWayHistoryArr &&
+              myWayHistoryArr.map((item: MyWay, i) => (
+                <SwiperSlide key={i}>
+                  <div css={slideStyle}>
+                    <p>{item.year}</p>
+                    <p>{item.description}</p>
+                  </div>
+                </SwiperSlide>
+              ))}
+          </Swiper>
+          <div css={linkWrapper}>
+            <Link to="/cart" css={linkStyle}>
+              Сертифікати
+            </Link>
+          </div>
+        </div>
+      )}
+      <div css={imgThumb(textHeight, isHideMobileImg, type, photo)}></div>
+    </div>
     // </div>
   );
 };
