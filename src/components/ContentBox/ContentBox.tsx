@@ -93,8 +93,7 @@ const ContentBox: React.FC<ContentBoxProps> = ({
       };
     }
   }, [swiper]);
-console.log('type', type)
-console.log('typeof children',  children)
+
   return (
     <div css={box(contentGap, changeDirection, type)}>
       {(type === "projects" || type === "info") && (
@@ -122,10 +121,10 @@ console.log('typeof children',  children)
             onSwiper={(swiper) => setSwiper(swiper)}
             scrollbar={{ draggable: true }}
             modules={[Navigation]}
-            navigation={{
-              prevEl: "#prevButton",
-              nextEl: "#nextButton",
-            }}
+            // navigation={{
+            //   prevEl: refPrevBtn.current,
+            //   nextEl: refNextBtn.current,
+            // }}
             breakpoints={{
               360: { slidesPerView: 1.088, spaceBetween: 16 },
               1440: { slidesPerView: 2, spaceBetween: 20 },
