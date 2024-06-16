@@ -5,9 +5,6 @@ import { containerStyles } from "@styles/variables";
 
 import plugImg1 from "/src/assets/images/plug1.svg";
 import plugImg2 from "/src/assets/images/plug2.svg";
-import QuestionsBox from "@components/QABox/QABox";
-import { questionsArr } from "@assets/questionsArr";
-
 
 const HistorySection = () => {
   return (
@@ -43,7 +40,6 @@ const HistorySection = () => {
           натуропатії та практичної психології яку наразі розвиваю створюючи
           коло спеціалістів. З чого починається здоровя
         </ContentBox>
-        <QuestionsBox content={questionsArr} />
       </div>
     </section>
   );

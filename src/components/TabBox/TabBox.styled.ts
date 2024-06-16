@@ -84,17 +84,17 @@ export const contentWrapper = css`
   `)}
 `;
 
-export const imgThumb = (wrapperWidth: number | undefined) => css`
+export const imgThumb = (wrapperWidth: number | undefined, isHideRadius: boolean) => css`
   display: none;
   width: ${wrapperWidth && wrapperWidth / 2}px;
-  border-radius: 34px;
+  border-radius: ${isHideRadius ? "0" : "34px"};
   overflow: hidden;
 
-  & img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  font-family: Arial;
+  font-size: 16px;
+  line-height: 120%;
+  letter-spacing: 1px;
+  color: var(--text-light-grey);
 
   ${onTablet(css`
     display: block;
@@ -103,7 +103,15 @@ export const imgThumb = (wrapperWidth: number | undefined) => css`
 
   ${onDesktop(css`
     height: 600px;
+
+    font-size: 20px;
   `)}
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 export const infoContainer = (wrapperWidth: number | undefined) => css`
