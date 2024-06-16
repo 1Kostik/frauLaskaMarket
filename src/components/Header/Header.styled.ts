@@ -83,7 +83,7 @@ export const burgerStyles = (istrue: string) => css`
 `;
 
 export const Section = styled.header<SectionProps>`
-z-index: 100;
+  z-index: 100;
   position: fixed;
   width: 100vw;
   height: 72px;
@@ -173,6 +173,9 @@ export const Links = styled(Link)<SectionProps>`
       letter-spacing: 0.15px;
       transition: var(--effectDuration);
       &:hover {
+        color: ${istrue === "true"
+          ? "var( --text-light-grey)"
+          : "var(--text-black)"};
         border: 1px solid
           ${istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
         background: ${istrue === "true"
@@ -187,7 +190,7 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  ${onTablet(css`    
+  ${onTablet(css`
     width: 688px;
     height: 40px;
     gap: 8px;
