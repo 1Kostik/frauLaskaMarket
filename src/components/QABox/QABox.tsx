@@ -2,6 +2,7 @@ import { useState } from "react";
 import { nanoid } from "nanoid";
 import { QaType } from "@assets/questionsArr";
 import {
+  boxContainer,
   contentContainer,
   imgThumb,
   qaCard,
@@ -15,7 +16,7 @@ interface QaProps {
   content: QaType[];
 }
 
-const QuestionsBox: React.FC<QaProps> = ({ content }) => {
+const QABox: React.FC<QaProps> = ({ content }) => {
   const [openedCards, setOpenedCards] = useState<number[]>([]);
 
   const handleOpenCard = (id: number) => {
@@ -27,7 +28,7 @@ const QuestionsBox: React.FC<QaProps> = ({ content }) => {
   };
 
   return (
-    <div>
+    <div css={boxContainer}>
       <h3 css={titleStyle}>Питання</h3>
       <div css={contentContainer}>
         <div css={imgThumb}></div>
@@ -51,4 +52,4 @@ const QuestionsBox: React.FC<QaProps> = ({ content }) => {
   );
 };
 
-export default QuestionsBox;
+export default QABox;

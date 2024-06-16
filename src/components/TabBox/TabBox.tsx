@@ -20,9 +20,10 @@ interface TabBoxProps {
   title: string;
   content: Tab[];
   photo?: string;
+  children?: string;
 }
 
-const TabBox: React.FC<TabBoxProps> = ({ title, content, photo }) => {
+const TabBox: React.FC<TabBoxProps> = ({ title, content, photo, children }) => {
   const [wrapperWidth, setWrapperWidth] = useState<number | undefined>(
     undefined
   );
@@ -101,8 +102,8 @@ const TabBox: React.FC<TabBoxProps> = ({ title, content, photo }) => {
         )}
       </div>
       <div css={contentWrapper}>
-        <div css={imgThumb(wrapperWidth)}>
-          {photo && <img src={photo} alt="photo" />}
+        <div css={imgThumb(wrapperWidth, !!children)}>
+          {children ? children : photo && <img src={photo} alt="photo" />}
         </div>
 
         <div css={infoContainer(wrapperWidth)}>

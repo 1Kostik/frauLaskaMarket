@@ -1,5 +1,11 @@
-// import { containerStyles } from "@styles/variables";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore from "swiper";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+
 import {
   box,
   btnWrapper,
@@ -16,13 +22,7 @@ import {
 import { ReactComponent as ArrowLeft } from "/src/assets/icons/arrow-left.svg";
 import { ReactComponent as ArrowRight } from "/src/assets/icons/arrow-right.svg";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
-import "swiper/css";
-
 import { MyWay, myWayHistoryArr } from "@assets/myWayHistoryArr";
-import { Navigation } from "swiper/modules";
-import { Link } from "react-router-dom";
 
 interface ContentBoxProps {
   children: React.ReactNode;
@@ -44,7 +44,6 @@ const ContentBox: React.FC<ContentBoxProps> = ({
   const [textHeight, setTextHeight] = useState<number | undefined>(undefined);
   const [swiper, setSwiper] = useState<SwiperCore | null>(null);
 
-  // const containerRef = useRef<HTMLDivElement | null>(null);
   const textRef = useRef<HTMLDivElement | null>(null);
   const refPrevBtn = useRef<HTMLButtonElement | null>(null);
   const refNextBtn = useRef<HTMLButtonElement | null>(null);
@@ -94,12 +93,9 @@ const ContentBox: React.FC<ContentBoxProps> = ({
       };
     }
   }, [swiper]);
-
+console.log('type', type)
+console.log('typeof children',  children)
   return (
-    // <div
-    //   css={[containerStyles, type === "myWay" && paddingsForMyWay]}
-    // ref={containerRef}
-    // >
     <div css={box(contentGap, changeDirection, type)}>
       {(type === "projects" || type === "info") && (
         <div css={textContainer(type)}>
@@ -154,7 +150,6 @@ const ContentBox: React.FC<ContentBoxProps> = ({
       )}
       <div css={imgThumb(textHeight, isHideMobileImg, type, photo)}></div>
     </div>
-    // </div>
   );
 };
 

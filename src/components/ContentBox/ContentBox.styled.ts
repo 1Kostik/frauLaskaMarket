@@ -122,7 +122,7 @@ export const imgThumb = (
   css`
     display: ${isHideMobileImg ? "none" : "block"};
     width: 100%;
-    height: ${textHeight || 0}px;
+    height: ${textHeight || "auto"}px;
     border-radius: ${type === "myWay" ? "0" : "12px"};
     overflow: hidden;
 
