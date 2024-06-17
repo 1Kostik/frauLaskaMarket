@@ -3,41 +3,69 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/navigation";
 import "swiper/css";
 import "./CardSlaider.css";
-import { containerStyles } from "@styles/variables";
 import {
   ArrowContainer,
   Button,
   Container,
   H2,
   TitleContainer,
+  arrowBigLeft,
+  arrowBigRight,
+  arrowContainer,
   arrowLeft,
+  arrowOnImg,
   arrowRight,
-  reviews,
+  breakpoints,
+  btnOnImg,
   swiper,
 } from "./CardSlider.styled";
-import foto1 from "@assets/images/imagesSwiper/photo (2).png";
-import foto2 from "@assets/images/imagesSwiper/photo (1).png";
-import foto3 from "@assets/images/imagesSwiper/teleg (1).png";
-import foto4 from "@assets/images/imagesSwiper/teleg (2).png";
-import foto5 from "@assets/images/imagesSwiper/teleg (3).png";
+
 import { ReactComponent as ArrowRight } from "@assets/icons/arrow-right.svg";
 import { ReactComponent as ArrowLeft } from "@assets/icons/arrow-left.svg";
 import { ReactComponent as ArrowShortLeft } from "@assets/icons/arrow-short-left.svg";
 import { ReactComponent as ArrowShortRight } from "@assets/icons/arrow-short-right.svg";
 import { CardItem } from "@components/CardItem";
 import { Navigation } from "swiper/modules";
-import { useLocation } from "react-router-dom";
+import { LuArrowRight } from "react-icons/lu";
+import { LuArrowLeft } from "react-icons/lu";
 import SwiperCore from "swiper";
+import { StyleProps } from "@pages/MainPage/CardSliderSection/CardSliderSection";
 
-const CardSlider = () => {
-  const location = useLocation();
-  const isMainPage = location.pathname === "/";
+export interface Itext {
+  id: number;
+  name: string;
+  activity: string;
+  description: string;
+}
+
+interface CardSliderProps {
+  renderArrayImg?: string[];
+  renderArrayText?: Itext[];
+  stylesProps: StyleProps;
+}
+
+const CardSlider: React.FC<CardSliderProps> = ({
+  renderArrayImg,
+  renderArrayText,
+  stylesProps,
+}) => {
   const [swiperRef, setSwiperRef] = useState<SwiperCore | null>(null);
+  const [navigation, setNavigation] = useState<{
+    prevEl: HTMLElement | null;
+    nextEl: HTMLElement | null;
+  }>({
+    prevEl: null,
+    nextEl: null,
+  });
   useEffect(() => {
     if (swiperRef) {
       const updateNavigationState = () => {
-        const prevButton = document.getElementById("prevButton");
-        const nextButton = document.getElementById("nextButton");
+        const prevButton = document.getElementById(
+          stylesProps.prevEl?.[0] || ""
+        );
+        const nextButton = document.getElementById(
+          stylesProps.nextEl?.[0] || ""
+        );
 
         if (prevButton && nextButton) {
           if (swiperRef.isBeginning) {
@@ -55,131 +83,86 @@ const CardSlider = () => {
       };
 
       swiperRef.on("slideChange", updateNavigationState);
-      updateNavigationState(); // Initial check
+      updateNavigationState();
     }
-  }, [swiperRef]);
+  }, [swiperRef, stylesProps.prevEl, stylesProps.nextEl]);
 
+  useEffect(() => {
+    const prevEl = document.getElementById(stylesProps.prevEl?.[0] || "");
+    const nextEl = document.getElementById(stylesProps.nextEl?.[0] || "");
+    setNavigation({ prevEl, nextEl });
+  }, [stylesProps.prevEl, stylesProps.nextEl]);
   const handleSwiper = (swiper: SwiperCore) => {
     setSwiperRef(swiper);
   };
-
-  const images = [foto1, foto2, foto3, foto4, foto5];
-  const text = [
-    {
-      id: 1,
-      name: "Lera",
-      activity: "фітнес тренер",
-      description:
-        "Знання в школі допомогли мені створити свою лінію аромакомпозицій для клієнтів які домогамають отримати найшвидкіші результати в сфері краси тіла",
-    },
-    {
-      id: 2,
-      name: "Sveta",
-      activity: "домогосподарка, мама",
-      description:
-        "Ароматерапія, навіть з першого курсу, відкрилася для мене як спосіб допомоги рідним природним способом. Я змінила звичні ліки на аромааптечку. Дякую",
-    },
-    {
-      id: 3,
-      name: "Lena",
-      activity: "масажист, психолог",
-      description:
-        "Дякую за знання! Вони допомогли мені мати свій особливий відхід до допомоги клієнтам. Мало хто з колег працює професійно з ефірними оліями.",
-    },
-    {
-      id: 4,
-      name: "Anna",
-      activity: "студент",
-      description:
-        "Знання в школі допомогли мені створити свою лінію аромакомпозицій для клієнтів які домогамають отримати найшвидкіші результати в сфері краси тіла",
-    },
-    {
-      id: 5,
-      name: "Anna",
-      activity: "студент",
-      description:
-        "Знання в школі допомогли мені створити свою лінію аромакомпозицій для клієнтів які домогамають отримати найшвидкіші результати в сфері краси тіла",
-    },
-    {
-      id: 6,
-      name: "Anna",
-      activity: "студент",
-      description:
-        "Знання в школі допомогли мені створити свою лінію аромакомпозицій для клієнтів які домогамають отримати найшвидкіші результати в сфері краси тіла",
-    },
-    {
-      id: 7,
-      name: "Anna",
-      activity: "студент",
-      description:
-        "Знання в школі допомогли мені створити свою лінію аромакомпозицій для клієнтів які домогамають отримати найшвидкіші результати в сфері краси тіла",
-    },
-  ];
-
+  console.log(
+    "stylesProps.display?.[0]:>> ",
+    stylesProps.display?.[0] !== "none"
+  );
+  console.log(" stylesProps.display?.[1]", stylesProps.display?.[1] !== "none");
   return (
-    <section css={containerStyles}>
-      <Container isMainPage={isMainPage}>
+    <Container stylesProps={stylesProps}>
+      {(stylesProps.display?.[0] !== "none" ||
+        stylesProps.display?.[1] !== "none") && (
         <TitleContainer>
-          {isMainPage ? <H2>Діяльність у фотографіях</H2> : <H2>Відгуки</H2>}
-
-          <ArrowContainer isMainPage={isMainPage}>
-            <Button id="prevButton">
-              {isMainPage ? (
-                <ArrowLeft css={arrowLeft} />
-              ) : (
+          {stylesProps.display?.[0] !== "none" && (
+            <H2>Діяльність у фотографіях</H2>
+          )}
+          {stylesProps.display?.[1] !== "none" && <H2>Відгуки</H2>}
+          <ArrowContainer stylesProps={stylesProps}>
+            <Button id={stylesProps.prevEl?.[0]}>
+              {stylesProps.display?.[0] !== "none" && (
+                <ArrowLeft css={arrowBigLeft} />
+              )}
+              {stylesProps.display?.[1] !== "none" && (
                 <ArrowShortLeft css={arrowLeft} />
               )}
             </Button>
-            <Button id="nextButton">
-              {isMainPage ? (
-                <ArrowRight css={arrowRight} />
-              ) : (
-                <ArrowShortRight css={arrowLeft} />
+            <Button id={stylesProps.nextEl?.[0]}>
+              {stylesProps.display?.[0] !== "none" && (
+                <ArrowRight css={arrowBigRight} />
+              )}
+              {stylesProps.display?.[1] !== "none" && (
+                <ArrowShortRight css={arrowRight} />
               )}
             </Button>
           </ArrowContainer>
         </TitleContainer>
-        <Swiper
-          onSwiper={handleSwiper}
-          css={isMainPage ? swiper : reviews}
-          breakpoints={{
-            360: {
-              slidesPerView: 1.06,
-              spaceBetween: 16,
-            },
-            768: {
-              slidesPerView: isMainPage ? 1.5:2.1 ,
-              spaceBetween: isMainPage ? 12 : 16,
-            },
-            1440: {
-              slidesPerView: isMainPage ? 2.1 : 3.5,
-              spaceBetween: isMainPage ? 12 : 20,
-            },
-          }}
-          modules={[Navigation]}
-          navigation={{
-            prevEl: "#prevButton",
-            nextEl: "#nextButton",
-          }}
-        >
-          {isMainPage
-            ? images &&
-              images.length > 0 &&
-              images.map((item, i) => (
-                <SwiperSlide className="swiper-slide image-slide" key={i}>
-                  <img src={item} alt="" />
-                </SwiperSlide>
-              ))
-            : text &&
-              text.length > 0 &&
-              text.map((item) => (
-                <SwiperSlide className="swiper-slide text-slide" key={item.id}>
-                  <CardItem text={item} />
-                </SwiperSlide>
-              ))}
-        </Swiper>
-      </Container>
-    </section>
+      )}
+      {stylesProps.display?.[2] !== "none" && (
+        <div css={arrowContainer(stylesProps)}>
+          <button id={stylesProps.prevEl?.[0]} css={btnOnImg}>
+            <LuArrowLeft css={arrowOnImg} />
+          </button>
+          <button id={stylesProps.nextEl?.[0]} css={btnOnImg}>
+            <LuArrowRight css={arrowOnImg} />
+          </button>
+        </div>
+      )}
+      <Swiper
+        onSwiper={handleSwiper}
+        css={swiper(stylesProps)}
+        breakpoints={breakpoints(stylesProps)}
+        modules={[Navigation]}
+        navigation={navigation}
+      >
+        {renderArrayImg
+          ? renderArrayImg &&
+            renderArrayImg.length > 0 &&
+            renderArrayImg.map((item, i) => (
+              <SwiperSlide className="swiper-slide image-slide" key={i}>
+                <img src={item} alt="" />
+              </SwiperSlide>
+            ))
+          : renderArrayText &&
+            renderArrayText.length > 0 &&
+            renderArrayText.map((item) => (
+              <SwiperSlide className="swiper-slide text-slide" key={item.id}>
+                <CardItem text={item} />
+              </SwiperSlide>
+            ))}
+      </Swiper>
+    </Container>
   );
 };
 

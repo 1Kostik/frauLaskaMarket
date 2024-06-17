@@ -8,9 +8,12 @@ export const Container = styled.div`
 `;
 
 export const SearchContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 24px;
+  display: none;
+  ${onTablet(css`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  `)}
   ${onDesktop(css``)}
 `;
 
@@ -75,13 +78,13 @@ export const ProductListContainer = styled.div`
   ${onTablet(css`
     display: flex;
     flex-wrap: wrap;
+    flex-direction: unset;
     width: 100%;
-    gap: 16px;
+    gap: 20px;
   `)}
   ${onDesktop(css`
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
   `)}
 `;

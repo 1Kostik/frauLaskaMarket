@@ -1,14 +1,19 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { onDesktop, onTablet } from "@styles/mixins";
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
   /* width: 360; */
-  height: 456px;
+  height: 451px;
   border: 1px solid var(--bg-light-grey);
   padding: 24px;
   border-radius: 16px;
+  ${onDesktop(css`
+    height: 456px;
+  `)}
 `;
 export const TitleWrapper = styled.div`
   display: flex;

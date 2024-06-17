@@ -16,8 +16,18 @@ import {
   svgArrowUp,
   svgArrowDpwn,
 } from "./SortingItems.styled";
-
-const SortingItems = () => {
+interface ISortingItProps {
+  isNone?: boolean;
+  options: string[];
+  padding?: string;
+  borderRadius?: string;
+}
+const SortingItems: React.FC<ISortingItProps> = ({
+  isNone,
+  options,
+  padding,
+  borderRadius,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
@@ -47,18 +57,16 @@ const SortingItems = () => {
     setChecked(true);
     setIsOpen(false);
   };
-  const options = [
-    "Від найменшої ціни до найбільшої",
-    "Від найбільшої ціни до найменшої",
-    "За ретингом",
-    "За популярністю",
-  ];
-
   return (
     <Container>
-      <H4>Сортувати за</H4>
+      <H4 isNone={isNone}>Сортувати за</H4>
       <SelectContainer>
-        <SelectTitleContainer onClick={handleClick} isOpen={isOpen}>
+        <SelectTitleContainer
+          onClick={handleClick}
+          isOpen={isOpen}
+          padding={padding}
+          borderRadius={borderRadius}
+        >
           <P isOpen={isOpen}>
             {selectedOption ? selectedOption : selectedOption}
           </P>
@@ -71,10 +79,10 @@ const SortingItems = () => {
         {isOpen && (
           <SelectOptionContainer>
             {options.map((option, i) => (
-              <SelectOne key={option+i}>
+              <SelectOne key={option + i}>
                 <SvgContainer>
                   {checked && selectedOption === option && (
-                    <Checked css={svgCheckedStyles}  />
+                    <Checked css={svgCheckedStyles} />
                   )}
                 </SvgContainer>
                 <SelectOption key={i} onClick={() => handleSelect(option)}>
