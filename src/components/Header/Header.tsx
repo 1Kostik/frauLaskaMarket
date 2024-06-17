@@ -19,16 +19,18 @@ import {
   Button,
   WrapperMenu,
 } from "./Header.styled";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ModalMobileHeader from "./ModalMobileHeader/ModalMobileHeader";
 const modalPortal = document.querySelector("#portal-root");
 
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
 const Header = () => {
   const location = useLocation();
+  const {id} = useParams();
   const isAromaSchool = location.pathname === "/aroma-school";
   const isConsultations = location.pathname === "/consultations";
   const isStore = location.pathname === "/store";
+  const isProductDetails=location.pathname ===`/store/${id}`;
   const isCart = location.pathname === "/cart";
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,6 +46,7 @@ const Header = () => {
     isConsultations ||
     isAromaSchool ||
     isOpen ||
+    isProductDetails ||
     isScrolled
       ? "true"
       : "false";
