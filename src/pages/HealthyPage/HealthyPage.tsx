@@ -2,6 +2,8 @@ import HeroSection from "@components/HeroSection/HeroSection";
 import bgImage from "/src/assets/images/gradient_banner.svg";
 import CardSliderSection from "@pages/MainPage/CardSliderSection/CardSliderSection";
 import { text } from "@assets/answers";
+import InfoSection from "./InfoSection/InfoSection";
+
 
 const HealthyPage = () => {
   const healthyPageProps = {
@@ -25,8 +27,9 @@ const HealthyPage = () => {
       <HeroSection bgImage={bgImage} viewType="school">
         <p>Сильна і міцна нація починається зі здорового способу життя.</p>
         <h1>Оздоровлення</h1>
-      </HeroSection>
-      <CardSliderSection renderArrayText={text}
+      </HeroSection>    
+      <InfoSection />
+        <CardSliderSection renderArrayText={text}
       stylesProps={healthyPageProps}
       />
     </>

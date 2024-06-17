@@ -51,6 +51,7 @@
   --bg-btn-grey: #d7d7d7;
   --bg-btn-grey-hover: #d9d9d9;
   --bg-btn-black: #252525;
+  --bg-btn-submit: #a5a5a5;
 
   --text-black: #252525;
   --text-light-grey: #d7d7d7;
@@ -58,6 +59,7 @@
   --text-white: #fff;
   --text-active-link-milk: #fffaef;
   --text-silver: #b7b7b7;
+  --text-dark-grey: #bfbfbf;
 
   --btn-text-hover: (var(--text-grey));
   --btn-show-more-hover: #a5a5a5;
@@ -65,7 +67,7 @@
 
   --border-color: #b7b7b7;
   --border-gray: #bfbfbf;
-  --border-light-grey: #D7D7D7;
+  --border-light-grey: #d7d7d7;
   --content-box-border: #bfbfbf54;
 
   --fill-cart-hover: #b7b7b7;

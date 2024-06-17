@@ -1,12 +1,5 @@
-export interface Info {
-  title: string;
-  description: string;
-}
+import { Tab } from "./tabArr";
 
-export interface Tab {
-  chapter: string;
-  info: Info[];
-}
 
 export const tabContent: Tab[] = [
   {

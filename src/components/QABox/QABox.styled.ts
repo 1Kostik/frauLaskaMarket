@@ -1,6 +1,13 @@
 import { css } from "@emotion/react";
 import { onDesktop, onTablet } from "@styles/mixins";
 
+export const boxContainer = css`
+  padding: 24px 0;
+  ${onDesktop(css`
+    padding: 40px 0;
+  `)}
+`;
+
 export const titleStyle = css`
   margin-bottom: 16px;
 
