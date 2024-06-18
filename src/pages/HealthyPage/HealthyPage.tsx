@@ -3,6 +3,7 @@ import bgImage from "/src/assets/images/gradient_banner.svg";
 import CardSliderSection from "@pages/MainPage/CardSliderSection/CardSliderSection";
 import { text } from "@assets/answers";
 import InfoSection from "./InfoSection/InfoSection";
+import PlansSection from "./PlansSection/PlansSection";
 
 
 const HealthyPage = () => {
@@ -32,6 +33,7 @@ const HealthyPage = () => {
         <CardSliderSection renderArrayText={text}
       stylesProps={healthyPageProps}
       />
+         <PlansSection />
     </>
   );
 };
