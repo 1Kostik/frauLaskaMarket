@@ -14,8 +14,10 @@ import StoreFilter from "@components/StoreFilter/StoreFilter";
 import SearchStore from "@components/SearchStore/SearchStore";
 import SortingItems from "@components/SortingItems/SortingItems";
 import Pagination from "@components/Pagination/Pagination";
+import { useNavigate } from "react-router-dom";
 
 function StorePage() {
+  const navigate = useNavigate();
   const [openFilter, setOpenFilter] = useState(false);
   const arrNumbers = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
@@ -47,6 +49,15 @@ function StorePage() {
   const handleOpenFilter = () => {
     setOpenFilter((prev) => !prev);
   };
+  const handleOnClickCard = (id: number) => {
+    navigate(`${id}`);
+  };
+    const options = [
+    "Від найменшої ціни до найбільшої",
+    "Від найбільшої ціни до найменшої",
+    "За ретингом",
+    "За популярністю",
+  ];
   return (
     <>
       <HeroSection viewType={"other"}>Магазин</HeroSection>
@@ -58,14 +69,19 @@ function StorePage() {
               <SearchStore />
               <Wrapper>
                 <Button onClick={handleOpenFilter}>Фільтр</Button>
-                <SortingItems />
+                <SortingItems options={options} />
               </Wrapper>
             </SearchContainer>
 
             <ProductListContainer>
               {currentItem &&
                 currentItem.map((item) => (
-                  <ProductCard key={item} show={openFilter} />
+                  <ProductCard
+                    key={item}
+                    show={openFilter}
+                    handleOnClickCard={handleOnClickCard}
+                    id={item}
+                  />
                 ))}
             </ProductListContainer>
           </Container>

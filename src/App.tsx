@@ -5,6 +5,7 @@ import HealthyPage from "@pages/HealthyPage/HealthyPage";
 import AromaSchool from "@pages/SchoolPage/SchoolPage";
 import StorePage from "@pages/StorePage/StorePage";
 import CartPage from "@pages/CartPage/CartPage";
+import ProductDetails from "@pages/ProductDetails/ProductDetails";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="consultations" element={<HealthyPage />} />
           <Route path="aroma-school" element={<AromaSchool />} />
           <Route path="store" element={<StorePage />} />
+          <Route path="store/:id" element={<ProductDetails />} />
           <Route path="cart" element={<CartPage />} />
         </Route>
       </Routes>
