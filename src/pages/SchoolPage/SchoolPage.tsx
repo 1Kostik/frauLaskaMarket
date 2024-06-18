@@ -1,5 +1,4 @@
 import HeroSection from "@components/HeroSection/HeroSection";
-import bgImage from "/src/assets/images/gradient_banner.svg";
 import CardSliderSection from "@pages/MainPage/CardSliderSection/CardSliderSection";
 import { text } from "@assets/answers";
 
