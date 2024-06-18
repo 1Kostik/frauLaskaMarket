@@ -2,6 +2,7 @@ import HeroSection from "@components/HeroSection/HeroSection";
 import bgImage from "/src/assets/images/gradient_banner.svg";
 import CardSlider from "@components/CardSlider/CardSlider";
 import InfoSection from "./InfoSection/InfoSection";
+import PlansSection from "./PlansSection/PlansSection";
 
 const HealthyPage = () => {
   return (
@@ -12,6 +13,7 @@ const HealthyPage = () => {
       </HeroSection>
       <InfoSection />
       <CardSlider />
+      <PlansSection />
     </>
   );
 };

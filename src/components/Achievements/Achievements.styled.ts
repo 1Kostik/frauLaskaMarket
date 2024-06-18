@@ -16,6 +16,7 @@ export const container = css`
 
   ${onDesktop(css`
     gap: 20px;
+    padding: 40px 0;
   `)}
 
   & div {
