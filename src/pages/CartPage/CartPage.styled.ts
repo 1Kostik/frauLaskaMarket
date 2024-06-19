@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { onDesktop, onTablet } from "@styles/mixins";
 
 export const sectionCart = css`
   padding: 24px 0px;
@@ -9,6 +10,9 @@ export const sectionCart = css`
 export const TitleContainer = styled.div`
   width: 100%;
   margin-bottom: 16px;
+  ${onTablet(css`
+    width: 312px;
+  `)};
 `;
 export const H2 = styled.h2`
   width: 100%;
@@ -20,14 +24,23 @@ export const H2 = styled.h2`
   line-height: 120%;
   letter-spacing: 0.36px;
 `;
-export const ItemContainer = styled.div`
+export const ItemInfoContainer = styled.div`
   width: 100%;
-  height: 122px;
+  height: 120px;
   display: flex;
   border: 1px solid var(--bg-light-grey);
   border-radius: 16px;
   gap: 8px;
-  padding: 12px;
+  padding: 11px;
+  ${onTablet(css`
+    width: 360px;
+  `)};
+  ${onDesktop(css`
+    height: auto;
+    width: 512px;
+    gap: 12px;
+    padding: 15px;
+  `)};
 `;
 export const ImgContainer = styled.div`
   width: 96px;
@@ -126,8 +139,66 @@ export const NewPrice = styled.span`
   line-height: 110%;
   letter-spacing: 1.6px;
 `;
-export const Price = styled.div` 
+export const Price = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+`;
+export const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  ${onDesktop(css`
+    flex-direction: unset;
+    gap: 20px;
+  `)};
+`;
+export const ItemContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  ${onTablet(css`
+    flex-direction: unset;
+    gap: 16px;
+  `)};
+  ${onDesktop(css`
+    width: 844px;
+    gap: 20px;
+  `)};
+`;
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  ${onDesktop(css`
+    gap: 20px;
+  `)};
+`;
+
+export const PaymentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  height: 271px;
+  border-radius: 16px;
+  border: 1px solid var(--bg-light-grey);
+  background: var(--bg-light-grey);
+  padding: 16px;
+  ${onTablet(css`
+    width: 688px;
+    height: 271px;
+  `)};
+  ${onDesktop(css`
+    width: 420px;
+    height: 278px;
+  `)};
+`;
+
+export const MainInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  ${onDesktop(css`
+    gap: 40px;
+  `)};
 `;

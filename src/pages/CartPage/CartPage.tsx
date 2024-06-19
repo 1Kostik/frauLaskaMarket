@@ -14,15 +14,20 @@ import {
   InfoContainer,
   InfoTitle,
   ItemContainer,
+  ItemInfoContainer,
+  MainContainer,
+  MainInfoContainer,
   NewPrice,
   OldPrice,
   P,
+  PaymentContainer,
   Price,
   PriceContainer,
   Score,
   sectionCart,
   TitleContainer,
   TitleItem,
+  Wrapper,
 } from "./CartPage.styled";
 import foto from "@assets/images/Photo (2).png";
 const CartPage = () => {
@@ -41,31 +46,110 @@ const CartPage = () => {
       <HeroSection viewType={"other"}>Кошик</HeroSection>
       <section css={sectionCart}>
         <div css={containerStyles}>
-          <TitleContainer>
-            <H2>Ваше замовлення</H2>
-          </TitleContainer>
-          <ItemContainer>
-            <ImgContainer>
-              <img src={foto} alt="" />
-            </ImgContainer>
-            <InfoContainer>
-              <InfoTitle>
-                <TitleItem>Назва товару</TitleItem> <DeleteBtn>x</DeleteBtn>
-              </InfoTitle>
-              <P>Код товару: №2147652</P>
-              <PriceContainer>
-                <BtnContainer>
-                  <Decrement>-</Decrement>
-                  <Score>0</Score>
-                  <Increment>+</Increment>
-                </BtnContainer>
-                <Price>
-                  <OldPrice>880 ₴</OldPrice>
-                  <NewPrice>800 ₴</NewPrice>
-                </Price>
-              </PriceContainer>
-            </InfoContainer>
-          </ItemContainer>
+          <MainContainer>
+            <MainInfoContainer>
+              <ItemContainer>
+                <TitleContainer>
+                  <H2>Ваше замовлення</H2>
+                </TitleContainer>
+                <Wrapper>
+                  <ItemInfoContainer>
+                    <ImgContainer>
+                      <img src={foto} alt="" />
+                    </ImgContainer>
+                    <InfoContainer>
+                      <InfoTitle>
+                        <TitleItem>Назва товару</TitleItem>{" "}
+                        <DeleteBtn>x</DeleteBtn>
+                      </InfoTitle>
+                      <P>Код товару: №2147652</P>
+                      <PriceContainer>
+                        <BtnContainer>
+                          <Decrement>-</Decrement>
+                          <Score>0</Score>
+                          <Increment>+</Increment>
+                        </BtnContainer>
+                        <Price>
+                          <OldPrice>880 ₴</OldPrice>
+                          <NewPrice>800 ₴</NewPrice>
+                        </Price>
+                      </PriceContainer>
+                    </InfoContainer>
+                  </ItemInfoContainer>
+                  <ItemInfoContainer>
+                    <ImgContainer>
+                      <img src={foto} alt="" />
+                    </ImgContainer>
+                    <InfoContainer>
+                      <InfoTitle>
+                        <TitleItem>Назва товару</TitleItem>{" "}
+                        <DeleteBtn>x</DeleteBtn>
+                      </InfoTitle>
+                      <P>Код товару: №2147652</P>
+                      <PriceContainer>
+                        <BtnContainer>
+                          <Decrement>-</Decrement>
+                          <Score>0</Score>
+                          <Increment>+</Increment>
+                        </BtnContainer>
+                        <Price>
+                          <OldPrice>880 ₴</OldPrice>
+                          <NewPrice>800 ₴</NewPrice>
+                        </Price>
+                      </PriceContainer>
+                    </InfoContainer>
+                  </ItemInfoContainer>
+                  <ItemInfoContainer>
+                    <ImgContainer>
+                      <img src={foto} alt="" />
+                    </ImgContainer>
+                    <InfoContainer>
+                      <InfoTitle>
+                        <TitleItem>Назва товару</TitleItem>{" "}
+                        <DeleteBtn>x</DeleteBtn>
+                      </InfoTitle>
+                      <P>Код товару: №2147652</P>
+                      <PriceContainer>
+                        <BtnContainer>
+                          <Decrement>-</Decrement>
+                          <Score>0</Score>
+                          <Increment>+</Increment>
+                        </BtnContainer>
+                        <Price>
+                          <OldPrice>880 ₴</OldPrice>
+                          <NewPrice>800 ₴</NewPrice>
+                        </Price>
+                      </PriceContainer>
+                    </InfoContainer>
+                  </ItemInfoContainer>
+                  <ItemInfoContainer>
+                    <ImgContainer>
+                      <img src={foto} alt="" />
+                    </ImgContainer>
+                    <InfoContainer>
+                      <InfoTitle>
+                        <TitleItem>Назва товару</TitleItem>{" "}
+                        <DeleteBtn>x</DeleteBtn>
+                      </InfoTitle>
+                      <P>Код товару: №2147652</P>
+                      <PriceContainer>
+                        <BtnContainer>
+                          <Decrement>-</Decrement>
+                          <Score>0</Score>
+                          <Increment>+</Increment>
+                        </BtnContainer>
+                        <Price>
+                          <OldPrice>880 ₴</OldPrice>
+                          <NewPrice>800 ₴</NewPrice>
+                        </Price>
+                      </PriceContainer>
+                    </InfoContainer>
+                  </ItemInfoContainer>
+                </Wrapper>
+              </ItemContainer>
+            </MainInfoContainer>
+            <PaymentContainer></PaymentContainer>
+          </MainContainer>
         </div>
       </section>
     </>
