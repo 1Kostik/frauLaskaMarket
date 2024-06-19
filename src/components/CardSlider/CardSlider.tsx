@@ -94,12 +94,7 @@ const CardSlider: React.FC<CardSliderProps> = ({
   }, [stylesProps.prevEl, stylesProps.nextEl]);
   const handleSwiper = (swiper: SwiperCore) => {
     setSwiperRef(swiper);
-  };
-  console.log(
-    "stylesProps.display?.[0]:>> ",
-    stylesProps.display?.[0] !== "none"
-  );
-  console.log(" stylesProps.display?.[1]", stylesProps.display?.[1] !== "none");
+  }; 
   return (
     <Container stylesProps={stylesProps}>
       {(stylesProps.display?.[0] !== "none" ||

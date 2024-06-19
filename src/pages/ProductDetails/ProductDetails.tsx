@@ -30,25 +30,28 @@ import {
   DeliveryInfoContainer,
   Span,
   ContainerTopSeller,
-  BackTitle,
   TitleWrapper,
+  BackStore,
+  ProductListContainer,
 } from "./ProductDetails.styled";
 import { LuArrowLeft } from "react-icons/lu";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { containerStyles } from "@styles/variables";
-import foto1 from "@assets/images/Photo (1).png";
 import SortingItems from "@components/SortingItems/SortingItems";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ProductCard from "@components/ProductCard/ProductCard";
-import { ProductListContainer } from "@pages/StorePage/StorePage.styled";
 import CardSlider from "@components/CardSlider/CardSlider";
 import { text } from "@assets/answers";
 import { imageArray } from "@assets/imagesArr";
+import { useAppDispatch } from "../../redux/hooks";
+import { addToBasket } from "../../redux/slisce";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+  const dispatch = useAppDispatch();
+  const param = useParams();
+ 
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -58,11 +61,19 @@ const ProductDetails = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  const widthImg: string =
+    windowWidth >= 360 && windowWidth < 768
+      ? "320px"
+      : windowWidth >= 768 && windowWidth < 1440
+      ? "336px"
+      : windowWidth >= 1440
+      ? "306px"
+      : "100%";
 
   const options = ["10ml", "20ml", "30ml", "40ml", "50ml", "60ml"];
-  const arrNumbers = [1, 2, 3, 4];
+  const arrNumbers = [1, 2, 3, 4, 5, 6];
   const handleBackClick = () => {
-    navigate(-1);
+    navigate("/store");
   };
   const ProductDetailsProps = {
     container: {
@@ -71,7 +82,7 @@ const ProductDetails = () => {
       width: ["100%"],
       height: ["", ""],
     },
-    display: ["none", "none","flex"],
+    display: ["none", "none", "flex"],
     width: ["320px", "332px", "626px"],
     height: ["320px", "332px", "626px"],
     gap: ["6px", "12px"],
@@ -80,22 +91,28 @@ const ProductDetails = () => {
     prevEl: ["#prevSmButton"],
     nextEl: ["#nextSmButton"],
   };
-const ProductDetailsPropsText={
-  container: {
-    "padding-top": ["24px", "40px"],
-    "padding-bottom": ["24px", "40px"],
-    width: ["100%"],
-    height: ["563px", "616px"],
-  },
-  display: ["none", "flex","none"],
-  width: ["320px", "728px", "1360px"],
-  height: ["456px", "456px", "456px"],
-  gap: ["6px", "12px"],
-  slidesPerView: [1, 2, 3.5],
-  spaceBetween: [16, 12],
-  prevEl: ["#prevMdButton"],
-  nextEl: ["#nextMdButton"],
-}
+  const ProductDetailsPropsText = {
+    container: {
+      "padding-top": ["24px", "40px"],
+      "padding-bottom": ["24px", "40px"],
+      width: ["100%"],
+      height: ["563px", "616px"],
+    },
+    display: ["none", "flex", "none"],
+    width: ["320px", "728px", "1360px"],
+    height: ["456px", "456px", "456px"],
+    gap: ["6px", "12px"],
+    slidesPerView: [1, 2, 3.5],
+    spaceBetween: [16, 12],
+    prevEl: ["#prevMdButton"],
+    nextEl: ["#nextMdButton"],
+  };
+  const handleAddToCart = () => {
+    if (param.id) {
+      const id = param.id;
+      dispatch(addToBasket({id}));
+    }
+  };
   return (
     <Section>
       <div css={containerStyles}>
@@ -155,7 +172,7 @@ const ProductDetailsPropsText={
                     />
                   </SelectWrapper>
                 </SelectContainer>
-                <Button>Додати до кошика</Button>
+                <Button onClick={handleAddToCart}>Додати до кошика</Button>
               </TextContainer>
             </InfoContainer>
           </Wrapper>
@@ -184,18 +201,22 @@ const ProductDetailsPropsText={
             </DeliveryInfoContainer>
           </DescriptionContainer>
           <div style={{ background: "#252525" }}>
-            <CardSlider renderArrayText={text}  stylesProps={ProductDetailsPropsText} />
+            <CardSlider
+              renderArrayText={text}
+              stylesProps={ProductDetailsPropsText}
+            />
           </div>
           <ContainerTopSeller>
             <TitleWrapper>
               <Title>Топ продажів</Title>
-              <BackTitle>Button</BackTitle>
+              <BackStore onClick={handleBackClick}>Button</BackStore>
             </TitleWrapper>
 
             <ProductListContainer>
               {arrNumbers.map((item) => (
                 <ProductCard
                   key={item}
+                  width={widthImg}
                   // show={openFilter}
                   // handleOnClickCard={handleOnClickCard}
                   // id={item}

@@ -405,7 +405,7 @@ export const Span = styled.span`
 
 export const ContainerTopSeller = styled.div`
   width: 100%;
- 
+
   padding: 24px 0px;
   height: 511px;
   ${onTablet(css`
@@ -417,7 +417,7 @@ export const ContainerTopSeller = styled.div`
     height: 556px;
   `)}
 `;
-export const BackTitle = styled.button`
+export const BackStore = styled.button`
   color: var(--text-light-grey);
   font-family: Fixel;
   font-size: 12px;
@@ -437,4 +437,28 @@ export const TitleWrapper = styled.div`
   ${onDesktop(css`
     margin-bottom: 36px;
   `)};
+`;
+export const ProductListContainer = styled.div`
+ display: flex;
+  gap: 16px;
+  overflow-x: scroll;
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
+  width: 100%;
+
+  &::-webkit-scrollbar {
+    display: none; 
+  }
+
+  ${onTablet(css`
+    display: flex;
+    width: 100%;
+    gap: 20px;
+  `)}
+
+  ${onDesktop(css`
+    width: 100%;
+    display: flex;
+    /* flex-wrap: wrap; */
+  `)}
 `;

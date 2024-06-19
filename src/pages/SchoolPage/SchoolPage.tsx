@@ -1,9 +1,6 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import CardSliderSection from "@pages/MainPage/CardSliderSection/CardSliderSection";
 import { text } from "@assets/answers";
-
-
-import bgImage from "/src/assets/images/gradient_banner.svg";
 import About from "./AboutSection/AboutSection";
 import QASection from "./QASection/QASection";
 import RegistrationSection from "./RegistrationSection/RegistrationSection";
@@ -16,11 +13,11 @@ const AromaSchool = () => {
       width: ["100%"],
       height: ["563px", "616px"],
     },
-    display: ["none", "Flex","none"],
+    display: ["none", "Flex", "none"],
     width: ["320px", "728px", "1360px"],
     height: ["451px", "451px", "456px"],
     gap: ["6px", "12px"],
-    slidesPerView: [1, 2,3.5],
+    slidesPerView: [1, 2, 3.5],
     spaceBetween: [16, 20],
     prevEl: ["#prevMdButton"],
     nextEl: ["#nextMdButton"],
@@ -28,11 +25,14 @@ const AromaSchool = () => {
   return (
     <>
       <HeroSection bgImage={bgImage} viewType="school">
-      <p>Сильна і міцна нація починається зі здорового способу життя.</p>
-      <h1>Школа ароматерапії</h1>
+        <p>Сильна і міцна нація починається зі здорового способу життя.</p>
+        <h1>Школа ароматерапії</h1>
       </HeroSection>
       <About />
-      <CardSliderSection renderArrayText={text}  stylesProps={AromaSchoolPageProps} />
+      <CardSliderSection
+        renderArrayText={text}
+        stylesProps={AromaSchoolPageProps}
+      />
       <QASection />
       <RegistrationSection />
     </>

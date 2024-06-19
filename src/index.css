@@ -44,7 +44,8 @@
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
---bg-tranparent:#d7d7d750;
+
+  --bg-tranparent:#d7d7d750;
   --bg-main-page: #e2e2e2;
   --bg-black: #252525;
   --bg-deep-black: #171616;

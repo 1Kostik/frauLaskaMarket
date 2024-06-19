@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
 interface Props {
   show?: boolean;
+ 
 }
 export const CardWrapper = styled.div``;
 
