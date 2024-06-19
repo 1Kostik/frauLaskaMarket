@@ -23,12 +23,14 @@ interface IPlanProps {
 
 const PlanContent: React.FC<IPlanProps> = ({ plan }) => {
   const [swiper, setSwiper] = useState<SwiperCore | null>(null);
+  const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
   const { planTitle, content } = plan;
   const refPrevBtn = useRef<HTMLButtonElement | null>(null);
   const refNextBtn = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (swiper) {
+      setCardHeight(swiper.height);
       swiper.on("slideChange", () =>
         updateButtonsVisibility(swiper, refPrevBtn, refNextBtn)
       );
@@ -69,7 +71,7 @@ const PlanContent: React.FC<IPlanProps> = ({ plan }) => {
         {content.map((content: IContent) => {
           return (
             <SwiperSlide key={nanoid()}>
-              <PlanCard content={content} />
+              <PlanCard content={content} cardHeight={cardHeight} />
             </SwiperSlide>
           );
         })}

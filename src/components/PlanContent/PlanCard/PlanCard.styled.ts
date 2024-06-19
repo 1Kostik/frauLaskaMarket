@@ -1,8 +1,8 @@
 import { css } from "@emotion/react";
 import { onDesktop } from "@styles/mixins";
 
-export const cardContainer = css`
-  height: 100%;
+export const cardContainer = (cardHeight: number | undefined) => css`
+  height: ${cardHeight}px;
   padding: 40px;
   border-radius: 16px;
   background-color: var(--bg-deep-black);
