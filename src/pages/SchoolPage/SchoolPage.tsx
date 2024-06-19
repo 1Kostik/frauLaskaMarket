@@ -4,6 +4,7 @@ import { text } from "@assets/answers";
 import About from "./AboutSection/AboutSection";
 import QASection from "./QASection/QASection";
 import RegistrationSection from "./RegistrationSection/RegistrationSection";
+import bgImage from "@assets/images/gradient_banner.svg"
 
 const AromaSchool = () => {
   const AromaSchoolPageProps = {
