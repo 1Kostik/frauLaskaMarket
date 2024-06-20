@@ -44,14 +44,14 @@ import CardSlider from "@components/CardSlider/CardSlider";
 import { text } from "@assets/answers";
 import { imageArray } from "@assets/imagesArr";
 import { useAppDispatch } from "../../redux/hooks";
-import { addToBasket } from "../../redux/slisce";
+import { addToBasket } from "../../redux/slice";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const dispatch = useAppDispatch();
   const param = useParams();
- 
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -110,7 +110,7 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     if (param.id) {
       const id = param.id;
-      dispatch(addToBasket({id}));
+      dispatch(addToBasket({ id }));
     }
   };
   return (
@@ -165,7 +165,6 @@ const ProductDetails = () => {
                   <H4>Обʼєм</H4>
                   <SelectWrapper>
                     <SortingItems
-                      isNone={true}
                       options={options}
                       padding={"12px"}
                       borderRadius={"16px"}

@@ -25,39 +25,44 @@ export const Button = styled.button`
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 166.667% */
+  line-height: 20px;
   letter-spacing: 0.1px;
-  border-radius: 24px;
-  padding: 9px 15px;
-  border: 1px solid var(--bg-light-grey);
   background: var(--bg-black);
-  transition: var(--effectDuration);
-  &:hover {
-    color: var(--text-black);
-    background-color: var(--bg-light-grey);
-  }
+  ${onDesktop(css`
+    border: 1px solid var(--bg-light-grey);
+    border-radius: 24px;
+    transition: var(--effectDuration);
+    gap: 8px;
+    padding: 10px 16px;
+    &:hover {
+      background-color: var(--bg-light-grey);
+      & p {
+        color: var(--text-black);
+      }
+      & path {
+        fill: var(--bg-black);
+      }
+    }
+  `)};
 `;
 export const Section = styled.section`
-  padding: 0px 20px 24px 20px;
+  padding: 0px 0px 24px 0px;
   background: var(--bg-black);
   ${onTablet(css`
-    padding: 0px 40px 24px 40px;
+    padding: 0px 0px 24px 0px;
   `)}
   ${onDesktop(css`
-    padding: 0px 78px 40px 78px;
+    padding: 0px 0px 40px 0px;
   `)}
 `;
 export const MaineContainer = styled.div`
-  width: 320px;
   display: flex;
   margin-left: auto;
   margin-right: auto;
   ${onTablet(css`
-    width: 688px;
     gap: 20px;
   `)}
   ${onDesktop(css`
-    width: 1284px;
     gap: 24px;
   `)}
 `;
@@ -65,7 +70,7 @@ export const Wrapper = styled.div`
   ${onTablet(css`
     display: flex;
     justify-content: space-between;
-    gap: 5px;
+    gap: 12px;
   `)};
   display: flex;
   justify-content: space-between;
@@ -87,4 +92,28 @@ export const ProductListContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
   `)}
+`;
+export const P = styled.p`
+  display: none;
+  ${onDesktop(css`
+    display: block;
+    color: var(--text-light-grey);
+    font-family: Fixel;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0.1px;
+  `)}
+`;
+// export const svgFilter = css`
+//   width: 40px;
+//   height: 40px;
+//   ${onDesktop(css`
+//     display: none;
+//   `)};
+// `;
+export const svgFilterSm = css`
+  width: 20px;
+  height: 20px;
 `;

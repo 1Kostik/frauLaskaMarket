@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as Checked } from "@assets/icons/checked.svg";
 import { ReactComponent as ArrowUp } from "@assets/icons/arrow-up-select.svg";
 import { ReactComponent as ArrowDpwn } from "@assets/icons/arrow-down-select.svg";
+
 import {
   Container,
-  H4,
   P,
   SelectContainer,
   SelectOption,
@@ -16,17 +16,22 @@ import {
   svgArrowUp,
   svgArrowDpwn,
 } from "./SortingItems.styled";
+
 interface ISortingItProps {
-  isNone?: boolean;
+  width?: string;
   options: string[];
   padding?: string;
   borderRadius?: string;
+  isOpenSearch?: boolean;
+  isOpenFilter?: boolean;
 }
 const SortingItems: React.FC<ISortingItProps> = ({
-  isNone,
+  width,
   options,
   padding,
   borderRadius,
+  isOpenSearch,
+  isOpenFilter,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -57,9 +62,9 @@ const SortingItems: React.FC<ISortingItProps> = ({
     setChecked(true);
     setIsOpen(false);
   };
+  const isChange = isOpenFilter && isOpenSearch;
   return (
     <Container>
-      <H4 isNone={isNone}>Сортувати за</H4>
       <SelectContainer>
         <SelectTitleContainer
           onClick={handleClick}
@@ -67,7 +72,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
           padding={padding}
           borderRadius={borderRadius}
         >
-          <P isOpen={isOpen}>
+          <P isOpen={isOpen} isChange={isChange}>
             {selectedOption ? selectedOption : selectedOption}
           </P>
           {isOpen ? (
@@ -77,7 +82,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
           )}
         </SelectTitleContainer>
         {isOpen && (
-          <SelectOptionContainer>
+          <SelectOptionContainer width={width}>
             {options.map((option, i) => (
               <SelectOne key={option + i}>
                 <SvgContainer>
