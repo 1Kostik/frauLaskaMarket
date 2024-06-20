@@ -9,16 +9,21 @@ import {
   MaineContainer,
   Wrapper,
   ProductListContainer,
+  svgFilterSm,
+  P,
 } from "./StorePage.styled";
 import StoreFilter from "@components/StoreFilter/StoreFilter";
 import SearchStore from "@components/SearchStore/SearchStore";
 import SortingItems from "@components/SortingItems/SortingItems";
 import Pagination from "@components/Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
+import { containerStyles } from "@styles/variables";
+import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 
 function StorePage() {
   const navigate = useNavigate();
   const [openFilter, setOpenFilter] = useState(false);
+  const [openSearch, setOpenSearch] = useState(false);
   const arrNumbers = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
     22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
@@ -52,7 +57,7 @@ function StorePage() {
   const handleOnClickCard = (id: number) => {
     navigate(`${id}`);
   };
-    const options = [
+  const options = [
     "Від найменшої ціни до найбільшої",
     "Від найбільшої ціни до найменшої",
     "За ретингом",
@@ -62,30 +67,41 @@ function StorePage() {
     <>
       <HeroSection viewType={"other"}>Магазин</HeroSection>
       <Section>
-        <MaineContainer>
-          {openFilter && <StoreFilter closeFilter={setOpenFilter} />}
-          <Container>
-            <SearchContainer>
-              <SearchStore />
-              <Wrapper>
-                <Button onClick={handleOpenFilter}>Фільтр</Button>
-                <SortingItems options={options} />
-              </Wrapper>
-            </SearchContainer>
-
-            <ProductListContainer>
-              {currentItem &&
-                currentItem.map((item) => (
-                  <ProductCard
-                    key={item}
-                    show={openFilter}
-                    handleOnClickCard={handleOnClickCard}
-                    id={item}
+        <div css={containerStyles}>
+          <MaineContainer>
+            {openFilter && <StoreFilter closeFilter={setOpenFilter} />}
+            <Container>
+              <SearchContainer>
+                <SearchStore isOpenSearch={setOpenSearch} />
+                <Wrapper>
+                  <Button onClick={handleOpenFilter}>
+                    {/* <Filter css={svgFilter} /> */}
+                    <FilterSm css={svgFilterSm} />
+                    <P>Фільтр</P>
+                  </Button>
+                  <SortingItems
+                    options={options}
+                    width={"260px"}
+                    isOpenSearch={openSearch}
+                    isOpenFilter={openFilter}
                   />
-                ))}
-            </ProductListContainer>
-          </Container>
-        </MaineContainer>
+                </Wrapper>
+              </SearchContainer>
+
+              <ProductListContainer>
+                {currentItem &&
+                  currentItem.map((item) => (
+                    <ProductCard
+                      key={item}
+                      show={openFilter}
+                      handleOnClickCard={handleOnClickCard}
+                      id={item}
+                    />
+                  ))}
+              </ProductListContainer>
+            </Container>
+          </MaineContainer>
+        </div>
         <Pagination
           totalPage={totalPage}
           countItemPages={countItemPages}

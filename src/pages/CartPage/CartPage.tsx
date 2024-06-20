@@ -1,20 +1,28 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectBasket } from "../../redux/selector";
-import { removeFromBasket } from "../../redux/slisce";
+import { selectBasket } from "../../redux/selectors";
+import { removeFromBasket } from "../../redux/slice";
 import { containerStyles } from "@styles/variables";
 import {
   BtnContainer,
+  Button,
+  CheckBoxContainer,
   Decrement,
   DeleteBtn,
+  EndPrice,
   H2,
+  H3,
   ImgContainer,
   Increment,
   InfoContainer,
+  InfoPaymentContainer,
+  InfoPrice,
   InfoTitle,
+  InfoWrapperPayment,
   ItemContainer,
   ItemInfoContainer,
+  Line,
   MainContainer,
   MainInfoContainer,
   NewPrice,
@@ -26,8 +34,11 @@ import {
   Score,
   sectionCart,
   TitleContainer,
+  TitleInfo,
   TitleItem,
+  TitlePayment,
   Wrapper,
+  WrapperTitle,
 } from "./CartPage.styled";
 import foto from "@assets/images/Photo (2).png";
 const CartPage = () => {
@@ -148,7 +159,25 @@ const CartPage = () => {
                 </Wrapper>
               </ItemContainer>
             </MainInfoContainer>
-            <PaymentContainer></PaymentContainer>
+            <PaymentContainer>
+              <TitlePayment>Разом</TitlePayment>
+              <InfoPaymentContainer>
+                <TitleInfo>1 товар на суму:</TitleInfo>{" "}
+                <InfoPrice>800 ₴</InfoPrice>
+              </InfoPaymentContainer>
+              <Line></Line>
+              <InfoWrapperPayment>
+                <WrapperTitle>До сплати:</WrapperTitle>{" "}
+                <EndPrice>800 ₴</EndPrice>
+              </InfoWrapperPayment>
+              <CheckBoxContainer>
+                <input type="checkbox" />
+                <H3>Передзвоніть мені для підтвердження</H3>
+              </CheckBoxContainer>
+              <Button type="submit" form="orderForm">
+                Замовити
+              </Button>
+            </PaymentContainer>
           </MainContainer>
         </div>
       </section>

@@ -3,8 +3,10 @@ import styled from "@emotion/styled";
 import { onDesktop } from "@styles/mixins";
 interface Props {
   isOpen?: boolean;
+  isChange?: boolean;
   padding?: string;
   borderRadius?: string;
+  width?: string;
 }
 interface Ih4 {
   isNone?: boolean;
@@ -34,11 +36,14 @@ export const SelectContainer = styled.div`
   width: 100%;
 `;
 
-export const SelectOptionContainer = styled.ul`
+export const SelectOptionContainer = styled.ul<Props>`
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   top: 44px;
   right: 0px;
-  width: 100%;
+  width: ${({ width }) => (width ? width : "100%")};
   height: auto;
   border: 1px solid #d7d7d7;
   border-radius: 12px;
@@ -49,31 +54,34 @@ export const SelectOptionContainer = styled.ul`
 `;
 
 export const SelectOption = styled.li`
+  width: 204px;
   color: var(--text-light-grey);
   font-family: Arial;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 16px; /* 133.333% */
+  line-height: 16px;
   letter-spacing: 0.4px;
+  cursor: pointer;
 `;
 
 export const SelectTitleContainer = styled.div<Props>`
   display: flex;
   width: 100%;
   height: 100%;
-  padding: ${({ padding }) => (padding ? padding : "8px 20px 8px 24px")};
+  padding: ${({ padding }) => (padding ? padding : "8px 17px 8px 17px")};
   align-items: center;
   justify-content: space-between;
   border-radius: ${({ borderRadius }) =>
     borderRadius ? borderRadius : "24px"};
-  gap: 12px;
+  gap: 6px;
   border: 1px solid #d7d7d7;
   background: ${({ isOpen }) =>
     isOpen ? "var(--bg-light-grey)" : "var(--bg-black)"};
 `;
 
 export const P = styled.p<Props>`
+  width: ${({ isChange }) => (isChange ? "38px" : "")};
   color: ${({ isOpen }) =>
     isOpen ? "var(--text-black)" : "var(--text-light-grey)"};
   text-align: right;
@@ -83,7 +91,12 @@ export const P = styled.p<Props>`
   font-weight: 400;
   line-height: 20px; /* 142.857% */
   letter-spacing: 0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   ${onDesktop(css`
+    width: 100%;
     font-size: 14px;
   `)}
 `;
@@ -96,8 +109,8 @@ export const SelectOne = styled.div`
   display: flex;
   align-items: center;
   gap: 14px;
-  width: 100%;
-  height: 40px;
+  width: 242px;
+  height: 24px;
 `;
 
 export const SvgContainer = styled.div`
