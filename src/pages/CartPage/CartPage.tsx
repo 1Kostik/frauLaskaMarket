@@ -160,6 +160,7 @@ const CartPage = () => {
                   </ItemInfoContainer>
                 </Wrapper>
               </ItemContainer>
+              <CartForm />
             </MainInfoContainer>
             <PaymentContainer>
               <TitlePayment>Разом</TitlePayment>
@@ -181,7 +182,7 @@ const CartPage = () => {
               </Button>
             </PaymentContainer>
           </MainContainer>
-          <CartForm />
+        
         </div>
       </section>
     </>
