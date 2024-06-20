@@ -30,6 +30,8 @@ import {
   Wrapper,
 } from "./CartPage.styled";
 import foto from "@assets/images/Photo (2).png";
+import CartForm from "@components/CartForm";
+
 const CartPage = () => {
   const dispatch = useAppDispatch();
   const [addedItems, setAddedItems] = useState([]);
@@ -150,6 +152,7 @@ const CartPage = () => {
             </MainInfoContainer>
             <PaymentContainer></PaymentContainer>
           </MainContainer>
+          <CartForm />
         </div>
       </section>
     </>
