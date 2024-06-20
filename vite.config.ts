@@ -5,6 +5,10 @@ import svgr from "@svgr/rollup";
 
 export default defineConfig({
   plugins: [react(), svgr()],
+  build: {
+    outDir: 'build',
+    sourcemap: true, 
+  },
   resolve: {
     alias: {
       "@styles": path.resolve(__dirname, "./src/styles"),
