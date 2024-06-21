@@ -8,6 +8,10 @@ export const formWrapper = css`
   flex-direction: column;
   row-gap: 24px;
 
+  ${onDesktop(css`
+    row-gap: 40px;
+  `)}
+
   & input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -22,6 +26,10 @@ export const groupWrapper = css`
   ${onTablet(css`
     display: flex;
     column-gap: 16px;
+  `)}
+
+  ${onDesktop(css`
+    column-gap: 20px;
   `)}
 
   & h3 {
@@ -49,6 +57,10 @@ export const groupWrapper = css`
     ${onTablet(css`
       width: 360px;
     `)}
+
+    ${onDesktop(css`
+      width: 512px;
+    `)}
   }
 
   & label {
@@ -68,15 +80,19 @@ export const deliveryTypes = css`
   scrollbar-width: none;
 
   & label {
-    height: 29px;
-    padding: 8px 20px;
+    padding: 8px 20px 7px 20px;
     border-radius: 16px;
     border: 1px solid var(--border-light-grey);
+    cursor: pointer;
 
     font-size: 12px;
     font-weight: 600;
-    line-height: 110%;
     letter-spacing: 1.6px;
+
+    ${onDesktop(css`
+      padding: 12px 24px 11px 24px;
+      font-size: 16px;
+    `)}
 
     &:last-of-type {
       margin-right: -20px;
@@ -104,6 +120,10 @@ export const paymentMethods = css`
   line-height: 20px;
   letter-spacing: 0.1px;
 
+  ${onDesktop(css`
+    font-size: 14px;
+  `)}
+
   & input {
     position: absolute;
     appearance: none;
@@ -126,6 +146,7 @@ export const paymentMethods = css`
     padding: 16px 16px 16px 48px;
     border-radius: 16px;
     border: 1px solid var(--border-light-grey);
+    cursor: pointer;
 
     &::before {
       content: "";
