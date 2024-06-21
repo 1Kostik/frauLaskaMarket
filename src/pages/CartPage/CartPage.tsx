@@ -1,5 +1,5 @@
 import HeroSection from "@components/HeroSection/HeroSection";
-// import React, { useState } from "react";
+// import { useState } from "react";
 // import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 // import { selectBasket } from "../../redux/selectors";
 // import { removeFromBasket } from "../../redux/slice";
