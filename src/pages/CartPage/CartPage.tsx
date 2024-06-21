@@ -1,8 +1,8 @@
 import HeroSection from "@components/HeroSection/HeroSection";
-import React, { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectBasket } from "../../redux/selectors";
-import { removeFromBasket } from "../../redux/slice";
+// import React, { useState } from "react";
+// import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+// import { selectBasket } from "../../redux/selectors";
+// import { removeFromBasket } from "../../redux/slice";
 import { containerStyles } from "@styles/variables";
 import {
   BtnContainer,
@@ -44,16 +44,16 @@ import foto from "@assets/images/Photo (2).png";
 import CartForm from "@components/CartForm";
 
 const CartPage = () => {
-  const dispatch = useAppDispatch();
-  const [addedItems, setAddedItems] = useState([]);
-  const basket = useAppSelector(selectBasket);
+  // const dispatch = useAppDispatch();
+  // const [addedItems, setAddedItems] = useState([]);
+  // const basket = useAppSelector(selectBasket);
 
-  const handleRemove = () => {
-    if (basket.length > 0) {
-      const id = basket[0].id;
-      dispatch(removeFromBasket(id));
-    }
-  };
+  // const handleRemove = () => {
+  //   if (basket.length > 0) {
+  //     const id = basket[0].id;
+  //     dispatch(removeFromBasket(id));
+  //   }
+  // };
   return (
     <>
       <HeroSection viewType={"other"}>Кошик</HeroSection>

@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { onDesktop, onTablet } from "@styles/mixins";
+import { onDesktop} from "@styles/mixins";
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as CartIcon } from "../../assets/icons/shopping_bag.svg";

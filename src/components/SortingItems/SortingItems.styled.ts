@@ -96,7 +96,7 @@ export const P = styled.p<Props>`
   text-overflow: ellipsis;
 
   ${onDesktop(css`
-    width: 100%;
+    /* width: 100%; */
     font-size: 14px;
   `)}
 `;
