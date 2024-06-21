@@ -4,14 +4,11 @@ import * as Yup from "yup";
 import {
   deliveryTypes,
   errorBorder,
-  //   container,
   errorStyle,
   formWrapper,
   groupWrapper,
-  //   formWrapper,
   inputStyle,
   paymentMethods,
-  // submitStyle,
 } from "./CartForm.styled";
 
 const validationSchema = Yup.object({
@@ -308,3 +305,4 @@ const CartForm = () => {
 };
 
 export default CartForm;
+
