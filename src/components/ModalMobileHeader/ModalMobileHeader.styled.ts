@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-// import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
 import { NavLink } from "react-router-dom";
 import { css } from "@emotion/react";
 import { onDesktop } from "@styles/mixins";

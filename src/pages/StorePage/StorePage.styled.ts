@@ -8,13 +8,11 @@ export const Container = styled.div`
 `;
 
 export const SearchContainer = styled.div`
-  display: none;
-  ${onTablet(css`
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 24px;
-  `)}
-  ${onDesktop(css``)}
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  /* ${onTablet(css``)}
+  ${onDesktop(css``)} */
 `;
 
 export const Button = styled.button`
@@ -67,14 +65,15 @@ export const MaineContainer = styled.div`
   `)}
 `;
 export const Wrapper = styled.div`
+  display: flex;
+  gap: 12px;
   ${onTablet(css`
-    display: flex;
     justify-content: space-between;
     gap: 12px;
   `)};
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
+  ${onDesktop(css`
+    gap: 24px;
+  `)}
 `;
 export const ProductListContainer = styled.div`
   display: flex;
@@ -106,13 +105,7 @@ export const P = styled.p`
     letter-spacing: 0.1px;
   `)}
 `;
-// export const svgFilter = css`
-//   width: 40px;
-//   height: 40px;
-//   ${onDesktop(css`
-//     display: none;
-//   `)};
-// `;
+
 export const svgFilterSm = css`
   width: 20px;
   height: 20px;

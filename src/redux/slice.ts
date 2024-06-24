@@ -1,24 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-export interface BasketState {
-  basket: any[];
+export interface CartState {
+  cart: any[];
 }
 
-const initialState: BasketState = {
-  basket: [],
+const initialState: CartState = {
+  cart: [],
 };
 
-const basketSlice = createSlice({
-  name: "basket",
+const cartSlice = createSlice({
+  name: "cart",
   initialState,
   reducers: {
-    addToBasket(state, action: PayloadAction<any>) {
-      state.basket.push(action.payload);
+    addToCart(state, action: PayloadAction<any>) {
+      state.cart.push(action.payload);
     },
-    removeFromBasket(state, action: PayloadAction<number>) {
-        state.basket = state.basket.filter(item => item.id !== action.payload);
+    removeFromCart(state, action: PayloadAction<number>) {
+        state.cart = state.cart.filter(item => item.id !== action.payload);
       },
   },
 });
 
-export const { addToBasket, removeFromBasket} = basketSlice.actions;
-export default basketSlice.reducer;
+export const { addToCart, removeFromCart} = cartSlice.actions;
+export default cartSlice.reducer;
