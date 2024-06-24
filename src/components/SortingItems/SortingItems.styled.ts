@@ -1,12 +1,14 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { onDesktop } from "@styles/mixins";
+import { onDesktop, onTablet } from "@styles/mixins";
 interface Props {
   isOpen?: boolean;
   isChange?: boolean;
+  isOpenSearch?: boolean;
   padding?: string;
   borderRadius?: string;
   width?: string;
+  disableWidth?: string;
 }
 interface Ih4 {
   isNone?: boolean;
@@ -81,7 +83,10 @@ export const SelectTitleContainer = styled.div<Props>`
 `;
 
 export const P = styled.p<Props>`
-  width: ${({ isChange }) => (isChange ? "38px" : "")};
+  width: ${({ disableWidth, isOpenSearch }) =>
+    disableWidth ? disableWidth : isOpenSearch ? "14px" : "100%"};
+
+  max-width: 180px;
   color: ${({ isOpen }) =>
     isOpen ? "var(--text-black)" : "var(--text-light-grey)"};
   text-align: right;
@@ -89,16 +94,21 @@ export const P = styled.p<Props>`
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   letter-spacing: 0.1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  ${onDesktop(css`
-    /* width: 100%; */
-    font-size: 14px;
-  `)}
+  ${({ disableWidth, isChange }) =>
+    onTablet(css`
+      width: ${disableWidth ? disableWidth : isChange ? "38px" : "100%"};
+      max-width: unset;
+    `)};
+  ${({ disableWidth }) =>
+    onDesktop(css`
+      width: ${disableWidth ? disableWidth : "100%"};
+      font-size: 14px;
+    `)}
 `;
 export const svgCheckedStyles = css`
   &path {

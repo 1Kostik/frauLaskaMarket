@@ -44,7 +44,7 @@ import CardSlider from "@components/CardSlider/CardSlider";
 import { text } from "@assets/answers";
 import { imageArray } from "@assets/imagesArr";
 import { useAppDispatch } from "../../redux/hooks";
-import { addToBasket } from "../../redux/slice";
+import { addToCart } from "../../redux/slice";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
@@ -110,7 +110,7 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     if (param.id) {
       const id = param.id;
-      dispatch(addToBasket({ id }));
+      dispatch(addToCart({ id }));
     }
   };
   return (
@@ -168,6 +168,7 @@ const ProductDetails = () => {
                       options={options}
                       padding={"12px"}
                       borderRadius={"16px"}
+                      disableWidth={"unset"}
                     />
                   </SelectWrapper>
                 </SelectContainer>
@@ -230,3 +231,25 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
+
+
+/*
+{
+id,
+categoryId,
+title,
+imageUrls,
+description,
+colors,
+discount,
+stockCount,
+ volumes: [
+    { size: "50ml", price: 880 },
+    { size: "100ml", price: 1200 },
+    { size: "200ml", price: 2000 }    
+  ],
+ranking,
+benefit,- увлажнение сухой кожи ( к примеру)(З чим допоможе?)
+composition, состав -ингридиенты
+}
+*/

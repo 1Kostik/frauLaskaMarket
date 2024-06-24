@@ -20,7 +20,7 @@ import {
   WrapperMenu,
 } from "./Header.styled";
 import { useLocation, useParams } from "react-router-dom";
-import ModalMobileHeader from "./ModalMobileHeader/ModalMobileHeader";
+import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
 const modalPortal = document.querySelector("#portal-root");
 
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];

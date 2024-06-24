@@ -69,10 +69,8 @@ export const TitleItem = styled.h2`
   line-height: 24px;
   letter-spacing: 0.15px;
 `;
-export const DeleteBtn = styled.button`
-  width: 20px;
-  height: 20px;
-  color: var(--text-light-grey);
+export const DeleteBtn = styled.button` 
+  padding: 4px;
 `;
 export const P = styled.p`
   font-family: Arial;
@@ -321,4 +319,12 @@ export const Button = styled.button`
   ${onDesktop(css`
     font-size: 14px;
   `)};
+`;
+export const svgClose= css`
+width: 16px;
+height: 16px;
+& path {
+  fill: var(--bg-light-grey);
+}
+
 `;

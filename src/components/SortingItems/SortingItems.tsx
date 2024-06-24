@@ -24,6 +24,7 @@ interface ISortingItProps {
   borderRadius?: string;
   isOpenSearch?: boolean;
   isOpenFilter?: boolean;
+  disableWidth?:string;
 }
 const SortingItems: React.FC<ISortingItProps> = ({
   width,
@@ -32,6 +33,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
   borderRadius,
   isOpenSearch,
   isOpenFilter,
+  disableWidth
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -72,7 +74,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
           padding={padding}
           borderRadius={borderRadius}
         >
-          <P isOpen={isOpen} isChange={isChange}>
+          <P isOpen={isOpen} isChange={isChange} isOpenSearch={isOpenSearch} disableWidth={disableWidth}>
             {selectedOption ? selectedOption : selectedOption}
           </P>
           {isOpen ? (

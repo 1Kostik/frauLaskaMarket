@@ -1,4 +1,4 @@
-import { BasketState } from "./slice";
+import { CartState } from "./slice";
 
-export const selectBasket = (state: { basket: BasketState }) =>
-  state.basket.basket;
+export const selectCart = (state: { cart: CartState }) =>
+  state.cart.cart;

@@ -22,13 +22,14 @@ const SearchStore: React.FC<PropsSearch> = ({ isOpenSearch }) => {
     setIsOpen((prev) => !prev);
   };
   useEffect(() => {
-    if (windowWidth >= 1440) {
+    if (windowWidth >= 1440 && isOpenSearch) {
       setIsOpen(true);
+      isOpenSearch(true);
     }
     if (isOpenSearch) {
       isOpenSearch(isOpen);
     }
-  }, [isOpen]);
+  }, [isOpen,windowWidth]);
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
