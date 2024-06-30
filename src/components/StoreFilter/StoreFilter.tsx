@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ButtonClose,
   Container,
@@ -15,6 +15,7 @@ import {
   P1,
   P2,
   FilterBtn,
+  FilterWrapper,
 } from "./StoreFilter.styled";
 import { ReactComponent as Close } from "@assets/icons/close.svg";
 import { ReactComponent as ArrowUp } from "@assets/icons/arrow-up-select.svg";
@@ -28,28 +29,29 @@ interface ISorteFilter {
   setFilteredProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 interface ChekedItems {
-  id: string; 
-  categoryId: string;
+  id: number;
+  categoryId: number;
 }
-const StoreFilter: React.FC<ISorteFilter> = ({ closeFilter,setFilteredProducts }) => {
+const StoreFilter: React.FC<ISorteFilter> = ({
+  closeFilter,
+  setFilteredProducts,
+}) => {
   const [openCategories, setOpenCategories] = useState<{
-    [key: string]: boolean;
+    [key: number]: boolean;
   }>({});
 
-  const [checkedItems, setCheckedItems] = useState<{ [key: string]: any }>({});
-
- 
+  const [checkedItems, setCheckedItems] = useState<{ [key: number]: any }>({});
 
   const handleCheckboxChange = (typeKey: string, item: ChekedItems) => {
     if (typeKey === "category") {
-      if (!Object.keys(checkedItems).includes(item.id)) {
+      if (!Object.keys(checkedItems).includes(`${item.id}`)) {
         setCheckedItems((prev) => {
           return { ...prev, [item.id]: [] };
         });
       } else {
         setCheckedItems((prev) => {
           const { [item.id]: removed, ...rest } = prev;
-          setOpenCategories((prev) => ({ ...prev, [item.id]: !prev[item.id] }));
+          setOpenCategories((prev) => ({ ...prev, [item.id]: false }));
           return rest;
         });
       }
@@ -64,7 +66,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({ closeFilter,setFilteredProducts }
           return {
             ...prev,
             [item.categoryId]: [
-              ...prev[item.categoryId].filter((id: string) => id !== item.id),
+              ...prev[item.categoryId].filter((id: number) => id !== item.id),
             ],
           };
         }
@@ -72,7 +74,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({ closeFilter,setFilteredProducts }
     }
   };
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: number) => {
     setOpenCategories((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
@@ -83,29 +85,28 @@ const StoreFilter: React.FC<ISorteFilter> = ({ closeFilter,setFilteredProducts }
     setFilteredProducts([]);
 
     (() =>
-      Object.keys(checkedItems).forEach((categoryId: string) => {
-        if (checkedItems[categoryId].length === 0) {
+      Object.keys(checkedItems).forEach((categoryId) => {
+        if (checkedItems[Number(categoryId)].length === 0) {
           setFilteredProducts((prev) => [
             ...prev,
             ...products.filter(
-              (item: Product) => categoryId === item.categoryId
+              (item: Product) => Number(categoryId) === item.categoryId
             ),
           ]);
         } else {
           setFilteredProducts((prev) => [
             ...prev,
             ...products.filter((item: Product) =>
-              checkedItems[categoryId].includes(item.id)
+              checkedItems[Number(categoryId)].includes(item.id)
             ),
           ]);
         }
       }))();
   };
 
-
   return (
-    <Container>
-      <div style={{ width: "272px" }}>
+    <FilterWrapper>
+      <Container>
         <TitleContainer>
           <H2>Фільтр</H2>
           <ButtonClose onClick={handleClose}>
@@ -117,7 +118,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({ closeFilter,setFilteredProducts }
             <ItemContainer isOpen={openCategories[category.id]}>
               <Wrapper>
                 <Label htmlFor={`checkBox${category.id}`}>
-                  {Object.keys(checkedItems).includes(category.id) ? (
+                  {Object.keys(checkedItems).includes(`${category.id}`) ? (
                     <CheckBoxActive />
                   ) : (
                     <CheckBox css={svgCheckBox} />
@@ -126,11 +127,10 @@ const StoreFilter: React.FC<ISorteFilter> = ({ closeFilter,setFilteredProducts }
                 <Input
                   type="checkbox"
                   id={`checkBox${category.id}`}
-                  checked={Object.keys(checkedItems).includes(category.id)}
+                  checked={Object.keys(checkedItems).includes(`${category.id}`)}
                   onChange={() =>
                     handleCheckboxChange("category", {
                       id: category.id,
-                      // title: category.title,
                       categoryId: category.id,
                     })
                   }
@@ -139,96 +139,65 @@ const StoreFilter: React.FC<ISorteFilter> = ({ closeFilter,setFilteredProducts }
               </Wrapper>
               <Wrapper>
                 <P2>{category.count}</P2>
-                <ButtonShow onClick={() => handleClick(category.id)}>
-                  {openCategories[category.id] ? <ArrowUp /> : <ArrowDown />}
+                <ButtonShow
+                  onClick={() => handleClick(category.id)}
+                  disabled={checkedItems[category.id] ? false : true}
+                >
+                  {openCategories[category.id] && checkedItems[category.id] ? (
+                    <ArrowUp />
+                  ) : (
+                    <ArrowDown />
+                  )}
                 </ButtonShow>
               </Wrapper>
-              {openCategories[category.id] && checkedItems[category.id] ? (
-                <>
-                  {products
-                    .filter(({ categoryId }: any) => categoryId === category.id)
-                    .map((item: Product) => (
-                      <SubItemContainer
-                        key={`${item.id}`}
-                        isOpen={openCategories[category.id]}
-                      >
-                        <Wrapper>
-                          <Label htmlFor={`checkBox${item.id}`}>
-                            {checkedItems[item.categoryId] &&
-                            checkedItems[item.categoryId].includes(item.id) ? (
-                              <CheckBoxActive />
-                            ) : (
-                              <CheckBox css={svgCheckBox} />
-                            )}
-                          </Label>
-                          <Input
-                            type="checkbox"
-                            id={`checkBox${item.id}`}
-                            checked={
-                              checkedItems[item.categoryId] &&
-                              checkedItems[item.categoryId].includes(item.id)
-                            }
-                            onChange={() =>
-                              handleCheckboxChange("product", {
-                                id: item.id,
-                                categoryId: item.categoryId,
-                              })
-                            }
-                          />
-                          <P1>{item.title}</P1>
-                        </Wrapper>
-
-                        <Wrapper>
-                          <P2>{item.stockCount}</P2>
-                        </Wrapper>
-                      </SubItemContainer>
-                    ))}
-                </>
-              ) : null}
             </ItemContainer>
-            {/* {openCategories[category.id] && (
+            {openCategories[category.id] && checkedItems[category.id] ? (
               <>
-                {products.map((item: Product) => (
-                  <SubItemContainer
-                    key={`${item.id}`}
-                    isOpen={openCategories[category.id]}
-                  >
-                    <Wrapper>
-                      <Label htmlFor={`checkBox${item.id}`}>
-                        {checkedItems[item.categoryId]&&checkedItems[item.categoryId].includes(item.id) ? (
-                          <CheckBoxActive />
-                        ) : (
-                          <CheckBox css={svgCheckBox} />
-                        )}
-                      </Label>
-                      <Input
-                        type="checkbox"
-                        id={`checkBox${item.id}`}
-                        checked={checkedItems[item.categoryId]&&checkedItems[item.categoryId].includes(
-                          item.id
-                        )}
-                        onChange={() =>
-                          handleCheckboxChange("product", {
-                            id: item.id,
-                            categoryId: item.categoryId,
-                          })
-                        }
-                      />
-                      <P1>{item.title}</P1>
-                    </Wrapper>
+                {products
+                  .filter(({ categoryId }: any) => categoryId === category.id)
+                  .map((item: Product) => (
+                    <SubItemContainer
+                      key={`${item.id}`}
+                      isOpen={openCategories[category.id]}
+                    >
+                      <Wrapper>
+                        <Label htmlFor={`checkBox${item.id}`}>
+                          {checkedItems[item.categoryId] &&
+                          checkedItems[item.categoryId].includes(item.id) ? (
+                            <CheckBoxActive />
+                          ) : (
+                            <CheckBox css={svgCheckBox} />
+                          )}
+                        </Label>
+                        <Input
+                          type="checkbox"
+                          id={`checkBox${item.id}`}
+                          checked={
+                            checkedItems[item.categoryId] &&
+                            checkedItems[item.categoryId].includes(item.id)
+                          }
+                          onChange={() =>
+                            handleCheckboxChange("product", {
+                              id: item.id,
+                              categoryId: item.categoryId,
+                            })
+                          }
+                        />
+                        <P1>{item.title}</P1>
+                      </Wrapper>
 
-                    <Wrapper>
-                      <P2>{item.stockCount}</P2>
-                    </Wrapper>
-                  </SubItemContainer>
-                ))}
+                      <Wrapper>
+                        <P2>{item.stockCount}</P2>
+                      </Wrapper>
+                    </SubItemContainer>
+                  ))}
               </>
-            )} */}
+            ) : null}
           </div>
         ))}
         <FilterBtn onClick={handleShowResult}>Показати</FilterBtn>
-      </div>
-    </Container>
+      </Container>
+    </FilterWrapper>
   );
 };
 

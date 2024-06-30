@@ -42,15 +42,45 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProductCard from "@components/ProductCard/ProductCard";
 import CardSlider from "@components/CardSlider/CardSlider";
 import { text } from "@assets/answers";
-import { imageArray } from "@assets/imagesArr";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/slice";
+import { products } from "@assets/products";
+import { Product } from "Interfaces/Product";
+import { selectCart } from "@redux/selectors";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [productPrice, setProductPrice] = useState(null);
+  const [addedColor, setAddedColor] = useState("");
+  const [message, setMessage] = useState<string | null>(null)
+  const cart = useAppSelector(selectCart);
   const dispatch = useAppDispatch();
   const param = useParams();
+
+  const product = products.find(
+    (item: Product) => item.id === Number(param.id)
+  );
+  const imageArray = [...product.imageUrls];
+  const title = product.title;
+  const description = product.description;
+  const colors = product.colors;
+  const benefit = product.benefit;
+  const composition = product.composition.toLowerCase();
+  const productCode = product.productCode;
+
+  useEffect(() => {
+    if (selectedOption) {
+      setAddedColor("")
+      product.volumes.forEach((item: any) => {
+        if (selectedOption === item.size) {
+          setProductPrice(item.price);
+          
+        }
+      });
+    }
+  }, [selectedOption]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,8 +100,8 @@ const ProductDetails = () => {
       ? "306px"
       : "100%";
 
-  const options = ["10ml", "20ml", "30ml", "40ml", "50ml", "60ml"];
-  const arrNumbers = [1, 2, 3, 4, 5, 6];
+  const options = [...product.volumes.map(({ size }: any) => size)];
+
   const handleBackClick = () => {
     navigate("/store");
   };
@@ -107,12 +137,41 @@ const ProductDetails = () => {
     prevEl: ["#prevMdButton"],
     nextEl: ["#nextMdButton"],
   };
+
   const handleAddToCart = () => {
-    if (param.id) {
-      const id = param.id;
-      dispatch(addToCart({ id }));
+    const productSearch = cart.find(
+      (item) => item.id === Number(param.id) && item.size === selectedOption
+    );
+    if (productSearch ) {
+      return;
+    }
+    if (param.id && selectedOption && productPrice !== null && addedColor !== "") {
+      const productToAdd = {
+        id: product.id,
+        title: product.title,
+        price: productPrice,
+        size: selectedOption,
+        discount: product.discount,
+        img: product.imageUrls[0],
+        productCode: product.productCode,
+        quantity: 1,
+        color: addedColor,
+      };
+     
+      dispatch(addToCart(productToAdd));
+    }else{
+       setMessage('Оберіть будь ласка колір!')
     }
   };
+  const popularity = products
+    .map((item: any) => {
+      return item;
+    })
+    .sort((a: any, b: any) => b.popularity - a.popularity);
+const handleAddColor=(color:string)=>{
+setAddedColor(color)
+setMessage(null)
+}
   return (
     <Section>
       <div css={containerStyles}>
@@ -135,31 +194,21 @@ const ProductDetails = () => {
               </ImageContainer>
               <TextContainer>
                 <TitleContainer>
-                  <H3>Eu mi et tellus etiam</H3>
+                  <H3>{title}</H3>
                   <P>Є в наявності</P>
                 </TitleContainer>
-                <P1>Код товару:№2147652</P1>
-                <P2>800 ₴</P2>
-                <P3>
-                  Eu mi et tellus etiam tellus varius ut fermentum. Lorem
-                  egestas lacinia nec aliquam elit etiam. Eu mi et tellus etiam
-                  tellus varius ut fermentum. Lorem egestas lacinia nec aliquam
-                  elit etiam.Eu mi et tellus etiam tellus varius ut fermentum.
-                  Lorem egestas lacinia nec aliquam elit etiam.Eu mi et tellus
-                  etiam tellus varius ut fermentum. Lorem egestas lacinia nec
-                  aliquam elit etiam.
-                </P3>
-                <ColorContainer>
+                <P1>Код товару:№{productCode}</P1>
+                <P2>{productPrice} ₴</P2>
+                <P3>{description}</P3>
+                <ColorContainer isErrorMessage={message !== null}>
+          
                   <H4>Колір</H4>
                   <Ul>
-                    <Li></Li>
-                    <Li></Li>
-                    <Li></Li>
-                    <Li></Li>
-                    <Li></Li>
-                    <Li></Li>
-                    <Li></Li>
+                    {colors.map((item: string, i: number) => (
+                      <Li key={i} style={{ background: item }} onClick={()=>handleAddColor(item)}></Li>
+                    ))}
                   </Ul>
+                  {message && <p style={{color:"red",fontSize:"14px",fontWeight:"500",position:"absolute",bottom:"-17px",left:"0px" }}>{message}</p>}
                 </ColorContainer>
                 <SelectContainer>
                   <H4>Обʼєм</H4>
@@ -169,6 +218,8 @@ const ProductDetails = () => {
                       padding={"12px"}
                       borderRadius={"16px"}
                       disableWidth={"unset"}
+                      setSelectedOption={setSelectedOption}
+                      selectedOption={selectedOption}
                     />
                   </SelectWrapper>
                 </SelectContainer>
@@ -178,19 +229,11 @@ const ProductDetails = () => {
           </Wrapper>
           <DescriptionContainer>
             <Title>З чим допоможе?</Title>
-            <Description>
-              Eu mi et tellus etiam tellus varius ut fermentum. Lorem egestas
-              lacinia nec aliquam elit etiam. Neque fames iaculis enim lacus.
-              Risus cursus enim feu
-            </Description>
+            <Description>{benefit}</Description>
           </DescriptionContainer>
           <DescriptionContainer>
             <Title>Склад</Title>
-            <Description>
-              Eu mi et tellus etiam tellus varius ut fermentum. Lorem egestas
-              lacinia nec aliquam elit etiam. Neque fames iaculis enim lacus.
-              Risus cursus enim feu
-            </Description>
+            <Description>{composition}</Description>
           </DescriptionContainer>
           <DescriptionContainer>
             <Title>Доставка</Title>
@@ -213,15 +256,10 @@ const ProductDetails = () => {
             </TitleWrapper>
 
             <ProductListContainer>
-              {arrNumbers.map((item) => (
-                <ProductCard
-                  key={item}
-                  width={widthImg}
-                  // show={openFilter}
-                  // handleOnClickCard={handleOnClickCard}
-                  // id={item}
-                />
-              ))}
+              {popularity &&
+                popularity.map((item: any) => (
+                  <ProductCard key={item.id} width={widthImg} item={item} />
+                ))}
             </ProductListContainer>
           </ContainerTopSeller>
         </Container>
@@ -231,25 +269,3 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
-
-
-/*
-{
-id,
-categoryId,
-title,
-imageUrls,
-description,
-colors,
-discount,
-stockCount,
- volumes: [
-    { size: "50ml", price: 880 },
-    { size: "100ml", price: 1200 },
-    { size: "200ml", price: 2000 }    
-  ],
-ranking,
-benefit,- увлажнение сухой кожи ( к примеру)(З чим допоможе?)
-composition, состав -ингридиенты
-}
-*/

@@ -1,8 +1,12 @@
 import HeroSection from "@components/HeroSection/HeroSection";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectCart } from "../../redux/selectors";
-import { removeFromCart } from "../../redux/slice";
+import { selectCart, selectCartTotalQuantity } from "../../redux/selectors";
+import {
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from "../../redux/slice";
 import { containerStyles } from "@styles/variables";
 import {
   BtnContainer,
@@ -41,9 +45,10 @@ import {
   Wrapper,
   WrapperTitle,
 } from "./CartPage.styled";
-import foto from "@assets/images/Photo (2).png";
+
 import CartForm from "@components/CartForm";
 import { ReactComponent as Close } from "@assets/icons/close2.svg";
+
 interface Item {
   id: number;
   img: string;
@@ -53,52 +58,44 @@ interface Item {
   count: number;
   total: number;
   discount: number;
+  color: string;
+  size: string;
 }
 const CartPage = () => {
   const dispatch = useAppDispatch();
-  const initialItems = [
-    {
-      id: 1,
-      img: foto,
-      title: "Face cream",
-      code: 123,
-      price: 880,
-      count: 1,
-      discount: 0,
-    },
-    {
-      id: 2,
-      img: foto,
-      title: "Hand cream",
-      code: 124,
-      price: 680,
-      count: 1,
-      discount: 10,
-    },
-  ];
-  const initialItemsWithTotal = initialItems.map((item) => ({
-    ...item,
-    total: Math.ceil(item.price - (item.price * item.discount) / 100),
-  }));
-  const [addedItems, setAddedItems] = useState<Item[]>(initialItemsWithTotal);
-  // useEffect(() => {
-  //   // Симуляция загрузки начальных данных (например, из API)
-  //   const fetchInitialItems = async () => {
-  //     const initialItems = await fetchDataFromAPI();
-  //     const itemsWithTotal = initialItems.map(item => ({
-  //       ...item,
-  //       total: item.price - (item.price * item.discount / 100),
-  //     }));
-  //     setAddedItems(itemsWithTotal);
-  //   };
-  
-  //   fetchInitialItems();
-  // }, []);
   const cart = useAppSelector(selectCart);
-  const handleAddItem = (id: number) => {
+  const totalQuantity = useAppSelector(selectCartTotalQuantity);
+
+  const initialItemsWithTotal = cart.map(
+    ({
+      id,
+      title,
+      img,
+      productCode,
+      size,
+      discount,
+      price,
+      quantity,
+      color,
+    }: any) => ({
+      id,
+      title,
+      img,
+      code: productCode,
+      price,
+      discount,
+      size,
+      count: quantity,
+      color,
+      total: Math.ceil(price - (price * discount) / 100),
+    })
+  );
+  const [addedItems, setAddedItems] = useState<Item[]>(initialItemsWithTotal);
+
+  const handleAddItem = (id: number, size: string) => {
     setAddedItems((prev) => {
       return prev.map((item) => {
-        if (id === item.id) {
+        if (id === item.id && item.size === size) {
           return {
             ...item,
             count: item.count + 1,
@@ -108,11 +105,12 @@ const CartPage = () => {
         return item;
       });
     });
+    dispatch(increaseQuantity({ id, size }));
   };
-  const handleDeleteItem = (id: number) => {
+  const handleDeleteItem = (id: number, size: string) => {
     setAddedItems((prev) => {
       return prev.map((item) => {
-        if (id === item.id && item.count > 1) {
+        if (id === item.id && item.size === size && item.count > 1) {
           return {
             ...item,
             count: item.count - 1,
@@ -123,16 +121,23 @@ const CartPage = () => {
         return item;
       });
     });
+    dispatch(decreaseQuantity({ id, size }));
   };
-  const handleRemove = () => {
-    if (cart.length > 0) {
-      const id = cart[0].id;
-      dispatch(removeFromCart(id));
+  const handleRemove = (id: number, size: string) => {
+    const productSearch = cart.find(
+      (item) => item.id === id && item.size === size
+    );
+    if (!productSearch) {
+      return;
     }
+    setAddedItems((prev) => {
+      return prev.filter((item) => !(item.id === id && item.size === size));
+    });
+    dispatch(removeFromCart({ id, size }));
   };
-  const totalCount = addedItems.reduce((acc, item) => {
-    return acc + item.count;
-  }, 0);
+  // const totalCount = addedItems.reduce((acc, item) => {
+  //   return acc + item.count;
+  // }, 0);
   const totalPrice = addedItems.reduce((acc, item) => {
     return acc + item.total;
   }, 0);
@@ -150,14 +155,16 @@ const CartPage = () => {
                 </TitleContainer>
                 <Wrapper>
                   {addedItems.map((item) => (
-                    <ItemInfoContainer>
+                    <ItemInfoContainer key={item.id + item.size}>
                       <ImgContainer>
                         <img src={item.img} alt="" />
                       </ImgContainer>
                       <InfoContainer>
                         <InfoTitle>
                           <TitleItem>{item.title}</TitleItem>
-                          <DeleteBtn onClick={handleRemove}>
+                          <DeleteBtn
+                            onClick={() => handleRemove(item.id, item.size)}
+                          >
                             <Close css={svgClose} />
                           </DeleteBtn>
                         </InfoTitle>
@@ -165,12 +172,16 @@ const CartPage = () => {
                         <PriceContainer>
                           <BtnContainer>
                             <Decrement
-                              onClick={() => handleDeleteItem(item.id)}
+                              onClick={() =>
+                                handleDeleteItem(item.id, item.size)
+                              }
                             >
                               -
                             </Decrement>
                             <Score>{item.count}</Score>
-                            <Increment onClick={() => handleAddItem(item.id)}>
+                            <Increment
+                              onClick={() => handleAddItem(item.id, item.size)}
+                            >
                               +
                             </Increment>
                           </BtnContainer>
@@ -192,10 +203,10 @@ const CartPage = () => {
               <TitlePayment>Разом</TitlePayment>
               <InfoPaymentContainer>
                 <TitleInfo>
-                  {totalCount}{" "}
-                  {totalCount === 1
+                  {totalQuantity}{" "}
+                  {totalQuantity === 1
                     ? "товар"
-                    : totalCount > 1 && totalCount < 5
+                    : totalQuantity > 1 && totalQuantity < 5
                     ? "товари"
                     : "товарів"}{" "}
                   на суму:

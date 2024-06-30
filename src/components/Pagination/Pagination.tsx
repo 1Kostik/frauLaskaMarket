@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, PaginationContainer } from "./Pagination.styled";
+import { ButtonPage, Container, PaginationContainer } from "./Pagination.styled";
 import { ReactComponent as ArrowNext } from "@assets/icons/arrow_next.svg";
 import { ReactComponent as ArrowPrev } from "@assets/icons/arrow_prev.svg";
 interface IPagination {
@@ -35,10 +35,10 @@ const Pagination: React.FC<IPagination> = ({
         >
           <ArrowPrev />
         </button>
-        {btnNumber.map((item) => (
-          <button key={item} onClick={() => paginate(item)}>
+        { btnNumber.map((item) => (
+          <ButtonPage key={item} onClick={() => paginate(item)} currentPage={currentPage===item}  style={{ visibility: btnNumber.length > 1 ? "visible" :"hidden"  }}>
             {item}
-          </button>
+          </ButtonPage>
         ))}
         <button
           onClick={() => nextPage()}

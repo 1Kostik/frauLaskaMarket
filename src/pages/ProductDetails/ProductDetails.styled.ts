@@ -1,7 +1,9 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
-
+interface PropsProdDet {
+  isErrorMessage?: boolean;
+}
 export const Section = styled.section`
   padding-top: 80px;
 `;
@@ -189,11 +191,17 @@ export const P3 = styled.p`
   `)}
 `;
 
-export const ColorContainer = styled.div`
+export const ColorContainer = styled.div<PropsProdDet>`
+  position: relative;
+  border: ${({ isErrorMessage }) =>
+    isErrorMessage ? "1px solid red" : "none"};
+  border-radius: ${({ isErrorMessage }) => (isErrorMessage ? "12px" : "none")};
+  padding: ${({ isErrorMessage }) => (isErrorMessage ? "5px 10px" : "none")};
+
   display: flex;
   width: 100%;
   gap: 24px;
-  margin-bottom: 12px;
+  margin-bottom: ${({ isErrorMessage }) => (isErrorMessage ? "17px" : "12px")};
   ${onDesktop(css`
     height: 40px;
   `)}
@@ -233,25 +241,6 @@ export const Li = styled.li`
   height: 20px;
   padding: 10px;
   border-radius: 50%;
-  background: #768159;
-  &:nth-of-type(2) {
-    background: #d7d7d7;
-  }
-  &:nth-of-type(3) {
-    background: #d9b8ff;
-  }
-  &:nth-of-type(4) {
-    background: #d7d7d7;
-  }
-  &:nth-of-type(5) {
-    background: #d7d7d7;
-  }
-  &:nth-of-type(6) {
-    background: #768159;
-  }
-  &:nth-of-type(7) {
-    background: #e09c4f;
-  }
 `;
 
 export const SelectContainer = styled.div`
@@ -268,7 +257,7 @@ export const Button = styled.button`
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   letter-spacing: 0.1px;
   border-radius: 24px;
   background: var(--bg-light-grey);
@@ -439,15 +428,15 @@ export const TitleWrapper = styled.div`
   `)};
 `;
 export const ProductListContainer = styled.div`
- display: flex;
+  display: flex;
   gap: 16px;
   overflow-x: scroll;
-  -ms-overflow-style: none;  
-  scrollbar-width: none; 
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   width: 100%;
 
   &::-webkit-scrollbar {
-    display: none; 
+    display: none;
   }
 
   ${onTablet(css`

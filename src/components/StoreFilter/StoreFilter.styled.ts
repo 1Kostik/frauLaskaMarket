@@ -1,15 +1,29 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { onTablet } from "@styles/mixins";
 interface Props {
   isOpen: boolean;
 }
 
-export const Container = styled.div`
-  width: 312px;
-  height: 100%;
-  border: 1px solid #d7d7d7;
-  border-radius: 16px;
+export const FilterWrapper = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 72px;
+  left: 0px;
+  background: var(--bg-black);
+  z-index: 100;
+  pointer-events: auto;
   padding: 26px 20px;
+  ${onTablet(css`
+    position: relative;
+    top: unset;
+    left: unset;
+    width: 312px;
+    height: 100%;
+    border: 1px solid #d7d7d7;
+    border-radius: 16px;
+  `)};
 `;
 
 export const H2 = styled.h2`
@@ -19,7 +33,7 @@ export const H2 = styled.h2`
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
-  line-height: 100%; /* 32px */
+  line-height: 100%;
   letter-spacing: 0.64px;
 `;
 
@@ -29,11 +43,14 @@ export const svgClose = css`
   }
 `;
 export const TitleContainer = styled.div`
-  width: 272px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 36px;
+  ${onTablet(css`
+    width: 272px;
+  `)};
 `;
 export const ButtonClose = styled.button`
   width: 40px;
@@ -59,10 +76,10 @@ export const ItemContainer = styled.div<Props>`
     isOpen ? "" : "1px solid var(--bg-light-grey)"};
 `;
 export const SubItemContainer = styled.div<Props>`
-  width: 100%;
+  width: 88%;
   height: 40px;
   display: flex;
-
+  justify-content: space-between;
   &:last-child {
     border-bottom: ${({ isOpen }) =>
       isOpen ? "1px solid var(--bg-light-grey)" : ""};
@@ -75,7 +92,7 @@ export const P1 = styled.p`
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   letter-spacing: 0.1px;
   white-space: normal;
 `;
@@ -85,7 +102,7 @@ export const P2 = styled.p`
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   letter-spacing: 0.1px;
 `;
 export const Wrapper = styled.div`
@@ -127,4 +144,10 @@ export const FilterBtn = styled.button`
   font-weight: 600;
   line-height: 24px; /* 133.333% */
   letter-spacing: 0.15px;
+`;
+export const Container = styled.div`
+  width: 100%;
+  ${onTablet(css`
+    width: 272px;
+  `)};
 `;

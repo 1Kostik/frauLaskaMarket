@@ -24,24 +24,86 @@ import { products } from "@assets/products";
 
 function StorePage() {
   const navigate = useNavigate();
+
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
-
-  const arrNumbers = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-  ];
+  const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [searchItem, setSearchItem] = useState<string>("");
+  const [findProduct, setFindProduct] = useState<Product[]>([]);
+
   const countItemPages = 12;
   const lastIndex = currentPage * countItemPages;
   const firstIndex = lastIndex - countItemPages;
-  const currentItems = (
-    filteredProducts.length > 0 ? filteredProducts : products
-  ).slice(firstIndex, lastIndex);
-  const totalPage = arrNumbers.length;
+
+  
+  let currentItems = (
+    filteredProducts.length > 0
+      ? filteredProducts
+      : findProduct.length > 0
+      ? findProduct
+      : products
+  );
+
+  const totalPage =
+    filteredProducts.length > 0
+      ? filteredProducts.length
+      : findProduct.length > 0
+      ? findProduct.length
+      : products.length;
+
   const lastPage = Math.ceil(totalPage / countItemPages);
+  const options = [
+    "Від найменшої ціни до найбільшої",
+    "Від найбільшої ціни до найменшої",
+    "За ретингом",
+    "За популярністю",
+  ];
+  switch (typeOfSort) {
+    case "Від найменшої ціни до найбільшої":
+      currentItems = currentItems.sort(
+        (a:any, b:any) => a.volumes[0].price - b.volumes[0].price
+      );
+      break;
+    case "Від найбільшої ціни до найменшої":
+      currentItems = currentItems.sort(
+        (a:any, b:any) => b.volumes[0].price - a.volumes[0].price
+      );
+      break;
+    case "За ретингом":
+      currentItems = currentItems.sort((a:any, b:any) => b.ranking - a.ranking);
+      break;
+    case "За популярністю":
+      currentItems = currentItems.sort((a:any, b:any) => b.popularity - a.popularity);
+      break;
+    default:
+      currentItems;
+      break;
+  }
+  useEffect(() => {
+    if (filteredProducts.length > 0) {
+      setSearchItem("");
+      setFindProduct([]);
+    } else if (searchItem !== "") {
+      
+      setFilteredProducts([]);
+    }
+  }, [filteredProducts,searchItem]);
+
+  useEffect(() => {
+    if (searchItem !== "" && products.length > 0) {
+      const findItem = products.filter((item: Product) =>
+        item.title
+          .toLowerCase()
+          .startsWith(searchItem.toLowerCase())
+      );
+      setFindProduct(findItem);
+    } else {
+      setFindProduct([]);
+    }
+  }, [searchItem]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -79,16 +141,14 @@ function StorePage() {
   const handleOpenFilter = () => {
     setOpenFilter((prev) => !prev);
   };
-  const handleOnClickCard = (id: string) => {
+  const handleOnClickCard = (id: number) => {
     navigate(`${id}`);
   };
-  const options = [
-    "Від найменшої ціни до найбільшої",
-    "Від найбільшої ціни до найменшої",
-    "За ретингом",
-    "За популярністю",
-  ];
-  console.log(" filteredProducts:>> ", filteredProducts);
+  
+  let sortedArray = [...currentItems].slice(firstIndex, lastIndex);
+console.log('sortedArray :>> ', sortedArray);
+  
+
   return (
     <>
       <HeroSection viewType={"other"}>Магазин</HeroSection>
@@ -99,11 +159,18 @@ function StorePage() {
               <StoreFilter
                 closeFilter={setOpenFilter}
                 setFilteredProducts={setFilteredProducts}
+               
               />
             )}
             <Container>
               <SearchContainer>
-                <SearchStore isOpenSearch={setOpenSearch} />
+                <SearchStore
+                  isOpenSearch={setOpenSearch}
+                  setSearchItem={setSearchItem}
+                  setFindProduct={setFindProduct}
+                  hasFilteredProducts={filteredProducts.length > 0}
+                  setOpenFilter={setOpenFilter}
+                />
                 <Wrapper>
                   <Button onClick={handleOpenFilter}>
                     <FilterSm css={svgFilterSm} />
@@ -114,18 +181,20 @@ function StorePage() {
                     width={"260px"}
                     isOpenSearch={openSearch}
                     isOpenFilter={openFilter}
+                    setSelectedOption={setTypeOfSort}
+                    selectedOption={typeOfSort}
                   />
                 </Wrapper>
               </SearchContainer>
 
               <ProductListContainer>
-                {currentItems &&
-                  currentItems.map((item:Product) => (
+                {sortedArray &&
+                  sortedArray.map((item: Product) => (
                     <ProductCard
                       key={item.id}
                       show={openFilter}
-                      handleOnClickCard={handleOnClickCard}
-                     item={item}
+                      handleOnClickCard={() => handleOnClickCard(item.id)}
+                      item={item}
                     />
                   ))}
               </ProductListContainer>

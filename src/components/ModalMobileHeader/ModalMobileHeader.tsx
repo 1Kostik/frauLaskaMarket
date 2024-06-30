@@ -7,8 +7,12 @@ import {
   SocialLink,
   Overlay,
   Wrapper,
+  NavContainer,
+  ImageContainer,
+  image,
 } from "./ModalMobileHeader.styled";
 import { Nav, NavWrapper } from "./ModalMobileHeader.styled";
+import FrauLaska from "@assets/images/fotoForModal.png"
 interface IModalHeader{
   setIsOpen:React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -21,6 +25,7 @@ const ModalMobileHeader:React.FC<IModalHeader> = ({setIsOpen}) => {
       <Overlay />
       <Wrapper>
         <Container>
+          <NavContainer>
           <NavWrapper>
             <Nav
               to={"/consultations"}
@@ -78,6 +83,10 @@ const ModalMobileHeader:React.FC<IModalHeader> = ({setIsOpen}) => {
               </SocialLink>
             </SocialContainer>
           </div>
+          </NavContainer>
+        <ImageContainer>
+          <img src={FrauLaska} alt="FrauLaska" css={image}/>
+        </ImageContainer>
         </Container>
       </Wrapper>
     </>

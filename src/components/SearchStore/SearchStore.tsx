@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { HiOutlineSearch } from "react-icons/hi";
 import { IoIosClose } from "react-icons/io";
 import {
@@ -11,25 +11,44 @@ import {
   svgClose,
   btnClose,
 } from "./SearchStore.styled";
+import { Product } from "Interfaces/Product";
 
 interface PropsSearch {
   isOpenSearch?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSearchItem?: React.Dispatch<React.SetStateAction<string>>;
+  setFindProduct?: React.Dispatch<React.SetStateAction<Product[]>>;
+  hasFilteredProducts?: boolean;
+  setOpenFilter?:React.Dispatch<React.SetStateAction<boolean>>;
 }
-const SearchStore: React.FC<PropsSearch> = ({ isOpenSearch }) => {
+
+const SearchStore: React.FC<PropsSearch> = ({
+  isOpenSearch,
+  setSearchItem,
+  setFindProduct,
+  hasFilteredProducts,
+  setOpenFilter,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [searchProduct, setSearchProduct] = useState("");
   const handleOpenInput = () => {
     setIsOpen((prev) => !prev);
   };
   useEffect(() => {
+    if (hasFilteredProducts) {
+      setSearchProduct("");
+    }
+  }, [hasFilteredProducts]);
+
+  useEffect(() => {
     if (windowWidth >= 1440 && isOpenSearch) {
       setIsOpen(true);
       isOpenSearch(true);
-    }
-    if (isOpenSearch) {
+    } else if (isOpenSearch) {
       isOpenSearch(isOpen);
     }
-  }, [isOpen,windowWidth]);
+  }, [isOpen, windowWidth, isOpenSearch]);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -40,16 +59,33 @@ const SearchStore: React.FC<PropsSearch> = ({ isOpenSearch }) => {
     };
   }, []);
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchProduct(e.target.value);
+  };
+  const handleInputBlur = () => {
+    if (searchProduct === "" && setFindProduct && setSearchItem) {
+      setFindProduct([]);
+      setSearchItem("");
+      return;
+    }
+  };
+  const handleSearchBtn = () => {
+    if (setSearchItem && setOpenFilter) {
+      setSearchItem(searchProduct);
+      setOpenFilter(false)
+    }
+  };
+
   return (
     <div css={container}>
-      {isOpen === false && (
+      {!isOpen && (
         <button css={openSearch} onClick={handleOpenInput}>
           <HiOutlineSearch css={svgSearch} />
         </button>
       )}
       {isOpen && (
         <div css={inputContainer}>
-          <button css={search}>
+          <button css={search} onClick={handleSearchBtn}>
             <HiOutlineSearch css={svgSearch} />
           </button>
           <input
@@ -57,7 +93,10 @@ const SearchStore: React.FC<PropsSearch> = ({ isOpenSearch }) => {
             id="search"
             placeholder="Search"
             css={inputSearch}
+            value={searchProduct}
             autoComplete="off"
+            onBlur={handleInputBlur}
+            onChange={handleInputChange}
           />
           <button css={btnClose} onClick={handleOpenInput}>
             <IoIosClose css={svgClose} />

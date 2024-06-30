@@ -18,24 +18,28 @@ import {
   burgerStyles,
   Button,
   WrapperMenu,
+  cartCount,
 } from "./Header.styled";
 import { useLocation, useParams } from "react-router-dom";
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
+import { selectCart, selectCartTotalQuantity } from "@redux/selectors";
+import { useAppSelector } from "@redux/hooks";
 const modalPortal = document.querySelector("#portal-root");
 
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
 const Header = () => {
   const location = useLocation();
-  const {id} = useParams();
+  const { id } = useParams();
   const isAromaSchool = location.pathname === "/aroma-school";
   const isConsultations = location.pathname === "/consultations";
   const isStore = location.pathname === "/store";
-  const isProductDetails=location.pathname ===`/store/${id}`;
+  const isProductDetails = location.pathname === `/store/${id}`;
   const isCart = location.pathname === "/cart";
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
-
+  // const cart = useAppSelector(selectCart);
+  const totalQuantity = useAppSelector(selectCartTotalQuantity);
   const handleBurgerMenuClick = () => {
     setIsOpen((prev) => !prev);
   };
@@ -144,6 +148,7 @@ const Header = () => {
           </NavWrapper>
           <WrapperMenu>
             <Cart to={"/cart"} istrue={istrue}>
+              {totalQuantity > 0 && <div css={cartCount(istrue.toString())}>{totalQuantity}</div>}
               <CartIcon css={cartStylesWithColor(istrue.toString())} />
             </Cart>
             <Links to={"/aroma-school#target-section"} istrue={istrue}>
@@ -154,7 +159,10 @@ const Header = () => {
             </Button>
             {isOpen &&
               modalPortal &&
-              ReactDOM.createPortal(<ModalMobileHeader setIsOpen={setIsOpen} />, modalPortal)}
+              ReactDOM.createPortal(
+                <ModalMobileHeader setIsOpen={setIsOpen} />,
+                modalPortal
+              )}
           </WrapperMenu>
         </Wrapper>
       </div>

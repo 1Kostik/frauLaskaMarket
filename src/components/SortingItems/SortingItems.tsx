@@ -25,6 +25,8 @@ interface ISortingItProps {
   isOpenSearch?: boolean;
   isOpenFilter?: boolean;
   disableWidth?:string;
+  setSelectedOption?:React.Dispatch<React.SetStateAction<string | null>>;
+  selectedOption?:string | null;
 }
 const SortingItems: React.FC<ISortingItProps> = ({
   width,
@@ -33,15 +35,18 @@ const SortingItems: React.FC<ISortingItProps> = ({
   borderRadius,
   isOpenSearch,
   isOpenFilter,
-  disableWidth
+  disableWidth,
+  setSelectedOption,
+  selectedOption
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  // const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setChecked(true);
+    if(setSelectedOption){
     setSelectedOption(options[0]);
     const handleCklickOutSide = (event: MouseEvent) => {
       if (
@@ -55,14 +60,17 @@ const SortingItems: React.FC<ISortingItProps> = ({
     return () => {
       document.removeEventListener("mousedown", handleCklickOutSide);
     };
+  }
   }, []);
   const handleClick = () => {
     setIsOpen((prev) => !prev);
   };
   const handleSelect = (option: string) => {
+    if(setSelectedOption){
     setSelectedOption(option);
     setChecked(true);
     setIsOpen(false);
+    }
   };
   const isChange = isOpenFilter && isOpenSearch;
   return (
