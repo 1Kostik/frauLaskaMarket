@@ -10,21 +10,29 @@ import {
 import { Product } from "Interfaces/Product";
 interface Props {
   show?: boolean;
-  handleOnClickCard?:(id:string)=>void;
-  item:Product;
-  width?:string ;
+  handleOnClickCard?: (id: number) => void;
+  item: Product;
+  width?: string;
+  
 }
-const ProductCard: React.FC<Props> = ({ show,handleOnClickCard,item,width }) => {
-const {id,imageUrls,title,volumes}=item
+const ProductCard: React.FC<Props> = ({
+  show,
+  handleOnClickCard,
+  item,
+  width,
+ 
+}) => {
+  const { id, imageUrls, title, volumes } = item;
   return (
-    <Container show={show} onClick={()=> id !== undefined && handleOnClickCard && handleOnClickCard(id)}>
-      <CardWrapper >
+    <Container
+      show={show}
+      onClick={() =>
+        id !== undefined && handleOnClickCard && handleOnClickCard(id)
+      }
+    >
+      <CardWrapper>
         <ImageContainer>
-          <img
-            src={imageUrls[0]}
-            alt=""
-           style={{width:`${width}`}}
-          />
+          <img src={imageUrls[0]} alt="" style={{ width: `${width}` }} />
         </ImageContainer>
         <InfoContainer>
           <H5>{title}</H5>

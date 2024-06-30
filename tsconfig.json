@@ -13,6 +13,8 @@
       "@pages/*": ["pages/*"],
       "@assets/*": ["assets/*"],
       "@utils/*": ["utils/*"],
+      "@redux/*": ["redux/*"],
+      
     },
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

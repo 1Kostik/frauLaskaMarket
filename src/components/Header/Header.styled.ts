@@ -224,6 +224,7 @@ export const cartStyles = css`
   }
 `;
 export const Cart = styled(Link)<SectionProps>`
+  position: relative;
   padding: 8px;
   border-radius: 50%;
   text-decoration: none;
@@ -286,4 +287,24 @@ export const anchorStyles = (istrue: string) => css`
       border-bottom: 2px solid var(--bg-light-grey);
     }
   `)}
+`;
+export const cartCount = (istrue: string) => css`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 24px;
+  width: 20px;
+  height: 20px;
+  padding: 4px; 
+  background-color: ${istrue === "true"
+      ? "var(--bg-light-grey)"
+      : "var(--bg-black)"};
+  border-radius: 50%;
+  color: ${istrue === "true"
+      ? "var(--text-black)"
+      :"var(--text-light-grey)" };
+  font-size: 12px;
+  font-weight: 600;
 `;

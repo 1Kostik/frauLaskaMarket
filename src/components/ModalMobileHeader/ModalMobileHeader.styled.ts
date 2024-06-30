@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { css } from "@emotion/react";
-import { onDesktop } from "@styles/mixins";
+import { onDesktop, onTablet } from "@styles/mixins";
 
 export const Wrapper = styled.div`
   position: fixed;
@@ -30,11 +30,24 @@ export const Container = styled.div`
   padding: 24px 20px;
   width: 360px;
   height: 100%;
+  margin: 0 auto;
+  ${onTablet(css`
+    width: 768px;
+    gap: 8px;
+    padding: 24px 40px;
+  `)};
+`;
+export const NavContainer = styled.div`
+  display: flex;  
+  width: 360px;
+  height: 100%;
   flex-direction: column;
   justify-content: space-between;
-  margin: 0 auto;
+  ${onTablet(css`
+    width: 340px;
+    padding-right:40px;
+  `)};
 `;
-
 export const NavWrapper = styled.nav`
   display: flex;
   gap: 12px;
@@ -114,4 +127,16 @@ export const SocialLink = styled.a`
     font-size: 14px;
     line-height: 20px;
   `)}
+`;
+export const ImageContainer=styled.div`
+ display: none;  
+  ${onTablet(css`
+    display: block;
+    width: 340px;
+    height: 100%;
+    padding-left:40px;
+  `)};
+`;
+export const image=css`
+height: 520px;
 `;

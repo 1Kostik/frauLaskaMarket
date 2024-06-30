@@ -1,7 +1,6 @@
 export interface Product {
-  id: string;
-  categoryId: string;
-  code: string;
+  id: number;
+  categoryId: number;  
   title: string;
   imageUrls: string[];
   description: string;
@@ -11,9 +10,11 @@ export interface Product {
   volumes: Volume[];
   ranking: number;
   benefit: string;
+  popularity:number;
+  productCode:string,
   composition: string;
 }
-interface Volume {
+export interface Volume {
   size: string;
   price: number;
 }
