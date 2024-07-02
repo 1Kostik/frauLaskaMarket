@@ -45,7 +45,7 @@ const initialValue = {
   deliveryName: "",
   deliveryLastName: "",
   deliverySurname: "",
-  postOfficeNumber: undefined,
+  postOfficeNumber: "",
   paymentMethod: "liqPay",
 };
 
@@ -65,7 +65,6 @@ const CartForm = () => {
           setSubmitting(false);
         }, 400);
       }}
-      // validateOnChange={true}
       validateOnBlur={false}
     >
       {({ setFieldValue, setFieldTouched, touched, errors }) => (
