@@ -43,10 +43,10 @@ import ProductCard from "@components/ProductCard/ProductCard";
 import CardSlider from "@components/CardSlider/CardSlider";
 import { text } from "@assets/answers";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { addToCart } from "../../redux/slice";
+import { addToCart } from "../../redux/cart/slice";
 import { products } from "@assets/products";
 import { Product } from "Interfaces/Product";
-import { selectCart } from "@redux/selectors";
+import { selectCart } from "@redux/cart/selectors";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ const ProductDetails = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [productPrice, setProductPrice] = useState(null);
   const [addedColor, setAddedColor] = useState("");
-  const [message, setMessage] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null);
   const cart = useAppSelector(selectCart);
   const dispatch = useAppDispatch();
   const param = useParams();
@@ -72,11 +72,10 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (selectedOption) {
-      setAddedColor("")
+      setAddedColor("");
       product.volumes.forEach((item: any) => {
         if (selectedOption === item.size) {
           setProductPrice(item.price);
-          
         }
       });
     }
@@ -142,10 +141,15 @@ const ProductDetails = () => {
     const productSearch = cart.find(
       (item) => item.id === Number(param.id) && item.size === selectedOption
     );
-    if (productSearch ) {
+    if (productSearch) {
       return;
     }
-    if (param.id && selectedOption && productPrice !== null && addedColor !== "") {
+    if (
+      param.id &&
+      selectedOption &&
+      productPrice !== null &&
+      addedColor !== ""
+    ) {
       const productToAdd = {
         id: product.id,
         title: product.title,
@@ -157,10 +161,10 @@ const ProductDetails = () => {
         quantity: 1,
         color: addedColor,
       };
-     
+
       dispatch(addToCart(productToAdd));
-    }else{
-       setMessage('Оберіть будь ласка колір!')
+    } else {
+      setMessage("Оберіть будь ласка колір!");
     }
   };
   const popularity = products
@@ -168,10 +172,10 @@ const ProductDetails = () => {
       return item;
     })
     .sort((a: any, b: any) => b.popularity - a.popularity);
-const handleAddColor=(color:string)=>{
-setAddedColor(color)
-setMessage(null)
-}
+  const handleAddColor = (color: string) => {
+    setAddedColor(color);
+    setMessage(null);
+  };
   return (
     <Section>
       <div css={containerStyles}>
@@ -201,14 +205,30 @@ setMessage(null)
                 <P2>{productPrice} ₴</P2>
                 <P3>{description}</P3>
                 <ColorContainer isErrorMessage={message !== null}>
-          
                   <H4>Колір</H4>
                   <Ul>
                     {colors.map((item: string, i: number) => (
-                      <Li key={i} style={{ background: item }} onClick={()=>handleAddColor(item)}></Li>
+                      <Li
+                        key={i}
+                        style={{ background: item }}
+                        onClick={() => handleAddColor(item)}
+                      ></Li>
                     ))}
                   </Ul>
-                  {message && <p style={{color:"red",fontSize:"14px",fontWeight:"500",position:"absolute",bottom:"-17px",left:"0px" }}>{message}</p>}
+                  {message && (
+                    <p
+                      style={{
+                        color: "red",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        position: "absolute",
+                        bottom: "-17px",
+                        left: "0px",
+                      }}
+                    >
+                      {message}
+                    </p>
+                  )}
                 </ColorContainer>
                 <SelectContainer>
                   <H4>Обʼєм</H4>

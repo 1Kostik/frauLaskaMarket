@@ -1,12 +1,15 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectCart, selectCartTotalQuantity } from "../../redux/selectors";
+import {
+  selectCart,
+  selectCartTotalQuantity,
+} from "../../redux/cart/selectors";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
-} from "../../redux/slice";
+} from "../../redux/cart/slice";
 import { containerStyles } from "@styles/variables";
 import {
   BtnContainer,
