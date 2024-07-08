@@ -20,7 +20,7 @@ import {
   WrapperMenu,
   cartCount,
 } from "./Header.styled";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
 import { selectCart, selectCartTotalQuantity } from "@redux/cart/selectors";
 import { useAppSelector } from "@redux/hooks";
@@ -41,7 +41,11 @@ const Header = () => {
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
   // const cart = useAppSelector(selectCart);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
-  const isAuth = useAppSelector(getAuth)
+  const isAuth = useAppSelector(getAuth);
+  const navigate = useNavigate();
+  const handleCreateAdvert = () => {
+    navigate("/admin/create-advert");
+  };
   const handleBurgerMenuClick = () => {
     setIsOpen((prev) => !prev);
   };
@@ -148,7 +152,11 @@ const Header = () => {
               Магазин
             </Nav>
           </NavWrapper>
-          {isAuth && <div>Створити</div>}
+          {isAuth && (
+            <button type="button" onClick={handleCreateAdvert}>
+              Створити
+            </button>
+          )}
           <WrapperMenu>
             <Cart to={"/cart"} istrue={istrue}>
               {totalQuantity > 0 && (
