@@ -114,11 +114,11 @@ export const LogoIcon = styled(Logo)<SectionProps>`
 export const NavWrapper = styled.nav`
   display: flex;
   ${onDesktop(css`
-    width: 948px;
     height: 40px;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    flex-grow: 1;
   `)}
 `;
 export const Nav = styled(NavLink)<SectionProps>`
@@ -297,14 +297,56 @@ export const cartCount = (istrue: string) => css`
   right: 24px;
   width: 20px;
   height: 20px;
-  padding: 4px; 
+  padding: 4px;
   background-color: ${istrue === "true"
-      ? "var(--bg-light-grey)"
-      : "var(--bg-black)"};
+    ? "var(--bg-light-grey)"
+    : "var(--bg-black)"};
   border-radius: 50%;
-  color: ${istrue === "true"
-      ? "var(--text-black)"
-      :"var(--text-light-grey)" };
+  color: ${istrue === "true" ? "var(--text-black)" : "var(--text-light-grey)"};
   font-size: 12px;
   font-weight: 600;
 `;
+
+export const addProductStyle = (isTrue: string) =>
+  css`
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 175px;
+    padding: 8px 16px;
+    color: ${isTrue === "true"
+      ? "var(--text-light-grey)"
+      : "var(--text-black)"};
+    font-family: Fixel;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    transition: var(--effectDuration);
+
+    ${onTablet(css`
+      margin-left: 350px;
+      font-size: 18px;
+    `)}
+    ${onDesktop(css`
+      margin-left: 0;
+    `)}
+
+    &:hover::after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 38px;
+      width: 143px;
+      height: 1px;
+      background-color: var(--bg-light-grey);
+    }
+
+    &:hover {
+      color: var(--text-active-link-milk);
+    }
+
+    & svg {
+      margin-right: 6px;
+    }
+  `;

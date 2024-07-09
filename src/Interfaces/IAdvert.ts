@@ -1,6 +1,6 @@
 import { Category } from "@components/CustomSelect/CustomSelect";
 
-interface IVolume {
+export interface IVolume {
   size: number | string;
   price: number | string;
   productCount: number | string;
@@ -18,4 +18,8 @@ export interface IAdvert {
   composition: string;
   colors: string[];
   feedbacks: string[];
+  benefit: string;
+  productCode: string;
+  ranking: number;
+  popularity: number;
 }

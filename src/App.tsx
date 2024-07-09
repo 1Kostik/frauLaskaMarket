@@ -24,7 +24,10 @@ function App() {
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin/create-advert" element={<CreateAdvertPage />} />
-        <Route path="/admin/edit-advert" element={<EditAdvertPage />} />
+        <Route
+          path="/admin/edit-advert/:productId"
+          element={<EditAdvertPage />}
+        />
       </Routes>
     </>
   );

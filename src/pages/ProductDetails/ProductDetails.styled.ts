@@ -32,6 +32,7 @@ export const Wrapper = styled.div`
   /* height: 678px; */
 `;
 export const ImageContainer = styled.div`
+  position: relative;
   border-radius: 8px;
   overflow: hidden;
   width: 100%;

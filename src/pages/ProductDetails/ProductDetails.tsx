@@ -45,14 +45,15 @@ import { text } from "@assets/answers";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cart/slice";
 import { products } from "@assets/products";
-import { Product } from "Interfaces/Product";
+import { Product, Volume } from "Interfaces/Product";
 import { selectCart } from "@redux/cart/selectors";
+import ProductInterface from "@components/ProductInterface";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [productPrice, setProductPrice] = useState(null);
+  const [productPrice, setProductPrice] = useState<number | null>(null);
   const [addedColor, setAddedColor] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const cart = useAppSelector(selectCart);
@@ -73,8 +74,8 @@ const ProductDetails = () => {
   useEffect(() => {
     if (selectedOption) {
       setAddedColor("");
-      product.volumes.forEach((item: any) => {
-        if (selectedOption === item.size) {
+      product.volumes.forEach((item: Volume) => {
+        if (Number(selectedOption) === item.size) {
           setProductPrice(item.price);
         }
       });
@@ -99,7 +100,7 @@ const ProductDetails = () => {
       ? "306px"
       : "100%";
 
-  const options = [...product.volumes.map(({ size }: any) => size)];
+  const options = [...product.volumes.map(({ size }: Volume) => size)];
 
   const handleBackClick = () => {
     navigate("/store");
@@ -168,10 +169,10 @@ const ProductDetails = () => {
     }
   };
   const popularity = products
-    .map((item: any) => {
+    .map((item: Product) => {
       return item;
     })
-    .sort((a: any, b: any) => b.popularity - a.popularity);
+    .sort((a: Product, b: Product) => b.popularity - a.popularity);
   const handleAddColor = (color: string) => {
     setAddedColor(color);
     setMessage(null);
@@ -195,7 +196,9 @@ const ProductDetails = () => {
                   renderArrayImg={imageArray}
                   stylesProps={ProductDetailsProps}
                 />
+                <ProductInterface productId={Number(param.id)} />
               </ImageContainer>
+
               <TextContainer>
                 <TitleContainer>
                   <H3>{title}</H3>
@@ -277,7 +280,7 @@ const ProductDetails = () => {
 
             <ProductListContainer>
               {popularity &&
-                popularity.map((item: any) => (
+                popularity.map((item: Product) => (
                   <ProductCard key={item.id} width={widthImg} item={item} />
                 ))}
             </ProductListContainer>

@@ -19,12 +19,14 @@ import {
   Button,
   WrapperMenu,
   cartCount,
+  addProductStyle,
 } from "./Header.styled";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
 import { selectCart, selectCartTotalQuantity } from "@redux/cart/selectors";
 import { useAppSelector } from "@redux/hooks";
 import { getAuth } from "@redux/auth/selectors";
+import { MdOutlinePostAdd } from "react-icons/md";
 const modalPortal = document.querySelector("#portal-root");
 
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
@@ -153,8 +155,13 @@ const Header = () => {
             </Nav>
           </NavWrapper>
           {isAuth && (
-            <button type="button" onClick={handleCreateAdvert}>
-              Створити
+            <button
+              type="button"
+              onClick={handleCreateAdvert}
+              css={addProductStyle(istrue)}
+            >
+              <MdOutlinePostAdd />
+              Додати товар
             </button>
           )}
           <WrapperMenu>
