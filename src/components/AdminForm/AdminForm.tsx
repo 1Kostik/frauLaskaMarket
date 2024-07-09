@@ -41,6 +41,10 @@ const initialValues: IAdvert = {
   composition: "",
   colors: [],
   feedbacks: [""],
+  benefit: "",
+  productCode: "",
+  ranking: 0,
+  popularity: 0,
 };
 
 const validationSchema = Yup.object({
@@ -62,6 +66,7 @@ const validationSchema = Yup.object({
   composition: Yup.string(),
   colors: Yup.array().min(1, "Необхідно вибрати хоча б один колір").required(),
   feedbacks: Yup.array().of(Yup.string()),
+  benefit: Yup.string(),
 });
 
 const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
@@ -215,7 +220,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
               <label htmlFor="description">Опис</label>
               <Field
                 name="description"
-                type="text"
+                type="textarea"
                 id="description"
                 onFocus={() => setFieldError("description", undefined)}
               />
@@ -224,8 +229,14 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
               </ErrorMessage>
 
               <label htmlFor="composition">Склад</label>
-              <Field name="composition" type="string" id="composition" />
+              <Field name="composition" type="textarea" id="composition" />
               <ErrorMessage name="composition">
+                {(msg) => <div css={errorStyle}>{msg}</div>}
+              </ErrorMessage>
+
+              <label htmlFor="benefit">З чим допоможе?</label>
+              <Field name="benefit" type="textarea" id="benefit" />
+              <ErrorMessage name="benefit">
                 {(msg) => <div css={errorStyle}>{msg}</div>}
               </ErrorMessage>
 

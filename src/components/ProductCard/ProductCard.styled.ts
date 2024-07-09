@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
 interface Props {
   show?: boolean;
- 
 }
 export const CardWrapper = styled.div``;
 
@@ -24,12 +23,49 @@ export const Container = styled.div<Props>`
 `;
 
 export const ImageContainer = styled.div`
+  position: relative;
   width: 100%;
   height: 336px;
   border-radius: 16px;
   background: #b7b7b7;
   margin-bottom: 8px;
   overflow: hidden;
+`;
+
+export const interfaceStyle = css`
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+
+  & button {
+    padding: 8px;
+    border-radius: 100%;
+    background-color: var(--bg-tranparent);
+    transition: var(--effectDuration);
+
+    & svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: var(--btn-show-more-hover);
+    }
+  }
+
+  & button:first-of-type:hover {
+    & svg {
+      fill: #ff000080;
+    }
+  }
+  & button:last-of-type:hover {
+    & svg {
+      fill: yellow;
+    }
+  }
 `;
 
 export const InfoContainer = styled.div`

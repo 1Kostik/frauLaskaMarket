@@ -1,5 +1,5 @@
-import AdminForm from '@components/AdminForm';
-import { IAdvert } from 'Interfaces/IAdvert';
+import AdminForm from "@components/AdminForm";
+import { IAdvert } from "Interfaces/IAdvert";
 
 const advert: IAdvert = {
   categoryId: 3,
@@ -26,14 +26,18 @@ const advert: IAdvert = {
   composition: "wheels",
   colors: ["#D9B8FF", "#E09C4F"],
   feedbacks: ["qwerty", "asdf"],
+  benefit: "string",
+  productCode: "string",
+  ranking: 0,
+  popularity: 0,
 };
 
 const EditAdvertPage = () => {
   return (
     <>
-      <AdminForm advert={advert}/>
+      <AdminForm advert={advert} />
     </>
   );
-}
+};
 
-export default EditAdvertPage
+export default EditAdvertPage;
