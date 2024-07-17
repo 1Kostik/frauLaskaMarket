@@ -21,13 +21,13 @@ function App() {
           <Route path="store" element={<StorePage />} />
           <Route path="store/:id" element={<ProductDetails />} />
           <Route path="cart" element={<CartPage />} />
+          <Route path="admin/create-advert" element={<CreateAdvertPage />} />
+          <Route
+            path="admin/edit-advert/:productId"
+            element={<EditAdvertPage />}
+          />
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
-        <Route path="/admin/create-advert" element={<CreateAdvertPage />} />
-        <Route
-          path="/admin/edit-advert/:productId"
-          element={<EditAdvertPage />}
-        />
       </Routes>
     </>
   );

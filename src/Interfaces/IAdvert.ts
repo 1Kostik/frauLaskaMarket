@@ -1,4 +1,4 @@
-import { Category } from "@components/CustomSelect/CustomSelect";
+
 
 export interface IVolume {
   size: number | string;
@@ -7,7 +7,7 @@ export interface IVolume {
 }
 
 export interface IAdvert {
-  categoryId: Category | undefined;
+  categoryId: number | undefined;
   imageFiles: File[] | string[];
   mainImage: string | undefined;
   title: string;
@@ -20,6 +20,5 @@ export interface IAdvert {
   feedbacks: string[];
   benefit: string;
   productCode: string;
-  ranking: number;
-  popularity: number;
+  newCategory?: string;
 }

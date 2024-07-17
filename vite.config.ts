@@ -6,8 +6,8 @@ import svgr from "@svgr/rollup";
 export default defineConfig({
   plugins: [react(), svgr()],
   build: {
-    outDir: 'build',
-    sourcemap: true, 
+    outDir: "build",
+    sourcemap: true,
   },
   resolve: {
     alias: {
@@ -17,6 +17,7 @@ export default defineConfig({
       "@assets": path.resolve(__dirname, "./src/assets"),
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@redux": path.resolve(__dirname, "./src/redux"),
+      "@services": path.resolve(__dirname, "./src/services"),
     },
   },
   server: {

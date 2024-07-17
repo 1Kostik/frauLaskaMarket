@@ -1,37 +1,73 @@
 import { css } from "@emotion/react";
+import { inputFieldStyle } from "@components/AdminForm/AdminForm.styled";
 
-export const selectWrapper = css`
-  width: 200px;
+export const selectContainer = css`
+  position: relative;
 `;
 
 export const selectorStyle = (isShowDropdown: boolean) => css`
+  ${inputFieldStyle}
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   & .arrow {
     transform: ${isShowDropdown ? "rotate(180deg)" : "rotate(0deg)"};
   }
 `;
 
-export const dropdown = ( categogy: number | undefined) => css`
+export const dropdownStyle = css`
+  position: absolute;
+  top: 60px;
+  z-index: 10;
 
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  width: 100%;
   padding: 10px;
+  background-color: var(--bg-btn-black);
 
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 12px;
 
   & div {
     position: relative;
-    padding-left: 20px;
-  }
+    display: flex;
+    padding-left: 24px;
+    cursor: pointer;
 
-  & :nth-of-type(${categogy})::before {
-    content: "";
-    position: absolute;
-    left: -5px;
-    display: block;
-    width: 16px;
-    height: 16px;
-    background-color: green;
+    & p {
+      flex-grow: 1;
+      font-family: Arial;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: 0.4px;
+      color: var(--text-light-grey);
+    }
+
+    & .checkIcon {
+      position: absolute;
+      left: 0;
+      fill: var(--text-light-grey);
+    }
+
+    & .editBtn,
+    .deleteBtn {
+      padding: 0 4px;
+    }
+
+    & .editBtn {
+      margin-right: 10px;
+      & svg {
+        fill: var(--edit-color);
+      }
+    }
+    & .deleteBtn {
+      & svg {
+        fill: var(--fill-delete-icon);
+      }
+    }
   }
 `;

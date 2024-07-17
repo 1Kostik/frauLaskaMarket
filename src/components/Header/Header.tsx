@@ -38,6 +38,7 @@ const Header = () => {
   const isStore = location.pathname === "/store";
   const isProductDetails = location.pathname === `/store/${id}`;
   const isCart = location.pathname === "/cart";
+  const isAdmin = location.pathname.startsWith("/admin");
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
@@ -59,6 +60,7 @@ const Header = () => {
     isAromaSchool ||
     isOpen ||
     isProductDetails ||
+    isAdmin ||
     isScrolled
       ? "true"
       : "false";

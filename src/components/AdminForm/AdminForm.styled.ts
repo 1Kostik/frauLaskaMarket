@@ -1,9 +1,28 @@
 import { css } from "@emotion/react";
 
-export const formWrapper = css`
+export const pageTitle = css`
+  padding-bottom: 40px;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.64px;
+  color: var(--text-light-grey);
+`;
+
+export const formContainer = css`
+  display: flex;
+  column-gap: 20px;
+
+  & .errorContainer {
+    position: relative;
+  }
+`;
+
+export const formDataWrapper = css`
   display: flex;
   flex-direction: column;
   row-gap: 16px;
+
+  width: 844px;
 
   color: grey;
 
@@ -12,16 +31,85 @@ export const formWrapper = css`
     -webkit-appearance: none;
     margin: 0;
   }
+`;
 
-  &  button {
-    color: gold;
+export const blockWrapper = css`
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border-light-grey);
+
+  & h2 {
+    min-width: 312px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 120%;
+    letter-spacing: 0.48px;
+    color: var(--text-light-grey);
+  }
+`;
+
+export const categoryBlock = css`
+  display: flex;
+  column-gap: 20px;
+`;
+
+export const categoryFields = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+`;
+
+export const inputFieldStyle = css`
+  width: 100%;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border-gray);
+  background-color: transparent;
+
+  font-family: Fixel;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: var(--text-dark-grey);
+
+  &::placeholder {
+    color: var(--text-dark-grey);
+  }
+`;
+
+export const titleImagesWrapper = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+export const addImagesBtn = css`
+  width: 169px;
+  padding: 10px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--border-light-grey);
+
+  font-family: Fixel;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: var(--text-light-grey);
+
+  cursor: pointer;
+
+  & ~ input {
+    display: none;
   }
 `;
 
 export const imagesContainer = css`
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
 `;
 
 export const imageWrapper = css`
@@ -43,23 +131,33 @@ export const imageWrapper = css`
     position: absolute;
     top: 8px;
     left: 8px;
-    width: 20px;
-    height: 20px;
-    background-color: pink;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: var(--bg-btn-grey);
   }
   & .close-btn {
     position: absolute;
     right: 8px;
     top: 8px;
-    padding: 2px;
-    border-radius: 100%;
-    background-color: var(--btn-show-more-hover);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+
+    background-color: var(--bg-btn-grey);
+
+    & path {
+      fill: var(--bg-black);
+    }
   }
 `;
 
 export const imageThumb = css`
-  width: 150px;
-  height: 150px;
+  width: calc((800px - (3 * 14px)) / 4);
+  height: 174px;
   border-radius: 15px;
   overflow: hidden;
 
@@ -70,32 +168,39 @@ export const imageThumb = css`
   }
 `;
 
-export const errorStyle = css`
-  color: red;
-  font-size: 14px;
-  margin-top: 4px;
-  background-color: pink;
+export const volumeStyle = css`
+  padding: 10px;
+  border: 1px solid green;
 `;
 
-export const inputPhotos = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 150px;
-  height: 150px;
-  border-radius: 16px;
-  border: 1px solid var(--border-color);
-  color: var(--text-light-grey);
+export const buttonStyle = css`
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--bg-btn-grey);
 
-  & ~ input {
-    display: none;
+  font-size: var(--Typography-sm, 14px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.1px;
+  color: var(--text-black);
+
+  background-color: var(--bg-btn-grey);
+`;
+
+export const submitWrapper = css`
+  width: 420px;
+  height: 74px;
+  ${blockWrapper}
+
+  & button {
+    ${buttonStyle}
   }
 `;
 
-export const volumeStyle = css`
-padding: 10px;
-border: 1px solid green;
-
-
-` 
-
+export const errorStyle = css`
+  position: absolute;
+  font-size: 14px;
+  padding-top: 4px;
+  color: var(--error-color);
+`;
