@@ -32,7 +32,7 @@ export const interfaceStyle = css`
   }
   & button:last-of-type:hover {
     & svg {
-      fill: #ff000080;
+      fill: var(--fill-delete-icon);
     }
   }
 `;

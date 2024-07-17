@@ -1,11 +1,15 @@
 import AdminForm from "@components/AdminForm";
+import { containerStyles } from "@styles/variables";
+import { sectionStyle } from "./CreateAdvertPage.styled";
 
-const CreateAdvert = () => {
+const CreateAdvertPage = () => {
   return (
-    <>
-      <AdminForm />
-    </>
+    <section css={sectionStyle}>
+      <div css={containerStyles}>
+        <AdminForm />
+      </div>
+    </section>
   );
 };
 
-export default CreateAdvert;
+export default CreateAdvertPage;

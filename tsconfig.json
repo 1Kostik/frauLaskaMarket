@@ -13,6 +13,7 @@
       "@pages/*": ["pages/*"],
       "@assets/*": ["assets/*"],
       "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"],
       "@redux/*": ["redux/*"],
       
     },

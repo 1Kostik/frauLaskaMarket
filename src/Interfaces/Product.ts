@@ -3,6 +3,7 @@ export interface Product {
   categoryId: number;
   title: string;
   imageUrls: string[];
+  mainImage: string;
   description: string;
   colors: string[];
   discount: number;
@@ -13,9 +14,10 @@ export interface Product {
   popularity: number;
   productCode: string;
   composition: string;
+  feedbacks: string[];
 }
 export interface Volume {
-  volume: number;
+  productCount: number;
   size: number;
   price: number;
 }

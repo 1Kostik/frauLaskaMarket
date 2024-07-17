@@ -1,79 +1,118 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { FormikProps } from "formik";
-import { dropdown, selectWrapper, selectorStyle } from "./CustomSelect.styled";
+import { nanoid } from "nanoid";
+
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { selectCategories } from "@redux/categories/selectors";
+import {
+  editCategory,
+  fetchCategories,
+  removeCategory,
+} from "@redux/categories/operations";
+
+import { TiDeleteOutline } from "react-icons/ti";
+import { FaCheck } from "react-icons/fa6";
 import { ReactComponent as ArrowDownIcon } from "@assets/icons/arrow-down-select.svg";
+import { errorBorder } from "@components/CartForm/CartForm.styled";
+import {
+  dropdownStyle,
+  selectContainer,
+  selectorStyle,
+} from "./CustomSelect.styled";
+
 import { IAdvert } from "Interfaces/IAdvert";
+import { ICategory } from "Interfaces/ICategory";
+
+import Modal from "@components/Modal";
+import DeleteCategoryModal from "@components/DeleteCategoryModal";
+import EditCategoryModal from "@components/EditCategoryModal";
+
+const modalPortal = document.querySelector("#portal-root");
 
 interface ICustomSelectProps {
   formik: FormikProps<IAdvert>;
-  selectedCategory?: number;
+  selectedCategoryId?: number;
 }
 
-export enum Category {
-  BODY_CARE = 1,
-  SUPPLEMENTS,
-  SCENTED_CANDLES,
+interface IEditAction {
+  type: string;
+  name: string;
 }
 
 const CustomSelect: React.FC<ICustomSelectProps> = ({
   formik,
-  selectedCategory,
+  selectedCategoryId,
 }) => {
   const [isShowDropdown, setIsShowDropdown] = useState(false);
-  const [categogy, setCategogy] = useState<Category | undefined>(
-    selectedCategory
+  const [selectedCategory, setSelectedCategory] = useState<number | undefined>(
+    selectedCategoryId
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editAction, setEditAction] = useState<IEditAction | undefined>(
+    undefined
+  );
+
+  const { setFieldError, setFieldValue, errors, touched } = formik;
+
+  const dispatch = useAppDispatch();
+  const categories: ICategory[] = useAppSelector(selectCategories);
 
   const handleShowDropDown = () => {
     setIsShowDropdown((prev) => !prev);
-    formik.setFieldError("categoryId", undefined);
+    setFieldError("categoryId", undefined);
   };
 
-  const handleOptionClick = (e: React.MouseEvent<HTMLDivElement> | number) => {
-    let optionValue;
-    if (typeof e === "number") {
-      optionValue = e;
-      console.log("e", e);
+  const categoryId = (name: string) => {
+    return categories.find((item) => item.title === name)?.id || 0;
+  };
+
+  const handleOptionClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const categoryName = (e.target as HTMLDivElement).innerText;
+    setSelectedCategory(categoryId(categoryName));
+    setTimeout(() => {
+      setIsShowDropdown(false);
+    }, 300);
+  };
+
+  const handleShowCategory = () => {
+    if (selectedCategory) {
+      return categories.find((item) => item.id === selectedCategory)?.title;
+    }
+    return "Оберіть категорію";
+  };
+
+  const handleEditCategory = (category: string, type: string) => {
+    if (type === "delete") {
+      setEditAction({ type: "delete", name: category });
     } else {
-      optionValue = (e.target as HTMLDivElement).innerText;
+      setEditAction({ type: "change", name: category });
     }
-
-    setCategogy(() => {
-      console.log("set");
-      switch (optionValue) {
-        case "Догляд за тілом":
-          return Category.BODY_CARE;
-        case "Харчові добавки":
-          return Category.SUPPLEMENTS;
-        case "Ароматизовані свічки":
-          return Category.SCENTED_CANDLES;
-        default:
-          break;
-      }
-    });
-    setIsShowDropdown((prev) => !prev);
+    setIsModalOpen(true);
   };
 
-  const handleSelectedCategory = () => {
-    switch (categogy) {
-      case Category.BODY_CARE:
-        return "Догляд за тілом";
-      case Category.SUPPLEMENTS:
-        return "Харчові добавки";
-      case Category.SCENTED_CANDLES:
-        return "Ароматизовані свічки";
+  const handleDeleteCategory = (categoryName: string) => {
+    dispatch(removeCategory(categoryId(categoryName))).then(() =>
+      setIsModalOpen(false)
+    );
+  };
 
-      default:
-        return "Оберіть категорію";
-    }
+  const handleCategoryNameEdit = (categoryName: string, newName: string) => {
+    dispatch(
+      editCategory({ id: categoryId(categoryName), name: newName })
+    ).then(() => setIsModalOpen(false));
   };
 
   useEffect(() => {
-    if (categogy) {
-      formik.setFieldValue("categoryId", categogy);
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setFieldValue("categoryId", selectedCategory);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categogy]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -82,7 +121,9 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
         !target.closest("[data-options]") &&
         !target.closest("[data-dropdown-trigger]")
       ) {
-        setIsShowDropdown(false);
+        setTimeout(() => {
+          setIsShowDropdown(false);
+        }, 300);
       }
     };
 
@@ -94,22 +135,65 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
   }, []);
 
   return (
-    <div css={selectWrapper}>
+    <div css={selectContainer}>
       <div
         onClick={handleShowDropDown}
         data-dropdown-trigger
-        css={selectorStyle(isShowDropdown)}
+        css={[
+          selectorStyle(isShowDropdown),
+          errorBorder(!!(errors.categoryId && touched.categoryId)),
+        ]}
       >
-        <p>{handleSelectedCategory()}</p>
-        <ArrowDownIcon className="arrow" />
+        <p>{handleShowCategory()}</p>
+        <button type="button">
+          <ArrowDownIcon className="arrow" />
+        </button>
       </div>
       {isShowDropdown && (
-        <div data-options css={dropdown(categogy)} onClick={handleOptionClick}>
-          <div>Догляд за тілом</div>
-          <div>Харчові добавки</div>
-          <div>Ароматизовані свічки</div>
+        <div data-options css={dropdownStyle} onClick={handleOptionClick}>
+          {categories.map((item) => (
+            <div key={nanoid()}>
+              {selectedCategory === item.id && (
+                <FaCheck className="checkIcon" />
+              )}
+              <p>{item.title}</p>
+              <button
+                type="button"
+                className="editBtn"
+                onClick={() => handleEditCategory(item.title, "change")}
+              >
+                <TiDeleteOutline />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleEditCategory(item.title, "delete")}
+                className="deleteBtn"
+              >
+                <TiDeleteOutline />
+              </button>
+            </div>
+          ))}
         </div>
       )}
+      {isModalOpen &&
+        modalPortal &&
+        createPortal(
+          <Modal setIsOpen={setIsModalOpen}>
+            {editAction?.type === "change" && (
+              <EditCategoryModal
+                name={editAction.name}
+                onTitleEdit={handleCategoryNameEdit}
+              />
+            )}
+            {editAction?.type === "delete" && (
+              <DeleteCategoryModal
+                onDelete={handleDeleteCategory}
+                name={editAction.name}
+              />
+            )}
+          </Modal>,
+          modalPortal
+        )}
     </div>
   );
 };

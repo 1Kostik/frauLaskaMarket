@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.11.5",
     "@reduxjs/toolkit": "^2.2.5",
     "@types/classnames": "^2.3.1",
+    "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "formik": "^2.4.6",
     "nanoid": "^5.0.7",

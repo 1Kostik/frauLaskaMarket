@@ -1,4 +1,5 @@
 import AdminForm from "@components/AdminForm";
+import { containerStyles } from "@styles/variables";
 import { IAdvert } from "Interfaces/IAdvert";
 
 const advert: IAdvert = {
@@ -28,15 +29,15 @@ const advert: IAdvert = {
   feedbacks: ["qwerty", "asdf"],
   benefit: "string",
   productCode: "string",
-  ranking: 0,
-  popularity: 0,
 };
 
 const EditAdvertPage = () => {
   return (
-    <>
-      <AdminForm advert={advert} />
-    </>
+     <section>
+      <div css={containerStyles}>
+        <AdminForm advert={advert}/>
+      </div>
+    </section>
   );
 };
 
