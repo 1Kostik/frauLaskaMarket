@@ -224,6 +224,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
             errors,
             touched,
           } = formik;
+
           return (
             <>
               <h1 css={pageTitle}>
@@ -515,34 +516,32 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                   />
                                 </label>
 
-                                {isShowColorPicker.includes(index) ||
-                                  (variations[index].color && (
-                                    <div className="errorContainer">
-                                      <ColorPicker
-                                        formik={formik}
-                                        colorForEdit={advert?.variations[index]}
-                                        index={index}
-                                        onClose={handleShowColorPicker}
-                                      />
-                                      <ErrorMessage name="colors">
-                                        {(msg) => (
-                                          <div css={errorStyle}>{msg}</div>
-                                        )}
-                                      </ErrorMessage>
-                                    </div>
-                                  ))}
-                                {!isShowColorPicker.includes(index) ||
-                                  (variations[index].color && (
-                                    <button
-                                      type="button"
-                                      css={buttonStyle}
-                                      onClick={() =>
-                                        handleShowColorPicker(index)
-                                      }
-                                    >
-                                      <p>Додати колір</p> <FiPlus />
-                                    </button>
-                                  ))}
+                                {(isShowColorPicker.includes(index) ||
+                                  variations[index].color) && (
+                                  <div className="errorContainer">
+                                    <ColorPicker
+                                      formik={formik}
+                                      colorForEdit={advert?.variations[index]}
+                                      index={index}
+                                      onClose={handleShowColorPicker}
+                                    />
+                                    <ErrorMessage name="colors">
+                                      {(msg) => (
+                                        <div css={errorStyle}>{msg}</div>
+                                      )}
+                                    </ErrorMessage>
+                                  </div>
+                                )}
+                                {(!isShowColorPicker.includes(index) ||
+                                  variations[index].color) && (
+                                  <button
+                                    type="button"
+                                    css={buttonStyle}
+                                    onClick={() => handleShowColorPicker(index)}
+                                  >
+                                    <p>Додати колір</p> <FiPlus />
+                                  </button>
+                                )}
 
                                 {isShowAddSize.includes(index) && (
                                   <label htmlFor={`variations.${index}.size`}>
@@ -606,7 +605,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                 discount: "",
                               })
                             }
-                            css={[buttonStyle, {marginTop: "14px"}]}
+                            css={[buttonStyle, { marginTop: "14px" }]}
                           >
                             <p>Додати варіацію товару</p>
                             <FiPlus />
