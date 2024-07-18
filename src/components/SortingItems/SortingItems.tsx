@@ -19,14 +19,14 @@ import {
 
 interface ISortingItProps {
   width?: string;
-  options: string[];
+  options: number[] | null;
   padding?: string;
   borderRadius?: string;
   isOpenSearch?: boolean;
   isOpenFilter?: boolean;
   disableWidth?:string;
-  setSelectedOption?:React.Dispatch<React.SetStateAction<string | null>>;
-  selectedOption?:string | null;
+  setSelectedOption?:React.Dispatch<React.SetStateAction<number | null>>;
+  selectedOption?:number | null;
 }
 const SortingItems: React.FC<ISortingItProps> = ({
   width,
@@ -46,7 +46,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
 
   useEffect(() => {
     setChecked(true);
-    if(setSelectedOption){
+    if(setSelectedOption && options){
     setSelectedOption(options[0]);
     const handleCklickOutSide = (event: MouseEvent) => {
       if (
@@ -65,7 +65,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
   const handleClick = () => {
     setIsOpen((prev) => !prev);
   };
-  const handleSelect = (option: string) => {
+  const handleSelect = (option: number) => {
     if(setSelectedOption){
     setSelectedOption(option);
     setChecked(true);
@@ -93,7 +93,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
         </SelectTitleContainer>
         {isOpen && (
           <SelectOptionContainer width={width}>
-            {options.map((option, i) => (
+            {options && options.map((option, i) => (
               <SelectOne key={option + i}>
                 <SvgContainer>
                   {checked && selectedOption === option && (

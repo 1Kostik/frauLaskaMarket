@@ -28,3 +28,8 @@ export const patchCategory = async ({
   const { data } = await axios.patch(`categories/${id}`, { title: name });
   return data;
 };
+
+export const getProductById = async (id: number) => {
+  const { data } = await axios.get(`products/${id}`);
+  return data;
+};
