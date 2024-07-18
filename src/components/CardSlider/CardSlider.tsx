@@ -30,6 +30,7 @@ import { LuArrowRight } from "react-icons/lu";
 import { LuArrowLeft } from "react-icons/lu";
 import SwiperCore from "swiper";
 import { StyleProps } from "@pages/MainPage/CardSliderSection/CardSliderSection";
+import { ImageUrl } from "Interfaces/Product";
 
 export interface Itext {
   id: number;
@@ -39,7 +40,7 @@ export interface Itext {
 }
 
 interface CardSliderProps {
-  renderArrayImg?: string[];
+  renderArrayImg?: ImageUrl[] | null;
   renderArrayText?: Itext[];
   stylesProps: StyleProps;
 }
@@ -144,9 +145,9 @@ const CardSlider: React.FC<CardSliderProps> = ({
         {renderArrayImg
           ? renderArrayImg &&
             renderArrayImg.length > 0 &&
-            renderArrayImg.map((item, i) => (
+            renderArrayImg.map((item:ImageUrl, i) => (
               <SwiperSlide className="swiper-slide image-slide" key={i}>
-                <img src={item} alt="" />
+                <img src={item.img_url} alt="" />
               </SwiperSlide>
             ))
           : renderArrayText &&

@@ -45,36 +45,88 @@ import { text } from "@assets/answers";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cart/slice";
 import { products } from "@assets/products";
-import { Product, Volume } from "Interfaces/Product";
+import { Product, Variation } from "Interfaces/Product";
 import { selectCart } from "@redux/cart/selectors";
 import ProductInterface from "@components/ProductInterface";
+import { getProductById } from "@services/servicesApi";
+const ProductDetailsProps = {
+  container: {
+    "padding-top": ["", ""],
+    "padding-bottom": ["", ""],
+    width: ["100%"],
+    height: ["", ""],
+  },
+  display: ["none", "none", "flex"],
+  width: ["320px", "332px", "626px"],
+  height: ["320px", "332px", "626px"],
+  gap: ["6px", "12px"],
+  slidesPerView: [1, 1, 1],
+  spaceBetween: [16, 12],
+  prevEl: ["#prevSmButton"],
+  nextEl: ["#nextSmButton"],
+};
+const ProductDetailsPropsText = {
+  container: {
+    "padding-top": ["24px", "40px"],
+    "padding-bottom": ["24px", "40px"],
+    width: ["100%"],
+    height: ["563px", "616px"],
+  },
+  display: ["none", "flex", "none"],
+  width: ["320px", "728px", "1360px"],
+  height: ["456px", "456px", "456px"],
+  gap: ["6px", "12px"],
+  slidesPerView: [1, 2, 3.5],
+  spaceBetween: [16, 12],
+  prevEl: ["#prevMdButton"],
+  nextEl: ["#nextMdButton"],
+};
 
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [productPrice, setProductPrice] = useState<number | null>(null);
   const [addedColor, setAddedColor] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
+
   const cart = useAppSelector(selectCart);
   const dispatch = useAppDispatch();
-  const param = useParams();
+  const { id } = useParams();
 
-  const product = products.find(
-    (item: Product) => item.id === Number(param.id)
-  );
-  const imageArray = [...product.imageUrls];
-  const title = product.title;
-  const description = product.description;
-  const colors = product.colors;
-  const benefit = product.benefit;
-  const composition = product.composition.toLowerCase();
-  const productCode = product.productCode;
+  const imageArray = product && [...product.imageUrls];
+  const title = product && product.title;
+  const description = product && product.description;
+  const colors =
+    product && product.variations.map((item: Variation) => item.color);
+  const benefit = product && product.benefit;
+  const composition = product && product.composition.toLowerCase();
+  const productCode = product && product.productCode;
 
   useEffect(() => {
-    if (selectedOption) {
+    const fetchProduct = async () => {
+      if (!id) {
+        return;
+      }
+      try {
+        const data = await getProductById(Number(id));
+        setProduct(data);
+        setProductPrice(data.variations[0].price);
+        setSelectedOption(data.variations[0].size);
+        setAddedColor(data.variations[0].color)
+      } catch (error) {
+        console.log("error :>> ", error);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  useEffect(() => {
+    if (selectedOption && product) {
       setAddedColor("");
-      product.volumes.forEach((item: Volume) => {
+      product.variations.forEach((item: Variation) => {
         if (Number(selectedOption) === item.size) {
           setProductPrice(item.price);
         }
@@ -100,53 +152,24 @@ const ProductDetails = () => {
       ? "306px"
       : "100%";
 
-  const options = [...product.volumes.map(({ size }: Volume) => size)];
+  const options = product && [
+    ...product.variations.map((item: Variation) => item.size),
+  ];
 
   const handleBackClick = () => {
     navigate("/store");
   };
-  const ProductDetailsProps = {
-    container: {
-      "padding-top": ["", ""],
-      "padding-bottom": ["", ""],
-      width: ["100%"],
-      height: ["", ""],
-    },
-    display: ["none", "none", "flex"],
-    width: ["320px", "332px", "626px"],
-    height: ["320px", "332px", "626px"],
-    gap: ["6px", "12px"],
-    slidesPerView: [1, 1, 1],
-    spaceBetween: [16, 12],
-    prevEl: ["#prevSmButton"],
-    nextEl: ["#nextSmButton"],
-  };
-  const ProductDetailsPropsText = {
-    container: {
-      "padding-top": ["24px", "40px"],
-      "padding-bottom": ["24px", "40px"],
-      width: ["100%"],
-      height: ["563px", "616px"],
-    },
-    display: ["none", "flex", "none"],
-    width: ["320px", "728px", "1360px"],
-    height: ["456px", "456px", "456px"],
-    gap: ["6px", "12px"],
-    slidesPerView: [1, 2, 3.5],
-    spaceBetween: [16, 12],
-    prevEl: ["#prevMdButton"],
-    nextEl: ["#nextMdButton"],
-  };
 
   const handleAddToCart = () => {
     const productSearch = cart.find(
-      (item) => item.id === Number(param.id) && item.size === selectedOption
+      (item) => item.id === Number(id) && item.size === selectedOption
     );
     if (productSearch) {
       return;
     }
     if (
-      param.id &&
+      product &&
+      id &&
       selectedOption &&
       productPrice !== null &&
       addedColor !== ""
@@ -156,7 +179,7 @@ const ProductDetails = () => {
         title: product.title,
         price: productPrice,
         size: selectedOption,
-        discount: product.discount,
+        discount: product.variations[0].discount,
         img: product.imageUrls[0],
         productCode: product.productCode,
         quantity: 1,
@@ -193,10 +216,10 @@ const ProductDetails = () => {
             <InfoContainer>
               <ImageContainer>
                 <CardSlider
-                  renderArrayImg={imageArray}
+                  renderArrayImg={imageArray && imageArray}
                   stylesProps={ProductDetailsProps}
                 />
-                <ProductInterface productId={Number(param.id)} />
+                <ProductInterface productId={Number(id)} />
               </ImageContainer>
 
               <TextContainer>
@@ -205,18 +228,19 @@ const ProductDetails = () => {
                   <P>Є в наявності</P>
                 </TitleContainer>
                 <P1>Код товару:№{productCode}</P1>
-                <P2>{productPrice} ₴</P2>
+                <P2>{productPrice && productPrice} ₴</P2>
                 <P3>{description}</P3>
                 <ColorContainer isErrorMessage={message !== null}>
                   <H4>Колір</H4>
                   <Ul>
-                    {colors.map((item: string, i: number) => (
-                      <Li
-                        key={i}
-                        style={{ background: item }}
-                        onClick={() => handleAddColor(item)}
-                      ></Li>
-                    ))}
+                    {colors &&
+                      colors.map((item: string, i: number) => (
+                        <Li
+                          key={i}
+                          style={{ background: item }}
+                          onClick={() => handleAddColor(item)}
+                        ></Li>
+                      ))}
                   </Ul>
                   {message && (
                     <p
@@ -237,7 +261,7 @@ const ProductDetails = () => {
                   <H4>Обʼєм</H4>
                   <SelectWrapper>
                     <SortingItems
-                      options={options}
+                      options={options && options}
                       padding={"12px"}
                       borderRadius={"16px"}
                       disableWidth={"unset"}
