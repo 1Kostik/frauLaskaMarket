@@ -101,6 +101,12 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
   const [isShowColorPicker, setIsShowColorPicker] = useState<number[]>([]);
   const [isShowAddSize, setIsShowAddSize] = useState<number[]>([]);
 
+  useEffect(() => {
+    if (advert) {
+      setIsShowColorPicker(advert.variations.map((_, i) => i));
+    }
+  }, [advert]);
+
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories).map(
     (item: ICategory) => item.title
@@ -175,9 +181,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     return;
   };
 
-  const handleShowColorPicker = (index: number) => {
+  const handleShowColorPicker = (
+    index: number,
+    formik: FormikProps<IAdvert>
+  ) => {
     setIsShowColorPicker((prev: number[]) => {
       if (prev.includes(index)) {
+        formik.values.variations[index].color = "";
         return prev.filter((item) => item !== index);
       } else {
         return [...prev, index];
@@ -521,7 +531,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                   <div className="errorContainer">
                                     <ColorPicker
                                       formik={formik}
-                                      colorForEdit={advert?.variations[index]}
+                                      variation={advert?.variations[index]}
                                       index={index}
                                       onClose={handleShowColorPicker}
                                     />
@@ -532,12 +542,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                     </ErrorMessage>
                                   </div>
                                 )}
-                                {(!isShowColorPicker.includes(index) ||
-                                  variations[index].color) && (
+                                {!isShowColorPicker.includes(index) && (
                                   <button
                                     type="button"
                                     css={buttonStyle}
-                                    onClick={() => handleShowColorPicker(index)}
+                                    onClick={() =>
+                                      handleShowColorPicker(index, formik)
+                                    }
                                   >
                                     <p>Додати колір</p> <FiPlus />
                                   </button>
