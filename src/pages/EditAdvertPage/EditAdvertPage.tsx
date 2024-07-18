@@ -3,32 +3,30 @@ import { containerStyles } from "@styles/variables";
 import { IAdvert } from "Interfaces/IAdvert";
 
 const advert: IAdvert = {
-  categoryId: 3,
+  categoryId: 2,
   imageFiles: [
     "https://res.cloudinary.com/dfmactvue/image/upload/v1696879579/samples/balloons.jpg",
   ],
   mainImage: "blob:http://localhost:3000/ca9a618c-71d1-43f2-838f-fe738ced78c9",
+
   title: "Car",
+  productCode: "string",
+  composition: "wheels",
+  benefit: "string",
   description: "bmw ",
-  volumes: [
+
+  variations: [
+    { size: "100", price: "111", count: "12", color: "pink", discount: "5" },
     {
-      size: 11,
-      price: 22,
-      productCount: 5,
-    },
-    {
-      size: 22,
-      price: 33,
-      productCount: 4,
+      size: "300",
+      price: "333",
+      count: "33",
+      color: "#dada11e0",
+      discount: "",
     },
   ],
-  discount: 10,
-  stockCount: 9,
-  composition: "wheels",
-  colors: ["#D9B8FF", "#E09C4F"],
+
   feedbacks: ["qwerty", "asdf"],
-  benefit: "string",
-  productCode: "string",
 };
 
 const EditAdvertPage = () => {

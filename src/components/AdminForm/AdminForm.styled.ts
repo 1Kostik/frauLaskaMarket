@@ -20,7 +20,7 @@ export const formContainer = css`
 export const formDataWrapper = css`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: 30px;
 
   width: 844px;
 
@@ -48,7 +48,7 @@ export const blockWrapper = css`
   }
 `;
 
-export const categoryBlock = css`
+export const commonBlock = css`
   display: flex;
   column-gap: 20px;
 `;
@@ -72,11 +72,17 @@ export const inputFieldStyle = css`
   font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.1px;
-  color: var(--text-dark-grey);
+  color: var(--text-light-grey);
 
   &::placeholder {
-    color: var(--text-dark-grey);
+    color: var(--text-light-grey);
   }
+`;
+
+export const textAreaStyle = css`
+  resize: vertical;
+  width: 478px;
+  min-height: 70px;
 `;
 
 export const titleImagesWrapper = css`
@@ -101,6 +107,14 @@ export const addImagesBtn = css`
 
   cursor: pointer;
 
+  transition: var(--effectDuration);
+
+  &:hover {
+    border: 1px solid var(--color, #a5a5a5);
+    box-shadow: -4px 4px 4px 0px rgba(30, 51, 86, 0.08);
+    color: var(--btn-show-more-hover);
+  }
+
   & ~ input {
     display: none;
   }
@@ -123,7 +137,7 @@ export const imageWrapper = css`
     border: 1px solid green;
 
     & .main-photo-btn {
-      background-color: green;
+      /* background-color: green; */
     }
   }
 
@@ -131,10 +145,16 @@ export const imageWrapper = css`
     position: absolute;
     top: 8px;
     left: 8px;
+
     width: 40px;
     height: 40px;
+    padding: 8px;
     border-radius: 8px;
     background-color: var(--bg-btn-grey);
+
+    & path {
+      fill: var(--bg-deep-black);
+    }
   }
   & .close-btn {
     position: absolute;
@@ -168,24 +188,43 @@ export const imageThumb = css`
   }
 `;
 
-export const volumeStyle = css`
-  padding: 10px;
-  border: 1px solid green;
+export const trashCan = css`
+  width: 24px;
+  height: 24px;
+  fill: var(--text-light-grey);
 `;
 
 export const buttonStyle = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 16px;
   border-radius: 24px;
   border: 1px solid var(--bg-btn-grey);
 
-  font-size: var(--Typography-sm, 14px);
+  font-size: 14px;
   font-weight: 600;
-  line-height: 1;
+  line-height: 20px;
   letter-spacing: 0.1px;
   color: var(--text-black);
 
   background-color: var(--bg-btn-grey);
+  transition: var(--effectDuration);
+
+  &:hover {
+    background: var(--btn-show-more-hover);
+    border: 1px solid var(--btn-show-more-hover);
+    box-shadow: -4px 4px 4px 0px rgba(30, 51, 86, 0.08);
+  }
+
+  & svg {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    fill: var(--text-black);
+  }
 `;
 
 export const submitWrapper = css`
@@ -203,4 +242,13 @@ export const errorStyle = css`
   font-size: 14px;
   padding-top: 4px;
   color: var(--error-color);
+
+  &.text-area-error {
+    bottom: -12px;
+  }
+
+  &.images-error {
+    right: 16px;
+    bottom: 16px;
+  }
 `;

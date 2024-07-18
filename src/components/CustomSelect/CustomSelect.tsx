@@ -5,14 +5,12 @@ import { nanoid } from "nanoid";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { selectCategories } from "@redux/categories/selectors";
-import {
-  editCategory,
-  fetchCategories,
-  removeCategory,
-} from "@redux/categories/operations";
+import { editCategory, removeCategory } from "@redux/categories/operations";
 
-import { TiDeleteOutline } from "react-icons/ti";
+import { RiDeleteBin2Line } from "react-icons/ri";
+import { FaRegEdit } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
+
 import { ReactComponent as ArrowDownIcon } from "@assets/icons/arrow-down-select.svg";
 import { errorBorder } from "@components/CartForm/CartForm.styled";
 import {
@@ -104,10 +102,6 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
   };
 
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (selectedCategory) {
       setFieldValue("categoryId", selectedCategory);
     }
@@ -162,14 +156,14 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
                 className="editBtn"
                 onClick={() => handleEditCategory(item.title, "change")}
               >
-                <TiDeleteOutline />
+                <FaRegEdit />
               </button>
               <button
                 type="button"
                 onClick={() => handleEditCategory(item.title, "delete")}
                 className="deleteBtn"
               >
-                <TiDeleteOutline />
+                <RiDeleteBin2Line />
               </button>
             </div>
           ))}

@@ -1,24 +1,25 @@
-
-
-export interface IVolume {
+export interface IVariation {
   size: number | string;
   price: number | string;
-  productCount: number | string;
+  count: number | string;
+  color: string;
+  discount: number | string;
 }
 
 export interface IAdvert {
   categoryId: number | undefined;
   imageFiles: File[] | string[];
   mainImage: string | undefined;
+
   title: string;
-  description: string;
-  volumes: IVolume[];
-  discount: number | string;
-  stockCount: number | string;
-  composition: string;
-  colors: string[];
-  feedbacks: string[];
-  benefit: string;
   productCode: string;
+  composition: string;
+  benefit: string;
+  description: string;
+
+  variations: IVariation[];
+
+  feedbacks: string[];
+
   newCategory?: string;
 }

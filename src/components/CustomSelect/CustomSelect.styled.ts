@@ -36,7 +36,6 @@ export const dropdownStyle = css`
     position: relative;
     display: flex;
     padding-left: 24px;
-    cursor: pointer;
 
     & p {
       flex-grow: 1;
@@ -45,6 +44,7 @@ export const dropdownStyle = css`
       line-height: 16px;
       letter-spacing: 0.4px;
       color: var(--text-light-grey);
+      cursor: pointer;
     }
 
     & .checkIcon {
@@ -59,12 +59,13 @@ export const dropdownStyle = css`
     }
 
     & .editBtn {
-      margin-right: 10px;
+      margin: 0 20px;
       & svg {
         fill: var(--edit-color);
       }
     }
     & .deleteBtn {
+      padding: 0 10px;
       & svg {
         fill: var(--fill-delete-icon);
       }

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@redux/hooks";
 import {
   Formik,
   Form,
@@ -14,26 +16,35 @@ import {
   imagesContainer,
   addImagesBtn,
   formDataWrapper,
-  volumeStyle,
   pageTitle,
   formContainer,
   submitWrapper,
   blockWrapper,
   categoryFields,
-  categoryBlock,
+  commonBlock,
   inputFieldStyle,
   buttonStyle,
   titleImagesWrapper,
+  textAreaStyle,
+  trashCan,
 } from "./AdminForm.styled";
+import { errorBorder } from "@components/CartForm/CartForm.styled";
+
 import { ReactComponent as CloseIcon } from "@assets/icons/close.svg";
+import { ReactComponent as CheckedIcon } from "@assets/icons/radio-btn-checked.svg";
+import { ReactComponent as UncheckedIcon } from "@assets/icons/radio-btn-unchecked.svg";
+
+import { FiPlus } from "react-icons/fi";
+import { FaRegTrashAlt } from "react-icons/fa";
+
 import CustomSelect from "@components/CustomSelect";
 import ColorPicker from "@components/ColorPicker";
-import { IAdvert } from "Interfaces/IAdvert";
-import { useAppDispatch, useAppSelector } from "@redux/hooks";
-import { createCategory } from "@redux/categories/operations";
+
+import { createCategory, fetchCategories } from "@redux/categories/operations";
 import { selectCategories } from "@redux/categories/selectors";
+
 import { ICategory } from "Interfaces/ICategory";
-import { errorBorder } from "@components/CartForm/CartForm.styled";
+import { IAdvert } from "Interfaces/IAdvert";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -45,42 +56,51 @@ const initialValues: IAdvert = {
   categoryId: undefined,
   imageFiles: [],
   mainImage: undefined,
+
   title: "",
-  description: "",
-  volumes: [{ size: "", price: "", productCount: "" }],
-  discount: "",
-  stockCount: "",
-  composition: "",
-  colors: [],
-  feedbacks: [""],
-  benefit: "",
   productCode: "",
+  composition: "",
+  benefit: "",
+  description: "",
+
+  variations: [{ size: "", price: "", count: "", color: "", discount: "" }],
+
+  feedbacks: [""],
+
   newCategory: "",
 };
 
 const validationSchema = Yup.object({
   categoryId: Yup.number().required("Оберіть категорію"),
   imageFiles: Yup.array()
-    .min(1, "Необхідно вибрати хоча б один файл")
+    .min(1, "Необхідно вибрати принаймні одне зображення")
     .nullable(),
+
   title: Yup.string().required("Назва обов'язкова"),
+  productCode: Yup.string().required("Код обов'язковий"),
+  composition: Yup.string(),
+  benefit: Yup.string(),
   description: Yup.string().required("Опис обов'язковий"),
-  volumes: Yup.array().of(
+
+  variations: Yup.array().of(
     Yup.object().shape({
-      size: Yup.mixed().required("Об'єм обов'язковий"),
       price: Yup.mixed().required("Ціна обов'язкова"),
-      productCount: Yup.mixed().required("Кількість обов'язкова"),
+      discount: Yup.number(),
+      count: Yup.mixed().required("Кількість обов'язкова"),
+      colors: Yup.array().min(1, "Необхідно вибрати хоча б один колір"),
+      size: Yup.mixed(),
     })
   ),
-  discount: Yup.number(),
-  composition: Yup.string(),
-  colors: Yup.array().min(1, "Необхідно вибрати хоча б один колір").required(),
+
   feedbacks: Yup.array().of(Yup.string()),
-  benefit: Yup.string(),
+
   newCategory: Yup.string(),
 });
 
 const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
+  const [isShowColorPicker, setIsShowColorPicker] = useState<number[]>([]);
+  const [isShowAddSize, setIsShowAddSize] = useState<number[]>([]);
+
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories).map(
     (item: ICategory) => item.title
@@ -155,17 +175,36 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     return;
   };
 
+  const handleShowColorPicker = (index: number) => {
+    setIsShowColorPicker((prev: number[]) => {
+      if (prev.includes(index)) {
+        return prev.filter((item) => item !== index);
+      } else {
+        return [...prev, index];
+      }
+    });
+  };
+
+  const handleShowSize = (index: number) => {
+    setIsShowAddSize((prev: number[]) => {
+      if (prev.includes(index)) {
+        return prev.filter((item) => item !== index);
+      } else {
+        return [...prev, index];
+      }
+    });
+  };
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
   return (
     <>
       <Formik
         initialValues={advert || initialValues}
         validationSchema={validationSchema}
         onSubmit={(values: IAdvert) => {
-          const totalProductCount = values.volumes.reduce(
-            (acc, vol) => acc + Number(vol.productCount),
-            0
-          );
-          values.stockCount = totalProductCount;
           const mainImg = values.imageFiles[0];
           if (typeof mainImg === "string") {
             values.mainImage = mainImg;
@@ -180,7 +219,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
       >
         {(formik: FormikProps<IAdvert>) => {
           const {
-            values: { imageFiles, volumes, feedbacks, newCategory },
+            values: { imageFiles, variations, feedbacks, newCategory },
             setFieldError,
             errors,
             touched,
@@ -193,18 +232,20 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
 
               <Form css={formContainer}>
                 <div css={formDataWrapper}>
-                  <div css={[blockWrapper, categoryBlock]}>
+                  <div css={[blockWrapper, commonBlock]}>
                     <h2>Категорія</h2>
                     <div css={categoryFields}>
-                      <div className="errorContainer">
-                        <CustomSelect
-                          formik={formik}
-                          selectedCategoryId={advert?.categoryId}
-                        />
-                        <ErrorMessage name="categoryId">
-                          {(msg) => <div css={errorStyle}>{msg}</div>}
-                        </ErrorMessage>
-                      </div>
+                      {categories.length !== 0 && (
+                        <div className="errorContainer">
+                          <CustomSelect
+                            formik={formik}
+                            selectedCategoryId={advert?.categoryId}
+                          />
+                          <ErrorMessage name="categoryId">
+                            {(msg) => <div css={errorStyle}>{msg}</div>}
+                          </ErrorMessage>
+                        </div>
+                      )}
 
                       <label htmlFor="newCategory" className="errorContainer">
                         <Field
@@ -238,7 +279,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                     </div>
                   </div>
 
-                  <div css={blockWrapper}>
+                  <div css={blockWrapper} className="errorContainer">
                     <div css={titleImagesWrapper}>
                       <h2>Фотографії</h2>
                       {imageFiles.length < 8 && (
@@ -257,7 +298,6 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                         </>
                       )}
                     </div>
-
                     <FieldArray name="imageFiles">
                       {() => (
                         <div css={imagesContainer}>
@@ -268,7 +308,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                 className="main-photo-btn"
                                 onClick={() => handleMainPhoto(i, formik)}
                               >
-                                {i === 0 ? <CloseIcon /> : ""}
+                                {i === 0 ? <CheckedIcon /> : <UncheckedIcon />}
                               </button>
                               <button
                                 type="button"
@@ -290,161 +330,324 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                             </div>
                           ))}
                           <ErrorMessage name={`imageFiles`}>
-                            {(msg) => <div css={errorStyle}>{msg}</div>}
+                            {(msg) => (
+                              <div css={errorStyle} className="images-error">
+                                {msg}
+                              </div>
+                            )}
                           </ErrorMessage>
                         </div>
                       )}
                     </FieldArray>
                   </div>
 
-                  <label htmlFor="title">Назва</label>
-                  <Field
-                    name="title"
-                    type="text"
-                    id="title"
-                    onFocus={() => setFieldError("title", undefined)}
-                  />
-                  <ErrorMessage name="title">
-                    {(msg) => <div css={errorStyle}>{msg}</div>}
-                  </ErrorMessage>
+                  <div css={[blockWrapper, commonBlock]}>
+                    <h2>Загальне</h2>
+                    <div css={categoryFields}>
+                      <label htmlFor="title" className="errorContainer">
+                        <Field
+                          name="title"
+                          type="text"
+                          id="title"
+                          placeholder="Назва товару"
+                          onFocus={() => setFieldError("title", undefined)}
+                          css={[
+                            inputFieldStyle,
+                            errorBorder(!!(errors.title && touched.title)),
+                          ]}
+                        />
+                        <ErrorMessage name="title">
+                          {(msg) => <div css={errorStyle}>{msg}</div>}
+                        </ErrorMessage>
+                      </label>
 
-                  <label htmlFor="description">Опис</label>
-                  <Field
-                    name="description"
-                    type="textarea"
-                    id="description"
-                    onFocus={() => setFieldError("description", undefined)}
-                  />
-                  <ErrorMessage name="description">
-                    {(msg) => <div css={errorStyle}>{msg}</div>}
-                  </ErrorMessage>
+                      <label htmlFor="productCode" className="errorContainer">
+                        <Field
+                          name="productCode"
+                          type="text"
+                          id="productCode"
+                          placeholder="Код"
+                          onFocus={() =>
+                            setFieldError("productCode", undefined)
+                          }
+                          css={[
+                            inputFieldStyle,
+                            errorBorder(
+                              !!(errors.productCode && touched.productCode)
+                            ),
+                          ]}
+                        />
+                        <ErrorMessage name="productCode">
+                          {(msg) => <div css={errorStyle}>{msg}</div>}
+                        </ErrorMessage>
+                      </label>
 
-                  <label htmlFor="composition">Склад</label>
-                  <Field name="composition" type="textarea" id="composition" />
-                  <ErrorMessage name="composition">
-                    {(msg) => <div css={errorStyle}>{msg}</div>}
-                  </ErrorMessage>
+                      <label htmlFor="composition" className="errorContainer">
+                        <Field
+                          name="composition"
+                          as="textarea"
+                          id="composition"
+                          placeholder="Склад"
+                          css={[
+                            inputFieldStyle,
+                            errorBorder(!!(errors.benefit && touched.benefit)),
+                            textAreaStyle,
+                          ]}
+                        />
+                        <ErrorMessage name="composition">
+                          {(msg) => <div css={errorStyle}>{msg}</div>}
+                        </ErrorMessage>
+                      </label>
 
-                  <label htmlFor="benefit">З чим допоможе?</label>
-                  <Field name="benefit" type="textarea" id="benefit" />
-                  <ErrorMessage name="benefit">
-                    {(msg) => <div css={errorStyle}>{msg}</div>}
-                  </ErrorMessage>
+                      <label htmlFor="benefit" className="errorContainer">
+                        <Field
+                          name="benefit"
+                          as="textarea"
+                          id="benefit"
+                          placeholder="З чим допоможе?"
+                          css={[
+                            inputFieldStyle,
+                            errorBorder(!!(errors.benefit && touched.benefit)),
+                            textAreaStyle,
+                          ]}
+                        />
+                        <ErrorMessage name="benefit">
+                          {(msg) => <div css={errorStyle}>{msg}</div>}
+                        </ErrorMessage>
+                      </label>
 
-                  <label htmlFor="discount">Знижка</label>
-                  <Field name="discount" type="number" id="discount" />
-
-                  <div className="errorContainer">
-                    <ColorPicker
-                      formik={formik}
-                      colorsForEdit={advert?.colors}
-                    />
-                    <ErrorMessage name="colors">
-                      {(msg) => <div css={errorStyle}>{msg}</div>}
-                    </ErrorMessage>
+                      <label htmlFor="description" className="errorContainer">
+                        <Field
+                          name="description"
+                          as="textarea"
+                          id="description"
+                          placeholder="Опис товару"
+                          onFocus={() =>
+                            setFieldError("description", undefined)
+                          }
+                          css={[
+                            inputFieldStyle,
+                            errorBorder(
+                              !!(errors.description && touched.description)
+                            ),
+                            textAreaStyle,
+                          ]}
+                        />
+                        <ErrorMessage name="description">
+                          {(msg) => (
+                            <div css={errorStyle} className="text-area-error">
+                              {msg}
+                            </div>
+                          )}
+                        </ErrorMessage>
+                      </label>
+                    </div>
                   </div>
 
-                  <FieldArray name="volumes">
-                    {({ push, remove }) => (
-                      <>
-                        {volumes.map((_, index) => (
-                          <div key={index} css={volumeStyle}>
-                            <label htmlFor={`volumes.${index}.size`}>
-                              Об'єм
-                            </label>
-                            <Field
-                              name={`volumes.${index}.size`}
-                              type="number"
-                              placeholder="Об'єм"
-                              onFocus={() => {
-                                setFieldError(`volumes.${index}`, undefined);
-                              }}
-                              onKeyPress={handleNumericInput}
-                            />
+                  <div>
+                    <FieldArray name="variations">
+                      {({ push, remove }) => (
+                        <>
+                          {variations.map((_, index) => (
+                            <div key={index} css={[blockWrapper, commonBlock]}>
+                              <h2>Варіація товару: {index + 1}</h2>
+                              <div css={categoryFields}>
+                                <label htmlFor={`variations.${index}.price`}>
+                                  <Field
+                                    name={`variations.${index}.price`}
+                                    type="number"
+                                    placeholder="Ціна товару"
+                                    onFocus={() => {
+                                      setFieldError(
+                                        `variations.${index}`,
+                                        undefined
+                                      );
+                                    }}
+                                    onKeyPress={handleNumericInput}
+                                    css={[
+                                      inputFieldStyle,
+                                      errorBorder(
+                                        !!(errors.title && touched.title)
+                                      ),
+                                    ]}
+                                  />
+                                </label>
 
-                            <label htmlFor={`volumes.${index}.price`}>
-                              Ціна
-                            </label>
-                            <Field
-                              name={`volumes.${index}.price`}
-                              type="number"
-                              placeholder="Ціна"
-                              onFocus={() => {
-                                setFieldError(`volumes.${index}`, undefined);
-                              }}
-                              onKeyPress={handleNumericInput}
-                            />
+                                <label htmlFor={`variations.${index}.discount`}>
+                                  <Field
+                                    name={`variations.${index}.discount`}
+                                    type="number"
+                                    placeholder="Знижка"
+                                    onFocus={() => {
+                                      setFieldError(
+                                        `variations.${index}`,
+                                        undefined
+                                      );
+                                    }}
+                                    onKeyPress={handleNumericInput}
+                                    css={[
+                                      inputFieldStyle,
+                                      errorBorder(
+                                        !!(errors.title && touched.title)
+                                      ),
+                                    ]}
+                                  />
+                                </label>
 
-                            <label htmlFor={`volumes.${index}.productCount`}>
-                              Кількість
-                            </label>
-                            <Field
-                              name={`volumes.${index}.productCount`}
-                              type="number"
-                              placeholder="Кількість"
-                              onFocus={() => {
-                                setFieldError(`volumes.${index}`, undefined);
-                              }}
-                              onKeyPress={handleNumericInput}
-                            />
+                                <label htmlFor={`variations.${index}.count`}>
+                                  <Field
+                                    name={`variations.${index}.count`}
+                                    type="number"
+                                    placeholder="Кількість"
+                                    onFocus={() => {
+                                      setFieldError(
+                                        `variations.${index}`,
+                                        undefined
+                                      );
+                                    }}
+                                    onKeyPress={handleNumericInput}
+                                    css={[
+                                      inputFieldStyle,
+                                      errorBorder(
+                                        !!(errors.title && touched.title)
+                                      ),
+                                    ]}
+                                  />
+                                </label>
 
-                            {volumes.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => remove(index)}
-                              >
-                                Видалити поле
-                              </button>
-                            )}
-                            <ErrorMessage name={`volumes.${index}`}>
-                              {() => (
-                                <div css={errorStyle}>
-                                  Усі поля мають бути заповнені
-                                </div>
+                                {isShowColorPicker.includes(index) ||
+                                  (variations[index].color && (
+                                    <div className="errorContainer">
+                                      <ColorPicker
+                                        formik={formik}
+                                        colorForEdit={advert?.variations[index]}
+                                        index={index}
+                                        onClose={handleShowColorPicker}
+                                      />
+                                      <ErrorMessage name="colors">
+                                        {(msg) => (
+                                          <div css={errorStyle}>{msg}</div>
+                                        )}
+                                      </ErrorMessage>
+                                    </div>
+                                  ))}
+                                {!isShowColorPicker.includes(index) ||
+                                  (variations[index].color && (
+                                    <button
+                                      type="button"
+                                      css={buttonStyle}
+                                      onClick={() =>
+                                        handleShowColorPicker(index)
+                                      }
+                                    >
+                                      <p>Додати колір</p> <FiPlus />
+                                    </button>
+                                  ))}
+
+                                {isShowAddSize.includes(index) && (
+                                  <label htmlFor={`variations.${index}.size`}>
+                                    <Field
+                                      name={`variations.${index}.size`}
+                                      type="number"
+                                      placeholder="Об'єм"
+                                      onFocus={() => {
+                                        setFieldError(
+                                          `variations.${index}`,
+                                          undefined
+                                        );
+                                      }}
+                                      onKeyPress={handleNumericInput}
+                                      css={[
+                                        inputFieldStyle,
+                                        errorBorder(
+                                          !!(errors.title && touched.title)
+                                        ),
+                                      ]}
+                                    />
+                                  </label>
+                                )}
+                                <button
+                                  type="button"
+                                  css={buttonStyle}
+                                  onClick={() => handleShowSize(index)}
+                                >
+                                  <p>Додати обʼєм</p> <FiPlus />
+                                </button>
+
+                                <ErrorMessage name={`variations.${index}`}>
+                                  {() => (
+                                    <div css={errorStyle}>
+                                      Усі поля мають бути заповнені
+                                    </div>
+                                  )}
+                                </ErrorMessage>
+                              </div>
+                              <div>
+                                {variations.length > 1 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => remove(index)}
+                                  >
+                                    <FaRegTrashAlt css={trashCan} />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              push({
+                                size: "",
+                                price: "",
+                                count: "",
+                                color: "",
+                                discount: "",
+                              })
+                            }
+                            css={[buttonStyle, {marginTop: "14px"}]}
+                          >
+                            <p>Додати варіацію товару</p>
+                            <FiPlus />
+                          </button>
+                        </>
+                      )}
+                    </FieldArray>
+                  </div>
+
+                  <div css={[blockWrapper, commonBlock]}>
+                    <h2>Відгуки</h2>
+                    <FieldArray name="feedbacks">
+                      {({ push, remove }) => (
+                        <>
+                          {feedbacks.map((_, i) => (
+                            <label key={i} htmlFor={`feedbacks.${i}`}>
+                              <Field
+                                as="textarea"
+                                name={`feedbacks.${i}`}
+                                id={`feedbacks.${i}`}
+                                placeholder="Відгук"
+                              />
+                              {feedbacks.length > 1 && (
+                                <button type="button" onClick={() => remove(i)}>
+                                  Видалити відгук
+                                </button>
                               )}
-                            </ErrorMessage>
-                          </div>
-                        ))}
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            push({ size: "", price: "", productCount: "" })
-                          }
-                        >
-                          Додати об'єм
-                        </button>
-                      </>
-                    )}
-                  </FieldArray>
-                  <FieldArray name="feedbacks">
-                    {({ push, remove }) => (
-                      <>
-                        {feedbacks.map((_, i) => (
-                          <label key={i} htmlFor={`feedbacks.${i}`}>
-                            <Field
-                              as="textarea"
-                              name={`feedbacks.${i}`}
-                              id={`feedbacks.${i}`}
-                              placeholder="Відгук"
-                            />
-                            {feedbacks.length > 1 && (
-                              <button type="button" onClick={() => remove(i)}>
-                                Видалити відгук
-                              </button>
-                            )}
-                            <ErrorMessage name={`feedbacks.${i}`}>
-                              {(msg) => <div css={errorStyle}>{msg}</div>}
-                            </ErrorMessage>
-                          </label>
-                        ))}
-                        <button type="button" onClick={() => push("")}>
-                          Додати відгук
-                        </button>
-                      </>
-                    )}
-                  </FieldArray>
+                              <ErrorMessage name={`feedbacks.${i}`}>
+                                {(msg) => <div css={errorStyle}>{msg}</div>}
+                              </ErrorMessage>
+                            </label>
+                          ))}
+                          <button type="button" onClick={() => push("")}>
+                            Додати відгук
+                          </button>
+                        </>
+                      )}
+                    </FieldArray>
+                  </div>
                 </div>
+
                 <div css={submitWrapper}>
                   <button type="submit">Опублікувати оголошення</button>
                 </div>

@@ -1,57 +1,86 @@
 import { useEffect, useState } from "react";
-import { colorsWrapper, inputStyle } from "./ColorPicker.styled";
 import { nanoid } from "nanoid";
 import { FormikProps } from "formik";
-import { IAdvert } from "Interfaces/IAdvert";
 
-const colorArr = ["#768159", "#D7D7D7", "#D9B8FF", "#E09C4F"];
+import {
+  colorPickerStyle,
+  colorsWrapper,
+  inputStyle,
+} from "./ColorPicker.styled";
+
+import { IAdvert, IVariation } from "Interfaces/IAdvert";
+
+import { IoMdClose } from "react-icons/io";
+import { ReactComponent as CheckedIcon } from "@assets/icons/radio-btn-checked.svg";
+import { ReactComponent as UncheckedIcon } from "@assets/icons/radio-btn-unchecked.svg";
+
+const colorArr = [
+  "#768159",
+  "#D7D7D7",
+  "#D9B8FF",
+  "#E09C4F",
+  "#ff0000b5",
+  "#dada11e0",
+  "#bfbfbf54",
+  "pink",
+];
 
 interface IColorPickerProps {
   formik: FormikProps<IAdvert>;
-  colorsForEdit?: string[];
+  colorForEdit?: IVariation;
+  index: number;
+  onClose: (index: number) => void;
 }
 
 const ColorPicker: React.FC<IColorPickerProps> = ({
   formik,
-  colorsForEdit,
+  colorForEdit,
+  index,
+  onClose,
 }) => {
-  const [selectedColors, setSelectedColors] = useState<string[]>(
-    colorsForEdit || []
+  const [selectedColor, setSelectedColor] = useState<IVariation>(
+    colorForEdit || formik.values.variations[index]
   );
 
   const handleSelectColor = (color: string) => {
-    if (selectedColors.includes(color)) {
-      setSelectedColors((prev) =>
-        prev.filter((itemColor) => itemColor !== color)
-      );
-    } else {
-      setSelectedColors((prev) => [...prev, color]);
-    }
+    setSelectedColor((prev) => ({ ...prev, color }));
   };
 
   useEffect(() => {
-    formik.setFieldValue("colors", selectedColors);
+    formik.setFieldValue(`variations.${index}.color`, selectedColor.color);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedColors]);
+  }, [selectedColor]);
 
   return (
-    <div>
-      <p>Колір</p>
+    <div css={colorPickerStyle}>
+      <div className="title-wrapper">
+        <h3>Колір</h3>
+        <button type="button" onClick={() => onClose(index)}>
+          <IoMdClose />
+        </button>
+      </div>
+
       <div css={colorsWrapper}>
         {colorArr.map((color, i) => (
           <div key={nanoid()}>
             <input
-              type="checkbox"
+              type="radio"
               name="color"
-              id={`color-${i}`}
-              checked={selectedColors.includes(color)}
+              id={`color-${index}-${i}`}
+              checked={selectedColor.color === color}
               css={inputStyle(color)}
               onChange={() => {
                 handleSelectColor(color);
-                formik.setFieldError("color", undefined);
+                formik.setFieldError(`variations.${index}`, undefined);
               }}
             />
-            <label htmlFor={`color-${i}`} />
+            <label htmlFor={`color-${index}-${i}`}>
+              {selectedColor.color === color ? (
+                <CheckedIcon />
+              ) : (
+                <UncheckedIcon />
+              )}
+            </label>
           </div>
         ))}
       </div>
