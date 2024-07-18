@@ -27,19 +27,19 @@ const colorArr = [
 
 interface IColorPickerProps {
   formik: FormikProps<IAdvert>;
-  colorForEdit?: IVariation;
+  variation?: IVariation;
   index: number;
-  onClose: (index: number) => void;
+  onClose: (index: number, formik: FormikProps<IAdvert>) => void;
 }
 
 const ColorPicker: React.FC<IColorPickerProps> = ({
   formik,
-  colorForEdit,
+  variation,
   index,
   onClose,
 }) => {
   const [selectedColor, setSelectedColor] = useState<IVariation>(
-    colorForEdit || formik.values.variations[index]
+    variation || formik.values.variations[index]
   );
 
   const handleSelectColor = (color: string) => {
@@ -55,7 +55,7 @@ const ColorPicker: React.FC<IColorPickerProps> = ({
     <div css={colorPickerStyle}>
       <div className="title-wrapper">
         <h3>Колір</h3>
-        <button type="button" onClick={() => onClose(index)}>
+        <button type="button" onClick={() => onClose(index, formik)}>
           <IoMdClose />
         </button>
       </div>
