@@ -26,14 +26,17 @@ const advert: IAdvert = {
     },
   ],
 
-  feedbacks: ["qwerty", "asdf"],
+  feedbacks: [
+    { name: "string", profession: "string", review: "string" },
+    { name: "qq", profession: "qq", review: "qeafasdf" },
+  ],
 };
 
 const EditAdvertPage = () => {
   return (
-     <section>
+    <section>
       <div css={containerStyles}>
-        <AdminForm advert={advert}/>
+        <AdminForm advert={advert} />
       </div>
     </section>
   );

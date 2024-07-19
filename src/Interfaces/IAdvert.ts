@@ -6,6 +6,12 @@ export interface IVariation {
   discount: number | string;
 }
 
+export interface Ifeedback {
+  name: string;
+  profession: string;
+  review: string;
+}
+
 export interface IAdvert {
   categoryId: number | undefined;
   imageFiles: File[] | string[];
@@ -19,7 +25,7 @@ export interface IAdvert {
 
   variations: IVariation[];
 
-  feedbacks: string[];
+  feedbacks: Ifeedback[];
 
   newCategory?: string;
 }
