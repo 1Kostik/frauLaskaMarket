@@ -85,7 +85,7 @@ const ProductDetailsPropsText = {
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [selectedOption, setSelectedOption] = useState<number | string | null>(null);
   const [productPrice, setProductPrice] = useState<number | null>(null);
   const [addedColor, setAddedColor] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -216,7 +216,7 @@ const ProductDetails = () => {
             <InfoContainer>
               <ImageContainer>
                 <CardSlider
-                  renderArrayImg={imageArray && imageArray}
+                  renderArrayImg={imageArray}
                   stylesProps={ProductDetailsProps}
                 />
                 <ProductInterface productId={Number(id)} />
@@ -228,7 +228,7 @@ const ProductDetails = () => {
                   <P>Є в наявності</P>
                 </TitleContainer>
                 <P1>Код товару:№{productCode}</P1>
-                <P2>{productPrice && productPrice} ₴</P2>
+                <P2>{productPrice} ₴</P2>
                 <P3>{description}</P3>
                 <ColorContainer isErrorMessage={message !== null}>
                   <H4>Колір</H4>
@@ -261,7 +261,7 @@ const ProductDetails = () => {
                   <H4>Обʼєм</H4>
                   <SelectWrapper>
                     <SortingItems
-                      options={options && options}
+                      options={options}
                       padding={"12px"}
                       borderRadius={"16px"}
                       disableWidth={"unset"}
