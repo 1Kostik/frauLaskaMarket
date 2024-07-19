@@ -20,84 +20,116 @@ import { useNavigate } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
-import { products } from "@assets/products";
+import { findProducts, getProductsAndSorted } from "@services/servicesApi";
 
 function StorePage() {
   const navigate = useNavigate();
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
-  const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
+  const [typeOfSort, setTypeOfSort] = useState<number | string | null>(
+    "Від найменшої ціни до найбільшої"
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchItem, setSearchItem] = useState<string>("");
   const [findProduct, setFindProduct] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   const countItemPages = 12;
   const lastIndex = currentPage * countItemPages;
   const firstIndex = lastIndex - countItemPages;
 
-  
-  let currentItems = (
-    filteredProducts.length > 0
+  let currentItems =
+    products && filteredProducts.length > 0
       ? filteredProducts
       : findProduct.length > 0
       ? findProduct
-      : products
-  );
+      : products;
 
   const totalPage =
-    filteredProducts.length > 0
+    products && filteredProducts.length > 0
       ? filteredProducts.length
       : findProduct.length > 0
       ? findProduct.length
       : products.length;
 
   const lastPage = Math.ceil(totalPage / countItemPages);
+
   const options = [
     "Від найменшої ціни до найбільшої",
     "Від найбільшої ціни до найменшої",
     "За ретингом",
     "За популярністю",
   ];
-  switch (typeOfSort) {
-    case "Від найменшої ціни до найбільшої":
-      currentItems = currentItems.sort(
-        (a:any, b:any) => a.volumes[0].price - b.volumes[0].price
-      );
-      break;
-    case "Від найбільшої ціни до найменшої":
-      currentItems = currentItems.sort(
-        (a:any, b:any) => b.volumes[0].price - a.volumes[0].price
-      );
-      break;
-    case "За ретингом":
-      currentItems = currentItems.sort((a:any, b:any) => b.ranking - a.ranking);
-      break;
-    case "За популярністю":
-      currentItems = currentItems.sort((a:any, b:any) => b.popularity - a.popularity);
-      break;
-    default:
-      currentItems;
-      break;
-  }
+
+  useEffect(() => {
+    let queryParams = "";
+    switch (typeOfSort) {
+      case "Від найменшої ціни до найбільшої":
+        queryParams = "sortOrder=ASC&sortField=price";
+        break;
+      case "Від найбільшої ціни до найменшої":
+        queryParams = "sortOrder=DESC&sortField=price";
+        break;
+      case "За ретингом":
+        queryParams = "sortOrder=DESC&sortField=ranking";
+        break;
+      case "За популярністю":
+        queryParams = "sortOrder=DESC&sortField=popularity";
+        break;
+      default:
+        queryParams = "";
+    }
+
+    async function fetchProducts() {
+      try {
+        const result = await getProductsAndSorted(queryParams);
+        setProducts(result);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    }
+
+    fetchProducts();
+  }, [typeOfSort]);
+
+  useEffect(() => {
+    if (searchItem === "") {
+      return;
+    }
+
+    async function findProduct(searchItem: string) {
+      // Заменяем символы _ на пробелы
+      const queryParams = `search=${searchItem.split("_").join(" ")}`;
+      console.log('queryParams :>> ', queryParams);
+      try {
+        const result = await findProducts(queryParams);
+        setFindProduct(result);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    }
+
+    console.log('Searching for:', searchItem);
+    findProduct(searchItem);
+
+  }, [searchItem]);
+
   useEffect(() => {
     if (filteredProducts.length > 0) {
       setSearchItem("");
       setFindProduct([]);
     } else if (searchItem !== "") {
-      
       setFilteredProducts([]);
     }
-  }, [filteredProducts,searchItem]);
+  }, [filteredProducts, searchItem]);
 
   useEffect(() => {
-    if (searchItem !== "" && products.length > 0) {
+    if (products && searchItem !== "" && products.length > 0) {
       const findItem = products.filter((item: Product) =>
-        item.title
-          .toLowerCase()
-          .startsWith(searchItem.toLowerCase())
+        item.title.toLowerCase().startsWith(searchItem.toLowerCase())
       );
       setFindProduct(findItem);
     } else {
@@ -123,6 +155,7 @@ function StorePage() {
       document.body.classList.remove("no-scroll");
     }
   }, [openFilter, windowWidth]);
+
   const paginate = (page: number) => setCurrentPage(page);
   const nextPage = () =>
     setCurrentPage((prev) => {
@@ -138,16 +171,15 @@ function StorePage() {
       }
       return prev - 1;
     });
+
   const handleOpenFilter = () => {
     setOpenFilter((prev) => !prev);
   };
   const handleOnClickCard = (id: number) => {
     navigate(`${id}`);
   };
-  
+
   let sortedArray = [...currentItems].slice(firstIndex, lastIndex);
-console.log('sortedArray :>> ', sortedArray);
-  
 
   return (
     <>
@@ -159,7 +191,6 @@ console.log('sortedArray :>> ', sortedArray);
               <StoreFilter
                 closeFilter={setOpenFilter}
                 setFilteredProducts={setFilteredProducts}
-               
               />
             )}
             <Container>

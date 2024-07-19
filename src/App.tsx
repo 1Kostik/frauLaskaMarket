@@ -1,18 +1,26 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import SharedLayout from "./components/SharedLayout/SharedLayout";
-import MainPage from "@pages/MainPage/MainPage";
-import HealthyPage from "@pages/HealthyPage/HealthyPage";
-import AromaSchool from "@pages/SchoolPage/SchoolPage";
-import StorePage from "@pages/StorePage/StorePage";
-import CartPage from "@pages/CartPage/CartPage";
-import ProductDetails from "@pages/ProductDetails/ProductDetails";
-import CreateAdvertPage from "@pages/CreateAdvertPage/CreateAdvertPage";
-import EditAdvertPage from "@pages/EditAdvertPage/EditAdvertPage";
-import LoginPage from "@pages/LoginPage/LoginPage";
+import { lazy, Suspense } from "react";
+
+const MainPage = lazy(() => import("@pages/MainPage/MainPage"));
+const HealthyPage = lazy(() => import("@pages/HealthyPage/HealthyPage"));
+const AromaSchool = lazy(() => import("@pages/SchoolPage/SchoolPage"));
+const StorePage = lazy(() => import("@pages/StorePage/StorePage"));
+const ProductDetails = lazy(
+  () => import("@pages/ProductDetails/ProductDetails")
+);
+const CartPage = lazy(() => import("@pages/CartPage/CartPage"));
+const CreateAdvertPage = lazy(
+  () => import("@pages/CreateAdvertPage/CreateAdvertPage")
+);
+const EditAdvertPage = lazy(
+  () => import("@pages/EditAdvertPage/EditAdvertPage")
+);
+const LoginPage = lazy(() => import("@pages/LoginPage/LoginPage"));
 
 function App() {
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<MainPage />} />
@@ -26,10 +34,11 @@ function App() {
             path="admin/edit-advert/:productId"
             element={<EditAdvertPage />}
           />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
       </Routes>
-    </>
+    </Suspense>
   );
 }
 

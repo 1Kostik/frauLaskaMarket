@@ -21,7 +21,7 @@ const ProductCard: React.FC<Props> = ({
   item,
   width,
 }) => {
-  const { id, imageUrls, title, volumes } = item;
+  const { id, imageUrls, title, variations } = item;
 
   return (
     <Container
@@ -32,12 +32,16 @@ const ProductCard: React.FC<Props> = ({
     >
       <CardWrapper>
         <ImageContainer>
-          <img src={imageUrls[0]} alt="" style={{ width: `${width}` }} />
+          <img
+            src={imageUrls[0].img_url}
+            alt=""
+            style={{ width: `${width}` }}
+          />
           <ProductInterface productId={id} />
         </ImageContainer>
         <InfoContainer>
           <H5>{title}</H5>
-          <P>{volumes[0].price} грн</P>
+          <P>{variations && variations.length > 0 ? variations[0].price:''} грн</P>
         </InfoContainer>
       </CardWrapper>
     </Container>

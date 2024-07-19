@@ -38,3 +38,19 @@ export const postAdvert = async (formData: FormData) => {
   const { data } = await axios.post("products", formData);
   return data;
 };
+
+export const getProducts = async () => {
+  const { data } = await axios.get(`products`);
+  return data;
+};
+
+export const getProductsAndSorted = async (queryParams:string) => {
+  const { data } = await axios.get(`products?${queryParams}`);
+  return data;
+};
+
+export const findProducts = async (queryParams:string) => {
+  const { data } = await axios.get(`products?${queryParams}`);
+  return data;
+};
+
