@@ -6,16 +6,16 @@ export interface IVariation {
   discount: number | string;
 }
 
-export interface Ifeedback {
+export interface IFeedback {
   name: string;
   profession: string;
   review: string;
 }
 
 export interface IAdvert {
-  categoryId: number | undefined;
-  imageFiles: File[] | string[];
-  mainImage: string | undefined;
+  category_id: number | string;
+  imageUrls: File[];
+  mainImage: string;
 
   title: string;
   productCode: string;
@@ -25,7 +25,10 @@ export interface IAdvert {
 
   variations: IVariation[];
 
-  feedbacks: Ifeedback[];
+  feedbacks: IFeedback[];
+
+  popularity: string | number;
+  ranking: string | number;
 
   newCategory?: string;
 }
