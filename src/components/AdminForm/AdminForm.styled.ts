@@ -93,7 +93,7 @@ export const titleImagesWrapper = css`
 `;
 
 export const addImagesBtn = css`
-  width: 169px;
+  width: 172px;
   padding: 10px 16px;
   border-radius: 24px;
   border: 1px solid var(--border-light-grey);
@@ -186,6 +186,36 @@ export const imageThumb = css`
     height: 100%;
     object-fit: cover;
   }
+`;
+
+export const variationsContainer = css`
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+`;
+
+export const variationWrapper = css`
+  display: flex;
+  align-items: start;
+  column-gap: 20px;
+  width: 100%;
+`;
+
+export const reviewsContainer = css`
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  width: 100%;
+`;
+
+export const reviewWrapper = css`
+  display: flex;
+  align-items: start;
+  column-gap: 20px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border-light-grey);
 `;
 
 export const trashCan = css`

@@ -7,6 +7,7 @@ import {
   FieldArray,
   FormikProps,
   Field,
+  FormikErrors,
 } from "formik";
 import * as Yup from "yup";
 import {
@@ -27,6 +28,10 @@ import {
   titleImagesWrapper,
   textAreaStyle,
   trashCan,
+  reviewWrapper,
+  reviewsContainer,
+  variationsContainer,
+  variationWrapper,
 } from "./AdminForm.styled";
 import { errorBorder } from "@components/CartForm/CartForm.styled";
 
@@ -44,7 +49,7 @@ import { createCategory, fetchCategories } from "@redux/categories/operations";
 import { selectCategories } from "@redux/categories/selectors";
 
 import { ICategory } from "Interfaces/ICategory";
-import { IAdvert } from "Interfaces/IAdvert";
+import { IAdvert, IVariation } from "Interfaces/IAdvert";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -65,7 +70,7 @@ const initialValues: IAdvert = {
 
   variations: [{ size: "", price: "", count: "", color: "", discount: "" }],
 
-  feedbacks: [""],
+  feedbacks: [{ name: "", profession: "", review: "" }],
 
   newCategory: "",
 };
@@ -85,14 +90,20 @@ const validationSchema = Yup.object({
   variations: Yup.array().of(
     Yup.object().shape({
       price: Yup.mixed().required("Ціна обов'язкова"),
-      discount: Yup.number(),
+      discount: Yup.mixed(),
       count: Yup.mixed().required("Кількість обов'язкова"),
-      colors: Yup.array().min(1, "Необхідно вибрати хоча б один колір"),
+      colors: Yup.string(),
       size: Yup.mixed(),
     })
   ),
 
-  feedbacks: Yup.array().of(Yup.string()),
+  feedbacks: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string(),
+      profession: Yup.string(),
+      review: Yup.string(),
+    })
+  ),
 
   newCategory: Yup.string(),
 });
@@ -219,7 +230,8 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
           if (typeof mainImg === "string") {
             values.mainImage = mainImg;
           } else {
-            values.mainImage = URL.createObjectURL(mainImg);
+            // values.mainImage = URL.createObjectURL(mainImg);
+            values.mainImage = mainImg.name;
           }
           delete values.newCategory;
           console.log("values", values);
@@ -458,111 +470,21 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                   <div>
                     <FieldArray name="variations">
                       {({ push, remove }) => (
-                        <>
+                        <div css={variationsContainer}>
                           {variations.map((_, index) => (
                             <div key={index} css={[blockWrapper, commonBlock]}>
                               <h2>Варіація товару: {index + 1}</h2>
-                              <div css={categoryFields}>
-                                <label htmlFor={`variations.${index}.price`}>
-                                  <Field
-                                    name={`variations.${index}.price`}
-                                    type="number"
-                                    placeholder="Ціна товару"
-                                    onFocus={() => {
-                                      setFieldError(
-                                        `variations.${index}`,
-                                        undefined
-                                      );
-                                    }}
-                                    onKeyPress={handleNumericInput}
-                                    css={[
-                                      inputFieldStyle,
-                                      errorBorder(
-                                        !!(errors.title && touched.title)
-                                      ),
-                                    ]}
-                                  />
-                                </label>
-
-                                <label htmlFor={`variations.${index}.discount`}>
-                                  <Field
-                                    name={`variations.${index}.discount`}
-                                    type="number"
-                                    placeholder="Знижка"
-                                    onFocus={() => {
-                                      setFieldError(
-                                        `variations.${index}`,
-                                        undefined
-                                      );
-                                    }}
-                                    onKeyPress={handleNumericInput}
-                                    css={[
-                                      inputFieldStyle,
-                                      errorBorder(
-                                        !!(errors.title && touched.title)
-                                      ),
-                                    ]}
-                                  />
-                                </label>
-
-                                <label htmlFor={`variations.${index}.count`}>
-                                  <Field
-                                    name={`variations.${index}.count`}
-                                    type="number"
-                                    placeholder="Кількість"
-                                    onFocus={() => {
-                                      setFieldError(
-                                        `variations.${index}`,
-                                        undefined
-                                      );
-                                    }}
-                                    onKeyPress={handleNumericInput}
-                                    css={[
-                                      inputFieldStyle,
-                                      errorBorder(
-                                        !!(errors.title && touched.title)
-                                      ),
-                                    ]}
-                                  />
-                                </label>
-
-                                {(isShowColorPicker.includes(index) ||
-                                  variations[index].color) && (
-                                  <div className="errorContainer">
-                                    <ColorPicker
-                                      formik={formik}
-                                      variation={advert?.variations[index]}
-                                      index={index}
-                                      onClose={handleShowColorPicker}
-                                    />
-                                    <ErrorMessage name="colors">
-                                      {(msg) => (
-                                        <div css={errorStyle}>{msg}</div>
-                                      )}
-                                    </ErrorMessage>
-                                  </div>
-                                )}
-                                {!isShowColorPicker.includes(index) && (
-                                  <button
-                                    type="button"
-                                    css={buttonStyle}
-                                    onClick={() =>
-                                      handleShowColorPicker(index, formik)
-                                    }
-                                  >
-                                    <p>Додати колір</p> <FiPlus />
-                                  </button>
-                                )}
-
-                                {isShowAddSize.includes(index) && (
-                                  <label htmlFor={`variations.${index}.size`}>
+                              <div css={variationWrapper}>
+                                <div css={categoryFields}>
+                                  <label htmlFor={`variations${index}.price`}>
                                     <Field
-                                      name={`variations.${index}.size`}
+                                      name={`variations.${index}.price`}
                                       type="number"
-                                      placeholder="Об'єм"
+                                      placeholder="Ціна товару"
+                                      id={`variations${index}.price`}
                                       onFocus={() => {
                                         setFieldError(
-                                          `variations.${index}`,
+                                          `variations.${index}.price`,
                                           undefined
                                         );
                                       }}
@@ -570,29 +492,128 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                       css={[
                                         inputFieldStyle,
                                         errorBorder(
-                                          !!(errors.title && touched.title)
+                                          !!(
+                                            (
+                                              errors.variations?.[
+                                                index
+                                              ] as FormikErrors<IVariation>
+                                            )?.price &&
+                                            touched.variations?.[index]?.price
+                                          )
                                         ),
                                       ]}
                                     />
+                                    <ErrorMessage
+                                      name={`variations.${index}.price`}
+                                    >
+                                      {(msg) => (
+                                        <div css={errorStyle}>{msg}</div>
+                                      )}
+                                    </ErrorMessage>
                                   </label>
-                                )}
-                                <button
-                                  type="button"
-                                  css={buttonStyle}
-                                  onClick={() => handleShowSize(index)}
-                                >
-                                  <p>Додати обʼєм</p> <FiPlus />
-                                </button>
 
-                                <ErrorMessage name={`variations.${index}`}>
-                                  {() => (
-                                    <div css={errorStyle}>
-                                      Усі поля мають бути заповнені
+                                  <label
+                                    htmlFor={`variations${index}.discount`}
+                                  >
+                                    <Field
+                                      name={`variations.${index}.discount`}
+                                      type="number"
+                                      placeholder="Знижка"
+                                      id={`variations${index}.discount`}
+                                      onKeyPress={handleNumericInput}
+                                      css={[inputFieldStyle]}
+                                    />
+                                  </label>
+
+                                  <label htmlFor={`variations${index}.count`}>
+                                    <Field
+                                      name={`variations.${index}.count`}
+                                      type="number"
+                                      placeholder="Кількість"
+                                      id={`variations${index}.count`}
+                                      onFocus={() => {
+                                        setFieldError(
+                                          `variations.${index}.count`,
+                                          undefined
+                                        );
+                                      }}
+                                      onKeyPress={handleNumericInput}
+                                      css={[
+                                        inputFieldStyle,
+                                        errorBorder(
+                                          !!(
+                                            errors.variations?.[index] &&
+                                            (
+                                              errors.variations[
+                                                index
+                                              ] as FormikErrors<IVariation>
+                                            ).count &&
+                                            touched.variations?.[index]?.count
+                                          )
+                                        ),
+                                      ]}
+                                    />
+                                    <ErrorMessage
+                                      name={`variations.${index}.count`}
+                                    >
+                                      {(msg) => (
+                                        <div css={errorStyle}>{msg}</div>
+                                      )}
+                                    </ErrorMessage>
+                                  </label>
+
+                                  {(isShowColorPicker.includes(index) ||
+                                    variations[index].color) && (
+                                    <div className="errorContainer">
+                                      <ColorPicker
+                                        formik={formik}
+                                        variation={advert?.variations[index]}
+                                        index={index}
+                                        onClose={handleShowColorPicker}
+                                      />
                                     </div>
                                   )}
-                                </ErrorMessage>
-                              </div>
-                              <div>
+                                  {!isShowColorPicker.includes(index) && (
+                                    <button
+                                      type="button"
+                                      css={buttonStyle}
+                                      onClick={() =>
+                                        handleShowColorPicker(index, formik)
+                                      }
+                                    >
+                                      <p>Додати колір</p> <FiPlus />
+                                    </button>
+                                  )}
+
+                                  {isShowAddSize.includes(index) && (
+                                    <label htmlFor={`variations${index}.size`}>
+                                      <Field
+                                        name={`variations.${index}.size`}
+                                        type="number"
+                                        placeholder="Об'єм"
+                                        id={`variations${index}.size`}
+                                        onKeyPress={handleNumericInput}
+                                        css={[inputFieldStyle]}
+                                      />
+                                    </label>
+                                  )}
+                                  <button
+                                    type="button"
+                                    css={buttonStyle}
+                                    onClick={() => handleShowSize(index)}
+                                  >
+                                    <p>Додати обʼєм</p> <FiPlus />
+                                  </button>
+
+                                  {/* <ErrorMessage name={`variations.${index}`}>
+                                    {() => (
+                                      <div css={errorStyle}>
+                                        Усі поля мають бути заповнені
+                                      </div>
+                                    )}
+                                  </ErrorMessage> */}
+                                </div>
+
                                 {variations.length > 1 && (
                                   <button
                                     type="button"
@@ -616,12 +637,12 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                 discount: "",
                               })
                             }
-                            css={[buttonStyle, { marginTop: "14px" }]}
+                            css={buttonStyle}
                           >
                             <p>Додати варіацію товару</p>
                             <FiPlus />
                           </button>
-                        </>
+                        </div>
                       )}
                     </FieldArray>
                   </div>
@@ -630,29 +651,63 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                     <h2>Відгуки</h2>
                     <FieldArray name="feedbacks">
                       {({ push, remove }) => (
-                        <>
+                        <div css={reviewsContainer}>
                           {feedbacks.map((_, i) => (
-                            <label key={i} htmlFor={`feedbacks.${i}`}>
-                              <Field
-                                as="textarea"
-                                name={`feedbacks.${i}`}
-                                id={`feedbacks.${i}`}
-                                placeholder="Відгук"
-                              />
+                            <div key={i} css={reviewWrapper}>
+                              <div css={categoryFields}>
+                                <label htmlFor={`feedbacks${i}.name`}>
+                                  <Field
+                                    type="text"
+                                    name={`feedbacks.${i}.name`}
+                                    id={`feedbacks${i}.name`}
+                                    placeholder="Імʼя людини"
+                                    css={[inputFieldStyle]}
+                                  />
+                                </label>
+                                <label htmlFor={`feedbacks${i}.profession`}>
+                                  <Field
+                                    type="text"
+                                    name={`feedbacks.${i}.profession`}
+                                    id={`feedbacks${i}.proffesion`}
+                                    placeholder="Хто ця людина"
+                                    css={[inputFieldStyle]}
+                                  />
+                                </label>
+                                <label htmlFor={`feedbacks${i}.review`}>
+                                  <Field
+                                    as="textarea"
+                                    name={`feedbacks.${i}.review`}
+                                    id={`feedbacks${i}.review`}
+                                    placeholder="Текст відгуку"
+                                    css={[
+                                      inputFieldStyle,
+                                      textAreaStyle,
+                                      { width: "100%" },
+                                    ]}
+                                  />
+                                </label>
+                                <ErrorMessage name={`feedbacks.${i}`}>
+                                  {(msg) => <div css={errorStyle}>{msg}</div>}
+                                </ErrorMessage>
+                              </div>
+
                               {feedbacks.length > 1 && (
                                 <button type="button" onClick={() => remove(i)}>
-                                  Видалити відгук
+                                  <FaRegTrashAlt css={trashCan} />
                                 </button>
                               )}
-                              <ErrorMessage name={`feedbacks.${i}`}>
-                                {(msg) => <div css={errorStyle}>{msg}</div>}
-                              </ErrorMessage>
-                            </label>
+                            </div>
                           ))}
-                          <button type="button" onClick={() => push("")}>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              push({ name: "", profession: "", review: "" })
+                            }
+                            css={buttonStyle}
+                          >
                             Додати відгук
                           </button>
-                        </>
+                        </div>
                       )}
                     </FieldArray>
                   </div>
