@@ -19,14 +19,14 @@ import {
 
 interface ISortingItProps {
   width?: string;
-  options: number[] | null;
+  options: number[] | string [] | null;
   padding?: string;
   borderRadius?: string;
   isOpenSearch?: boolean;
   isOpenFilter?: boolean;
   disableWidth?:string;
-  setSelectedOption?:React.Dispatch<React.SetStateAction<number | null>>;
-  selectedOption?:number | null;
+  setSelectedOption?:React.Dispatch<React.SetStateAction<number | string | null>>;
+  selectedOption?:number| string | null;
 }
 const SortingItems: React.FC<ISortingItProps> = ({
   width,
@@ -65,7 +65,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
   const handleClick = () => {
     setIsOpen((prev) => !prev);
   };
-  const handleSelect = (option: number) => {
+  const handleSelect = (option: number | string) => {
     if(setSelectedOption){
     setSelectedOption(option);
     setChecked(true);
@@ -94,7 +94,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
         {isOpen && (
           <SelectOptionContainer width={width}>
             {options && options.map((option, i) => (
-              <SelectOne key={option + i}>
+              <SelectOne key={option + `${i}`}>
                 <SvgContainer>
                   {checked && selectedOption === option && (
                     <Checked css={svgCheckedStyles} />
