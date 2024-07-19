@@ -30,7 +30,7 @@ const modalPortal = document.querySelector("#portal-root");
 
 interface ICustomSelectProps {
   formik: FormikProps<IAdvert>;
-  selectedCategoryId?: number;
+  selectedCategoryId?: number | string;
 }
 
 interface IEditAction {
@@ -43,7 +43,7 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
   selectedCategoryId,
 }) => {
   const [isShowDropdown, setIsShowDropdown] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<number | undefined>(
+  const [selectedCategory, setSelectedCategory] = useState<number | string | undefined>(
     selectedCategoryId
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +58,7 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
 
   const handleShowDropDown = () => {
     setIsShowDropdown((prev) => !prev);
-    setFieldError("categoryId", undefined);
+    setFieldError("category_id", undefined);
   };
 
   const categoryId = (name: string) => {
@@ -103,7 +103,7 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
 
   useEffect(() => {
     if (selectedCategory) {
-      setFieldValue("categoryId", selectedCategory);
+      setFieldValue("category_id", selectedCategory);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
@@ -135,7 +135,7 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
         data-dropdown-trigger
         css={[
           selectorStyle(isShowDropdown),
-          errorBorder(!!(errors.categoryId && touched.categoryId)),
+          errorBorder(!!(errors.category_id && touched.category_id)),
         ]}
       >
         <p>{handleShowCategory()}</p>

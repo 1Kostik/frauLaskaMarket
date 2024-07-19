@@ -4,7 +4,7 @@ import { IAdvert } from "Interfaces/IAdvert";
 
 const advert: IAdvert = {
   categoryId: 2,
-  imageFiles: [
+  imageUrls: [
     "https://res.cloudinary.com/dfmactvue/image/upload/v1696879579/samples/balloons.jpg",
   ],
   mainImage: "blob:http://localhost:3000/ca9a618c-71d1-43f2-838f-fe738ced78c9",

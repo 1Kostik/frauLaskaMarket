@@ -49,7 +49,9 @@ import { createCategory, fetchCategories } from "@redux/categories/operations";
 import { selectCategories } from "@redux/categories/selectors";
 
 import { ICategory } from "Interfaces/ICategory";
-import { IAdvert, IVariation } from "Interfaces/IAdvert";
+import { IAdvert, IFeedback, IVariation } from "Interfaces/IAdvert";
+import { createAdvert } from "@redux/ads/operations";
+// import { Product } from "Interfaces/Product";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -58,9 +60,9 @@ interface IAdminFormProps {
 }
 
 const initialValues: IAdvert = {
-  categoryId: undefined,
-  imageFiles: [],
-  mainImage: undefined,
+  category_id: "",
+  imageUrls: [],
+  mainImage: "",
 
   title: "",
   productCode: "",
@@ -72,15 +74,16 @@ const initialValues: IAdvert = {
 
   feedbacks: [{ name: "", profession: "", review: "" }],
 
+  popularity: "",
+  ranking: "",
+
   newCategory: "",
 };
 
 const validationSchema = Yup.object({
-  categoryId: Yup.number().required("Оберіть категорію"),
-  imageFiles: Yup.array()
-    .min(1, "Необхідно вибрати принаймні одне зображення")
-    .nullable(),
-
+  category_id: Yup.mixed().required("Оберіть категорію"),
+  imageUrls: Yup.array().min(1, "Необхідно вибрати принаймні одне зображення"),
+  mainImage: Yup.string(),
   title: Yup.string().required("Назва обов'язкова"),
   productCode: Yup.string().required("Код обов'язковий"),
   composition: Yup.string(),
@@ -112,13 +115,14 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
   const [isShowColorPicker, setIsShowColorPicker] = useState<number[]>([]);
   const [isShowAddSize, setIsShowAddSize] = useState<number[]>([]);
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (advert) {
       setIsShowColorPicker(advert.variations.map((_, i) => i));
     }
   }, [advert]);
 
-  const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories).map(
     (item: ICategory) => item.title
   );
@@ -128,37 +132,36 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     formik: FormikProps<IAdvert>
   ) => {
     const {
-      values: { imageFiles },
+      values: { imageUrls },
       setFieldValue,
     } = formik;
     const files = Array.from(e.target.files || []) as File[];
     const filesForAdd = files.filter((file) => file.size < FILE_SIZE);
     const fileUrls = filesForAdd.map((file) => URL.createObjectURL(file));
-
-    if (imageFiles.length + fileUrls.length > 8) {
+    if (imageUrls.length + fileUrls.length > 8) {
       return;
     }
 
-    setFieldValue("imageFiles", [...imageFiles, ...filesForAdd]);
+    setFieldValue("imageUrls", [...imageUrls, ...filesForAdd]);
   };
 
   const handleRemove = (i: number, formik: FormikProps<IAdvert>) => {
     const {
-      values: { imageFiles },
+      values: { imageUrls },
       setFieldValue,
     } = formik;
-    setFieldValue("imageFiles", [
-      ...imageFiles.filter((_, index) => index !== i),
+    setFieldValue("imageUrls", [
+      ...imageUrls.filter((_, index) => index !== i),
     ]);
   };
 
   const handleMainPhoto = (i: number, formik: FormikProps<IAdvert>) => {
     formik.setFieldValue(
-      "imageFiles",
+      "imageUrls",
       (() => {
-        const { imageFiles } = formik.values;
-        const mainImage = imageFiles[i];
-        return [mainImage, ...imageFiles.filter((_, index) => index !== i)];
+        const { imageUrls } = formik.values;
+        const mainImage = imageUrls[i];
+        return [mainImage, ...imageUrls.filter((_, index) => index !== i)];
       })()
     );
   };
@@ -220,28 +223,82 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
+  const handleOnSubmit = (values: IAdvert) => {
+    const mainImg = values.imageUrls[0];
+    if (typeof mainImg === "string") {
+      values.mainImage = mainImg;
+    } else {
+      values.mainImage = mainImg.name;
+    }
+    delete values.newCategory;
+    values.popularity = 1;
+    values.ranking = 1;
+
+    const formData = new FormData();
+
+    values.imageUrls.forEach((file) => {
+      if (file instanceof File) {
+        formData.append(`imageUrls`, file);
+      }
+    });
+
+    for (const key in values) {
+      if (Object.prototype.hasOwnProperty.call(values, key)) {
+        const value = values[key as keyof IAdvert];
+        if (typeof value === "string" || typeof value === "number") {
+          formData.append(key, value.toString());
+        } else if (Array.isArray(value)) {
+          value.forEach((valuesObj, index) => {
+            if (
+              typeof valuesObj === "object" &&
+              valuesObj !== null &&
+              !(valuesObj instanceof File)
+            ) {
+              for (const objKey in valuesObj) {
+                if (Object.prototype.hasOwnProperty.call(valuesObj, objKey)) {
+                  const objValue =
+                    valuesObj[objKey as keyof (IVariation | IFeedback)];
+                  if (
+                    typeof objValue === "string" ||
+                    typeof objValue === "number"
+                  ) {
+                    if (key === "imageUrls") return;
+                    formData.append(`${key}[${index}][${objKey}]`, objValue);
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+    }
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+    // console.log("values", values);
+    dispatch(createAdvert(formData));
+  };
+
+  //     // const requestOptions = {
+  //     //   method: "POST",
+  //     //   body: productFormData,
+  //     //   redirect: "follow",
+  //     // };
+
   return (
     <>
       <Formik
         initialValues={advert || initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values: IAdvert) => {
-          const mainImg = values.imageFiles[0];
-          if (typeof mainImg === "string") {
-            values.mainImage = mainImg;
-          } else {
-            // values.mainImage = URL.createObjectURL(mainImg);
-            values.mainImage = mainImg.name;
-          }
-          delete values.newCategory;
-          console.log("values", values);
+        onSubmit={(values) => {
+          handleOnSubmit(values);
         }}
         validateOnBlur={false}
         validateOnChange={false}
       >
         {(formik: FormikProps<IAdvert>) => {
           const {
-            values: { imageFiles, variations, feedbacks, newCategory },
+            values: { imageUrls, variations, feedbacks, newCategory },
             setFieldError,
             errors,
             touched,
@@ -262,9 +319,9 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                         <div className="errorContainer">
                           <CustomSelect
                             formik={formik}
-                            selectedCategoryId={advert?.categoryId}
+                            selectedCategoryId={advert?.category_id}
                           />
-                          <ErrorMessage name="categoryId">
+                          <ErrorMessage name="category_id">
                             {(msg) => <div css={errorStyle}>{msg}</div>}
                           </ErrorMessage>
                         </div>
@@ -305,15 +362,15 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                   <div css={blockWrapper} className="errorContainer">
                     <div css={titleImagesWrapper}>
                       <h2>Фотографії</h2>
-                      {imageFiles.length < 8 && (
+                      {imageUrls.length < 8 && (
                         <>
-                          <label htmlFor="imageFiles" css={addImagesBtn}>
+                          <label htmlFor="imageUrls" css={addImagesBtn}>
                             Додати фотографію
                           </label>
                           <input
                             type="file"
-                            name="imageFiles"
-                            id="imageFiles"
+                            name="imageUrls"
+                            id="imageUrls"
                             accept="image/*"
                             multiple
                             onChange={(e) => handleAddPhotos(e, formik)}
@@ -321,10 +378,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                         </>
                       )}
                     </div>
-                    <FieldArray name="imageFiles">
+                    <FieldArray name="imageUrls">
                       {() => (
                         <div css={imagesContainer}>
-                          {imageFiles.map((image, i) => (
+                          {imageUrls.map((image, i) => (
                             <div key={i} css={imageWrapper}>
                               <button
                                 type="button"
@@ -352,7 +409,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                               </div>
                             </div>
                           ))}
-                          <ErrorMessage name={`imageFiles`}>
+                          <ErrorMessage name={`imageUrls`}>
                             {(msg) => (
                               <div css={errorStyle} className="images-error">
                                 {msg}

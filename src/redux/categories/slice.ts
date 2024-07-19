@@ -8,6 +8,7 @@ import {
 } from "./operations";
 import { ICategoriesState } from "Interfaces/ICategoriesState";
 
+
 const initialState = {
   list: [],
   isLoading: false,
@@ -30,6 +31,7 @@ const handleRejected = (
   state: ICategoriesState,
   { payload }: PayloadAction<unknown>
 ) => {
+  state.isLoading = false;
   state.error = payload;
 };
 
