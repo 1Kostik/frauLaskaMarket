@@ -13,16 +13,8 @@ export const formDataWrapper = css`
   display: flex;
   flex-direction: column;
   row-gap: 30px;
-
   width: 844px;
-
   color: grey;
-
-  & input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
 
   & .errorContainer {
     position: relative;
@@ -92,7 +84,7 @@ export const inputLabel = (isShow: boolean) => css`
     opacity: 1;
   `}
   width: fit-content;
-  padding: 4px 8px;
+  padding: 4px 8px 2px;
   border: 1px solid var(--border-color);
   border-radius: 10px;
   background-color: var(--bg-black);
@@ -106,9 +98,10 @@ export const inputLabel = (isShow: boolean) => css`
 `;
 
 export const textAreaStyle = css`
+  overflow-y: hidden;
   resize: vertical;
-  width: 478px;
-  min-height: 70px;
+  width: 100%;
+  min-height: 66px;
 `;
 
 export const titleImagesWrapper = css`
