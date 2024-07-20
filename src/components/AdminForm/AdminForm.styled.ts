@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { onDesktop } from "@styles/mixins";
 
 export const pageTitle = css`
   padding-bottom: 40px;
@@ -6,15 +7,6 @@ export const pageTitle = css`
   font-weight: 600;
   letter-spacing: 0.64px;
   color: var(--text-light-grey);
-`;
-
-export const formContainer = css`
-  display: flex;
-  column-gap: 20px;
-
-  & .errorContainer {
-    position: relative;
-  }
 `;
 
 export const formDataWrapper = css`
@@ -31,6 +23,10 @@ export const formDataWrapper = css`
     -webkit-appearance: none;
     margin: 0;
   }
+
+  & .errorContainer {
+    position: relative;
+  }
 `;
 
 export const blockWrapper = css`
@@ -39,12 +35,16 @@ export const blockWrapper = css`
   border: 1px solid var(--border-light-grey);
 
   & h2 {
-    min-width: 312px;
+    min-width: 150px;
     font-size: 24px;
     font-weight: 600;
     line-height: 120%;
     letter-spacing: 0.48px;
     color: var(--text-light-grey);
+
+    ${onDesktop(css`
+      width: 312px;
+    `)}
   }
 `;
 
@@ -77,6 +77,32 @@ export const inputFieldStyle = css`
   &::placeholder {
     color: var(--text-light-grey);
   }
+`;
+
+export const inputLabel = (isShow: boolean) => css`
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  opacity: 0;
+  transition: var(--effectDuration);
+  ${isShow &&
+  css`
+    top: -11px;
+    left: 14px;
+    opacity: 1;
+  `}
+  width: fit-content;
+  padding: 4px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--bg-black);
+
+  font-family: Fixel;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.1px;
+  color: var(--text-light-grey);
 `;
 
 export const textAreaStyle = css`
@@ -258,7 +284,7 @@ export const buttonStyle = css`
 `;
 
 export const submitWrapper = css`
-  width: 420px;
+  width: 100%;
   height: 74px;
   ${blockWrapper}
 
