@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 import {
   Formik,
@@ -87,7 +87,6 @@ const validationSchema = Yup.object({
   title: Yup.string().required("Назва обов'язкова"),
   productCode: Yup.string().required("Код обов'язковий"),
   composition: Yup.string(),
-  benefit: Yup.string(),
   description: Yup.string().required("Опис обов'язковий"),
 
   variations: Yup.array().of(
@@ -115,16 +114,35 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
   const [isShowColorPicker, setIsShowColorPicker] = useState<number[]>([]);
   const [isShowAddSize, setIsShowAddSize] = useState<number[]>([]);
 
+  const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories).map(
     (item: ICategory) => item.title
   );
 
-  const dispatch = useAppDispatch();
-
+  const [feedbacksArr, setFeedbacksArr] = useState<number[]>([]);
+  const feedbackRefArr = useRef<(HTMLAreaElement | null)[]>([]);
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
-
+    feedbackRefArr.current = feedbacksArr.map(
+      (i) => feedbackRefArr.current[i] || null
+    );
+    console.log("feedbackRefArr.current", feedbackRefArr.current);
+  }, [feedbacksArr]);
+  useEffect(() => {
+    feedbackRefArr.current.forEach((item) =>
+      item?.addEventListener(
+        "input",
+        () => (item.style.height = `${item.scrollHeight}px`)
+      )
+    );
+    return () => {
+      feedbackRefArr.current.forEach((item) =>
+        item?.removeEventListener(
+          "input",
+          () => (item.style.height = `${item.scrollHeight}px`)
+        )
+      );
+    };
+  }, [feedbacksArr]);
   useEffect(() => {
     const textAreaElemets = document.querySelectorAll("textarea");
     textAreaElemets.forEach((textArea) =>
@@ -140,6 +158,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
       );
     };
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   useEffect(() => {
     if (advert) {
@@ -807,6 +829,9 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                     name={`feedbacks.${i}.review`}
                                     id={`feedbacks${i}.review`}
                                     placeholder="Текст відгуку"
+                                    innerRef={(el: HTMLAreaElement) =>
+                                      (feedbackRefArr.current[i] = el)
+                                    }
                                     css={[
                                       inputFieldStyle,
                                       textAreaStyle,
@@ -835,9 +860,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           ))}
                           <button
                             type="button"
-                            onClick={() =>
-                              push({ name: "", profession: "", review: "" })
-                            }
+                            onClick={() => {
+                              setFeedbacksArr((prev) => [
+                                ...prev,
+                                feedbacks.length,
+                              ]);
+                              push({ name: "", profession: "", review: "" });
+                            }}
                             css={buttonStyle}
                           >
                             Додати відгук
