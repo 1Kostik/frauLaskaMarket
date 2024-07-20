@@ -18,7 +18,7 @@ import {
   addImagesBtn,
   formDataWrapper,
   pageTitle,
-  formContainer,
+  // formContainer,
   submitWrapper,
   blockWrapper,
   categoryFields,
@@ -32,6 +32,7 @@ import {
   reviewsContainer,
   variationsContainer,
   variationWrapper,
+  inputLabel,
 } from "./AdminForm.styled";
 import { errorBorder } from "@components/CartForm/CartForm.styled";
 
@@ -51,6 +52,7 @@ import { selectCategories } from "@redux/categories/selectors";
 import { ICategory } from "Interfaces/ICategory";
 import { IAdvert, IFeedback, IVariation } from "Interfaces/IAdvert";
 import { createAdvert } from "@redux/ads/operations";
+import { SerializedStyles } from "@emotion/react";
 // import { Product } from "Interfaces/Product";
 
 const FILE_SIZE = 1024 * 1024 * 2;
@@ -219,6 +221,14 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     });
   };
 
+  const handleInputFieldStyles = (
+    errors: string | undefined,
+    touched: boolean | undefined,
+    textareaStyle?: SerializedStyles
+  ) => {
+    return [inputFieldStyle, errorBorder(!!(errors && touched)), textareaStyle];
+  };
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
@@ -279,12 +289,6 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     dispatch(createAdvert(formData));
   };
 
-  //     // const requestOptions = {
-  //     //   method: "POST",
-  //     //   body: productFormData,
-  //     //   redirect: "follow",
-  //     // };
-
   return (
     <>
       <Formik
@@ -298,7 +302,17 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
       >
         {(formik: FormikProps<IAdvert>) => {
           const {
-            values: { imageUrls, variations, feedbacks, newCategory },
+            values: {
+              imageUrls,
+              variations,
+              feedbacks,
+              newCategory,
+              title,
+              productCode,
+              benefit,
+              composition,
+              description,
+            },
             setFieldError,
             errors,
             touched,
@@ -310,7 +324,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                 {!advert ? "Створення товару" : "Редагевання товару"}
               </h1>
 
-              <Form css={formContainer}>
+              <Form>
                 <div css={formDataWrapper}>
                   <div css={[blockWrapper, commonBlock]}>
                     <h2>Категорія</h2>
@@ -335,12 +349,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           onFocus={() =>
                             setFieldError("newCategory", undefined)
                           }
-                          css={[
-                            inputFieldStyle,
-                            errorBorder(
-                              !!(errors.newCategory && touched.newCategory)
-                            ),
-                          ]}
+                          css={handleInputFieldStyles(
+                            errors.newCategory,
+                            touched.newCategory
+                          )}
                         />
                         <ErrorMessage name="newCategory">
                           {(msg) => <div css={errorStyle}>{msg}</div>}
@@ -431,11 +443,12 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           id="title"
                           placeholder="Назва товару"
                           onFocus={() => setFieldError("title", undefined)}
-                          css={[
-                            inputFieldStyle,
-                            errorBorder(!!(errors.title && touched.title)),
-                          ]}
+                          css={handleInputFieldStyles(
+                            errors.title,
+                            touched.title
+                          )}
                         />
+                        <p css={inputLabel(!!title)}>Назва товару</p>
                         <ErrorMessage name="title">
                           {(msg) => <div css={errorStyle}>{msg}</div>}
                         </ErrorMessage>
@@ -450,13 +463,12 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           onFocus={() =>
                             setFieldError("productCode", undefined)
                           }
-                          css={[
-                            inputFieldStyle,
-                            errorBorder(
-                              !!(errors.productCode && touched.productCode)
-                            ),
-                          ]}
+                          css={handleInputFieldStyles(
+                            errors.productCode,
+                            touched.productCode
+                          )}
                         />
+                        <p css={inputLabel(!!productCode)}>Код</p>
                         <ErrorMessage name="productCode">
                           {(msg) => <div css={errorStyle}>{msg}</div>}
                         </ErrorMessage>
@@ -468,12 +480,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           as="textarea"
                           id="composition"
                           placeholder="Склад"
-                          css={[
-                            inputFieldStyle,
-                            errorBorder(!!(errors.benefit && touched.benefit)),
-                            textAreaStyle,
-                          ]}
+                          css={handleInputFieldStyles(
+                            errors.composition,
+                            touched.composition,
+                            textAreaStyle
+                          )}
                         />
+                        <p css={inputLabel(!!composition)}>Склад</p>
                         <ErrorMessage name="composition">
                           {(msg) => <div css={errorStyle}>{msg}</div>}
                         </ErrorMessage>
@@ -485,12 +498,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           as="textarea"
                           id="benefit"
                           placeholder="З чим допоможе?"
-                          css={[
-                            inputFieldStyle,
-                            errorBorder(!!(errors.benefit && touched.benefit)),
-                            textAreaStyle,
-                          ]}
+                          css={handleInputFieldStyles(
+                            errors.benefit,
+                            touched.benefit,
+                            textAreaStyle
+                          )}
                         />
+                        <p css={inputLabel(!!benefit)}>З чим допоможе?</p>
                         <ErrorMessage name="benefit">
                           {(msg) => <div css={errorStyle}>{msg}</div>}
                         </ErrorMessage>
@@ -505,14 +519,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           onFocus={() =>
                             setFieldError("description", undefined)
                           }
-                          css={[
-                            inputFieldStyle,
-                            errorBorder(
-                              !!(errors.description && touched.description)
-                            ),
-                            textAreaStyle,
-                          ]}
+                          css={handleInputFieldStyles(
+                            errors.description,
+                            touched.description,
+                            textAreaStyle
+                          )}
                         />
+                        <p css={inputLabel(!!description)}>Опис товару</p>
                         <ErrorMessage name="description">
                           {(msg) => (
                             <div css={errorStyle} className="text-area-error">
@@ -533,7 +546,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                               <h2>Варіація товару: {index + 1}</h2>
                               <div css={variationWrapper}>
                                 <div css={categoryFields}>
-                                  <label htmlFor={`variations${index}.price`}>
+                                  <label
+                                    htmlFor={`variations${index}.price`}
+                                    className="errorContainer"
+                                  >
                                     <Field
                                       name={`variations.${index}.price`}
                                       type="number"
@@ -546,20 +562,22 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                         );
                                       }}
                                       onKeyPress={handleNumericInput}
-                                      css={[
-                                        inputFieldStyle,
-                                        errorBorder(
-                                          !!(
-                                            (
-                                              errors.variations?.[
-                                                index
-                                              ] as FormikErrors<IVariation>
-                                            )?.price &&
-                                            touched.variations?.[index]?.price
-                                          )
-                                        ),
-                                      ]}
+                                      css={handleInputFieldStyles(
+                                        (
+                                          errors.variations?.[
+                                            index
+                                          ] as FormikErrors<IVariation>
+                                        )?.price,
+                                        touched.variations?.[index]?.price
+                                      )}
                                     />
+                                    <p
+                                      css={inputLabel(
+                                        !!formik.values.variations[index].price
+                                      )}
+                                    >
+                                      Ціна товару
+                                    </p>
                                     <ErrorMessage
                                       name={`variations.${index}.price`}
                                     >
@@ -571,6 +589,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
 
                                   <label
                                     htmlFor={`variations${index}.discount`}
+                                    className="errorContainer"
                                   >
                                     <Field
                                       name={`variations.${index}.discount`}
@@ -580,9 +599,20 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                       onKeyPress={handleNumericInput}
                                       css={[inputFieldStyle]}
                                     />
+                                    <p
+                                      css={inputLabel(
+                                        !!formik.values.variations[index]
+                                          .discount
+                                      )}
+                                    >
+                                      Знижка
+                                    </p>
                                   </label>
 
-                                  <label htmlFor={`variations${index}.count`}>
+                                  <label
+                                    htmlFor={`variations${index}.count`}
+                                    className="errorContainer"
+                                  >
                                     <Field
                                       name={`variations.${index}.count`}
                                       type="number"
@@ -595,21 +625,23 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                         );
                                       }}
                                       onKeyPress={handleNumericInput}
-                                      css={[
-                                        inputFieldStyle,
-                                        errorBorder(
-                                          !!(
-                                            errors.variations?.[index] &&
-                                            (
-                                              errors.variations[
-                                                index
-                                              ] as FormikErrors<IVariation>
-                                            ).count &&
-                                            touched.variations?.[index]?.count
-                                          )
-                                        ),
-                                      ]}
+                                      css={handleInputFieldStyles(
+                                        errors.variations?.[index] &&
+                                          (
+                                            errors.variations[
+                                              index
+                                            ] as FormikErrors<IVariation>
+                                          ).count,
+                                        touched.variations?.[index]?.count
+                                      )}
                                     />
+                                    <p
+                                      css={inputLabel(
+                                        !!formik.values.variations[index].count
+                                      )}
+                                    >
+                                      Кількість
+                                    </p>
                                     <ErrorMessage
                                       name={`variations.${index}.count`}
                                     >
@@ -643,7 +675,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                   )}
 
                                   {isShowAddSize.includes(index) && (
-                                    <label htmlFor={`variations${index}.size`}>
+                                    <label
+                                      htmlFor={`variations${index}.size`}
+                                      className="errorContainer"
+                                    >
                                       <Field
                                         name={`variations.${index}.size`}
                                         type="number"
@@ -652,6 +687,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                         onKeyPress={handleNumericInput}
                                         css={[inputFieldStyle]}
                                       />
+                                      <p
+                                        css={inputLabel(
+                                          !!formik.values.variations[index].size
+                                        )}
+                                      >
+                                        Кількість
+                                      </p>
                                     </label>
                                   )}
                                   <button
@@ -661,14 +703,6 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                   >
                                     <p>Додати обʼєм</p> <FiPlus />
                                   </button>
-
-                                  {/* <ErrorMessage name={`variations.${index}`}>
-                                    {() => (
-                                      <div css={errorStyle}>
-                                        Усі поля мають бути заповнені
-                                      </div>
-                                    )}
-                                  </ErrorMessage> */}
                                 </div>
 
                                 {variations.length > 1 && (
@@ -712,7 +746,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           {feedbacks.map((_, i) => (
                             <div key={i} css={reviewWrapper}>
                               <div css={categoryFields}>
-                                <label htmlFor={`feedbacks${i}.name`}>
+                                <label
+                                  htmlFor={`feedbacks${i}.name`}
+                                  className="errorContainer"
+                                >
                                   <Field
                                     type="text"
                                     name={`feedbacks.${i}.name`}
@@ -720,8 +757,18 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                     placeholder="Імʼя людини"
                                     css={[inputFieldStyle]}
                                   />
+                                  <p
+                                    css={inputLabel(
+                                      !!formik.values.feedbacks[i].name
+                                    )}
+                                  >
+                                    Імʼя людини
+                                  </p>
                                 </label>
-                                <label htmlFor={`feedbacks${i}.profession`}>
+                                <label
+                                  htmlFor={`feedbacks${i}.profession`}
+                                  className="errorContainer"
+                                >
                                   <Field
                                     type="text"
                                     name={`feedbacks.${i}.profession`}
@@ -729,8 +776,18 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                     placeholder="Хто ця людина"
                                     css={[inputFieldStyle]}
                                   />
+                                  <p
+                                    css={inputLabel(
+                                      !!formik.values.feedbacks[i].profession
+                                    )}
+                                  >
+                                    Хто ця людина
+                                  </p>
                                 </label>
-                                <label htmlFor={`feedbacks${i}.review`}>
+                                <label
+                                  htmlFor={`feedbacks${i}.review`}
+                                  className="errorContainer"
+                                >
                                   <Field
                                     as="textarea"
                                     name={`feedbacks.${i}.review`}
@@ -742,6 +799,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                       { width: "100%" },
                                     ]}
                                   />
+                                  <p
+                                    css={inputLabel(
+                                      !!formik.values.feedbacks[i].review
+                                    )}
+                                  >
+                                    Текст відгуку
+                                  </p>
                                 </label>
                                 <ErrorMessage name={`feedbacks.${i}`}>
                                   {(msg) => <div css={errorStyle}>{msg}</div>}
@@ -768,10 +832,9 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                       )}
                     </FieldArray>
                   </div>
-                </div>
-
-                <div css={submitWrapper}>
-                  <button type="submit">Опублікувати оголошення</button>
+                  <div css={submitWrapper}>
+                    <button type="submit">Опублікувати оголошення</button>
+                  </div>
                 </div>
               </Form>
             </>
