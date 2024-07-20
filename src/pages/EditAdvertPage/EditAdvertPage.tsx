@@ -17,13 +17,13 @@ const advert: IAdvert = {
 
   variations: [
     { size: "100", price: "111", count: "12", color: "pink", discount: "5" },
-    // {
-    //   size: "300",
-    //   price: "333",
-    //   count: "33",
-    //   color: "#dada11e0",
-    //   discount: "",
-    // },
+    {
+      size: "300",
+      price: "333",
+      count: "33",
+      color: "#dada11e0",
+      discount: "",
+    },
   ],
 
   feedbacks: [

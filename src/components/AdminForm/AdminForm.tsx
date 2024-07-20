@@ -18,7 +18,6 @@ import {
   addImagesBtn,
   formDataWrapper,
   pageTitle,
-  // formContainer,
   submitWrapper,
   blockWrapper,
   categoryFields,
@@ -53,7 +52,6 @@ import { ICategory } from "Interfaces/ICategory";
 import { IAdvert, IFeedback, IVariation } from "Interfaces/IAdvert";
 import { createAdvert } from "@redux/ads/operations";
 import { SerializedStyles } from "@emotion/react";
-// import { Product } from "Interfaces/Product";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -117,17 +115,37 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
   const [isShowColorPicker, setIsShowColorPicker] = useState<number[]>([]);
   const [isShowAddSize, setIsShowAddSize] = useState<number[]>([]);
 
+  const categories = useAppSelector(selectCategories).map(
+    (item: ICategory) => item.title
+  );
+
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const textAreaElemets = document.querySelectorAll("textarea");
+    textAreaElemets.forEach((textArea) =>
+      textArea.addEventListener("input", () => {
+        textArea.style.height = `${textArea.scrollHeight}px`;
+      })
+    );
+    return () => {
+      textAreaElemets.forEach((textArea) =>
+        textArea.removeEventListener("input", () => {
+          textArea.style.height = `${textArea.scrollHeight}px`;
+        })
+      );
+    };
+  }, []);
 
   useEffect(() => {
     if (advert) {
       setIsShowColorPicker(advert.variations.map((_, i) => i));
     }
   }, [advert]);
-
-  const categories = useAppSelector(selectCategories).map(
-    (item: ICategory) => item.title
-  );
 
   const handleAddPhotos = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -228,10 +246,6 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
   ) => {
     return [inputFieldStyle, errorBorder(!!(errors && touched)), textareaStyle];
   };
-
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
 
   const handleOnSubmit = (values: IAdvert) => {
     const mainImg = values.imageUrls[0];
@@ -552,7 +566,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                   >
                                     <Field
                                       name={`variations.${index}.price`}
-                                      type="number"
+                                      type="text"
                                       placeholder="Ціна товару"
                                       id={`variations${index}.price`}
                                       onFocus={() => {
@@ -593,7 +607,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                   >
                                     <Field
                                       name={`variations.${index}.discount`}
-                                      type="number"
+                                      type="text"
                                       placeholder="Знижка"
                                       id={`variations${index}.discount`}
                                       onKeyPress={handleNumericInput}
@@ -615,7 +629,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                   >
                                     <Field
                                       name={`variations.${index}.count`}
-                                      type="number"
+                                      type="text"
                                       placeholder="Кількість"
                                       id={`variations${index}.count`}
                                       onFocus={() => {
@@ -681,7 +695,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                     >
                                       <Field
                                         name={`variations.${index}.size`}
-                                        type="number"
+                                        type="text"
                                         placeholder="Об'єм"
                                         id={`variations${index}.size`}
                                         onKeyPress={handleNumericInput}
@@ -692,7 +706,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                           !!formik.values.variations[index].size
                                         )}
                                       >
-                                        Кількість
+                                        Об'єм
                                       </p>
                                     </label>
                                   )}
