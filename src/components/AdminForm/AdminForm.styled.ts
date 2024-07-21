@@ -22,7 +22,7 @@ export const formDataWrapper = css`
 `;
 
 export const blockWrapper = css`
-  padding: 16px;
+  padding: 18px 16px;
   border-radius: 16px;
   border: 1px solid var(--border-light-grey);
 
@@ -79,7 +79,7 @@ export const inputLabel = (isShow: boolean) => css`
   transition: var(--effectDuration);
   ${isShow &&
   css`
-    top: -11px;
+    top: -10px;
     left: 14px;
     opacity: 1;
   `}
@@ -232,7 +232,7 @@ export const reviewWrapper = css`
   align-items: start;
   column-gap: 20px;
   width: 100%;
-  padding: 12px;
+  padding: 16px 12px;
   border-radius: 16px;
   border: 1px solid var(--border-light-grey);
 `;
@@ -288,8 +288,8 @@ export const submitWrapper = css`
 
 export const errorStyle = css`
   position: absolute;
-  font-size: 14px;
-  padding-top: 4px;
+  font-size: 12px;
+  padding-top: 1px;
   color: var(--error-color);
 
   &.text-area-error {

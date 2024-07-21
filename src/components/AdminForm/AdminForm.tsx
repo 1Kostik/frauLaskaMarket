@@ -125,7 +125,6 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     feedbackRefArr.current = feedbacksArr.map(
       (i) => feedbackRefArr.current[i] || null
     );
-    console.log("feedbackRefArr.current", feedbackRefArr.current);
   }, [feedbacksArr]);
   useEffect(() => {
     feedbackRefArr.current.forEach((item) =>
@@ -146,15 +145,17 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
   useEffect(() => {
     const textAreaElemets = document.querySelectorAll("textarea");
     textAreaElemets.forEach((textArea) =>
-      textArea.addEventListener("input", () => {
-        textArea.style.height = `${textArea.scrollHeight}px`;
-      })
+      textArea.addEventListener(
+        "input",
+        () => (textArea.style.height = `${textArea.scrollHeight}px`)
+      )
     );
     return () => {
       textAreaElemets.forEach((textArea) =>
-        textArea.removeEventListener("input", () => {
-          textArea.style.height = `${textArea.scrollHeight}px`;
-        })
+        textArea.removeEventListener(
+          "input",
+          () => (textArea.style.height = `${textArea.scrollHeight}px`)
+        )
       );
     };
   }, []);
