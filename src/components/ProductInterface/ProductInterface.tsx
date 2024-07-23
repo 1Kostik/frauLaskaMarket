@@ -26,7 +26,7 @@ const ProductInterface: React.FC<IProductInterfaceProps> = ({ productId }) => {
   const handleProductDelete = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     dispatch(deleteProduct(productId));
-    console.log("delete", productId);
+    navigate("/store");
   };
 
   return (
