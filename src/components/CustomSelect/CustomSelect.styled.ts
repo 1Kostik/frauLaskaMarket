@@ -23,7 +23,6 @@ export const dropdownStyle = css`
 
   display: flex;
   flex-direction: column;
-  row-gap: 10px;
 
   width: 100%;
   padding: 10px;
@@ -41,7 +40,7 @@ export const dropdownStyle = css`
       flex-grow: 1;
       font-family: Arial;
       font-size: 14px;
-      line-height: 16px;
+      line-height: 22px;
       letter-spacing: 0.4px;
       color: var(--text-light-grey);
       cursor: pointer;

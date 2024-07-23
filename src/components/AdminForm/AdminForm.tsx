@@ -49,14 +49,16 @@ import { createCategory, fetchCategories } from "@redux/categories/operations";
 import { selectCategories } from "@redux/categories/selectors";
 
 import { ICategory } from "Interfaces/ICategory";
-import { IAdvert, IFeedback, IVariation } from "Interfaces/IAdvert";
-import { createAdvert } from "@redux/ads/operations";
+import { IAdvert, IFeedback, IImageUrl, IVariation } from "Interfaces/IAdvert";
+import { createProduct, updateProduct } from "@redux/ads/operations";
 import { SerializedStyles } from "@emotion/react";
+import { deleteProductImage } from "@services/servicesApi";
+import { deleteImage } from "@redux/ads/slice";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
 interface IAdminFormProps {
-  advert?: IAdvert;
+  product?: IAdvert | null;
 }
 
 const initialValues: IAdvert = {
@@ -85,7 +87,7 @@ const validationSchema = Yup.object({
   imageUrls: Yup.array().min(1, "Необхідно вибрати принаймні одне зображення"),
   mainImage: Yup.string(),
   title: Yup.string().required("Назва обов'язкова"),
-  productCode: Yup.string().required("Код обов'язковий"),
+  productCode: Yup.number().required("Код обов'язковий"),
   composition: Yup.string(),
   description: Yup.string().required("Опис обов'язковий"),
 
@@ -110,7 +112,7 @@ const validationSchema = Yup.object({
   newCategory: Yup.string(),
 });
 
-const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
+const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
   const [isShowColorPicker, setIsShowColorPicker] = useState<number[]>([]);
   const [isShowAddSize, setIsShowAddSize] = useState<number[]>([]);
 
@@ -165,10 +167,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (advert) {
-      setIsShowColorPicker(advert.variations.map((_, i) => i));
+    if (product) {
+      setIsShowColorPicker(product.variations.map((_, i) => i));
     }
-  }, [advert]);
+  }, [product]);
 
   const handleAddPhotos = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -188,14 +190,27 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     setFieldValue("imageUrls", [...imageUrls, ...filesForAdd]);
   };
 
-  const handleRemove = (i: number, formik: FormikProps<IAdvert>) => {
+  const handleRemove = (
+    i: number,
+    image: File | IImageUrl,
+    formik: FormikProps<IAdvert>
+  ) => {
     const {
       values: { imageUrls },
       setFieldValue,
     } = formik;
-    setFieldValue("imageUrls", [
-      ...imageUrls.filter((_, index) => index !== i),
-    ]);
+    if (!(image instanceof File) && image.id) {
+      deleteProductImage(image.id).then(() => {
+        image.id && dispatch(deleteImage(image.id));
+        setFieldValue("imageUrls", [
+          ...imageUrls.filter((_, index) => index !== i),
+        ]);
+      });
+    } else {
+      setFieldValue("imageUrls", [
+        ...imageUrls.filter((_, index) => index !== i),
+      ]);
+    }
   };
 
   const handleMainPhoto = (i: number, formik: FormikProps<IAdvert>) => {
@@ -272,10 +287,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
 
   const handleOnSubmit = (values: IAdvert) => {
     const mainImg = values.imageUrls[0];
-    if (typeof mainImg === "string") {
-      values.mainImage = mainImg;
+    if (mainImg instanceof File) {
+      const mainImgName = mainImg.name;
+      values.mainImage = mainImgName;
     } else {
-      values.mainImage = mainImg.name;
+      const regex = /\/([^/?#]+)$/;
+      const pureName = mainImg.img_url.match(regex);
+      values.mainImage = pureName ? pureName[1] : mainImg.img_url;
     }
     delete values.newCategory;
     values.popularity = 1;
@@ -286,13 +304,14 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
     values.imageUrls.forEach((file) => {
       if (file instanceof File) {
         formData.append(`imageUrls`, file);
-      }
+      } else return;
     });
 
     for (const key in values) {
       if (Object.prototype.hasOwnProperty.call(values, key)) {
         const value = values[key as keyof IAdvert];
         if (typeof value === "string" || typeof value === "number") {
+          if (key === "id") continue;
           formData.append(key, value.toString());
         } else if (Array.isArray(value)) {
           value.forEach((valuesObj, index) => {
@@ -309,8 +328,11 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                     typeof objValue === "string" ||
                     typeof objValue === "number"
                   ) {
-                    if (key === "imageUrls") return;
-                    formData.append(`${key}[${index}][${objKey}]`, objValue);
+                    if (objKey === "img_url") continue;
+                    formData.append(
+                      `${key}[${index}][${objKey}]`,
+                      objValue.toString()
+                    );
                   }
                 }
               }
@@ -319,17 +341,21 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
         }
       }
     }
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-    // console.log("values", values);
-    dispatch(createAdvert(formData));
+    // formData.forEach((value, key) => {
+    //   console.log(key, value);
+    // });
+
+    if (!product) {
+      dispatch(createProduct(formData));
+    } else if (product?.id !== undefined) {
+      dispatch(updateProduct({ id: product.id, formData }));
+    }
   };
 
   return (
     <>
       <Formik
-        initialValues={advert || initialValues}
+        initialValues={product || initialValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
           handleOnSubmit(values);
@@ -358,7 +384,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
           return (
             <>
               <h1 css={pageTitle}>
-                {!advert ? "Створення товару" : "Редагевання товару"}
+                {!product ? "Створення товару" : "Редагевання товару"}
               </h1>
 
               <Form>
@@ -370,7 +396,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                         <div className="errorContainer">
                           <CustomSelect
                             formik={formik}
-                            selectedCategoryId={advert?.category_id}
+                            selectedCategoryId={product?.category_id}
                           />
                           <ErrorMessage name="category_id">
                             {(msg) => <div css={errorStyle}>{msg}</div>}
@@ -442,16 +468,16 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                               <button
                                 type="button"
                                 className="close-btn"
-                                onClick={() => handleRemove(i, formik)}
+                                onClick={() => handleRemove(i, image, formik)}
                               >
                                 <CloseIcon />
                               </button>
                               <div css={imageThumb}>
                                 <img
                                   src={
-                                    typeof image === "string"
-                                      ? image
-                                      : URL.createObjectURL(image)
+                                    image instanceof File
+                                      ? URL.createObjectURL(image)
+                                      : image.img_url
                                   }
                                   alt={`preview ${i}`}
                                 />
@@ -497,6 +523,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                           type="text"
                           id="productCode"
                           placeholder="Код"
+                          onKeyPress={handleNumericInput}
                           onFocus={() =>
                             setFieldError("productCode", undefined)
                           }
@@ -693,7 +720,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ advert }) => {
                                     <div className="errorContainer">
                                       <ColorPicker
                                         formik={formik}
-                                        variation={advert?.variations[index]}
+                                        variation={product?.variations[index]}
                                         index={index}
                                         onClose={handleShowColorPicker}
                                       />
