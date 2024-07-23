@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 axios.defaults.baseURL = "http://localhost:8081/api/";
 
@@ -13,11 +14,6 @@ export const postCategory = async (title: string) => {
   return data;
 };
 
-export const deleteCategory = async (id: number) => {
-  const { data } = await axios.delete(`categories/${id}`);
-  return data;
-};
-
 export const patchCategory = async ({
   id,
   name,
@@ -29,8 +25,8 @@ export const patchCategory = async ({
   return data;
 };
 
-export const getProductById = async (id: number) => {
-  const { data } = await axios.get(`products/${id}`);
+export const deleteCategory = async (id: number) => {
+  const { data } = await axios.delete(`categories/${id}`);
   return data;
 };
 
@@ -39,18 +35,49 @@ export const postAdvert = async (formData: FormData) => {
   return data;
 };
 
+export const deleteAdvert = async (id: number) => {
+  const { data } = await axios.delete(`products/${id}`);
+  return data;
+};
+
+export const putchAdvert = async ({
+  id,
+  formData,
+}: {
+  id: number;
+  formData: FormData;
+}) => {
+  const { data } = await axios.patch(`products/${id}`, formData);
+  return data;
+};
+
+export const getProductById = async (id: number) => {
+  const { data } = await axios.get(`products/${id}`);
+  return data;
+};
+
 export const getProducts = async () => {
   const { data } = await axios.get(`products`);
   return data;
 };
 
-export const getProductsAndSorted = async (queryParams:string) => {
+export const getProductsAndSorted = async (queryParams: string) => {
   const { data } = await axios.get(`products?${queryParams}`);
   return data;
 };
 
-export const findProducts = async (queryParams:string) => {
+export const findProducts = async (queryParams: string) => {
   const { data } = await axios.get(`products?${queryParams}`);
   return data;
 };
 
+export const deleteProductImage = async (id: number) => {
+  try {
+    const { data } = await axios.delete(`products/images/${id}`);
+    toast.success("Зображення видалено");
+    return data;
+  } catch (error) {
+    toast.error("Не вдалося видалити зображення");
+    console.log(error);
+  }
+};
