@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ButtonClose,
   Container,
@@ -22,55 +22,85 @@ import { ReactComponent as ArrowUp } from "@assets/icons/arrow-up-select.svg";
 import { ReactComponent as ArrowDown } from "@assets/icons/arrow-down-select.svg";
 import { ReactComponent as CheckBox } from "@assets/icons/checkbox.svg";
 import { ReactComponent as CheckBoxActive } from "@assets/icons/checkbox-active.svg";
-import { categories, products } from "@assets/products";
-import { Product } from "Interfaces/Product";
+// import { Product } from "Interfaces/Product";
+import { useAppDispatch } from "@redux/hooks";
+import { fetchCategories } from "@redux/categories/operations";
+import {
+  getAllProducts,
+  getCategoriesProductCount,
+} from "@services/servicesApi";
+
 interface ISorteFilter {
   closeFilter: React.Dispatch<React.SetStateAction<boolean>>;
-  setFilteredProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  setFilteredItemsId: React.Dispatch<React.SetStateAction<Record<string, string>[]>>;
+  // updateSearchParams: (newParams: Record<string, string>) => void;
 }
-interface ChekedItems {
+
+interface CheckedItems {
   id: number;
-  categoryId: number;
+  productsId: number[];
 }
+
 const StoreFilter: React.FC<ISorteFilter> = ({
   closeFilter,
-  setFilteredProducts,
+  // updateSearchParams,
+  setFilteredItemsId,
 }) => {
+  const dispatch = useAppDispatch();
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
   }>({});
+  const [checkedItems, setCheckedItems] = useState<CheckedItems[]>([]);
+  // const [productData, setProductData] = useState<Product[]>([]);
+  const [categoriesProductCount, setCategoriesProductCount] = useState<any>();
 
-  const [checkedItems, setCheckedItems] = useState<{ [key: number]: any }>({});
 
-  const handleCheckboxChange = (typeKey: string, item: ChekedItems) => {
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   async function fetchAllProducts() {
+  //     const result = await getAllProducts();
+  //     setProductData(result);
+  //   }
+  //   fetchAllProducts();
+  // }, []);
+
+  useEffect(() => {
+    async function fetchCategoriesProductCount() {
+      const result = await getCategoriesProductCount();
+      setCategoriesProductCount(result);
+    }
+    fetchCategoriesProductCount();
+  }, []);
+
+  const handleCheckboxChange = (
+    typeKey: string,
+    item: { id: number; category_id?: number }
+  ) => {
     if (typeKey === "category") {
-      if (!Object.keys(checkedItems).includes(`${item.id}`)) {
-        setCheckedItems((prev) => {
-          return { ...prev, [item.id]: [] };
-        });
+      if (!checkedItems.some((checkedItem) => checkedItem.id === item.id)) {
+        setCheckedItems((prev) => [...prev, { id: item.id, productsId: [] }]);
       } else {
-        setCheckedItems((prev) => {
-          const { [item.id]: removed, ...rest } = prev;
-          setOpenCategories((prev) => ({ ...prev, [item.id]: false }));
-          return rest;
-        });
+        setCheckedItems((prev) =>
+          prev.filter((checkedItem) => checkedItem.id !== item.id)
+        );
+        setOpenCategories((prev) => ({ ...prev, [item.id]: false }));
       }
     } else if (typeKey === "product") {
-      setCheckedItems((prev) => {
-        if (!prev[item.categoryId].includes(item.id)) {
-          return {
-            ...prev,
-            [item.categoryId]: [...prev[item.categoryId], item.id],
-          };
-        } else {
-          return {
-            ...prev,
-            [item.categoryId]: [
-              ...prev[item.categoryId].filter((id: number) => id !== item.id),
-            ],
-          };
-        }
-      });
+      setCheckedItems((prev) =>
+        prev.map((checkedItem) => {
+          if (checkedItem.id === item.category_id) {
+            const productsId = checkedItem.productsId.includes(item.id)
+              ? checkedItem.productsId.filter((id) => id !== item.id)
+              : [...checkedItem.productsId, item.id];
+            return { ...checkedItem, productsId };
+          }
+          return checkedItem;
+        })
+      );
     }
   };
 
@@ -81,28 +111,36 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const handleClose = () => {
     closeFilter(false);
   };
-  const handleShowResult = () => {
-    setFilteredProducts([]);
 
-    (() =>
-      Object.keys(checkedItems).forEach((categoryId) => {
-        if (checkedItems[Number(categoryId)].length === 0) {
-          setFilteredProducts((prev) => [
-            ...prev,
-            ...products.filter(
-              (item: Product) => Number(categoryId) === item.categoryId
-            ),
-          ]);
-        } else {
-          setFilteredProducts((prev) => [
-            ...prev,
-            ...products.filter((item: Product) =>
-              checkedItems[Number(categoryId)].includes(item.id)
-            ),
-          ]);
-        }
-      }))();
+  const handleShowResult = () => {
+    const filteredItems = checkedItems.map((item) => ({
+      categoryId: item.id.toString(),
+      productId: item.productsId.join(',')
+    }));
+    setFilteredItemsId(filteredItems);
   };
+
+  const convertJSONToReadableFormat = (data: any) => {
+    const uniqueProducts: any[] = [];
+    const productIds = new Set();
+
+    data.forEach((item: any) => {
+      JSON.parse(item.products).forEach((product: any) => {
+        if (!productIds.has(product.product_id)) {
+          uniqueProducts.push(product);
+          productIds.add(product.product_id);
+        }
+      });
+    });
+
+    return uniqueProducts;
+  };
+
+  const products =
+    categoriesProductCount &&
+    convertJSONToReadableFormat(categoriesProductCount);
+
+  
 
   return (
     <FilterWrapper>
@@ -113,88 +151,112 @@ const StoreFilter: React.FC<ISorteFilter> = ({
             <Close css={svgClose} />
           </ButtonClose>
         </TitleContainer>
-        {categories.map((category) => (
-          <div key={category.id}>
-            <ItemContainer isOpen={openCategories[category.id]}>
-              <Wrapper>
-                <Label htmlFor={`checkBox${category.id}`}>
-                  {Object.keys(checkedItems).includes(`${category.id}`) ? (
-                    <CheckBoxActive />
-                  ) : (
-                    <CheckBox css={svgCheckBox} />
-                  )}
-                </Label>
-                <Input
-                  type="checkbox"
-                  id={`checkBox${category.id}`}
-                  checked={Object.keys(checkedItems).includes(`${category.id}`)}
-                  onChange={() =>
-                    handleCheckboxChange("category", {
-                      id: category.id,
-                      categoryId: category.id,
-                    })
-                  }
-                />
-                <P1>{category.title}</P1>
-              </Wrapper>
-              <Wrapper>
-                <P2>{category.count}</P2>
-                <ButtonShow
-                  onClick={() => handleClick(category.id)}
-                  disabled={checkedItems[category.id] ? false : true}
-                >
-                  {openCategories[category.id] && checkedItems[category.id] ? (
-                    <ArrowUp />
-                  ) : (
-                    <ArrowDown />
-                  )}
-                </ButtonShow>
-              </Wrapper>
-            </ItemContainer>
-            {openCategories[category.id] && checkedItems[category.id] ? (
-              <>
-                {products
-                  .filter(({ categoryId }: any) => categoryId === category.id)
-                  .map((item: Product) => (
-                    <SubItemContainer
-                      key={`${item.id}`}
-                      isOpen={openCategories[category.id]}
-                    >
-                      <Wrapper>
-                        <Label htmlFor={`checkBox${item.id}`}>
-                          {checkedItems[item.categoryId] &&
-                          checkedItems[item.categoryId].includes(item.id) ? (
-                            <CheckBoxActive />
-                          ) : (
-                            <CheckBox css={svgCheckBox} />
-                          )}
-                        </Label>
-                        <Input
-                          type="checkbox"
-                          id={`checkBox${item.id}`}
-                          checked={
-                            checkedItems[item.categoryId] &&
-                            checkedItems[item.categoryId].includes(item.id)
-                          }
-                          onChange={() =>
-                            handleCheckboxChange("product", {
-                              id: item.id,
-                              categoryId: item.categoryId,
-                            })
-                          }
-                        />
-                        <P1>{item.title}</P1>
-                      </Wrapper>
+        {categoriesProductCount &&
+          categoriesProductCount.map((category: any) => (
+            <div key={category.id}>
+              <ItemContainer isOpen={openCategories[category.id]}>
+                <Wrapper>
+                  <Label htmlFor={`checkBox${category.id}`}>
+                    {checkedItems.some(
+                      (checkedItem) => checkedItem.id === category.id
+                    ) ? (
+                      <CheckBoxActive />
+                    ) : (
+                      <CheckBox css={svgCheckBox} />
+                    )}
+                  </Label>
+                  <Input
+                    type="checkbox"
+                    id={`checkBox${category.id}`}
+                    checked={checkedItems.some(
+                      (checkedItem) => checkedItem.id === category.id
+                    )}
+                    onChange={() =>
+                      handleCheckboxChange("category", {
+                        id: category.id,
+                      })
+                    }
+                  />
+                  <P1>{category.title}</P1>
+                </Wrapper>
+                <Wrapper>
+                  <P2>{category.product_count}</P2>
+                  <ButtonShow
+                    onClick={() => handleClick(category.id)}
+                    disabled={
+                      !checkedItems.some(
+                        (checkedItem) => checkedItem.id === category.id
+                      )
+                    }
+                  >
+                    {openCategories[category.id] &&
+                    checkedItems.some(
+                      (checkedItem) => checkedItem.id === category.id
+                    ) ? (
+                      <ArrowUp />
+                    ) : (
+                      <ArrowDown />
+                    )}
+                  </ButtonShow>
+                </Wrapper>
+              </ItemContainer>
+              {openCategories[category.id] &&
+              checkedItems.some(
+                (checkedItem) => checkedItem.id === category.id
+              ) ? (
+                <>
+                  {products &&
+                    products
+                      .filter((item: any) => item.categoryId === category.id)
+                      .map((item: any) => (
+                        <SubItemContainer
+                          key={`${item.product_id}`}
+                          isOpen={openCategories[category.id]}
+                        >
+                          <Wrapper>
+                            <Label htmlFor={`checkBox${item.product_id}`}>
+                              {checkedItems
+                                .find(
+                                  (checkedItem) =>
+                                    checkedItem.id === item.categoryId
+                                )
+                                ?.productsId.includes(item.product_id) ? (
+                                <CheckBoxActive />
+                              ) : (
+                                <CheckBox css={svgCheckBox} />
+                              )}
+                            </Label>
+                            <Input
+                              type="checkbox"
+                              id={`checkBox${item.product_id}`}
+                              checked={
+                                checkedItems
+                                  .find(
+                                    (checkedItem) =>
+                                      checkedItem.id === item.categoryId
+                                  )
+                                  ?.productsId.includes(item.product_id) ||
+                                false
+                              }
+                              onChange={() =>
+                                handleCheckboxChange("product", {
+                                  id: item.product_id,
+                                  category_id: item.categoryId,
+                                })
+                              }
+                            />
+                            <P1>{item.product_title}</P1>
+                          </Wrapper>
 
-                      <Wrapper>
-                        <P2>{item.stockCount}</P2>
-                      </Wrapper>
-                    </SubItemContainer>
-                  ))}
-              </>
-            ) : null}
-          </div>
-        ))}
+                          <Wrapper>
+                            <P2>{item.product_quantity}</P2>
+                          </Wrapper>
+                        </SubItemContainer>
+                      ))}
+                </>
+              ) : null}
+            </div>
+          ))}
         <FilterBtn onClick={handleShowResult}>Показати</FilterBtn>
       </Container>
     </FilterWrapper>

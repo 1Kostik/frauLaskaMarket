@@ -35,6 +35,7 @@ export const postAdvert = async (formData: FormData) => {
   return data;
 };
 
+
 export const deleteAdvert = async (id: number) => {
   const { data } = await axios.delete(`products/${id}`);
   return data;
@@ -56,7 +57,7 @@ export const getProductById = async (id: number) => {
   return data;
 };
 
-export const getProducts = async () => {
+export const getAllProducts = async () => {
   const { data } = await axios.get(`products`);
   return data;
 };
@@ -71,6 +72,12 @@ export const findProducts = async (queryParams: string) => {
   return data;
 };
 
+
+export const getCategoriesProductCount = async () => {
+  const { data } = await axios.get(`categories/product-count`);
+  return data;
+};
+
 export const deleteProductImage = async (id: number) => {
   try {
     const { data } = await axios.delete(`products/images/${id}`);
@@ -81,3 +88,4 @@ export const deleteProductImage = async (id: number) => {
     console.log(error);
   }
 };
+

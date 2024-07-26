@@ -58,15 +58,19 @@ const CardSlider: React.FC<CardSliderProps> = ({
     prevEl: null,
     nextEl: null,
   });
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    const prevEl = document.getElementById(stylesProps.prevEl?.[0] || "");
+    const nextEl = document.getElementById(stylesProps.nextEl?.[0] || "");
+    setNavigation({ prevEl, nextEl });
+  }, [stylesProps.prevEl, stylesProps.nextEl]);
+
   useEffect(() => {
     if (swiperRef) {
       const updateNavigationState = () => {
-        const prevButton = document.getElementById(
-          stylesProps.prevEl?.[0] || ""
-        );
-        const nextButton = document.getElementById(
-          stylesProps.nextEl?.[0] || ""
-        );
+        const prevButton = navigation.prevEl;
+        const nextButton = navigation.nextEl;
 
         if (prevButton && nextButton) {
           if (swiperRef.isBeginning) {
@@ -85,17 +89,21 @@ const CardSlider: React.FC<CardSliderProps> = ({
 
       swiperRef.on("slideChange", updateNavigationState);
       updateNavigationState();
-    }
-  }, [swiperRef, stylesProps.prevEl, stylesProps.nextEl]);
 
-  useEffect(() => {
-    const prevEl = document.getElementById(stylesProps.prevEl?.[0] || "");
-    const nextEl = document.getElementById(stylesProps.nextEl?.[0] || "");
-    setNavigation({ prevEl, nextEl });
-  }, [stylesProps.prevEl, stylesProps.nextEl]);
+      return () => {
+        swiperRef.off("slideChange", updateNavigationState);
+      };
+    }
+  }, [swiperRef, navigation]);
+
   const handleSwiper = (swiper: SwiperCore) => {
     setSwiperRef(swiper);
-  }; 
+  };
+
+  useEffect(() => {
+    setKey((prevKey) => prevKey + 1);
+  }, [stylesProps]);
+
   return (
     <Container stylesProps={stylesProps}>
       {(stylesProps.display?.[0] !== "none" ||
@@ -136,6 +144,7 @@ const CardSlider: React.FC<CardSliderProps> = ({
         </div>
       )}
       <Swiper
+        key={key}
         onSwiper={handleSwiper}
         css={swiper(stylesProps)}
         breakpoints={breakpoints(stylesProps)}
@@ -143,9 +152,8 @@ const CardSlider: React.FC<CardSliderProps> = ({
         navigation={navigation}
       >
         {renderArrayImg
-          ? renderArrayImg &&
-            renderArrayImg.length > 0 &&
-            renderArrayImg.map((item:ImageUrl, i) => (
+          ? renderArrayImg.length > 0 &&
+            renderArrayImg.map((item: ImageUrl, i) => (
               <SwiperSlide className="swiper-slide image-slide" key={i}>
                 <img src={item.img_url} alt="" />
               </SwiperSlide>

@@ -1,6 +1,6 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import ProductCard from "@components/ProductCard/ProductCard";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Container,
   SearchContainer,
@@ -16,7 +16,7 @@ import StoreFilter from "@components/StoreFilter/StoreFilter";
 import SearchStore from "@components/SearchStore/SearchStore";
 import SortingItems from "@components/SortingItems/SortingItems";
 import Pagination from "@components/Pagination/Pagination";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
@@ -24,18 +24,54 @@ import { findProducts, getProductsAndSorted } from "@services/servicesApi";
 
 function StorePage() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = useMemo(
+    () => Object.fromEntries([...searchParams]),
+    [searchParams]
+  );
+  const {
+    sortOrder = "ASC",
+    sortField = "price",
+    page,
+    limit,
+    search,
+    categoryId,
+    productId,
+  } = params;
+
+  const filteredParams = {
+    sortOrder: sortOrder || undefined,
+    sortField: sortField || undefined,
+    page: page || undefined,
+    limit: limit || undefined,
+    search: search || undefined,
+    categoryId: categoryId || undefined,
+    productId: productId || undefined,
+  };
+  const nonEmptyParams = Object.entries(filteredParams).reduce(
+    (acc, [key, value]) => {
+      if (value !== undefined || value == "") {
+        acc[key] = value;
+      }
+      return acc;
+    },
+    {} as Record<string, string>
+  );
+  // const queryParams = new URLSearchParams(nonEmptyParams).toString();
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
-  const [typeOfSort, setTypeOfSort] = useState<number | string | null>(
-    "Від найменшої ціни до найбільшої"
-  );
+  const [typeOfSort, setTypeOfSort] = useState<number | string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchItem, setSearchItem] = useState<string>("");
   const [findProduct, setFindProduct] = useState<Product[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [filteredItemsId, setFilteredItemsId] = useState<
+    Record<string, string>[]
+  >([]);
+  // console.log('queryParams :>> ', queryParams);
 
   const countItemPages = 12;
   const lastIndex = currentPage * countItemPages;
@@ -65,66 +101,114 @@ function StorePage() {
   ];
 
   useEffect(() => {
-    let queryParams = "";
-    switch (typeOfSort) {
-      case "Від найменшої ціни до найбільшої":
-        queryParams = "sortOrder=ASC&sortField=price";
+    switch (`sortOrder=${sortOrder}&sortField=${sortField}`) {
+      case `sortOrder=ASC&sortField=price`:
+        setTypeOfSort("Від найменшої ціни до найбільшої");
         break;
-      case "Від найбільшої ціни до найменшої":
-        queryParams = "sortOrder=DESC&sortField=price";
+      case `sortOrder=DESC&sortField=price`:
+        setTypeOfSort("Від найбільшої ціни до найменшої");
         break;
-      case "За ретингом":
-        queryParams = "sortOrder=DESC&sortField=ranking";
+      case `sortOrder=DESC&sortField=ranking`:
+        setTypeOfSort("За ретингом");
         break;
-      case "За популярністю":
-        queryParams = "sortOrder=DESC&sortField=popularity";
+      case `sortOrder=DESC&sortField=popularity`:
+        setTypeOfSort("За популярністю");
         break;
       default:
-        queryParams = "";
+        break;
     }
+  }, [sortField, sortOrder]);
+
+  const updateSearchParams = useCallback(
+    (newParams: Record<string, string>) => {
+      setSearchParams((prevParams) => {
+        const updatedParams = new URLSearchParams(prevParams);
+        Object.keys(newParams).forEach((key) => updatedParams.delete(key));
+        Object.entries(newParams).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            value.forEach((val) => updatedParams.append(key, val));
+          } else if (value !== "") {
+            updatedParams.set(key, value);
+          }
+        });
+        return updatedParams;
+      });
+    },
+    [setSearchParams]
+  );
+
+  useEffect(() => {
+    const categoryIds = filteredItemsId.map((item) => item.categoryId);
+    const productIds = filteredItemsId.flatMap((item) =>
+      item.productId.split(",")
+    );
+
+    const newSearchParams = {
+      ...params,
+      categoryId: categoryIds,
+      productId: productIds,
+      page: currentPage.toString(),
+      limit: countItemPages.toString(),
+      search: searchItem.trim(),
+    };
+
+    updateSearchParams(newSearchParams);
+  }, [filteredItemsId, currentPage, searchItem, updateSearchParams]);
+
+  useEffect(() => {
+    switch (typeOfSort) {
+      case "Від найменшої ціни до найбільшої":
+        updateSearchParams({ sortOrder: "ASC", sortField: "price" });
+        break;
+      case "Від найбільшої ціни до найменшої":
+        updateSearchParams({ sortOrder: "DESC", sortField: "price" });
+        break;
+      case "За ретингом":
+        updateSearchParams({ sortOrder: "DESC", sortField: "ranking" });
+        break;
+      case "За популярністю":
+        updateSearchParams({ sortOrder: "DESC", sortField: "popularity" });
+        break;
+      default:
+        break;
+    }
+  }, [updateSearchParams, typeOfSort]);
+
+  useEffect(() => {
+    const searchParamsString = new URLSearchParams(nonEmptyParams);
+
+    filteredItemsId.forEach((item) => {
+      searchParamsString.append("categoryId", item.categoryId);
+      item.productId.split(",").forEach((pid) => {
+        searchParamsString.append("productId", pid);
+      });
+    });
 
     async function fetchProducts() {
       try {
-        const result = await getProductsAndSorted(queryParams);
+        const result = await getProductsAndSorted(
+          searchParamsString.toString()
+        );
         setProducts(result);
       } catch (error) {
         console.error("Failed to fetch products:", error);
       }
     }
-
     fetchProducts();
-  }, [typeOfSort]);
-
-  useEffect(() => {
-    if (searchItem === "") {
-      return;
-    }
-
-    async function findProduct(searchItem: string) {
-      // Заменяем символы _ на пробелы
-      const queryParams = `search=${searchItem.split("_").join(" ")}`;
-      console.log('queryParams :>> ', queryParams);
-      try {
-        const result = await findProducts(queryParams);
-        setFindProduct(result);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
-    }
-
-    console.log('Searching for:', searchItem);
-    findProduct(searchItem);
-
-  }, [searchItem]);
+  }, [nonEmptyParams, filteredItemsId]);
 
   useEffect(() => {
     if (filteredProducts.length > 0) {
       setSearchItem("");
       setFindProduct([]);
-    } else if (searchItem !== "") {
+    }
+  }, [filteredProducts]);
+
+  useEffect(() => {
+    if (searchItem !== "") {
       setFilteredProducts([]);
     }
-  }, [filteredProducts, searchItem]);
+  }, [searchItem]);
 
   useEffect(() => {
     if (products && searchItem !== "" && products.length > 0) {
@@ -146,6 +230,7 @@ function StorePage() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   useEffect(() => {
     if (openFilter && windowWidth >= 360 && windowWidth < 768) {
       document.body.classList.add("no-scroll");
@@ -190,7 +275,7 @@ function StorePage() {
             {openFilter && (
               <StoreFilter
                 closeFilter={setOpenFilter}
-                setFilteredProducts={setFilteredProducts}
+                setFilteredItemsId={setFilteredItemsId}
               />
             )}
             <Container>
