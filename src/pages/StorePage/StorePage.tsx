@@ -48,16 +48,20 @@ function StorePage() {
     categoryId: categoryId || undefined,
     productId: productId || undefined,
   };
+
   const nonEmptyParams = Object.entries(filteredParams).reduce(
     (acc, [key, value]) => {
-      if (value !== undefined || value == "") {
+      if (Array.isArray(value)) {
+        if (value.length > 0 && value.some((v) => v !== "")) {
+          acc[key] = value;
+        }
+      } else if (value !== undefined && value !== "") {
         acc[key] = value;
       }
       return acc;
     },
-    {} as Record<string, string>
+    {} as Record<string, string | string[]>
   );
-  // const queryParams = new URLSearchParams(nonEmptyParams).toString();
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
@@ -71,7 +75,6 @@ function StorePage() {
   const [filteredItemsId, setFilteredItemsId] = useState<
     Record<string, string>[]
   >([]);
-  // console.log('queryParams :>> ', queryParams);
 
   const countItemPages = 12;
   const lastIndex = currentPage * countItemPages;
@@ -120,7 +123,7 @@ function StorePage() {
   }, [sortField, sortOrder]);
 
   const updateSearchParams = useCallback(
-    (newParams: Record<string, string>) => {
+    (newParams: Record<string, string | string[]>) => {
       setSearchParams((prevParams) => {
         const updatedParams = new URLSearchParams(prevParams);
         Object.keys(newParams).forEach((key) => updatedParams.delete(key));
@@ -137,6 +140,7 @@ function StorePage() {
     [setSearchParams]
   );
 
+  // Основной эффект для обновления продуктов при изменении параметров поиска
   useEffect(() => {
     const categoryIds = filteredItemsId.map((item) => item.categoryId);
     const productIds = filteredItemsId.flatMap((item) =>
@@ -152,38 +156,41 @@ function StorePage() {
       search: searchItem.trim(),
     };
 
-    updateSearchParams(newSearchParams);
-  }, [filteredItemsId, currentPage, searchItem, updateSearchParams]);
+    const nonEmptyParams = Object.entries(newSearchParams).reduce(
+      (acc, [key, value]) => {
+        if (Array.isArray(value)) {
+          const filteredValue = value.filter((v) => v !== "");
 
-  useEffect(() => {
-    switch (typeOfSort) {
-      case "Від найменшої ціни до найбільшої":
-        updateSearchParams({ sortOrder: "ASC", sortField: "price" });
-        break;
-      case "Від найбільшої ціни до найменшої":
-        updateSearchParams({ sortOrder: "DESC", sortField: "price" });
-        break;
-      case "За ретингом":
-        updateSearchParams({ sortOrder: "DESC", sortField: "ranking" });
-        break;
-      case "За популярністю":
-        updateSearchParams({ sortOrder: "DESC", sortField: "popularity" });
-        break;
-      default:
-        break;
-    }
-  }, [updateSearchParams, typeOfSort]);
+          if (filteredValue.length > 0) {
+            acc[key] = filteredValue;
+          }
+        } else if (value !== undefined && value !== "") {
+          acc[key] = value;
+          console.log("acc 2 :>> ", (acc[key] = value));
+        }
+        return acc;
+      },
+      {} as Record<string, string | string[]>
+    );
 
-  useEffect(() => {
-    const searchParamsString = new URLSearchParams(nonEmptyParams);
+    updateSearchParams(nonEmptyParams);
 
-    filteredItemsId.forEach((item) => {
-      searchParamsString.append("categoryId", item.categoryId);
-      item.productId.split(",").forEach((pid) => {
-        searchParamsString.append("productId", pid);
-      });
+    const searchParamsString = new URLSearchParams();
+
+// Перебираем nonEmptyParams и добавляем их в searchParamsString
+Object.entries(nonEmptyParams).forEach(([key, value]) => {
+  if (Array.isArray(value)) {
+    value.forEach((val) => {
+      if (val !== "") {
+        searchParamsString.append(key, val);
+      }
     });
+  } else if (value !== "") {
+    searchParamsString.append(key, value);
+  }
+});
 
+console.log('searchParamsString :>> ', ...searchParamsString);
     async function fetchProducts() {
       try {
         const result = await getProductsAndSorted(
@@ -195,7 +202,9 @@ function StorePage() {
       }
     }
     fetchProducts();
-  }, [nonEmptyParams, filteredItemsId]);
+  }, [filteredItemsId, currentPage, searchItem]);
+
+  // Эффекты для синхронизации состояния
 
   useEffect(() => {
     if (filteredProducts.length > 0) {
