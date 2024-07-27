@@ -75,7 +75,11 @@ const SearchStore: React.FC<PropsSearch> = ({
       setOpenFilter(false)
     }
   };
-
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearchBtn();
+    }
+  };
   return (
     <div css={container}>
       {!isOpen && (
@@ -97,6 +101,7 @@ const SearchStore: React.FC<PropsSearch> = ({
             autoComplete="off"
             onBlur={handleInputBlur}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown} 
           />
           <button css={btnClose} onClick={handleOpenInput}>
             <IoIosClose css={svgClose} />
