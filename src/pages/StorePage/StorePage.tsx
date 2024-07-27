@@ -39,29 +39,29 @@ function StorePage() {
     productId,
   } = params;
 
-  const filteredParams = {
-    sortOrder: sortOrder || undefined,
-    sortField: sortField || undefined,
-    page: page || undefined,
-    limit: limit || undefined,
-    search: search || undefined,
-    categoryId: categoryId || undefined,
-    productId: productId || undefined,
-  };
+  // const filteredParams = {
+  //   sortOrder: sortOrder || undefined,
+  //   sortField: sortField || undefined,
+  //   page: page || undefined,
+  //   limit: limit || undefined,
+  //   search: search || undefined,
+  //   categoryId: categoryId || undefined,
+  //   productId: productId || undefined,
+  // };
 
-  const nonEmptyParams = Object.entries(filteredParams).reduce(
-    (acc, [key, value]) => {
-      if (Array.isArray(value)) {
-        if (value.length > 0 && value.some((v) => v !== "")) {
-          acc[key] = value;
-        }
-      } else if (value !== undefined && value !== "") {
-        acc[key] = value;
-      }
-      return acc;
-    },
-    {} as Record<string, string | string[]>
-  );
+  // const nonEmptyParams = Object.entries(filteredParams).reduce(
+  //   (acc, [key, value]) => {
+  //     if (Array.isArray(value)) {
+  //       if (value.length > 0 && value.some((v) => v !== "")) {
+  //         acc[key] = value;
+  //       }
+  //     } else if (value !== undefined && value !== "") {
+  //       acc[key] = value;
+  //     }
+  //     return acc;
+  //   },
+  //   {} as Record<string, string | string[]>
+  // );
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
@@ -76,7 +76,7 @@ function StorePage() {
     Record<string, string>[]
   >([]);
 
-  const countItemPages = 12;
+  const countItemPages = 30;
   const lastIndex = currentPage * countItemPages;
   const firstIndex = lastIndex - countItemPages;
 
@@ -122,6 +122,7 @@ function StorePage() {
     }
   }, [sortField, sortOrder]);
 
+
   const updateSearchParams = useCallback(
     (newParams: Record<string, string | string[]>) => {
       setSearchParams((prevParams) => {
@@ -140,6 +141,24 @@ function StorePage() {
     [setSearchParams]
   );
 
+  useEffect(() => {
+    switch (typeOfSort) {
+      case "Від найменшої ціни до найбільшої":
+        updateSearchParams({sortOrder:"ASC",sortField:"price"});
+        break;
+      case "Від найбільшої ціни до найменшої":
+        updateSearchParams({sortOrder:"DESC",sortField:"price"});
+        break;
+      case "За ретингом":
+        updateSearchParams({sortOrder:"DESC",sortField:"ranking"});
+        break;
+      case "За популярністю":
+        updateSearchParams({sortOrder:"DESC",sortField:"popularity"});
+        break;
+      default:
+        break;
+    }
+  }, [typeOfSort]);
   // Основной эффект для обновления продуктов при изменении параметров поиска
   useEffect(() => {
     const categoryIds = filteredItemsId.map((item) => item.categoryId);
@@ -149,6 +168,8 @@ function StorePage() {
 
     const newSearchParams = {
       ...params,
+      sortOrder: sortOrder,
+      sortField: sortField,
       categoryId: categoryIds,
       productId: productIds,
       page: currentPage.toString(),
@@ -177,20 +198,17 @@ function StorePage() {
 
     const searchParamsString = new URLSearchParams();
 
-// Перебираем nonEmptyParams и добавляем их в searchParamsString
-Object.entries(nonEmptyParams).forEach(([key, value]) => {
-  if (Array.isArray(value)) {
-    value.forEach((val) => {
-      if (val !== "") {
-        searchParamsString.append(key, val);
+    Object.entries(nonEmptyParams).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((val) => {
+          if (val !== "") {
+            searchParamsString.append(key, val);
+          }
+        });
+      } else if (value !== "") {
+        searchParamsString.append(key, value);
       }
-    });
-  } else if (value !== "") {
-    searchParamsString.append(key, value);
-  }
-});
-
-console.log('searchParamsString :>> ', ...searchParamsString);
+    });  
     async function fetchProducts() {
       try {
         const result = await getProductsAndSorted(
@@ -202,9 +220,9 @@ console.log('searchParamsString :>> ', ...searchParamsString);
       }
     }
     fetchProducts();
-  }, [filteredItemsId, currentPage, searchItem]);
+  }, [filteredItemsId, currentPage, searchItem,sortOrder,sortField]);
 
-  // Эффекты для синхронизации состояния
+ 
 
   useEffect(() => {
     if (filteredProducts.length > 0) {
