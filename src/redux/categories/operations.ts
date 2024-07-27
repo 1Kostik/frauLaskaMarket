@@ -6,6 +6,7 @@ import {
   postCategory,
 } from "@services/servicesApi";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export type KnownError = {
   errorMessage: string;
@@ -32,8 +33,10 @@ export const createCategory = createAsyncThunk(
   async (title: string, thunkAPI) => {
     try {
       const categories = await postCategory(title);
+      toast.success("Категорію створено");
       return categories;
     } catch (err) {
+      toast.error("Шось пійшло не так");
       const error = err as AxiosError<KnownError>;
       if (!error.response) {
         throw err;
@@ -48,8 +51,10 @@ export const removeCategory = createAsyncThunk(
   async (id: number, thunkAPI) => {
     try {
       const categories = await deleteCategory(id);
+      toast.success("Категорія видалена");
       return categories;
     } catch (err) {
+      toast.error("Шось пійшло не так");
       const error = err as AxiosError<KnownError>;
       if (!error.response) {
         throw err;
@@ -64,8 +69,10 @@ export const editCategory = createAsyncThunk(
   async ({ id, name }: { id: number; name: string }, thunkAPI) => {
     try {
       const categories = await patchCategory({ id, name });
+      toast.success("Категорію змінено");
       return categories;
     } catch (err) {
+      toast.error("Шось пійшло не так");
       const error = err as AxiosError<KnownError>;
       if (!error.response) {
         throw err;

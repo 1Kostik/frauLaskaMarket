@@ -1,24 +1,11 @@
-export interface IVariation {
-  size: number | string;
-  price: number | string;
-  count: number | string;
-  color: string;
-  discount: number | string;
-}
-
-export interface IFeedback {
-  name: string;
-  profession: string;
-  review: string;
-}
-
 export interface IAdvert {
+  id?: number;
   category_id: number | string;
-  imageUrls: File[];
+  imageUrls: File[] | IImageUrl[];
   mainImage: string;
 
   title: string;
-  productCode: string;
+  productCode: string | number;
   composition: string;
   benefit: string;
   description: string;
@@ -31,4 +18,25 @@ export interface IAdvert {
   ranking: string | number;
 
   newCategory?: string;
+}
+
+export interface IVariation {
+  id?: number;
+  size: number | string;
+  price: number | string;
+  count: number | string;
+  color: string;
+  discount: number | string;
+}
+
+export interface IFeedback {
+  id?: number;
+  name: string;
+  profession: string;
+  review: string;
+}
+
+export interface IImageUrl {
+  id?: number;
+  img_url: string;
 }

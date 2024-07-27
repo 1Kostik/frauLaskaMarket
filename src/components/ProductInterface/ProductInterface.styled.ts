@@ -11,13 +11,13 @@ export const interfaceStyle = css`
 
   & button {
     padding: 8px;
-    border-radius: 100%;
+    border-radius: 9px;
     background-color: var(--bg-tranparent);
     transition: var(--effectDuration);
 
     & svg {
-      width: 20px;
-      height: 20px;
+      width: 30px;
+      height: 30px;
     }
 
     &:hover {
