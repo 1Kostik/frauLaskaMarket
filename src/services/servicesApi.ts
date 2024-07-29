@@ -89,3 +89,14 @@ export const deleteProductImage = async (id: number) => {
   }
 };
 
+export const deleteProductVariationById= async (id: number)=>{
+  try {
+    const { data } = await axios.delete(`/products/variations/${id}`);
+    toast.success("Варіацію видалено");
+    return data;
+  } catch (error) {
+    toast.error("Не вдалося видалити варіацію");
+    console.log(error);
+  }
+}
+

@@ -16,10 +16,10 @@ export interface Product {
 export interface Variation {
   id: number;
   price: number;
-  discount: number;
+  discount: number | null;
   count: number;
-  size: number;
-  color: string;
+  size: number | null ;
+  color: string | null;
 }
 
 export interface Feedback {
