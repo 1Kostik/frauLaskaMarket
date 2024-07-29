@@ -100,3 +100,14 @@ export const deleteProductVariationById= async (id: number)=>{
   }
 }
 
+export const deleteProductFeedbackById = async (id: number) => {
+  try {
+    const { data } = await axios.delete(`/products/feedbacks/${id}`);
+    toast.success("Відгук видалено");
+    return data;
+  } catch (error) {
+    toast.error("Не вдалося видалити відгук");
+    console.log(error);
+  }
+};
+
