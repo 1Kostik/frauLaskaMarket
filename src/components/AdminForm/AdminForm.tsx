@@ -53,6 +53,7 @@ import { IAdvert, IFeedback, IImageUrl, IVariation } from "Interfaces/IAdvert";
 import { createProduct, updateProduct } from "@redux/ads/operations";
 import { SerializedStyles } from "@emotion/react";
 import {
+  deleteProductFeedbackById,
   deleteProductImage,
   deleteProductVariationById,
 } from "@services/servicesApi";
@@ -78,7 +79,7 @@ const initialValues: IAdvert = {
 
   variations: [{ size: "", price: "", count: "", color: "", discount: "" }],
 
-  feedbacks: [],
+  feedbacks: [{ name: "", profession: "", review: "" }],
 
   popularity: "",
   ranking: "",
@@ -812,10 +813,9 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                     type="button"
                                     onClick={() => {
                                       remove(index);
-                                      product?.variations[index].id &&
-                                        deleteProductVariationById(
-                                          product.variations[index].id
-                                        );
+                                      deleteProductVariationById(
+                                        Number(variations[index].id)
+                                      );
                                     }}
                                   >
                                     <FaRegTrashAlt css={trashCan} />
@@ -932,10 +932,9 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                   type="button"
                                   onClick={() => {
                                     remove(i);
-                                    product?.feedbacks[i].id &&
-                                      deleteProductVariationById(
-                                        product.feedbacks[i].id
-                                      );
+                                    deleteProductFeedbackById(
+                                      Number(feedbacks[i].id)
+                                    );
                                   }}
                                 >
                                   <FaRegTrashAlt css={trashCan} />
@@ -950,7 +949,11 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                 ...prev,
                                 feedbacks.length,
                               ]);
-                              push({ name: "", profession: "", review: "" });
+                              push({
+                                name: "",
+                                profession: "",
+                                review: "",
+                              });
                             }}
                             css={buttonStyle}
                           >
