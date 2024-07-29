@@ -420,7 +420,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
           return (
             <>
               <h1 css={pageTitle}>
-                {!product ? "Створення товару" : "Редагевання товару"}
+                {!product ? "Створення товару" : "Редагування товару"}
               </h1>
 
               <Form>
@@ -928,7 +928,16 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                               </div>
 
                               {feedbacks.length > 1 && (
-                                <button type="button" onClick={() => remove(i)}>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    remove(i);
+                                    product?.feedbacks[i].id &&
+                                      deleteProductVariationById(
+                                        product.feedbacks[i].id
+                                      );
+                                  }}
+                                >
                                   <FaRegTrashAlt css={trashCan} />
                                 </button>
                               )}
