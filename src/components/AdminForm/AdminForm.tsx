@@ -52,8 +52,12 @@ import { ICategory } from "Interfaces/ICategory";
 import { IAdvert, IFeedback, IImageUrl, IVariation } from "Interfaces/IAdvert";
 import { createProduct, updateProduct } from "@redux/ads/operations";
 import { SerializedStyles } from "@emotion/react";
-import { deleteProductImage } from "@services/servicesApi";
+import {
+  deleteProductImage,
+  deleteProductVariationById,
+} from "@services/servicesApi";
 import { deleteImage } from "@redux/ads/slice";
+import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -74,7 +78,7 @@ const initialValues: IAdvert = {
 
   variations: [{ size: "", price: "", count: "", color: "", discount: "" }],
 
-  feedbacks: [{ name: "", profession: "", review: "" }],
+  feedbacks: [],
 
   popularity: "",
   ranking: "",
@@ -102,19 +106,47 @@ const validationSchema = Yup.object({
   ),
 
   feedbacks: Yup.array().of(
-    Yup.object().shape({
-      name: Yup.string(),
-      profession: Yup.string(),
-      review: Yup.string(),
-    })
+    Yup.object()
+      .shape({
+        name: Yup.string(),
+        profession: Yup.string(),
+        review: Yup.string(),
+      })
+      .test(
+        "all-or-none",
+        "All fields are required if any one field is filled",
+        function (value) {
+          const { name, profession, review } = value || {};
+          const isAnyFieldFilled = [name, profession, review].some(
+            (field) => field && field.trim() !== ""
+          );
+          const isAllFieldsFilled = [name, profession, review].every(
+            (field) => field && field.trim() !== ""
+          );
+          if (isAnyFieldFilled && !isAllFieldsFilled) {
+            return this.createError({
+              message: "Всі поля мають бути заповнені",
+            });
+          }
+          return true;
+        }
+      )
   ),
-
   newCategory: Yup.string(),
 });
 
 const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
   const [isShowColorPicker, setIsShowColorPicker] = useState<number[]>([]);
-  const [isShowAddSize, setIsShowAddSize] = useState<number[]>([]);
+  const [isShowAddSize, setIsShowAddSize] = useState<number[]>(
+    !product
+      ? []
+      : product.variations.reduce((acc, item, i) => {
+          if (item.size !== null) {
+            acc.push(i);
+          }
+          return acc;
+        }, [] as number[])
+  );
 
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories).map(
@@ -168,7 +200,11 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
 
   useEffect(() => {
     if (product) {
-      setIsShowColorPicker(product.variations.map((_, i) => i));
+      product.variations.map((item, i) => {
+        if (item.color) {
+          setIsShowColorPicker((prev) => [...prev, i]);
+        }
+      });
     }
   }, [product]);
 
@@ -190,7 +226,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     setFieldValue("imageUrls", [...imageUrls, ...filesForAdd]);
   };
 
-  const handleRemove = (
+  const handlePhotoRemove = (
     i: number,
     image: File | IImageUrl,
     formik: FormikProps<IAdvert>
@@ -355,7 +391,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
   return (
     <>
       <Formik
-        initialValues={product || initialValues}
+        initialValues={replaceNullsWithEmptyStrings(product) || initialValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
           handleOnSubmit(values);
@@ -468,7 +504,9 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                               <button
                                 type="button"
                                 className="close-btn"
-                                onClick={() => handleRemove(i, image, formik)}
+                                onClick={() =>
+                                  handlePhotoRemove(i, image, formik)
+                                }
                               >
                                 <CloseIcon />
                               </button>
@@ -772,7 +810,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                 {variations.length > 1 && (
                                   <button
                                     type="button"
-                                    onClick={() => remove(index)}
+                                    onClick={() => {
+                                      remove(index);
+                                      product?.variations[index].id &&
+                                        deleteProductVariationById(
+                                          product.variations[index].id
+                                        );
+                                    }}
                                   >
                                     <FaRegTrashAlt css={trashCan} />
                                   </button>
@@ -808,7 +852,11 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                       {({ push, remove }) => (
                         <div css={reviewsContainer}>
                           {feedbacks.map((_, i) => (
-                            <div key={i} css={reviewWrapper}>
+                            <div
+                              key={i}
+                              css={reviewWrapper}
+                              className="errorContainer"
+                            >
                               <div css={categoryFields}>
                                 <label
                                   htmlFor={`feedbacks${i}.name`}

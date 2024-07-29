@@ -187,7 +187,7 @@ function StorePage() {
           }
         } else if (value !== undefined && value !== "") {
           acc[key] = value;
-          console.log("acc 2 :>> ", (acc[key] = value));
+          // console.log("acc 2 :>> ", (acc[key] = value));
         }
         return acc;
       },

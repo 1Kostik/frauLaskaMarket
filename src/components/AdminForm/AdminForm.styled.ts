@@ -288,6 +288,7 @@ export const submitWrapper = css`
 
 export const errorStyle = css`
   position: absolute;
+  bottom: -16px;
   font-size: 12px;
   padding-top: 1px;
   color: var(--error-color);

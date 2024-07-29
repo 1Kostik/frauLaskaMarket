@@ -54,7 +54,7 @@ import { ReactComponent as Close } from "@assets/icons/close2.svg";
 
 interface Item {
   id: number;
-  img: string;
+  img: { id: number; img_url: string };
   title: string;
   code: number;
   price: number;
@@ -160,7 +160,7 @@ const CartPage = () => {
                   {addedItems.map((item) => (
                     <ItemInfoContainer key={item.id + item.size}>
                       <ImgContainer>
-                        <img src={item.img} alt="" />
+                        <img src={item.img.img_url} alt="" />
                       </ImgContainer>
                       <InfoContainer>
                         <InfoTitle>
