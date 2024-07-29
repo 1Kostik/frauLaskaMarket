@@ -30,7 +30,7 @@ export interface IVariation {
 }
 
 export interface IFeedback {
-  id?: number;
+  id?: number ;
   name: string;
   profession: string;
   review: string;
