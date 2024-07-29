@@ -39,62 +39,22 @@ function StorePage() {
     productId,
   } = params;
 
-  // const filteredParams = {
-  //   sortOrder: sortOrder || undefined,
-  //   sortField: sortField || undefined,
-  //   page: page || undefined,
-  //   limit: limit || undefined,
-  //   search: search || undefined,
-  //   categoryId: categoryId || undefined,
-  //   productId: productId || undefined,
-  // };
-
-  // const nonEmptyParams = Object.entries(filteredParams).reduce(
-  //   (acc, [key, value]) => {
-  //     if (Array.isArray(value)) {
-  //       if (value.length > 0 && value.some((v) => v !== "")) {
-  //         acc[key] = value;
-  //       }
-  //     } else if (value !== undefined && value !== "") {
-  //       acc[key] = value;
-  //     }
-  //     return acc;
-  //   },
-  //   {} as Record<string, string | string[]>
-  // );
-
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<number | string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  // const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchItem, setSearchItem] = useState<string>("");
-  const [findProduct, setFindProduct] = useState<Product[]>([]);
+  // const [findProduct, setFindProduct] = useState<Product[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredItemsId, setFilteredItemsId] = useState<
     Record<string, string>[]
   >([]);
+  const [totalPage, setTotalPage] = useState<number>(0);
 
-  const countItemPages = 30;
-  const lastIndex = currentPage * countItemPages;
-  const firstIndex = lastIndex - countItemPages;
-
-  let currentItems =
-    products && filteredProducts.length > 0
-      ? filteredProducts
-      : findProduct.length > 0
-      ? findProduct
-      : products;
-
-  const totalPage =
-    products && filteredProducts.length > 0
-      ? filteredProducts.length
-      : findProduct.length > 0
-      ? findProduct.length
-      : products.length;
-
-  const lastPage = Math.ceil(totalPage / countItemPages);
+  const countItemPages = 12;
+  const lastPage = totalPage && Math.ceil(totalPage / countItemPages);
 
   const options = [
     "Від найменшої ціни до найбільшої",
@@ -122,7 +82,6 @@ function StorePage() {
     }
   }, [sortField, sortOrder]);
 
-
   const updateSearchParams = useCallback(
     (newParams: Record<string, string | string[]>) => {
       setSearchParams((prevParams) => {
@@ -144,16 +103,16 @@ function StorePage() {
   useEffect(() => {
     switch (typeOfSort) {
       case "Від найменшої ціни до найбільшої":
-        updateSearchParams({sortOrder:"ASC",sortField:"price"});
+        updateSearchParams({ sortOrder: "ASC", sortField: "price" });
         break;
       case "Від найбільшої ціни до найменшої":
-        updateSearchParams({sortOrder:"DESC",sortField:"price"});
+        updateSearchParams({ sortOrder: "DESC", sortField: "price" });
         break;
       case "За ретингом":
-        updateSearchParams({sortOrder:"DESC",sortField:"ranking"});
+        updateSearchParams({ sortOrder: "DESC", sortField: "ranking" });
         break;
       case "За популярністю":
-        updateSearchParams({sortOrder:"DESC",sortField:"popularity"});
+        updateSearchParams({ sortOrder: "DESC", sortField: "popularity" });
         break;
       default:
         break;
@@ -187,7 +146,6 @@ function StorePage() {
           }
         } else if (value !== undefined && value !== "") {
           acc[key] = value;
-          // console.log("acc 2 :>> ", (acc[key] = value));
         }
         return acc;
       },
@@ -208,45 +166,45 @@ function StorePage() {
       } else if (value !== "") {
         searchParamsString.append(key, value);
       }
-    });  
+    });
     async function fetchProducts() {
       try {
         const result = await getProductsAndSorted(
           searchParamsString.toString()
         );
-        setProducts(result);
+
+        setTotalPage(Number(result.total_products));
+        setProducts(result.productData);
       } catch (error) {
         console.error("Failed to fetch products:", error);
       }
     }
     fetchProducts();
-  }, [filteredItemsId, currentPage, searchItem,sortOrder,sortField]);
+  }, [filteredItemsId, currentPage, searchItem, sortOrder, sortField]);
 
- 
+  // useEffect(() => {
+  //   if (filteredProducts.length > 0) {
+  //     setSearchItem("");
+  //     setFindProduct([]);
+  //   }
+  // }, [filteredProducts]);
 
-  useEffect(() => {
-    if (filteredProducts.length > 0) {
-      setSearchItem("");
-      setFindProduct([]);
-    }
-  }, [filteredProducts]);
+  // useEffect(() => {
+  //   if (searchItem !== "") {
+  //     setFilteredProducts([]);
+  //   }
+  // }, [searchItem]);
 
-  useEffect(() => {
-    if (searchItem !== "") {
-      setFilteredProducts([]);
-    }
-  }, [searchItem]);
-
-  useEffect(() => {
-    if (products && searchItem !== "" && products.length > 0) {
-      const findItem = products.filter((item: Product) =>
-        item.title.toLowerCase().startsWith(searchItem.toLowerCase())
-      );
-      setFindProduct(findItem);
-    } else {
-      setFindProduct([]);
-    }
-  }, [searchItem]);
+  // useEffect(() => {
+  //   if (products && searchItem !== "" && products.length > 0) {
+  //     const findItem = products.filter((item: Product) =>
+  //       item.title.toLowerCase().startsWith(searchItem.toLowerCase())
+  //     );
+  //     setFindProduct(findItem);
+  //   } else {
+  //     setFindProduct([]);
+  //   }
+  // }, [searchItem]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -291,7 +249,7 @@ function StorePage() {
     navigate(`${id}`);
   };
 
-  let sortedArray = [...currentItems].slice(firstIndex, lastIndex);
+ 
 
   return (
     <>
@@ -310,8 +268,8 @@ function StorePage() {
                 <SearchStore
                   isOpenSearch={setOpenSearch}
                   setSearchItem={setSearchItem}
-                  setFindProduct={setFindProduct}
-                  hasFilteredProducts={filteredProducts.length > 0}
+                  // setFindProduct={setFindProduct}
+                  // hasFilteredProducts={filteredProducts.length > 0}
                   setOpenFilter={setOpenFilter}
                 />
                 <Wrapper>
@@ -331,8 +289,8 @@ function StorePage() {
               </SearchContainer>
 
               <ProductListContainer>
-                {sortedArray &&
-                  sortedArray.map((item: Product) => (
+                {products &&
+                  products.map((item: Product) => (
                     <ProductCard
                       key={item.id}
                       show={openFilter}
