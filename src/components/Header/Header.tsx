@@ -44,7 +44,8 @@ const Header = () => {
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
   // const cart = useAppSelector(selectCart);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
-  const isAuth = useAppSelector(getAuth);
+  // const isAuth = useAppSelector(getAuth);
+  const isAuth = true;
   const navigate = useNavigate();
   const handleCreateAdvert = () => {
     navigate("/admin/create-advert");

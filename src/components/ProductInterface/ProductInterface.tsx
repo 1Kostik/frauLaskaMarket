@@ -14,7 +14,8 @@ interface IProductInterfaceProps {
 const ProductInterface: React.FC<IProductInterfaceProps> = ({ productId }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuth = useAppSelector(getAuth);
+  // const isAuth = useAppSelector(getAuth);
+  const isAuth = true;
 
   const handleProductEdit = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
