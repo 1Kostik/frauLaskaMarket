@@ -59,6 +59,7 @@ import {
 } from "@services/servicesApi";
 import { deleteImage } from "@redux/ads/slice";
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
+import { useNavigate } from "react-router-dom";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -149,6 +150,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
         }, [] as number[])
   );
 
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories).map(
     (item: ICategory) => item.title
@@ -383,9 +385,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     // });
 
     if (!product) {
-      dispatch(createProduct(formData));
+      dispatch(createProduct(formData)).then(({ payload }) =>
+        navigate(`/store/${payload.id}`)
+      );
     } else if (product?.id !== undefined) {
-      dispatch(updateProduct({ id: product.id, formData }));
+      dispatch(updateProduct({ id: product.id, formData })).then(() =>
+        navigate(`/store/${product.id}`)
+      );
     }
   };
 
