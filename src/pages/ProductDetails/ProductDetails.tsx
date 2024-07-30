@@ -44,11 +44,11 @@ import CardSlider from "@components/CardSlider/CardSlider";
 import { text } from "@assets/answers";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cart/slice";
-import { products } from "@assets/products";
 import { Product, Variation } from "Interfaces/Product";
 import { selectCart } from "@redux/cart/selectors";
 import ProductInterface from "@components/ProductInterface";
 import { getProductById } from "@services/servicesApi";
+import { popularity } from "@utils/popularity";
 const ProductDetailsProps = {
   container: {
     "padding-top": ["", ""],
@@ -85,7 +85,9 @@ const ProductDetailsPropsText = {
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [selectedOption, setSelectedOption] = useState<number | string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<number | string | null>(
+    null
+  );
   const [productPrice, setProductPrice] = useState<number | null>(null);
   const [addedColor, setAddedColor] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -114,7 +116,7 @@ const ProductDetails = () => {
         setProduct(data);
         setProductPrice(data.variations[0].price);
         setSelectedOption(data.variations[0].size);
-        setAddedColor(data.variations[0].color)
+        setAddedColor(data.variations[0].color);
       } catch (error) {
         console.log("error :>> ", error);
       }
@@ -191,11 +193,7 @@ const ProductDetails = () => {
       setMessage("Оберіть будь ласка колір!");
     }
   };
-  const popularity = products
-    .map((item: Product) => {
-      return item;
-    })
-    .sort((a: Product, b: Product) => b.popularity - a.popularity);
+
   const handleAddColor = (color: string) => {
     setAddedColor(color);
     setMessage(null);
@@ -234,13 +232,15 @@ const ProductDetails = () => {
                   <H4>Колір</H4>
                   <Ul>
                     {colors &&
-                      colors.map((item: string, i: number) => (
-                        <Li
-                          key={i}
-                          style={{ background: item }}
-                          onClick={() => handleAddColor(item)}
-                        ></Li>
-                      ))}
+                      colors
+                        .filter((item): item is string => item !== null)
+                        .map((item, i) => (
+                          <Li
+                            key={i}
+                            style={{ background: item }}
+                            onClick={() => handleAddColor(item)}
+                          ></Li>
+                        ))}
                   </Ul>
                   {message && (
                     <p

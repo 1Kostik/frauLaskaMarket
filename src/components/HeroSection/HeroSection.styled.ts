@@ -4,9 +4,9 @@ import { css } from "@emotion/react";
 import { onDesktop, onTablet } from "@styles/mixins";
 
 export const Section = styled.section<HeroSectionProps>`
-  height: ${({ viewType }) => (viewType === "other" ? "196px" : "640px")};
+  height: ${({ viewType }) => (viewType === "other" ? "auto" : "640px")};
   padding-top: 72px;
-  padding-bottom: ${({ viewType }) => (viewType === "other" ? "60px" : "0")};
+  padding-bottom: ${({ viewType }) => (viewType === "other" ? "24px" : "0")};
 
   background: ${({ bgImage, viewType }) => {
     switch (viewType) {
@@ -26,14 +26,8 @@ export const Section = styled.section<HeroSectionProps>`
   background-size: auto 820px;
 
   ${({ viewType }) =>
-    viewType === "other" &&
-    onTablet(css`
-      height: 244px;
-    `)}
-  ${({ viewType }) =>
     viewType === "other"
       ? onDesktop(css`
-          height: 340px;
           padding-top: 80px;
         `)
       : onDesktop(css`
@@ -43,6 +37,7 @@ export const Section = styled.section<HeroSectionProps>`
 `;
 
 export const Container = styled.div<HeroSectionProps>`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -59,6 +54,17 @@ export const Container = styled.div<HeroSectionProps>`
 `;
 
 export const titleStyle = (viewType?: string) => css`
+  ${viewType === "other" &&
+  css`
+    padding-top: 24px;
+
+    ${onDesktop(
+      css`
+        padding-top: 40px;
+      `
+    )}
+  `}
+
   font-size: 96px;
   font-weight: 800;
   color: var(--text-white);
@@ -86,15 +92,55 @@ export const titleStyle = (viewType?: string) => css`
   `}
 `;
 
-export const paragraphStyle = css`
+export const paragraphStyle = (pageName?: string) => css`
   font-family: Inter;
   font-size: 18px;
   line-height: 120%;
   color: var(--text-light-grey);
-  margin-bottom: 16px;
+
+  margin-bottom: ${pageName === "ordered" ? "0" : "16px"};
+  padding-top: ${pageName === "ordered" ? "12px" : "0"};
 
   ${onDesktop(css`
     font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: ${pageName} === "ordered"? "0":"20px";
   `)};
+`;
+
+export const buttonStyle = css`
+  width: 160px;
+  height: 40px;
+  margin-top: 24px;
+  padding: 10px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--border-light-grey);
+
+  color: var(--text-light-grey);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  transition: var(--effectDuration);
+
+  ${onTablet(css`
+    position: absolute;
+    top: 24px;
+    right: 40px;
+    width: auto;
+    margin: 0;
+  `)}
+
+  ${onDesktop(
+    css`
+      top: 40px;
+      right: 78px;
+      font-size: 14px;
+    `
+  )}
+
+  &:hover {
+    color: var(--btn-show-more-hover);
+    border: 1px solid var(--btn-show-more-hover);
+    box-shadow: -4px 4px 4px 0px rgba(30, 51, 86, 0.08);
+  }
 `;
