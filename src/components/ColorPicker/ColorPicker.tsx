@@ -19,9 +19,8 @@ const colorArr = [
   "#D7D7D7",
   "#D9B8FF",
   "#E09C4F",
-  "#ff0000b5",
-  "#dada11e0",
-  "#bfbfbf54",
+  "#ff0000",
+  "#dada11",
   "pink",
 ];
 
