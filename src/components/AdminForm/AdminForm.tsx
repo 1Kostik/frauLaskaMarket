@@ -60,6 +60,7 @@ import {
 import { deleteImage } from "@redux/ads/slice";
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 import { useNavigate } from "react-router-dom";
+import { handleNumericInput } from "@utils/handleNumericInput";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -261,17 +262,6 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
         return [mainImage, ...imageUrls.filter((_, index) => index !== i)];
       })()
     );
-  };
-
-  const handleNumericInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const allowedChars = /[0-9]/;
-    if (
-      !allowedChars.test(e.key) &&
-      e.key !== "Backspace" &&
-      e.key !== "Delete"
-    ) {
-      e.preventDefault();
-    }
   };
 
   const handleCreateNewCategory = (

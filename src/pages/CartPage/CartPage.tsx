@@ -62,19 +62,8 @@ import { useNavigate } from "react-router-dom";
 import { Product } from "Interfaces/Product";
 import ProductCard from "@components/ProductCard/ProductCard";
 import { popularity } from "@utils/popularity";
+import { Item } from "Interfaces/IItem";
 
-interface Item {
-  id: number;
-  img: { id: number; img_url: string };
-  title: string;
-  code: number;
-  price: number;
-  count: number;
-  total: number;
-  discount: number;
-  color: string;
-  size: string;
-}
 const CartPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -102,7 +91,7 @@ const CartPage = () => {
       size,
       count: quantity,
       color,
-      total: Math.ceil(price - (price * discount) / 100),
+      total: Math.round(price - (price * discount) / 100),
     })
   );
   const [addedItems, setAddedItems] = useState<Item[]>(initialItemsWithTotal);
@@ -115,7 +104,9 @@ const CartPage = () => {
           return {
             ...item,
             count: item.count + 1,
-            total: item.price - (item.price * item.discount) / 100 + item.total,
+            total:
+              Math.round(item.price - (item.price * item.discount) / 100) +
+              item.total,
           };
         }
         return item;
@@ -131,7 +122,8 @@ const CartPage = () => {
             ...item,
             count: item.count - 1,
             total:
-              item.total - (item.price - (item.price * item.discount) / 100),
+              item.total -
+              Math.round(item.price - (item.price * item.discount) / 100),
           };
         }
         return item;
@@ -242,7 +234,7 @@ const CartPage = () => {
                     ))}
                   </Wrapper>
                 </ItemContainer>
-                <CartForm />
+                <CartForm addedItems={addedItems} totalPrice={totalPrice} />
               </MainInfoContainer>
               <PaymentContainer>
                 <TitlePayment>Разом</TitlePayment>

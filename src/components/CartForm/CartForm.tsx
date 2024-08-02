@@ -10,6 +10,9 @@ import {
   inputStyle,
   paymentMethods,
 } from "./CartForm.styled";
+import { Item } from "Interfaces/IItem";
+import { handleNumericInput } from "@utils/handleNumericInput";
+import { makePayment } from "@services/servicesApi";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -49,7 +52,12 @@ const initialValue = {
   paymentMethod: "liqPay",
 };
 
-const CartForm = () => {
+interface ICartFormProps {
+  addedItems: Item[];
+  totalPrice: number;
+}
+
+const CartForm: React.FC<ICartFormProps> = ({ addedItems, totalPrice }) => {
   const preventNumberInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (/\d/.test(e.key)) {
       e.preventDefault();
@@ -59,11 +67,9 @@ const CartForm = () => {
     <Formik
       initialValues={initialValue}
       validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          console.log({ values });
-          setSubmitting(false);
-        }, 400);
+      onSubmit={async (values) => {
+        console.log({ values, addedItems, totalPrice });
+        makePayment(50);
       }}
       validateOnBlur={false}
     >
@@ -248,7 +254,7 @@ const CartForm = () => {
               <label htmlFor="postOfficeNumber">
                 <Field
                   name="postOfficeNumber"
-                  type="number"
+                  type="text"
                   placeholder="Номер відділення"
                   css={[
                     inputStyle,
@@ -256,6 +262,7 @@ const CartForm = () => {
                       !!(errors.postOfficeNumber && touched.postOfficeNumber)
                     ),
                   ]}
+                  onKeyPress={handleNumericInput}
                   onFocus={() =>
                     setFieldTouched("postOfficeNumber", false, false)
                   }
