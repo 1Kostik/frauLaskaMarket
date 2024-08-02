@@ -35,7 +35,6 @@ export const postAdvert = async (formData: FormData) => {
   return data;
 };
 
-
 export const deleteAdvert = async (id: number) => {
   const { data } = await axios.delete(`products/${id}`);
   return data;
@@ -72,7 +71,6 @@ export const findProducts = async (queryParams: string) => {
   return data;
 };
 
-
 export const getCategoriesProductCount = async () => {
   const { data } = await axios.get(`categories/product-count`);
   return data;
@@ -89,7 +87,7 @@ export const deleteProductImage = async (id: number) => {
   }
 };
 
-export const deleteProductVariationById= async (id: number)=>{
+export const deleteProductVariationById = async (id: number) => {
   try {
     const { data } = await axios.delete(`/products/variations/${id}`);
     toast.success("Варіацію видалено");
@@ -98,7 +96,7 @@ export const deleteProductVariationById= async (id: number)=>{
     toast.error("Не вдалося видалити варіацію");
     console.log(error);
   }
-}
+};
 
 export const deleteProductFeedbackById = async (id: number) => {
   try {
@@ -111,3 +109,17 @@ export const deleteProductFeedbackById = async (id: number) => {
   }
 };
 
+export const makePayment = async (totalAmount: number) => {
+  try {
+    const {data} = await axios.post("/orders/payment", { totalAmount });
+    console.log('data.redirectUrl', data.redirectUrl)
+    if (data.redirectUrl) {
+      window.location.href = data.redirectUrl;
+    } else {
+      toast.error("Шось пішло не так");
+    }
+  } catch (error) {
+    toast.error("Шось пішло не так");
+    console.log(error);
+  }
+};
