@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { onDesktop, onTablet } from "@styles/mixins";
 import radioChecked from "@assets/icons/radio-btn-checked.svg";
 import radioUnchecked from "@assets/icons/radio-btn-unchecked.svg";
+import checkboxChecked from "@assets/icons/checkbox-active.svg";
 
 export const formWrapper = css`
   display: flex;
@@ -65,6 +66,33 @@ export const groupWrapper = css`
 
   & label {
     position: relative;
+  }
+`;
+
+export const recipientStyle = css`
+  & h3 {
+    visibility: hidden;
+    margin-bottom: 0;
+  }
+
+  & label {
+    display: flex;
+    cursor: pointer;
+  }
+
+  & label::before {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+
+  & input:checked + label::before {
+    background: url(${checkboxChecked});
+    background-position: center;
   }
 `;
 
