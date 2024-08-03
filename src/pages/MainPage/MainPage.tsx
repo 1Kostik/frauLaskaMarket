@@ -16,7 +16,7 @@ const MainPage = () => {
       width: ["100%"],
       height: ["640px", "900px"],
     },
-    display: ["flex", "none","none"],
+    display: ["flex", "none", "none"],
     width: ["340px", "728px", "1360px"],
     height: ["524px", "528px", "740px"],
     gap: ["6px", "12px"],

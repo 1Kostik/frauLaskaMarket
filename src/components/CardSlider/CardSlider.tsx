@@ -30,7 +30,7 @@ import { LuArrowRight } from "react-icons/lu";
 import { LuArrowLeft } from "react-icons/lu";
 import SwiperCore from "swiper";
 import { StyleProps } from "@pages/MainPage/CardSliderSection/CardSliderSection";
-import { ImageUrl } from "Interfaces/Product";
+import { Feedback, ImageUrl } from "Interfaces/Product";
 
 export interface Itext {
   id: number;
@@ -41,7 +41,7 @@ export interface Itext {
 
 interface CardSliderProps {
   renderArrayImg?: ImageUrl[] | null;
-  renderArrayText?: Itext[];
+  renderArrayText?: Feedback[];
   stylesProps: StyleProps;
 }
 

@@ -1,27 +1,28 @@
 import React from "react";
 import { H3, P1, P2, TitleWrapper, Wrapper } from "./CardItem.styled";
+import { Feedback } from "Interfaces/Product";
 
-interface IText {
-  id: number;
-  name: string;
-  activity: string;
-  description: string;
-}
+// interface IText {
+//   id: number;
+//   name: string;
+//   activity: string;
+//   description: string;
+// }
 
 interface Props {
-  text: IText;
+  text: Feedback;
 }
 
 export const CardItem: React.FC<Props> = ({ text }) => {
-  const { id, name, activity, description } = text;
+  const { id, name, profession, review } = text;
   return (
     <>
       <Wrapper key={id}>
         <TitleWrapper>
           <H3>{name}</H3>
-          <P1>{activity}</P1>
+          <P1>{profession}</P1>
         </TitleWrapper>
-        <P2>{description}</P2>
+        <P2>{review}</P2>
       </Wrapper>
     </>
   );

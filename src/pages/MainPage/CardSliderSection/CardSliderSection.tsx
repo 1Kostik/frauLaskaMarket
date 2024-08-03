@@ -1,6 +1,6 @@
-import CardSlider, { Itext } from "@components/CardSlider/CardSlider";
+import CardSlider from "@components/CardSlider/CardSlider";
 import { containerStyles } from "@styles/variables";
-import { ImageUrl } from "Interfaces/Product";
+import { Feedback, ImageUrl } from "Interfaces/Product";
 import React from "react";
 export interface StyleProps {
   container?: {
@@ -20,7 +20,7 @@ export interface StyleProps {
 }
 interface ICardSliderSectionProps {
   renderArrayImg?: ImageUrl[] | null;
-  renderArrayText?: Itext[];
+  renderArrayText?: Feedback[];
   stylesProps: StyleProps;
 }
 const CardSliderSection: React.FC<ICardSliderSectionProps> = ({

@@ -81,6 +81,7 @@ const CartPage = () => {
       price,
       quantity,
       color,
+      totalСost,
     }: any) => ({
       id,
       title,
@@ -91,7 +92,7 @@ const CartPage = () => {
       size,
       count: quantity,
       color,
-      total: Math.round(price - (price * discount) / 100),
+      totalСost,
     })
   );
   const [addedItems, setAddedItems] = useState<Item[]>(initialItemsWithTotal);
@@ -104,14 +105,12 @@ const CartPage = () => {
           return {
             ...item,
             count: item.count + 1,
-            total:
-              Math.round(item.price - (item.price * item.discount) / 100) +
-              item.total,
           };
         }
         return item;
       });
     });
+
     dispatch(increaseQuantity({ id, size }));
   };
   const handleDeleteItem = (id: number, size: string) => {
@@ -121,9 +120,6 @@ const CartPage = () => {
           return {
             ...item,
             count: item.count - 1,
-            total:
-              item.total -
-              Math.round(item.price - (item.price * item.discount) / 100),
           };
         }
         return item;
@@ -143,11 +139,8 @@ const CartPage = () => {
     });
     dispatch(removeFromCart({ id, size }));
   };
-  // const totalCount = addedItems.reduce((acc, item) => {
-  //   return acc + item.count;
-  // }, 0);
-  const totalPrice = addedItems.reduce((acc, item) => {
-    return acc + item.total;
+  const totalPrice = cart.reduce((acc, item) => {
+    return acc + item.totalСost;
   }, 0);
 
   const handleBackClick = () => {
@@ -226,7 +219,7 @@ const CartPage = () => {
                               {item.discount > 0 && (
                                 <OldPrice>{item.price} ₴</OldPrice>
                               )}
-                              <NewPrice>{item.total}₴</NewPrice>
+                              <NewPrice>{item.totalСost}₴</NewPrice>
                             </Price>
                           </PriceContainer>
                         </InfoContainer>
@@ -288,17 +281,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-
-/*
-{
-id:number,
-img:string,
-title:string,
-codeItem:number,
-price:number,
-count:number,
-discount:number,
-}
-
-
-*/
