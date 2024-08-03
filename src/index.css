@@ -133,3 +133,11 @@ svg {
 .btn-hide {
   display: none !important;
 }
+.hiddenInput {
+   position: absolute;
+    appearance: none;
+    width: 0px;
+    height: 0px;
+    margin: -1px;
+    opacity: 0;
+}
