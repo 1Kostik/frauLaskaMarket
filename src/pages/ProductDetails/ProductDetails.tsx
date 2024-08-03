@@ -33,6 +33,7 @@ import {
   TitleWrapper,
   BackStore,
   ProductListContainer,
+  checkedColor,
 } from "./ProductDetails.styled";
 import { LuArrowLeft } from "react-icons/lu";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
@@ -41,14 +42,14 @@ import SortingItems from "@components/SortingItems/SortingItems";
 import { useNavigate, useParams } from "react-router-dom";
 import ProductCard from "@components/ProductCard/ProductCard";
 import CardSlider from "@components/CardSlider/CardSlider";
-import { text } from "@assets/answers";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cart/slice";
-import { Product, Variation } from "Interfaces/Product";
+import { Feedback, Product, Variation } from "Interfaces/Product";
 import { selectCart } from "@redux/cart/selectors";
 import ProductInterface from "@components/ProductInterface";
 import { getProductById } from "@services/servicesApi";
 import { popularity } from "@utils/popularity";
+
 const ProductDetailsProps = {
   container: {
     "padding-top": ["", ""],
@@ -92,11 +93,10 @@ const ProductDetails = () => {
   const [addedColor, setAddedColor] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [product, setProduct] = useState<Product | null>(null);
-
+  const [feedBacks, setFeedBacks] = useState<Feedback[]>([]);
   const cart = useAppSelector(selectCart);
   const dispatch = useAppDispatch();
   const { id } = useParams();
-
   const imageArray = product && [...product.imageUrls];
   const title = product && product.title;
   const description = product && product.description;
@@ -117,6 +117,7 @@ const ProductDetails = () => {
         setProductPrice(data.variations[0].price);
         setSelectedOption(data.variations[0].size);
         setAddedColor(data.variations[0].color);
+        setFeedBacks(data.feedbacks);
       } catch (error) {
         console.log("error :>> ", error);
       }
@@ -154,10 +155,12 @@ const ProductDetails = () => {
       ? "306px"
       : "100%";
 
-  const options = product && [
-    ...product.variations.map((item: Variation) => item.size),
-  ];
-
+      const options: number[] | null = product && product.variations
+      ? product.variations
+            .map((item: Variation) => item.size)
+            .filter((size): size is number => size !== null)
+      : null;
+  
   const handleBackClick = () => {
     navigate("/store");
   };
@@ -186,6 +189,10 @@ const ProductDetails = () => {
         productCode: product.productCode,
         quantity: 1,
         color: addedColor,
+        totalСost:
+          (productPrice -
+            (productPrice * (product.variations[0].discount || 1)) / 100) *
+          1,
       };
 
       dispatch(addToCart(productToAdd));
@@ -235,11 +242,20 @@ const ProductDetails = () => {
                       colors
                         .filter((item): item is string => item !== null)
                         .map((item, i) => (
-                          <Li
-                            key={i}
-                            style={{ background: item }}
-                            onClick={() => handleAddColor(item)}
-                          ></Li>
+                          <>
+                            <Li
+                              key={i}
+                              style={{ background: item }}
+                              onClick={() => handleAddColor(item)}
+                            >
+                              {" "}
+                              {addedColor && addedColor === item ? (
+                                <div css={checkedColor} />
+                              ) : (
+                                ""
+                              )}
+                            </Li>
+                          </>
                         ))}
                   </Ul>
                   {message && (
@@ -292,7 +308,7 @@ const ProductDetails = () => {
           </DescriptionContainer>
           <div style={{ background: "#252525" }}>
             <CardSlider
-              renderArrayText={text}
+              renderArrayText={feedBacks}
               stylesProps={ProductDetailsPropsText}
             />
           </div>

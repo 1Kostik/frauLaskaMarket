@@ -30,6 +30,9 @@ const cartSlice = createSlice({
       );
       if (item) {
         item.quantity += 1;
+        item.totalСost =
+          Math.round(item.price - (item.price * item.discount) / 100) *
+          item.quantity;
       }
     },
     decreaseQuantity(
@@ -42,6 +45,9 @@ const cartSlice = createSlice({
       );
       if (item && item.quantity > 1) {
         item.quantity -= 1;
+        item.totalСost =
+          Math.round(item.price - (item.price * item.discount) / 100) *
+          item.quantity;
       }
     },
   },

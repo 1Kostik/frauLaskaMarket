@@ -19,7 +19,7 @@ import {
 
 interface ISortingItProps {
   width?: string;
-  options: number[] | string [] | null;
+  options: number[] | string[] | null;
   padding?: string;
   borderRadius?: string;
   isOpenSearch?: boolean;

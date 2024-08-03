@@ -238,10 +238,12 @@ export const Ul = styled.ul`
 `;
 
 export const Li = styled.li`
+position: relative;
   width: 20px;
   height: 20px;
   padding: 10px;
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 export const SelectContainer = styled.div`
@@ -451,4 +453,13 @@ export const ProductListContainer = styled.div`
     display: flex;
     /* flex-wrap: wrap; */
   `)}
+`;
+export const checkedColor = css`
+position: absolute;
+border-radius: 50%;
+border: 2px solid white;
+height: 30px;
+width: 30px;
+top: -5px;
+left:-5px;
 `;
