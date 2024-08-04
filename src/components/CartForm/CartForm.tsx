@@ -300,7 +300,7 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, totalPrice }) => {
                     }
                     onKeyDown={preventNumberInput}
                   />
-                  <p css={inputLabel(!!values.postOfficeNumber)}></p>
+                  <p css={inputLabel(!!values.recipientName)}>Ім’я</p>
                   <ErrorMessage name="recipientName">
                     {(msg) => <div css={errorStyle}>{msg}</div>}
                   </ErrorMessage>
@@ -324,6 +324,7 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, totalPrice }) => {
                     }
                     onKeyDown={preventNumberInput}
                   />
+                  <p css={inputLabel(!!values.recipientLastName)}>Прізвище</p>
                   <ErrorMessage name="recipientLastName">
                     {(msg) => <div css={errorStyle}>{msg}</div>}
                   </ErrorMessage>
@@ -362,6 +363,9 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, totalPrice }) => {
                       />
                     )}
                   </Field>
+                  <p css={inputLabel(!!values.recipientPhone)}>
+                    Номер телефону
+                  </p>
                   <ErrorMessage name="recipientPhone">
                     {(msg) => <div css={errorStyle}>{msg}</div>}
                   </ErrorMessage>

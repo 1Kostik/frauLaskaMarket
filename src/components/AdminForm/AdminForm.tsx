@@ -960,7 +960,11 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                     </FieldArray>
                   </div>
                   <div css={submitWrapper}>
-                    <button type="submit">Опублікувати оголошення</button>
+                    <button type="submit">
+                      {product
+                        ? "Зберегти зміни"
+                        : "Опублікувати оголошення"}
+                    </button>
                   </div>
                 </div>
               </Form>
