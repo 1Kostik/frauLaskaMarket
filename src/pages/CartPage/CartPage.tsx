@@ -227,7 +227,7 @@ const CartPage = () => {
                     ))}
                   </Wrapper>
                 </ItemContainer>
-                <CartForm addedItems={addedItems} totalPrice={totalPrice} />
+                <CartForm addedItems={addedItems} total_amount={totalPrice} />
               </MainInfoContainer>
               <PaymentContainer>
                 <TitlePayment>Разом</TitlePayment>
