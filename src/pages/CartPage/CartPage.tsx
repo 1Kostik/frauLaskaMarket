@@ -63,6 +63,7 @@ import { Product } from "Interfaces/Product";
 import ProductCard from "@components/ProductCard/ProductCard";
 import { popularity } from "@utils/popularity";
 import { Item } from "Interfaces/IItem";
+import { nanoid } from "nanoid";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ const CartPage = () => {
 
   const initialItemsWithTotal = cart.map(
     ({
-      id,
+      product_id,
       title,
       img,
       productCode,
@@ -83,7 +84,7 @@ const CartPage = () => {
       color,
       totalСost,
     }: any) => ({
-      id,
+      product_id,
       title,
       img,
       code: productCode,
@@ -101,7 +102,7 @@ const CartPage = () => {
   const handleAddItem = (id: number, size: string) => {
     setAddedItems((prev) => {
       return prev.map((item) => {
-        if (id === item.id && item.size === size) {
+        if (id === item.product_id && item.size === size) {
           return {
             ...item,
             count: item.count + 1,
@@ -116,7 +117,7 @@ const CartPage = () => {
   const handleDeleteItem = (id: number, size: string) => {
     setAddedItems((prev) => {
       return prev.map((item) => {
-        if (id === item.id && item.size === size && item.count > 1) {
+        if (id === item.product_id && item.size === size && item.count > 1) {
           return {
             ...item,
             count: item.count - 1,
@@ -129,13 +130,13 @@ const CartPage = () => {
   };
   const handleRemove = (id: number, size: string) => {
     const productSearch = cart.find(
-      (item) => item.id === id && item.size === size
+      (item) => item.product_id === id && item.size === size
     );
     if (!productSearch) {
       return;
     }
     setAddedItems((prev) => {
-      return prev.filter((item) => !(item.id === id && item.size === size));
+      return prev.filter((item) => !(item.product_id === id && item.size === size));
     });
     dispatch(removeFromCart({ id, size }));
   };
@@ -183,7 +184,7 @@ const CartPage = () => {
                   </TitleContainer>
                   <Wrapper>
                     {addedItems.map((item) => (
-                      <ItemInfoContainer key={item.id + item.size}>
+                      <ItemInfoContainer key={nanoid()}>
                         <ImgContainer>
                           <img src={item.img.img_url} alt="" />
                         </ImgContainer>
@@ -191,7 +192,7 @@ const CartPage = () => {
                           <InfoTitle>
                             <TitleItem>{item.title}</TitleItem>
                             <DeleteBtn
-                              onClick={() => handleRemove(item.id, item.size)}
+                              onClick={() => handleRemove(item.product_id, item.size)}
                             >
                               <Close css={svgClose} />
                             </DeleteBtn>
@@ -201,7 +202,7 @@ const CartPage = () => {
                             <BtnContainer>
                               <Decrement
                                 onClick={() =>
-                                  handleDeleteItem(item.id, item.size)
+                                  handleDeleteItem(item.product_id, item.size)
                                 }
                               >
                                 -
@@ -209,7 +210,7 @@ const CartPage = () => {
                               <Score>{item.count}</Score>
                               <Increment
                                 onClick={() =>
-                                  handleAddItem(item.id, item.size)
+                                  handleAddItem(item.product_id, item.size)
                                 }
                               >
                                 +

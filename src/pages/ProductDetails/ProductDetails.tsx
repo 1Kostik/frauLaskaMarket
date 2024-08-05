@@ -176,23 +176,29 @@ const ProductDetails = () => {
   const handleBackClick = () => {
     navigate("/store");
   };
-
+  console.log("cart :>> ", cart);
+  console.log("selectedOption :>> ", selectedOption);
   const handleAddToCart = () => {
     const productSearch = cart.find(
-      (item) => item.id === Number(id) && item.size === selectedOption
+      (item) =>
+        (item.product_id === Number(id) &&
+          item.size === selectedOption &&
+          item.size !== null) ||
+        item.color === addedColor
     );
+    console.log("productSearch :>> ", productSearch);
     if (productSearch) {
       return;
     }
     if (
       product &&
       id &&
-      selectedOption &&
-      productPrice !== null &&
-      addedColor !== ""
+      // selectedOption &&
+      productPrice !== null
+      // addedColor !== ""
     ) {
       const productToAdd = {
-        id: product.id,
+        product_id: product.id,
         title: product.title,
         price: productPrice,
         size: selectedOption,
