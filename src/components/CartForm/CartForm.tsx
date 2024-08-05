@@ -16,6 +16,7 @@ import { Item } from "Interfaces/IItem";
 import { handleNumericInput } from "@utils/handleNumericInput";
 import { makePayment } from "@services/servicesApi";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
+import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 
 const validationSchema = (isOtherRecipient: boolean) =>
   Yup.object({
@@ -97,10 +98,10 @@ const initialValue = {
 
 interface ICartFormProps {
   addedItems: Item[];
-  totalPrice: number;
+  total_amount: number;
 }
 
-const CartForm: React.FC<ICartFormProps> = ({ addedItems, totalPrice }) => {
+const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
   const [isOtherRecipient, setIsOtherRecipient] = useState(false);
 
   const handleRecipient = () => {
@@ -117,7 +118,12 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, totalPrice }) => {
       initialValues={initialValue}
       validationSchema={validationSchema(isOtherRecipient)}
       onSubmit={async (values) => {
-        console.log({ values, addedItems, totalPrice });
+        console.log({
+          status: "В очікуванні",
+          ...replaceNullsWithEmptyStrings(values),
+          order_itmes: addedItems,
+          total_amount,
+        });
         // makePayment(50);
       }}
       validateOnBlur={false}

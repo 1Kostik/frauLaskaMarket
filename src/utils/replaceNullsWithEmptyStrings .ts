@@ -6,8 +6,10 @@ export const replaceNullsWithEmptyStrings = <T>(obj: T): T => {
   } else if (obj && typeof obj === "object") {
     return Object.keys(obj).reduce((acc, key) => {
       const value = (obj as { [key: string]: string })[key];
-      (acc as { [key: string]: string })[key] =
-        value === null ? "" : replaceNullsWithEmptyStrings(value);
+      if (value !== null && value !== "") {
+        (acc as { [key: string]: string })[key] =
+          replaceNullsWithEmptyStrings(value);
+      }
       return acc;
     }, {} as T);
   }
