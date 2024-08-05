@@ -54,8 +54,8 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   // const [productData, setProductData] = useState<Product[]>([]);
   const [categoriesProductCount, setCategoriesProductCount] = useState<any>();
 
-
-
+console.log('checkedItems :>> ', checkedItems);
+console.log('openCategories :>> ', openCategories);
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);

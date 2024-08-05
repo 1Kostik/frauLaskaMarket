@@ -71,7 +71,7 @@ const SearchStore: React.FC<PropsSearch> = ({
   };
   const handleSearchBtn = () => {
     if (setSearchItem && setOpenFilter) {
-      setSearchItem(searchProduct);
+      setSearchItem(searchProduct.toLowerCase());
       setOpenFilter(false)
     }
   };
