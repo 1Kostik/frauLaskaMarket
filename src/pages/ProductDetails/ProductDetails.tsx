@@ -128,14 +128,25 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (selectedOption && product) {
-      setAddedColor("");
       product.variations.forEach((item: Variation) => {
         if (Number(selectedOption) === item.size) {
           setProductPrice(item.price);
+          const color = item.color ? item.color : "";
+          setAddedColor(color);
         }
       });
     }
   }, [selectedOption]);
+  useEffect(() => {
+    if (product) {
+      product.variations.forEach((item: Variation) => {
+        if (addedColor === item.color) {
+          setProductPrice(item.price);
+          setSelectedOption(item.size);
+        }
+      });
+    }
+  }, [addedColor]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -155,12 +166,13 @@ const ProductDetails = () => {
       ? "306px"
       : "100%";
 
-      const options: number[] | null = product && product.variations
+  const options: number[] | null =
+    product && product.variations
       ? product.variations
-            .map((item: Variation) => item.size)
-            .filter((size): size is number => size !== null)
+          .map((item: Variation) => item.size)
+          .filter((size): size is number => size !== null)
       : null;
-  
+
   const handleBackClick = () => {
     navigate("/store");
   };
@@ -242,20 +254,18 @@ const ProductDetails = () => {
                       colors
                         .filter((item): item is string => item !== null)
                         .map((item, i) => (
-                          <>
-                            <Li
-                              key={i}
-                              style={{ background: item }}
-                              onClick={() => handleAddColor(item)}
-                            >
-                              {" "}
-                              {addedColor && addedColor === item ? (
-                                <div css={checkedColor} />
-                              ) : (
-                                ""
-                              )}
-                            </Li>
-                          </>
+                          <Li
+                            key={i}
+                            style={{ background: item }}
+                            onClick={() => handleAddColor(item)}
+                          >
+                            {" "}
+                            {addedColor && addedColor === item ? (
+                              <div css={checkedColor} />
+                            ) : (
+                              ""
+                            )}
+                          </Li>
                         ))}
                   </Ul>
                   {message && (

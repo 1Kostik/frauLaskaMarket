@@ -267,9 +267,7 @@ function StorePage() {
               <SearchContainer>
                 <SearchStore
                   isOpenSearch={setOpenSearch}
-                  setSearchItem={setSearchItem}
-                  // setFindProduct={setFindProduct}
-                  // hasFilteredProducts={filteredProducts.length > 0}
+                  setSearchItem={setSearchItem}                
                   setOpenFilter={setOpenFilter}
                 />
                 <Wrapper>
