@@ -30,12 +30,12 @@ function StorePage() {
     () => Object.fromEntries([...searchParams]),
     [searchParams]
   );
-  const { sortOrder = "ASC", sortField = "price" } = params;
+  const { sortOrder = "ASC", sortField = "price", page} = params;
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<number | string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(Number(page));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const [searchItem, setSearchItem] = useState<string>("");
