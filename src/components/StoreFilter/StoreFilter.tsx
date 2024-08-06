@@ -51,12 +51,11 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
   }>({});
-  const [checkedItems, setCheckedItems] = useState<CheckedItems[]>(getSavedFilter());
+  const [checkedItems, setCheckedItems] = useState<CheckedItems[]>(
+    getSavedFilter()
+  );
 
   const [categoriesProductCount, setCategoriesProductCount] = useState<any>();
-
-  console.log("checkedItems :>> ", checkedItems);
-  console.log("openCategories :>> ", openCategories);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -65,7 +64,6 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   useEffect(() => {
     localStorage.setItem("filter", JSON.stringify(checkedItems));
   }, [checkedItems]);
-
 
   useEffect(() => {
     async function fetchCategoriesProductCount() {

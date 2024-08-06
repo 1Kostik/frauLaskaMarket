@@ -16,7 +16,7 @@ import StoreFilter from "@components/StoreFilter/StoreFilter";
 import SearchStore from "@components/SearchStore/SearchStore";
 import SortingItems from "@components/SortingItems/SortingItems";
 import Pagination from "@components/Pagination/Pagination";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
@@ -24,24 +24,17 @@ import { findProducts, getProductsAndSorted } from "@services/servicesApi";
 
 function StorePage() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isStorePage = "/store";
+  // const location = useLocation();
+  // const isStorePage = "/store";
 
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useMemo(
     () => Object.fromEntries([...searchParams]),
     [searchParams]
   );
-  const {
-    sortOrder = "ASC",
-    sortField = "price",
-    page,
-    limit,
-    search,
-    categoryId,
-    productId,
-  } = params;
-// console.log('params :>> ', params);
+  const { sortOrder = "ASC", sortField = "price" } = params;
+  console.log("params :>> ", params);
+
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<number | string | null>(null);
@@ -158,23 +151,33 @@ function StorePage() {
 
     updateSearchParams(nonEmptyParams);
 
-    const searchParamsString = new URLSearchParams();
+    // const searchParamsString = new URLSearchParams();
 
-    Object.entries(nonEmptyParams).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((val) => {
-          if (val !== "") {
-            searchParamsString.append(key, val);
-          }
-        });
-      } else if (value !== "") {
-        searchParamsString.append(key, value);
-      }
-    });
+    // Object.entries(nonEmptyParams).forEach(([key, value]) => {
+    //   if (Array.isArray(value)) {
+    //     value.forEach((val) => {
+    //       if (val !== "") {
+    //         searchParamsString.append(key, val);
+    //       }
+    //     });
+    //   } else if (value !== "") {
+    //     searchParamsString.append(key, value);
+    //   }
+    // });
     async function fetchProducts() {
       try {
+        // console.log('searchParamsString', searchParamsString)
+        // console.log(
+        //   "searchParamsString.toString()",
+        //   searchParamsString.toString()
+        // );
+        console.log(
+          "params.toString()",
+          new URLSearchParams(params).toString()
+        );
+
         const result = await getProductsAndSorted(
-          searchParamsString.toString()
+          new URLSearchParams(params).toString()
         );
 
         setTotalPage(Number(result.total_products));
@@ -184,7 +187,15 @@ function StorePage() {
       }
     }
     fetchProducts();
-  }, [filteredItemsId, currentPage, searchItem, sortOrder, sortField]);
+  }, [
+    filteredItemsId,
+    currentPage,
+    searchItem,
+    sortOrder,
+    sortField,
+    params,
+    updateSearchParams,
+  ]);
 
   // useEffect(() => {
   //   if (filteredProducts.length > 0) {
