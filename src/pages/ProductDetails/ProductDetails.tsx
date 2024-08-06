@@ -101,7 +101,11 @@ const ProductDetails = () => {
   const title = product && product.title;
   const description = product && product.description;
   const colors =
-    product && product.variations.map((item: Variation) => item.color);
+    product &&
+    Array.from(
+      new Set(product.variations.map((item: Variation) => item.color))
+    );
+
   const benefit = product && product.benefit;
   const composition = product && product.composition.toLowerCase();
   const productCode = product && product.productCode;
@@ -172,21 +176,23 @@ const ProductDetails = () => {
           .map((item: Variation) => item.size)
           .filter((size): size is number => size !== null)
       : null;
-
+  const isOptions = options && options.length > 0 ? true : false;
   const handleBackClick = () => {
     navigate("/store");
   };
-  console.log("cart :>> ", cart);
-  console.log("selectedOption :>> ", selectedOption);
+
   const handleAddToCart = () => {
     const productSearch = cart.find(
       (item) =>
         (item.product_id === Number(id) &&
           item.size === selectedOption &&
           item.size !== null) ||
-        item.color === addedColor
+        (item.size === selectedOption &&
+          item.size !== null &&
+          item.product_id === Number(id) &&
+          item.color === addedColor)
     );
-    console.log("productSearch :>> ", productSearch);
+
     if (productSearch) {
       return;
     }
@@ -253,55 +259,62 @@ const ProductDetails = () => {
                 <P1>Код товару:№{productCode}</P1>
                 <P2>{productPrice} ₴</P2>
                 <P3>{description}</P3>
-                <ColorContainer isErrorMessage={message !== null}>
-                  <H4>Колір</H4>
-                  <Ul>
-                    {colors &&
-                      colors
-                        .filter((item): item is string => item !== null)
-                        .map((item, i) => (
-                          <Li
-                            key={i}
-                            style={{ background: item }}
-                            onClick={() => handleAddColor(item)}
-                          >
-                            {" "}
-                            {addedColor && addedColor === item ? (
-                              <div css={checkedColor} />
-                            ) : (
-                              ""
-                            )}
-                          </Li>
-                        ))}
-                  </Ul>
-                  {message && (
-                    <p
-                      style={{
-                        color: "red",
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        position: "absolute",
-                        bottom: "-17px",
-                        left: "0px",
-                      }}
-                    >
-                      {message}
-                    </p>
-                  )}
-                </ColorContainer>
-                <SelectContainer>
-                  <H4>Обʼєм</H4>
-                  <SelectWrapper>
-                    <SortingItems
-                      options={options}
-                      padding={"12px"}
-                      borderRadius={"16px"}
-                      disableWidth={"unset"}
-                      setSelectedOption={setSelectedOption}
-                      selectedOption={selectedOption}
-                    />
-                  </SelectWrapper>
-                </SelectContainer>
+                {colors && colors.length > 0 && (
+                  <ColorContainer
+                    isErrorMessage={message !== null}
+                    isOptions={isOptions}
+                  >
+                    <H4>Колір</H4>
+                    <Ul>
+                      {colors &&
+                        colors
+                          .filter((item): item is string => item !== null)
+                          .map((item, i) => (
+                            <Li
+                              key={i}
+                              style={{ background: item }}
+                              onClick={() => handleAddColor(item)}
+                            >
+                              {" "}
+                              {addedColor && addedColor === item ? (
+                                <div css={checkedColor} />
+                              ) : (
+                                ""
+                              )}
+                            </Li>
+                          ))}
+                    </Ul>
+                    {message && (
+                      <p
+                        style={{
+                          color: "red",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          position: "absolute",
+                          bottom: "-17px",
+                          left: "0px",
+                        }}
+                      >
+                        {message}
+                      </p>
+                    )}
+                  </ColorContainer>
+                )}
+                {isOptions && (
+                  <SelectContainer>
+                    <H4>Обʼєм</H4>
+                    <SelectWrapper>
+                      <SortingItems
+                        options={options}
+                        padding={"12px"}
+                        borderRadius={"16px"}
+                        disableWidth={"unset"}
+                        setSelectedOption={setSelectedOption}
+                        selectedOption={selectedOption}
+                      />
+                    </SelectWrapper>
+                  </SelectContainer>
+                )}
                 <Button onClick={handleAddToCart}>Додати до кошика</Button>
               </TextContainer>
             </InfoContainer>

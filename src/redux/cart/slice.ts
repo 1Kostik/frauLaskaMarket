@@ -14,10 +14,18 @@ const cartSlice = createSlice({
     addToCart(state, action: PayloadAction<any>) {
       state.cart = [...state.cart, action.payload];
     },
-    removeFromCart(state, action: PayloadAction<{ id: number; size: string }>) {
+    removeFromCart(
+      state,
+      action: PayloadAction<{ id: number; size: string; color: string }>
+    ) {
+      console.log(' action.payload :>> ',  action.payload)
       state.cart = state.cart.filter(
         (item) =>
-          !(item.id === action.payload.id && item.size === action.payload.size)
+          !(
+            item.product_id === action.payload.id &&
+            item.size === action.payload.size &&
+            item.color === action.payload.color
+          )
       );
     },
     increaseQuantity(

@@ -128,17 +128,30 @@ const CartPage = () => {
     });
     dispatch(decreaseQuantity({ id, size }));
   };
-  const handleRemove = (id: number, size: string) => {
-    const productSearch = cart.find(
-      (item) => item.product_id === id && item.size === size
-    );
-    if (!productSearch) {
-      return;
-    }
+  const handleRemove = (id: number, size: string, color: string) => {
+    // const productSearch = cart.find(
+    //   (item) =>
+    //     (item.product_id === id && item.size === size && item.size !== null) ||
+    //   (item.size === size &&
+    //     item.size !== null &&
+    //     item.product_id === Number(id) &&
+    //     item.color === color)
+    // );
+    // if (!productSearch) {
+    //   return;
+    // }
+    // console.log("productSearch :>> ", productSearch);
     setAddedItems((prev) => {
-      return prev.filter((item) => !(item.product_id === id && item.size === size));
+      return prev.filter(
+        (item) =>
+          !(
+            item.product_id === id &&
+            item.size === size &&
+            item.color === color
+          )
+      );
     });
-    dispatch(removeFromCart({ id, size }));
+    dispatch(removeFromCart({ id, size, color }));
   };
   const totalPrice = cart.reduce((acc, item) => {
     return acc + item.totalСost;
@@ -192,7 +205,13 @@ const CartPage = () => {
                           <InfoTitle>
                             <TitleItem>{item.title}</TitleItem>
                             <DeleteBtn
-                              onClick={() => handleRemove(item.product_id, item.size)}
+                              onClick={() =>
+                                handleRemove(
+                                  item.product_id,
+                                  item.size,
+                                  item.color
+                                )
+                              }
                             >
                               <Close css={svgClose} />
                             </DeleteBtn>

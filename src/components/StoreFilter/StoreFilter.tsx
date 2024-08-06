@@ -22,18 +22,15 @@ import { ReactComponent as ArrowUp } from "@assets/icons/arrow-up-select.svg";
 import { ReactComponent as ArrowDown } from "@assets/icons/arrow-down-select.svg";
 import { ReactComponent as CheckBox } from "@assets/icons/checkbox.svg";
 import { ReactComponent as CheckBoxActive } from "@assets/icons/checkbox-active.svg";
-// import { Product } from "Interfaces/Product";
 import { useAppDispatch } from "@redux/hooks";
 import { fetchCategories } from "@redux/categories/operations";
-import {
-  getAllProducts,
-  getCategoriesProductCount,
-} from "@services/servicesApi";
+import { getCategoriesProductCount } from "@services/servicesApi";
 
 interface ISorteFilter {
   closeFilter: React.Dispatch<React.SetStateAction<boolean>>;
-  setFilteredItemsId: React.Dispatch<React.SetStateAction<Record<string, string>[]>>;
-  // updateSearchParams: (newParams: Record<string, string>) => void;
+  setFilteredItemsId: React.Dispatch<
+    React.SetStateAction<Record<string, string>[]>
+  >;
 }
 
 interface CheckedItems {
@@ -43,30 +40,32 @@ interface CheckedItems {
 
 const StoreFilter: React.FC<ISorteFilter> = ({
   closeFilter,
-  // updateSearchParams,
   setFilteredItemsId,
 }) => {
+  const getSavedFilter = () => {
+    const savedFilter = localStorage.getItem("filter");
+    const parsedFilter = savedFilter && JSON.parse(savedFilter);
+    return parsedFilter || [];
+  };
   const dispatch = useAppDispatch();
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
   }>({});
-  const [checkedItems, setCheckedItems] = useState<CheckedItems[]>([]);
-  // const [productData, setProductData] = useState<Product[]>([]);
+  const [checkedItems, setCheckedItems] = useState<CheckedItems[]>(getSavedFilter());
+
   const [categoriesProductCount, setCategoriesProductCount] = useState<any>();
 
-console.log('checkedItems :>> ', checkedItems);
-console.log('openCategories :>> ', openCategories);
+  console.log("checkedItems :>> ", checkedItems);
+  console.log("openCategories :>> ", openCategories);
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   async function fetchAllProducts() {
-  //     const result = await getAllProducts();
-  //     setProductData(result);
-  //   }
-  //   fetchAllProducts();
-  // }, []);
+  useEffect(() => {
+    localStorage.setItem("filter", JSON.stringify(checkedItems));
+  }, [checkedItems]);
+
 
   useEffect(() => {
     async function fetchCategoriesProductCount() {
@@ -115,7 +114,7 @@ console.log('openCategories :>> ', openCategories);
   const handleShowResult = () => {
     const filteredItems = checkedItems.map((item) => ({
       categoryId: item.id.toString(),
-      productId: item.productsId.join(',')
+      productId: item.productsId.join(","),
     }));
     setFilteredItemsId(filteredItems);
   };
@@ -139,8 +138,6 @@ console.log('openCategories :>> ', openCategories);
   const products =
     categoriesProductCount &&
     convertJSONToReadableFormat(categoriesProductCount);
-
-  
 
   return (
     <FilterWrapper>

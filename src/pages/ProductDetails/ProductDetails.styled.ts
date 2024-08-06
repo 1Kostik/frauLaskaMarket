@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
 interface PropsProdDet {
   isErrorMessage?: boolean;
+  isOptions?: boolean;
 }
 export const Section = styled.section`
   padding-top: 80px;
@@ -202,7 +203,8 @@ export const ColorContainer = styled.div<PropsProdDet>`
   display: flex;
   width: 100%;
   gap: 24px;
-  margin-bottom: ${({ isErrorMessage }) => (isErrorMessage ? "17px" : "12px")};
+  margin-bottom: ${({ isErrorMessage, isOptions }) =>
+    isErrorMessage ? "17px" : isOptions ? "12px" : "30px"};
   ${onDesktop(css`
     height: 40px;
   `)}
@@ -238,7 +240,7 @@ export const Ul = styled.ul`
 `;
 
 export const Li = styled.li`
-position: relative;
+  position: relative;
   width: 20px;
   height: 20px;
   padding: 10px;
@@ -455,11 +457,11 @@ export const ProductListContainer = styled.div`
   `)}
 `;
 export const checkedColor = css`
-position: absolute;
-border-radius: 50%;
-border: 2px solid white;
-height: 30px;
-width: 30px;
-top: -5px;
-left:-5px;
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid white;
+  height: 30px;
+  width: 30px;
+  top: -5px;
+  left: -5px;
 `;

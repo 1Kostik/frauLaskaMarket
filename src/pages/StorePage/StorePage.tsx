@@ -16,7 +16,7 @@ import StoreFilter from "@components/StoreFilter/StoreFilter";
 import SearchStore from "@components/SearchStore/SearchStore";
 import SortingItems from "@components/SortingItems/SortingItems";
 import Pagination from "@components/Pagination/Pagination";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
@@ -24,6 +24,9 @@ import { findProducts, getProductsAndSorted } from "@services/servicesApi";
 
 function StorePage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isStorePage = "/store";
+
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useMemo(
     () => Object.fromEntries([...searchParams]),
@@ -38,15 +41,15 @@ function StorePage() {
     categoryId,
     productId,
   } = params;
-
+// console.log('params :>> ', params);
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<number | string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  // const [filteredProducts, setFilteredProducts] = useState([]);
+
   const [searchItem, setSearchItem] = useState<string>("");
-  // const [findProduct, setFindProduct] = useState<Product[]>([]);
+
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredItemsId, setFilteredItemsId] = useState<
     Record<string, string>[]
@@ -118,6 +121,7 @@ function StorePage() {
         break;
     }
   }, [typeOfSort]);
+
   // Основной эффект для обновления продуктов при изменении параметров поиска
   useEffect(() => {
     const categoryIds = filteredItemsId.map((item) => item.categoryId);
@@ -249,8 +253,6 @@ function StorePage() {
     navigate(`${id}`);
   };
 
- 
-
   return (
     <>
       <HeroSection viewType={"other"}>Магазин</HeroSection>
@@ -267,7 +269,7 @@ function StorePage() {
               <SearchContainer>
                 <SearchStore
                   isOpenSearch={setOpenSearch}
-                  setSearchItem={setSearchItem}                
+                  setSearchItem={setSearchItem}
                   setOpenFilter={setOpenFilter}
                 />
                 <Wrapper>
