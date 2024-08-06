@@ -14,7 +14,7 @@ import {
 } from "./CartForm.styled";
 import { Item } from "Interfaces/IItem";
 import { handleNumericInput } from "@utils/handleNumericInput";
-import { makePayment } from "@services/servicesApi";
+// import { makePayment } from "@services/servicesApi";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 
