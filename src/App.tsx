@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import SharedLayout from "./components/SharedLayout/SharedLayout";
 import { lazy, Suspense } from "react";
-
+import ClearLocalStorageOnNavigate from "./components/ClearLocalStorageOnNavigate"
 const MainPage = lazy(() => import("@pages/MainPage/MainPage"));
 const HealthyPage = lazy(() => import("@pages/HealthyPage/HealthyPage"));
 const AromaSchool = lazy(() => import("@pages/SchoolPage/SchoolPage"));
@@ -22,6 +22,7 @@ const OrderedPage = lazy(() => import("@pages/OrderedPage/OrderedPage"));
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
+        <ClearLocalStorageOnNavigate/>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<MainPage />} />
