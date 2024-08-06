@@ -87,7 +87,7 @@ const CartPage = () => {
       product_id,
       title,
       img,
-      code: productCode,
+      productCode,
       price,
       discount,
       size,
@@ -216,7 +216,7 @@ const CartPage = () => {
                               <Close css={svgClose} />
                             </DeleteBtn>
                           </InfoTitle>
-                          <P>Код товару: №{item.code}</P>
+                          <P>Код товару: №{item.productCode}</P>
                           <PriceContainer>
                             <BtnContainer>
                               <Decrement
