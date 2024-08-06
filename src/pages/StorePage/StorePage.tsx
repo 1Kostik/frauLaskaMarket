@@ -16,17 +16,15 @@ import StoreFilter from "@components/StoreFilter/StoreFilter";
 import SearchStore from "@components/SearchStore/SearchStore";
 import SortingItems from "@components/SortingItems/SortingItems";
 import Pagination from "@components/Pagination/Pagination";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
-import { findProducts, getProductsAndSorted } from "@services/servicesApi";
+import {  getProductsAndSorted } from "@services/servicesApi";
+import { getSavedFilter } from "@utils/getSavedFilter";
 
 function StorePage() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isStorePage = "/store";
-
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useMemo(
     () => Object.fromEntries([...searchParams]),
@@ -34,14 +32,9 @@ function StorePage() {
   );
   const {
     sortOrder = "ASC",
-    sortField = "price",
-    page,
-    limit,
-    search,
-    categoryId,
-    productId,
+    sortField = "price",   
   } = params;
-// console.log('params :>> ', params);
+
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<number | string | null>(null);
@@ -51,9 +44,14 @@ function StorePage() {
   const [searchItem, setSearchItem] = useState<string>("");
 
   const [products, setProducts] = useState<Product[]>([]);
+  
+
   const [filteredItemsId, setFilteredItemsId] = useState<
     Record<string, string>[]
-  >([]);
+  >(getSavedFilter().map((item:any) => ({
+    categoryId: item.id.toString(),
+    productId: item.productsId.join(","),
+  })));
   const [totalPage, setTotalPage] = useState<number>(0);
 
   const countItemPages = 12;
@@ -86,7 +84,7 @@ function StorePage() {
   }, [sortField, sortOrder]);
 
   const updateSearchParams = useCallback(
-    (newParams: Record<string, string | string[]>) => {
+    (newParams: Record<string, string | string[]>) => {     
       setSearchParams((prevParams) => {
         const updatedParams = new URLSearchParams(prevParams);
         Object.keys(newParams).forEach((key) => updatedParams.delete(key));
@@ -96,7 +94,7 @@ function StorePage() {
           } else if (value !== "") {
             updatedParams.set(key, value);
           }
-        });
+        });      
         return updatedParams;
       });
     },
@@ -145,9 +143,9 @@ function StorePage() {
         if (Array.isArray(value)) {
           const filteredValue = value.filter((v) => v !== "");
 
-          if (filteredValue.length > 0) {
+          // if (filteredValue.length > 0) {
             acc[key] = filteredValue;
-          }
+          // }
         } else if (value !== undefined && value !== "") {
           acc[key] = value;
         }
