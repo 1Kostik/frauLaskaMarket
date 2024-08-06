@@ -118,8 +118,10 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
       initialValues={initialValue}
       validationSchema={validationSchema(isOtherRecipient)}
       onSubmit={async (values) => {
+        const date = new Date();
         console.log({
           status: "В очікуванні",
+          order_date: date.toISOString(),
           ...replaceNullsWithEmptyStrings(values),
           order_itmes: addedItems,
           total_amount,
