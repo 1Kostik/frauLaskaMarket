@@ -20,7 +20,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
-import {  getProductsAndSorted } from "@services/servicesApi";
+import { getProductsAndSorted } from "@services/servicesApi";
 import { getSavedFilter } from "@utils/getSavedFilter";
 
 function StorePage() {
@@ -30,10 +30,7 @@ function StorePage() {
     () => Object.fromEntries([...searchParams]),
     [searchParams]
   );
-  const {
-    sortOrder = "ASC",
-    sortField = "price",   
-  } = params;
+  const { sortOrder = "ASC", sortField = "price" } = params;
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
@@ -44,14 +41,13 @@ function StorePage() {
   const [searchItem, setSearchItem] = useState<string>("");
 
   const [products, setProducts] = useState<Product[]>([]);
-  
 
-  const [filteredItemsId, setFilteredItemsId] = useState<
-    Record<string, string>[]
-  >(getSavedFilter().map((item:any) => ({
+  const savedFilteredItemsId = getSavedFilter().map((item: any) => ({
     categoryId: item.id.toString(),
     productId: item.productsId.join(","),
-  })));
+  }));
+  const [filteredItemsId, setFilteredItemsId] =
+    useState<Record<string, string>[]>(savedFilteredItemsId);
   const [totalPage, setTotalPage] = useState<number>(0);
 
   const countItemPages = 12;
@@ -84,7 +80,7 @@ function StorePage() {
   }, [sortField, sortOrder]);
 
   const updateSearchParams = useCallback(
-    (newParams: Record<string, string | string[]>) => {     
+    (newParams: Record<string, string | string[]>) => {
       setSearchParams((prevParams) => {
         const updatedParams = new URLSearchParams(prevParams);
         Object.keys(newParams).forEach((key) => updatedParams.delete(key));
@@ -94,7 +90,7 @@ function StorePage() {
           } else if (value !== "") {
             updatedParams.set(key, value);
           }
-        });      
+        });
         return updatedParams;
       });
     },
@@ -144,7 +140,7 @@ function StorePage() {
           const filteredValue = value.filter((v) => v !== "");
 
           // if (filteredValue.length > 0) {
-            acc[key] = filteredValue;
+          acc[key] = filteredValue;
           // }
         } else if (value !== undefined && value !== "") {
           acc[key] = value;
