@@ -213,10 +213,10 @@ const ProductDetails = () => {
         productCode: product.productCode,
         quantity: 1,
         color: addedColor,
-        totalСost:
-          (productPrice -
-            (productPrice * (product.variations[0].discount || 1)) / 100) *
-          1,
+        totalСost: Math.round(
+          productPrice -
+            (productPrice * (product.variations[0].discount || 0)) / 100
+        ),
       };
 
       dispatch(addToCart(productToAdd));
