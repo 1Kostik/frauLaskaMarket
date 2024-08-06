@@ -14,7 +14,7 @@ import {
 } from "./CartForm.styled";
 import { Item } from "Interfaces/IItem";
 import { handleNumericInput } from "@utils/handleNumericInput";
-import { makePayment } from "@services/servicesApi";
+// import { makePayment } from "@services/servicesApi";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 
@@ -118,8 +118,10 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
       initialValues={initialValue}
       validationSchema={validationSchema(isOtherRecipient)}
       onSubmit={async (values) => {
+        const date = new Date();
         console.log({
           status: "В очікуванні",
+          order_date: date.toISOString(),
           ...replaceNullsWithEmptyStrings(values),
           order_itmes: addedItems,
           total_amount,
