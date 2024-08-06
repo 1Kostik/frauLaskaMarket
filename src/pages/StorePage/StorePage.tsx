@@ -20,20 +20,20 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
-import { findProducts, getProductsAndSorted } from "@services/servicesApi";
+import {  getProductsAndSorted } from "@services/servicesApi";
+import { getSavedFilter } from "@utils/getSavedFilter";
 
 function StorePage() {
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const isStorePage = "/store";
-
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useMemo(
     () => Object.fromEntries([...searchParams]),
     [searchParams]
   );
-  const { sortOrder = "ASC", sortField = "price" } = params;
-  console.log("params :>> ", params);
+  const {
+    sortOrder = "ASC",
+    sortField = "price",   
+  } = params;
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
@@ -44,9 +44,14 @@ function StorePage() {
   const [searchItem, setSearchItem] = useState<string>("");
 
   const [products, setProducts] = useState<Product[]>([]);
+  
+
   const [filteredItemsId, setFilteredItemsId] = useState<
     Record<string, string>[]
-  >([]);
+  >(getSavedFilter().map((item:any) => ({
+    categoryId: item.id.toString(),
+    productId: item.productsId.join(","),
+  })));
   const [totalPage, setTotalPage] = useState<number>(0);
 
   const countItemPages = 12;
@@ -79,7 +84,7 @@ function StorePage() {
   }, [sortField, sortOrder]);
 
   const updateSearchParams = useCallback(
-    (newParams: Record<string, string | string[]>) => {
+    (newParams: Record<string, string | string[]>) => {     
       setSearchParams((prevParams) => {
         const updatedParams = new URLSearchParams(prevParams);
         Object.keys(newParams).forEach((key) => updatedParams.delete(key));
@@ -89,7 +94,7 @@ function StorePage() {
           } else if (value !== "") {
             updatedParams.set(key, value);
           }
-        });
+        });      
         return updatedParams;
       });
     },
@@ -138,9 +143,9 @@ function StorePage() {
         if (Array.isArray(value)) {
           const filteredValue = value.filter((v) => v !== "");
 
-          if (filteredValue.length > 0) {
+          // if (filteredValue.length > 0) {
             acc[key] = filteredValue;
-          }
+          // }
         } else if (value !== undefined && value !== "") {
           acc[key] = value;
         }
@@ -151,33 +156,23 @@ function StorePage() {
 
     updateSearchParams(nonEmptyParams);
 
-    // const searchParamsString = new URLSearchParams();
+    const searchParamsString = new URLSearchParams();
 
-    // Object.entries(nonEmptyParams).forEach(([key, value]) => {
-    //   if (Array.isArray(value)) {
-    //     value.forEach((val) => {
-    //       if (val !== "") {
-    //         searchParamsString.append(key, val);
-    //       }
-    //     });
-    //   } else if (value !== "") {
-    //     searchParamsString.append(key, value);
-    //   }
-    // });
+    Object.entries(nonEmptyParams).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((val) => {
+          if (val !== "") {
+            searchParamsString.append(key, val);
+          }
+        });
+      } else if (value !== "") {
+        searchParamsString.append(key, value);
+      }
+    });
     async function fetchProducts() {
       try {
-        // console.log('searchParamsString', searchParamsString)
-        // console.log(
-        //   "searchParamsString.toString()",
-        //   searchParamsString.toString()
-        // );
-        console.log(
-          "params.toString()",
-          new URLSearchParams(params).toString()
-        );
-
         const result = await getProductsAndSorted(
-          new URLSearchParams(params).toString()
+          searchParamsString.toString()
         );
 
         setTotalPage(Number(result.total_products));
@@ -187,15 +182,7 @@ function StorePage() {
       }
     }
     fetchProducts();
-  }, [
-    filteredItemsId,
-    currentPage,
-    searchItem,
-    sortOrder,
-    sortField,
-    params,
-    updateSearchParams,
-  ]);
+  }, [filteredItemsId, currentPage, searchItem, sortOrder, sortField]);
 
   // useEffect(() => {
   //   if (filteredProducts.length > 0) {

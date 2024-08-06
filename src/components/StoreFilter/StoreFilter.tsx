@@ -25,6 +25,7 @@ import { ReactComponent as CheckBoxActive } from "@assets/icons/checkbox-active.
 import { useAppDispatch } from "@redux/hooks";
 import { fetchCategories } from "@redux/categories/operations";
 import { getCategoriesProductCount } from "@services/servicesApi";
+import { getSavedFilter } from "@utils/getSavedFilter";
 
 interface ISorteFilter {
   closeFilter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -42,11 +43,6 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   closeFilter,
   setFilteredItemsId,
 }) => {
-  const getSavedFilter = () => {
-    const savedFilter = localStorage.getItem("filter");
-    const parsedFilter = savedFilter && JSON.parse(savedFilter);
-    return parsedFilter || [];
-  };
   const dispatch = useAppDispatch();
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
