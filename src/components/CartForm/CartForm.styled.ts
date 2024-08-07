@@ -73,6 +73,7 @@ export const recipientStyle = css`
   & h3 {
     visibility: hidden;
     margin-bottom: 0;
+    height: 0;
   }
 
   & label {

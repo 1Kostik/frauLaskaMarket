@@ -35,7 +35,7 @@ function StorePage() {
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<number | string | null>(null);
-  const [currentPage, setCurrentPage] = useState(Number(page));
+  const [currentPage, setCurrentPage] = useState(Number(page || 1));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const [searchItem, setSearchItem] = useState<string>("");
