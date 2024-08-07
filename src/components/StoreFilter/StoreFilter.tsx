@@ -33,12 +33,23 @@ interface ISorteFilter {
     React.SetStateAction<Record<string, string>[]>
   >;
 }
+interface ProductsJSON {
+  categoryId: number;
+  product_id: number;
+  product_title: string;
+  product_quantity: number;
+}
 
-interface CheckedItems {
+export interface CheckedItems {
   id: number;
   productsId: number[];
 }
-
+interface CategoriesProductCount {
+  id: number;
+  product_count: number;
+  products: string;
+  title: string;
+}
 const StoreFilter: React.FC<ISorteFilter> = ({
   closeFilter,
   setFilteredItemsId,
@@ -51,7 +62,8 @@ const StoreFilter: React.FC<ISorteFilter> = ({
     getSavedFilter()
   );
 
-  const [categoriesProductCount, setCategoriesProductCount] = useState<any>();
+  const [categoriesProductCount, setCategoriesProductCount] =
+    useState<CategoriesProductCount[]>();
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -113,12 +125,12 @@ const StoreFilter: React.FC<ISorteFilter> = ({
     setFilteredItemsId(filteredItems);
   };
 
-  const convertJSONToReadableFormat = (data: any) => {
-    const uniqueProducts: any[] = [];
+  const convertJSONToReadableFormat = (data: CategoriesProductCount[]) => {
+    const uniqueProducts: ProductsJSON[] = [];
     const productIds = new Set();
 
-    data.forEach((item: any) => {
-      JSON.parse(item.products).forEach((product: any) => {
+    data.forEach((item: CategoriesProductCount) => {
+      JSON.parse(item.products).forEach((product: ProductsJSON) => {
         if (!productIds.has(product.product_id)) {
           uniqueProducts.push(product);
           productIds.add(product.product_id);
@@ -132,7 +144,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const products =
     categoriesProductCount &&
     convertJSONToReadableFormat(categoriesProductCount);
-
+ 
   return (
     <FilterWrapper>
       <Container>
@@ -143,7 +155,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({
           </ButtonClose>
         </TitleContainer>
         {categoriesProductCount &&
-          categoriesProductCount.map((category: any) => (
+          categoriesProductCount.map((category: CategoriesProductCount) => (
             <div key={category.id}>
               <ItemContainer isOpen={openCategories[category.id]}>
                 <Wrapper>
@@ -198,8 +210,10 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                 <>
                   {products &&
                     products
-                      .filter((item: any) => item.categoryId === category.id)
-                      .map((item: any) => (
+                      .filter(
+                        (item: ProductsJSON) => item.categoryId === category.id
+                      )
+                      .map((item: ProductsJSON) => (
                         <SubItemContainer
                           key={`${item.product_id}`}
                           isOpen={openCategories[category.id]}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState,Dispatch, SetStateAction } from "react";
 import { ReactComponent as Checked } from "@assets/icons/checked.svg";
 import { ReactComponent as ArrowUp } from "@assets/icons/arrow-up-select.svg";
 import { ReactComponent as ArrowDpwn } from "@assets/icons/arrow-down-select.svg";
@@ -17,18 +17,18 @@ import {
   svgArrowDpwn,
 } from "./SortingItems.styled";
 
-interface ISortingItProps {
+interface ISortingItProps<T> {
   width?: string;
-  options: number[] | string[] | null;
+  options: T[] | null;
   padding?: string;
   borderRadius?: string;
   isOpenSearch?: boolean;
   isOpenFilter?: boolean;
-  disableWidth?:string;
-  setSelectedOption?:React.Dispatch<React.SetStateAction<number | string | null>>;
-  selectedOption?:number| string | null;
+  disableWidth?: string;
+  setSelectedOption?: Dispatch<SetStateAction<T | null>>;
+  selectedOption?: T | null;
 }
-const SortingItems: React.FC<ISortingItProps> = ({
+const SortingItems = <T extends number | string>({
   width,
   options,
   padding,
@@ -37,41 +37,40 @@ const SortingItems: React.FC<ISortingItProps> = ({
   isOpenFilter,
   disableWidth,
   setSelectedOption,
-  selectedOption
-}) => {
+  selectedOption,
+}: ISortingItProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setChecked(true);
-    if(setSelectedOption && options){
-    setSelectedOption(options[0]);
-    const handleCklickOutSide = (event: MouseEvent) => {
-      if (
-        selectRef.current &&
-        !selectRef.current.contains(event.target as Node)
-      ) {
+    if (setSelectedOption && options && options.length > 0) {
+      setSelectedOption(options[0]);
+    }
+    const handleClickOutside = (event: MouseEvent) => {
+      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleCklickOutSide);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleCklickOutSide);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }
-  }, []);
+  }, [setSelectedOption, options]);
+
   const handleClick = () => {
     setIsOpen((prev) => !prev);
   };
-  const handleSelect = (option: number | string) => {
-    if(setSelectedOption){
-    setSelectedOption(option);
-    setChecked(true);
-    setIsOpen(false);
+
+  const handleSelect = (option: T) => {
+    if (setSelectedOption) {
+      setSelectedOption(option);
+      setChecked(true);
+      setIsOpen(false);
     }
   };
+
   const isChange = isOpenFilter && isOpenSearch;
   return (
     <Container>
@@ -83,7 +82,7 @@ const SortingItems: React.FC<ISortingItProps> = ({
           borderRadius={borderRadius}
         >
           <P isOpen={isOpen} isChange={isChange} isOpenSearch={isOpenSearch} disableWidth={disableWidth}>
-            {selectedOption ? selectedOption : selectedOption}
+            {selectedOption ? selectedOption : ''}
           </P>
           {isOpen ? (
             <ArrowUp css={svgArrowUp} />
