@@ -62,8 +62,21 @@ import { useNavigate } from "react-router-dom";
 import { Product } from "Interfaces/Product";
 import ProductCard from "@components/ProductCard/ProductCard";
 import { popularity } from "@utils/popularity";
-import { Item } from "Interfaces/IItem";
+// import { Item } from "Interfaces/IItem";
 import { nanoid } from "nanoid";
+
+export interface AddedToCartProduct {
+  product_id: number;
+  title: string;
+  img: { img_url: string; id: number };
+  productCode: number;
+  size?: number | null | undefined;
+  discount?: number | null;
+  price: number;
+  count: number;
+  color?: string | undefined;
+  totalСost: number;
+}
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -80,10 +93,10 @@ const CartPage = () => {
       size,
       discount,
       price,
-      quantity,
+      count,
       color,
       totalСost,
-    }: any) => ({
+    }: AddedToCartProduct) => ({
       product_id,
       title,
       img,
@@ -91,15 +104,17 @@ const CartPage = () => {
       price,
       discount,
       size,
-      count: quantity,
+      count,
       color,
       totalСost,
     })
   );
-  const [addedItems, setAddedItems] = useState<Item[]>(initialItemsWithTotal);
+  const [addedItems, setAddedItems] = useState<AddedToCartProduct[]>(
+    initialItemsWithTotal
+  );
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const handleAddItem = (id: number, size: string) => {
+  const handleAddItem = (id: number, size?: number | null) => {
     setAddedItems((prev) => {
       return prev.map((item) => {
         if (id === item.product_id && item.size === size) {
@@ -114,7 +129,7 @@ const CartPage = () => {
 
     dispatch(increaseQuantity({ id, size }));
   };
-  const handleDeleteItem = (id: number, size: string) => {
+  const handleDeleteItem = (id: number, size?: number | null) => {
     setAddedItems((prev) => {
       return prev.map((item) => {
         if (id === item.product_id && item.size === size && item.count > 1) {
@@ -128,7 +143,11 @@ const CartPage = () => {
     });
     dispatch(decreaseQuantity({ id, size }));
   };
-  const handleRemove = (id: number, size: string, color: string) => {
+  const handleRemove = (
+    id: number,
+    size?: number | null,
+    color?: string | null
+  ) => {
     // const productSearch = cart.find(
     //   (item) =>
     //     (item.product_id === id && item.size === size && item.size !== null) ||
@@ -236,7 +255,7 @@ const CartPage = () => {
                               </Increment>
                             </BtnContainer>
                             <Price>
-                              {item.discount > 0 && (
+                              {item.discount && item.discount > 0 && (
                                 <OldPrice>{item.price} ₴</OldPrice>
                               )}
                               <NewPrice>{item.totalСost}₴</NewPrice>

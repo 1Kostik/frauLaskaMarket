@@ -86,7 +86,7 @@ const ProductDetailsPropsText = {
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [selectedOption, setSelectedOption] = useState<number | string | null>(
+  const [selectedOption, setSelectedOption] = useState<number | null>(
     null
   );
   const [productPrice, setProductPrice] = useState<number | null>(null);
@@ -211,7 +211,7 @@ const ProductDetails = () => {
         discount: product.variations[0].discount,
         img: product.imageUrls[0],
         productCode: product.productCode,
-        quantity: 1,
+        count: 1,
         color: addedColor,
         totalСost: Math.round(
           productPrice -
@@ -304,7 +304,7 @@ const ProductDetails = () => {
                   <SelectContainer>
                     <H4>Обʼєм</H4>
                     <SelectWrapper>
-                      <SortingItems
+                      <SortingItems<number>
                         options={options}
                         padding={"12px"}
                         borderRadius={"16px"}

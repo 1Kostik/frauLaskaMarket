@@ -1,6 +1,7 @@
+import { AddedToCartProduct } from "@pages/CartPage/CartPage";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface CartState {
-  cart: any[];
+  cart: AddedToCartProduct[];
 }
 
 const initialState: CartState = {
@@ -11,14 +12,15 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart(state, action: PayloadAction<any>) {
+    addToCart(state, action: PayloadAction<AddedToCartProduct>) {
+    
       state.cart = [...state.cart, action.payload];
     },
     removeFromCart(
       state,
-      action: PayloadAction<{ id: number; size: string; color: string }>
+      action: PayloadAction<{ id: number; size?: number | null; color?: string | null}>
     ) {
-      console.log(' action.payload :>> ',  action.payload)
+      
       state.cart = state.cart.filter(
         (item) =>
           !(
@@ -30,32 +32,32 @@ const cartSlice = createSlice({
     },
     increaseQuantity(
       state,
-      action: PayloadAction<{ id: number; size: string }>
+      action: PayloadAction<{ id: number; size?: number | null}>
     ) {
       const item = state.cart.find(
         (item) =>
-          item.id === action.payload.id && item.size === action.payload.size
+          item.product_id === action.payload.id && item.size === action.payload.size
       );
       if (item) {
-        item.quantity += 1;
+        item.count += 1;
         item.totalСost =
-          Math.round(item.price - (item.price * item.discount) / 100) *
-          item.quantity;
+          Math.round(item.price - (item.price * (item.discount || 0)) / 100) *
+          item.count;
       }
     },
     decreaseQuantity(
       state,
-      action: PayloadAction<{ id: number; size: string }>
+      action: PayloadAction<{ id: number; size?: number | null }>
     ) {
       const item = state.cart.find(
         (item) =>
-          item.id === action.payload.id && item.size === action.payload.size
+          item.product_id === action.payload.id && item.size === action.payload.size
       );
-      if (item && item.quantity > 1) {
-        item.quantity -= 1;
+      if (item && item.count > 1) {
+        item.count -= 1;
         item.totalСost =
-          Math.round(item.price - (item.price * item.discount) / 100) *
-          item.quantity;
+          Math.round(item.price - (item.price * (item.discount || 0)) / 100) *
+          item.count;
       }
     },
   },

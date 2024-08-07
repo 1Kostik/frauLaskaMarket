@@ -22,7 +22,10 @@ import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
 import { getProductsAndSorted } from "@services/servicesApi";
 import { getSavedFilter } from "@utils/getSavedFilter";
-
+interface SavedFilter {
+  id: string;
+  productsId: string[];
+}
 function StorePage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,19 +33,18 @@ function StorePage() {
     () => Object.fromEntries([...searchParams]),
     [searchParams]
   );
-  const { sortOrder = "ASC", sortField = "price", page} = params;
+  const { sortOrder = "ASC", sortField = "price", page } = params;
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
-  const [typeOfSort, setTypeOfSort] = useState<number | string | null>(null);
+  const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(Number(page || 1));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+console.log('typeOfSort :>> ', typeOfSort);
   const [searchItem, setSearchItem] = useState<string>("");
-
   const [products, setProducts] = useState<Product[]>([]);
-
-  const savedFilteredItemsId = getSavedFilter().map((item: any) => ({
+  
+  const savedFilteredItemsId = getSavedFilter().map((item: SavedFilter) => ({
     categoryId: item.id.toString(),
     productId: item.productsId.join(","),
   }));
@@ -271,7 +273,7 @@ function StorePage() {
                     <FilterSm css={svgFilterSm} />
                     <P>Фільтр</P>
                   </Button>
-                  <SortingItems
+                  <SortingItems<string>
                     options={options}
                     width={"260px"}
                     isOpenSearch={openSearch}

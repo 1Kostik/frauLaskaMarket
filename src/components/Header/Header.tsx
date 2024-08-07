@@ -23,9 +23,9 @@ import {
 } from "./Header.styled";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
-import { selectCart, selectCartTotalQuantity } from "@redux/cart/selectors";
+import { selectCartTotalQuantity } from "@redux/cart/selectors";
 import { useAppSelector } from "@redux/hooks";
-import { getAuth } from "@redux/auth/selectors";
+// import { getAuth } from "@redux/auth/selectors";
 import { MdOutlinePostAdd } from "react-icons/md";
 const modalPortal = document.querySelector("#portal-root");
 
