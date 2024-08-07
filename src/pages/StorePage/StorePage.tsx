@@ -38,13 +38,12 @@ function StorePage() {
   const [openFilter, setOpenFilter] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(Number(page));
+  const [currentPage, setCurrentPage] = useState(Number(page || 1));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 console.log('typeOfSort :>> ', typeOfSort);
   const [searchItem, setSearchItem] = useState<string>("");
-
   const [products, setProducts] = useState<Product[]>([]);
-
+  
   const savedFilteredItemsId = getSavedFilter().map((item: SavedFilter) => ({
     categoryId: item.id.toString(),
     productId: item.productsId.join(","),
