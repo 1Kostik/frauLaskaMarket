@@ -1,4 +1,5 @@
 import axios from "axios";
+import { IOrder } from "Interfaces/IOrder";
 import { toast } from "react-toastify";
 
 axios.defaults.baseURL = "http://localhost:8081/api/";
@@ -111,13 +112,25 @@ export const deleteProductFeedbackById = async (id: number) => {
 
 export const makePayment = async (totalAmount: number) => {
   try {
-    const {data} = await axios.post("/orders/payment", { totalAmount });
-    console.log('data.redirectUrl', data.redirectUrl)
+    const { data } = await axios.post("/orders/payment", { totalAmount });
+    console.log("data.redirectUrl", data.redirectUrl);
     if (data.redirectUrl) {
       window.location.href = data.redirectUrl;
     } else {
       toast.error("Шось пішло не так");
     }
+  } catch (error) {
+    toast.error("Шось пішло не так");
+    console.log(error);
+  }
+};
+
+export const makeOrder = async (orderInfo: IOrder) => {
+  console.log('orderInfo', orderInfo)
+  try {
+    const { data } = await axios.post("orders", orderInfo);
+    toast.success("Замовлення створено");
+    return data;
   } catch (error) {
     toast.error("Шось пішло не так");
     console.log(error);
