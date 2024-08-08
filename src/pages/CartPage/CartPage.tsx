@@ -62,7 +62,6 @@ import { useNavigate } from "react-router-dom";
 import { Product } from "Interfaces/Product";
 import ProductCard from "@components/ProductCard/ProductCard";
 import { popularity } from "@utils/popularity";
-// import { Item } from "Interfaces/IItem";
 import { nanoid } from "nanoid";
 
 export interface AddedToCartProduct {
@@ -84,35 +83,42 @@ const CartPage = () => {
   const cart = useAppSelector(selectCart);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
 
-  const initialItemsWithTotal = cart.map(
-    ({
-      product_id,
-      title,
-      img,
-      productCode,
-      size,
-      discount,
-      price,
-      count,
-      color,
-      totalСost,
-    }: AddedToCartProduct) => ({
-      product_id,
-      title,
-      img,
-      productCode,
-      price,
-      discount,
-      size,
-      count,
-      color,
-      totalСost,
-    })
-  );
-  const [addedItems, setAddedItems] = useState<AddedToCartProduct[]>(
-    initialItemsWithTotal
-  );
+  const [addedItems, setAddedItems] = useState<AddedToCartProduct[]>([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const totalPrice = cart.reduce((acc, item) => {
+    return acc + item.totalСost;
+  }, 0);
+
+  // useEffect для обновления addedItems на основе состояния корзины
+  useEffect(() => {
+    const updatedItems = cart.map(
+      ({
+        product_id,
+        title,
+        img,
+        productCode,
+        size,
+        discount,
+        price,
+        count,
+        color,
+        totalСost,
+      }: AddedToCartProduct) => ({
+        product_id,
+        title,
+        img,
+        productCode,
+        size,
+        discount,
+        price,
+        count,
+        color,
+        totalСost,
+      })
+    );
+    setAddedItems(updatedItems);
+  }, [cart]); // Зависимость от cart
 
   const handleAddItem = (id: number, size?: number | null) => {
     setAddedItems((prev) => {
@@ -126,9 +132,9 @@ const CartPage = () => {
         return item;
       });
     });
-
     dispatch(increaseQuantity({ id, size }));
   };
+
   const handleDeleteItem = (id: number, size?: number | null) => {
     setAddedItems((prev) => {
       return prev.map((item) => {
@@ -143,23 +149,8 @@ const CartPage = () => {
     });
     dispatch(decreaseQuantity({ id, size }));
   };
-  const handleRemove = (
-    id: number,
-    size?: number | null,
-    color?: string | null
-  ) => {
-    // const productSearch = cart.find(
-    //   (item) =>
-    //     (item.product_id === id && item.size === size && item.size !== null) ||
-    //   (item.size === size &&
-    //     item.size !== null &&
-    //     item.product_id === Number(id) &&
-    //     item.color === color)
-    // );
-    // if (!productSearch) {
-    //   return;
-    // }
-    // console.log("productSearch :>> ", productSearch);
+
+  const handleRemove = (id: number, size?: number | null, color?: string | null) => {
     setAddedItems((prev) => {
       return prev.filter(
         (item) =>
@@ -172,9 +163,6 @@ const CartPage = () => {
     });
     dispatch(removeFromCart({ id, size, color }));
   };
-  const totalPrice = cart.reduce((acc, item) => {
-    return acc + item.totalСost;
-  }, 0);
 
   const handleBackClick = () => {
     navigate("/store");
@@ -200,6 +188,7 @@ const CartPage = () => {
       : "100%";
 
   const title = addedItems.length !== 0 ? "Кошик" : "Кошик порожній";
+
   return (
     <>
       <HeroSection viewType={"other"} isEmpty={addedItems.length === 0}>

@@ -43,11 +43,17 @@ const SortingItems = <T extends number | string>({
   const [checked, setChecked] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
-    setChecked(true);
-    if (setSelectedOption && options && options.length > 0) {
-      setSelectedOption(options[0]);
+    if (isInitialMount.current) {
+      if (setSelectedOption && options && options.length > 0) {
+        setSelectedOption(options[0]);
+        setChecked(true);
+      }
+      isInitialMount.current = false;
     }
+  
     const handleClickOutside = (event: MouseEvent) => {
       if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -58,6 +64,7 @@ const SortingItems = <T extends number | string>({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [setSelectedOption, options]);
+  
 
   const handleClick = () => {
     setIsOpen((prev) => !prev);
