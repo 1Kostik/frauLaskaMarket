@@ -12,11 +12,17 @@ import {
   paymentMethods,
   recipientStyle,
 } from "./CartForm.styled";
-import { Item } from "Interfaces/IItem";
+
 import { handleNumericInput } from "@utils/handleNumericInput";
 // import { makePayment } from "@services/servicesApi";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
+
+import { makeOrder } from "@services/servicesApi";
+
+import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
+import { orderItemsConverter } from "@utils/orderItemsConverter";
+
 
 const validationSchema = (isOtherRecipient: boolean) =>
   Yup.object({
@@ -32,7 +38,7 @@ const validationSchema = (isOtherRecipient: boolean) =>
     email: Yup.string()
       .email("Невірна адреса електронної пошти")
       .required("Обов'язковий"),
-    deliveryType: Yup.string().oneOf(["postPickup", "selfPickup"]),
+    deliveryType: Yup.string().oneOf(["Самовивіз з відділення", "Самовивіз"]),
 
     recipientName: Yup.string()
       .max(15, "Має бути 15 символів або менше")
@@ -73,7 +79,7 @@ const validationSchema = (isOtherRecipient: boolean) =>
       .test("is-postPickup", "Обов'язкове поле", function (value) {
         const { deliveryType } = this.parent;
         if (
-          deliveryType === "postPickup" &&
+          deliveryType === "Самовивіз з відділення" &&
           (value === null || value === undefined)
         ) {
           return false;
@@ -83,12 +89,25 @@ const validationSchema = (isOtherRecipient: boolean) =>
     paymentMethod: Yup.string().oneOf(["liqPay", "deliveryPayment", "other"]),
   });
 
-const initialValue = {
+  interface IInitialValue {
+    name: string;
+    lastName: string;
+    phone: string;
+    email: string;
+    deliveryType: string;
+    recipientName: string;
+    recipientLastName: string;
+    recipientPhone: string;
+    postOfficeNumber: string | number;
+    paymentMethod: string;
+  }
+
+const initialValue: IInitialValue = {
   name: "",
   lastName: "",
   phone: "",
   email: "",
-  deliveryType: "postPickup",
+  deliveryType: "Самовивіз з відділення",
   recipientName: "",
   recipientLastName: "",
   recipientPhone: "",
@@ -97,7 +116,7 @@ const initialValue = {
 };
 
 interface ICartFormProps {
-  addedItems: Item[];
+  addedItems: IAddedToCartProduct[];
   total_amount: number;
 }
 
@@ -113,19 +132,22 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
       e.preventDefault();
     }
   };
+
   return (
     <Formik
       initialValues={initialValue}
       validationSchema={validationSchema(isOtherRecipient)}
       onSubmit={async (values) => {
         const date = new Date();
-        console.log({
+
+        const newOrder = {
           status: "В очікуванні",
-          order_date: date.toISOString(),
+          order_date: date.toISOString().split(".")[0],
           ...replaceNullsWithEmptyStrings(values),
-          order_itmes: addedItems,
+          order_items: orderItemsConverter(addedItems),
           total_amount,
-        });
+        };
+        makeOrder(newOrder);
         // makePayment(50);
       }}
       validateOnBlur={false}
@@ -238,19 +260,19 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
                 <Field
                   type="radio"
                   name="deliveryType"
-                  value="postPickup"
+                  value="Самовивіз з відділення"
                   id="postPickup"
                 />
                 <label htmlFor="postPickup">Самовивіз з відділення</label>
                 <Field
                   type="radio"
                   name="deliveryType"
-                  value="selfPickup"
+                  value="Самовивіз"
                   id="selfPickup"
                 />
                 <label htmlFor="selfPickup">Самовивіз</label>
               </div>
-              {values.deliveryType === "postPickup" && (
+              {values.deliveryType === "Самовивіз з відділення" && (
                 <label htmlFor="postOfficeNumber">
                   <Field
                     name="postOfficeNumber"

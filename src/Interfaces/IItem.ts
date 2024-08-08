@@ -6,7 +6,7 @@ export interface Item {
   price: number;
   count: number;
   totalСost: number;
-  discount: number;
+  discount?: number;
   color: string;
   size: string;
 }

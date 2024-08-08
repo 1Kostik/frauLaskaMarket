@@ -63,19 +63,9 @@ import { Product } from "Interfaces/Product";
 import ProductCard from "@components/ProductCard/ProductCard";
 import { popularity } from "@utils/popularity";
 import { nanoid } from "nanoid";
+import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 
-export interface AddedToCartProduct {
-  product_id: number;
-  title: string;
-  img: { img_url: string; id: number };
-  productCode: number;
-  size?: number | null | undefined;
-  discount?: number | null;
-  price: number;
-  count: number;
-  color?: string | undefined;
-  totalСost: number;
-}
+
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -83,7 +73,7 @@ const CartPage = () => {
   const cart = useAppSelector(selectCart);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
 
-  const [addedItems, setAddedItems] = useState<AddedToCartProduct[]>([]);
+  const [addedItems, setAddedItems] = useState<IAddedToCartProduct[]>([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const totalPrice = cart.reduce((acc, item) => {
@@ -104,7 +94,7 @@ const CartPage = () => {
         count,
         color,
         totalСost,
-      }: AddedToCartProduct) => ({
+      }: IAddedToCartProduct) => ({
         product_id,
         title,
         img,
