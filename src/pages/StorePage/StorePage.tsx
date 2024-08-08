@@ -1,6 +1,6 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import ProductCard from "@components/ProductCard/ProductCard";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Container,
   SearchContainer,
@@ -40,10 +40,10 @@ function StorePage() {
   const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(Number(page || 1));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-console.log('typeOfSort :>> ', typeOfSort);
+
   const [searchItem, setSearchItem] = useState<string>("");
   const [products, setProducts] = useState<Product[]>([]);
-  
+
   const savedFilteredItemsId = getSavedFilter().map((item: SavedFilter) => ({
     categoryId: item.id.toString(),
     productId: item.productsId.join(","),
@@ -62,24 +62,29 @@ console.log('typeOfSort :>> ', typeOfSort);
     "За популярністю",
   ];
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
-    switch (`sortOrder=${sortOrder}&sortField=${sortField}`) {
-      case `sortOrder=ASC&sortField=price`:
-        setTypeOfSort("Від найменшої ціни до найбільшої");
-        break;
-      case `sortOrder=DESC&sortField=price`:
-        setTypeOfSort("Від найбільшої ціни до найменшої");
-        break;
-      case `sortOrder=DESC&sortField=ranking`:
-        setTypeOfSort("За ретингом");
-        break;
-      case `sortOrder=DESC&sortField=popularity`:
-        setTypeOfSort("За популярністю");
-        break;
-      default:
-        break;
+    if (isInitialMount.current) {
+      switch (`sortOrder=${sortOrder}&sortField=${sortField}`) {
+        case `sortOrder=ASC&sortField=price`:
+          setTypeOfSort("Від найменшої ціни до найбільшої");
+          break;
+        case `sortOrder=DESC&sortField=price`:
+          setTypeOfSort("Від найбільшої ціни до найменшої");
+          break;
+        case `sortOrder=DESC&sortField=ranking`:
+          setTypeOfSort("За ретингом");
+          break;
+        case `sortOrder=DESC&sortField=popularity`:
+          setTypeOfSort("За популярністю");
+          break;
+        default:
+          break;
+      }
+      isInitialMount.current = false;
     }
-  }, [sortField, sortOrder]);
+  }, [sortOrder, sortField]);
 
   const updateSearchParams = useCallback(
     (newParams: Record<string, string | string[]>) => {
@@ -298,7 +303,7 @@ console.log('typeOfSort :>> ', typeOfSort);
             </Container>
           </MaineContainer>
         </div>
-        <Pagination
+       {products && products.length > 0 && <Pagination
           totalPage={totalPage}
           countItemPages={countItemPages}
           paginate={paginate}
@@ -306,7 +311,7 @@ console.log('typeOfSort :>> ', typeOfSort);
           prevPage={prevPage}
           currentPage={currentPage}
           lastPage={lastPage}
-        />
+        />}
       </Section>
     </>
   );
