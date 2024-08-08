@@ -3,10 +3,10 @@ export interface IAddedToCartProduct {
   title: string;
   img: { img_url: string; id: number };
   productCode: number;
-  size?: number | null | undefined;
-  discount?: number | null;
+  size: number | null | undefined;
+  discount: number | null;
   price: number;
   count: number;
-  color?: string | undefined;
-  totalСost: number;
+  color: string | undefined;
+  totalCost: number;
 }

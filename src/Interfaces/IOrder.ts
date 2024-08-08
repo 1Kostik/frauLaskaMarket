@@ -2,9 +2,9 @@ export interface IOrderItem {
   product_id: number;
   title: string;
   count: number;
-  totalСost: number;
-  color?: string | undefined;
-  size?: number | null | undefined;
+  totalCost: number;
+  color: string | undefined;
+  size: number | null | undefined;
   productCode: number;
 }
 

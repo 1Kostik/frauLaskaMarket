@@ -23,7 +23,6 @@ import { makeOrder } from "@services/servicesApi";
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import { orderItemsConverter } from "@utils/orderItemsConverter";
 
-
 const validationSchema = (isOtherRecipient: boolean) =>
   Yup.object({
     name: Yup.string()
@@ -89,18 +88,18 @@ const validationSchema = (isOtherRecipient: boolean) =>
     paymentMethod: Yup.string().oneOf(["liqPay", "deliveryPayment", "other"]),
   });
 
-  interface IInitialValue {
-    name: string;
-    lastName: string;
-    phone: string;
-    email: string;
-    deliveryType: string;
-    recipientName: string;
-    recipientLastName: string;
-    recipientPhone: string;
-    postOfficeNumber: string | number;
-    paymentMethod: string;
-  }
+interface IInitialValue {
+  name: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  deliveryType: string;
+  recipientName: string;
+  recipientLastName: string;
+  recipientPhone: string;
+  postOfficeNumber: string | number;
+  paymentMethod: string;
+}
 
 const initialValue: IInitialValue = {
   name: "",
@@ -122,7 +121,7 @@ interface ICartFormProps {
 
 const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
   const [isOtherRecipient, setIsOtherRecipient] = useState(false);
-
+console.log('addedItems', addedItems)
   const handleRecipient = () => {
     setIsOtherRecipient((prev) => !prev);
   };
@@ -138,11 +137,15 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
       initialValues={initialValue}
       validationSchema={validationSchema(isOtherRecipient)}
       onSubmit={async (values) => {
-        const date = new Date();
-
+        const date: Date = new Date();
+        const offset = date.getTimezoneOffset() * 60000;
+        const localISOTime = new Date(date.getTime() - offset)
+          .toISOString()
+          .split(".")[0];
+        console.log(localISOTime);
         const newOrder = {
           status: "В очікуванні",
-          order_date: date.toISOString().split(".")[0],
+          order_date: localISOTime,
           ...replaceNullsWithEmptyStrings(values),
           order_items: orderItemsConverter(addedItems),
           total_amount,
