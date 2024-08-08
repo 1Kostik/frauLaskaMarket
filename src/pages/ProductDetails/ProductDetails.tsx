@@ -213,7 +213,7 @@ const ProductDetails = () => {
         productCode: product.productCode,
         count: 1,
         color: addedColor,
-        totalСost: Math.round(
+        totalCost: Math.round(
           productPrice -
             (productPrice * (product.variations[0].discount || 0)) / 100
         ),
