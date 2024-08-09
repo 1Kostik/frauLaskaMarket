@@ -119,7 +119,9 @@ const Header = () => {
       }
     }
   }, [isOpen, isScrolled]);
-
+const handleVueOrders =()=>{
+  navigate("admin/orders");
+}
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
@@ -159,6 +161,15 @@ const Header = () => {
               Магазин
             </Nav>
           </NavWrapper>
+          {isAuth && (
+            <button
+              type="button"
+              onClick={handleVueOrders}
+              css={addProductStyle(istrue)}
+            >             
+             Замовлення
+            </button>
+          )}
           {isAuth && (
             <button
               type="button"
