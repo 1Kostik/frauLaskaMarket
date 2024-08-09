@@ -18,7 +18,7 @@ const EditAdvertPage = lazy(
 );
 const LoginPage = lazy(() => import("@pages/LoginPage/LoginPage"));
 const OrderedPage = lazy(() => import("@pages/OrderedPage/OrderedPage"));
-
+const OrdersPage = lazy(()=>import("@pages/OrdersPage/OrdersPage"))
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -37,6 +37,7 @@ function App() {
             path="admin/edit-advert/:productId"
             element={<EditAdvertPage />}
           />
+           <Route path="admin/orders" element={<OrdersPage/>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
