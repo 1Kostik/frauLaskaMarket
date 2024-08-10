@@ -110,11 +110,12 @@ export const deleteProductFeedbackById = async (id: number) => {
   }
 };
 
-export const makePayment = async (totalAmount: number) => {
+export const makePayment = async (orderDetails: IOrder) => {
   try {
-    const { data } = await axios.post("/orders/payment", { totalAmount });
-    console.log("data.redirectUrl", data.redirectUrl);
+    const { data } = await axios.post("/orders/payment", orderDetails);
+    // console.log("data.redirectUrl", data.redirectUrl);
     if (data.redirectUrl) {
+      console.log("data.order_id", data.order_id);
       window.location.href = data.redirectUrl;
     } else {
       toast.error("Шось пішло не так");
@@ -126,7 +127,7 @@ export const makePayment = async (totalAmount: number) => {
 };
 
 export const makeOrder = async (orderInfo: IOrder) => {
-  console.log('orderInfo', orderInfo)
+  console.log("orderInfo", orderInfo);
   try {
     const { data } = await axios.post("orders", orderInfo);
     toast.success("Замовлення створено");
@@ -136,3 +137,14 @@ export const makeOrder = async (orderInfo: IOrder) => {
     console.log(error);
   }
 };
+
+// export const updateOrder = async (orderId: number, status: string) => {
+//   try {
+//     const { data } = await axios.put(`orders/${orderId}`, { status });
+//     toast.success("Статус замовлення змінено");
+//     return data;
+//   } catch (error) {
+//     toast.error("Шось пішло не так");
+//     console.log(error);
+//   }
+// };
