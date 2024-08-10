@@ -1,4 +1,3 @@
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 export interface CartState {
@@ -14,14 +13,16 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart(state, action: PayloadAction<IAddedToCartProduct>) {
-    
       state.cart = [...state.cart, action.payload];
     },
     removeFromCart(
       state,
-      action: PayloadAction<{ id: number; size?: number | null; color?: string | null}>
+      action: PayloadAction<{
+        id: number;
+        size?: number | null;
+        color?: string | null;
+      }>
     ) {
-      
       state.cart = state.cart.filter(
         (item) =>
           !(
@@ -31,13 +32,17 @@ const cartSlice = createSlice({
           )
       );
     },
+    clearCart(state) {
+      state.cart = [];
+    },
     increaseQuantity(
       state,
-      action: PayloadAction<{ id: number; size?: number | null}>
+      action: PayloadAction<{ id: number; size?: number | null }>
     ) {
       const item = state.cart.find(
         (item) =>
-          item.product_id === action.payload.id && item.size === action.payload.size
+          item.product_id === action.payload.id &&
+          item.size === action.payload.size
       );
       if (item) {
         item.count += 1;
@@ -52,7 +57,8 @@ const cartSlice = createSlice({
     ) {
       const item = state.cart.find(
         (item) =>
-          item.product_id === action.payload.id && item.size === action.payload.size
+          item.product_id === action.payload.id &&
+          item.size === action.payload.size
       );
       if (item && item.count > 1) {
         item.count -= 1;
@@ -64,6 +70,11 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+  clearCart,
+} = cartSlice.actions;
 export default cartSlice.reducer;

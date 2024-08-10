@@ -9,6 +9,7 @@ export interface IOrderItem {
 }
 
 export interface IOrder {
+  id?: number;
   deliveryType: string;
   email: string;
   lastName: string;
