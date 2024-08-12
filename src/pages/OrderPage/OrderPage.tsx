@@ -14,12 +14,12 @@ import { containerStyles } from "@styles/variables";
 import {
   BtnContainer,
   Button,
-  // CheckBoxContainer,
+  CheckBoxContainer,
   Decrement,
   DeleteBtn,
   EndPrice,
   H2,
-  // H3,
+  H3,
   ImgContainer,
   Increment,
   InfoContainer,
@@ -47,8 +47,9 @@ import {
   TitlePayment,
   Wrapper,
   WrapperTitle,
-} from "./CartPage.styled";
+} from "./OrderPage.styled";
 
+import CartForm from "@components/CartForm";
 import { ReactComponent as Close } from "@assets/icons/close2.svg";
 import {
   BackStore,
@@ -192,7 +193,7 @@ const CartPage = () => {
               <MainInfoContainer>
                 <ItemContainer>
                   <TitleContainer>
-                    <H2>Товари у кошику</H2>
+                    <H2>Ваше замовлення</H2>
                   </TitleContainer>
                   <Wrapper>
                     {addedItems.map((item) => (
@@ -246,6 +247,7 @@ const CartPage = () => {
                     ))}
                   </Wrapper>
                 </ItemContainer>
+                <CartForm addedItems={addedItems} total_amount={totalPrice} />
               </MainInfoContainer>
               <PaymentContainer>
                 <TitlePayment>Разом</TitlePayment>
@@ -266,12 +268,12 @@ const CartPage = () => {
                   <WrapperTitle>До сплати:</WrapperTitle>{" "}
                   <EndPrice>{totalPrice} ₴</EndPrice>
                 </InfoWrapperPayment>
-                {/* <CheckBoxContainer>
+                <CheckBoxContainer>
                   <input type="checkbox" />
                   <H3>Передзвоніть мені для підтвердження</H3>
-                </CheckBoxContainer> */}
-                <Button type="submit" onClick={() => navigate("/order")}>
-                  Перейти до замовлення
+                </CheckBoxContainer>
+                <Button type="submit" form="orderForm">
+                  Оформити замовлення
                 </Button>
               </PaymentContainer>
             </MainContainer>

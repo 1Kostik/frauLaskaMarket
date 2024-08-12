@@ -38,6 +38,7 @@ const Header = () => {
   const isStore = location.pathname === "/store";
   const isProductDetails = location.pathname === `/store/${id}`;
   const isCart = location.pathname === "/cart";
+  const isOrder = location.pathname === "/order";
   const isAdmin = location.pathname.startsWith("/admin");
   const isOrdered = location.pathname.startsWith("/ordered");
   const [isOpen, setIsOpen] = useState(false);
@@ -57,6 +58,7 @@ const Header = () => {
 
   const istrue =
     isCart ||
+    isOrder ||
     isStore ||
     isConsultations ||
     isAromaSchool ||
@@ -119,9 +121,9 @@ const Header = () => {
       }
     }
   }, [isOpen, isScrolled]);
-const handleVueOrders =()=>{
-  navigate("admin/orders");
-}
+  const handleVueOrders = () => {
+    navigate("admin/orders");
+  };
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
@@ -166,8 +168,8 @@ const handleVueOrders =()=>{
               type="button"
               onClick={handleVueOrders}
               css={addProductStyle(istrue)}
-            >             
-             Замовлення
+            >
+              Замовлення
             </button>
           )}
           {isAuth && (
@@ -187,9 +189,11 @@ const handleVueOrders =()=>{
               )}
               <CartIcon css={cartStylesWithColor(istrue.toString())} />
             </Cart>
-          {!isAuth &&  <Links to={"/aroma-school#target-section"} istrue={istrue}>
-              Звʼязатись зі мною
-            </Links>}
+            {!isAuth && (
+              <Links to={"/aroma-school#target-section"} istrue={istrue}>
+                Звʼязатись зі мною
+              </Links>
+            )}
             <Button istrue={istrue} onClick={handleBurgerMenuClick}>
               <BurgerMenu css={burgerStyles(istrue.toString())} />
             </Button>

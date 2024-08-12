@@ -29,7 +29,7 @@ const validationSchema = (isOtherRecipient: boolean) =>
     name: Yup.string()
       .max(15, "Має бути 15 символів або менше")
       .required("Обов'язкове"),
-    lastName: Yup.string()
+    last_name: Yup.string()
       .max(15, "Має бути 15 символів або менше")
       .required("Обов'язкове"),
     phone: Yup.string()
@@ -38,20 +38,20 @@ const validationSchema = (isOtherRecipient: boolean) =>
     email: Yup.string()
       .email("Невірна адреса електронної пошти")
       .required("Обов'язковий"),
-    deliveryType: Yup.string().oneOf(["Самовивіз з відділення", "Самовивіз"]),
+    delivery_type: Yup.string().oneOf(["Самовивіз з відділення", "Самовивіз"]),
 
-    recipientName: Yup.string()
+    recipient_name: Yup.string()
       .max(15, "Має бути 15 символів або менше")
-      .test("isOtherRecipient-recipientName", "Обов'язкове", function (value) {
+      .test("isOtherRecipient-recipient_name", "Обов'язкове", function (value) {
         if (isOtherRecipient && (!value || value.trim() === "")) {
           return false;
         }
         return true;
       }),
-    recipientLastName: Yup.string()
+    recipient_last_name: Yup.string()
       .max(15, "Має бути 15 символів або менше")
       .test(
-        "isOtherRecipient-recipientLastName",
+        "isOtherRecipient-recipient_last_name",
         "Обов'язкове",
         function (value) {
           if (isOtherRecipient && (!value || value.trim() === "")) {
@@ -60,10 +60,10 @@ const validationSchema = (isOtherRecipient: boolean) =>
           return true;
         }
       ),
-    recipientPhone: Yup.string()
+    recipient_phone: Yup.string()
       .matches(/^\+380\d{9}$/, "Невірний номер телефону")
       .test(
-        "isOtherRecipient-recipientPhone",
+        "isOtherRecipient-recipient_phone",
         "Обов'язковий",
         function (value) {
           if (isOtherRecipient && (!value || value.trim() === "")) {
@@ -73,46 +73,46 @@ const validationSchema = (isOtherRecipient: boolean) =>
         }
       ),
 
-    postOfficeNumber: Yup.number()
+    post_office_number: Yup.number()
       .positive()
       .integer()
       .test("is-postPickup", "Обов'язкове поле", function (value) {
-        const { deliveryType } = this.parent;
+        const { delivery_type } = this.parent;
         if (
-          deliveryType === "Самовивіз з відділення" &&
+          delivery_type === "Самовивіз з відділення" &&
           (value === null || value === undefined)
         ) {
           return false;
         }
         return true;
       }),
-    paymentMethod: Yup.string().oneOf(["liqPay", "deliveryPayment", "other"]),
+    payment_method: Yup.string().oneOf(["liqPay", "deliveryPayment", "other"]),
   });
 
 interface IInitialValue {
   name: string;
-  lastName: string;
+  last_name: string;
   phone: string;
   email: string;
-  deliveryType: string;
-  recipientName: string;
-  recipientLastName: string;
-  recipientPhone: string;
-  postOfficeNumber: string | number;
-  paymentMethod: string;
+  delivery_type: string;
+  recipient_name: string;
+  recipient_last_name: string;
+  recipient_phone: string;
+  post_office_number: string | number;
+  payment_method: string;
 }
 
 const initialValue: IInitialValue = {
   name: "",
-  lastName: "",
+  last_name: "",
   phone: "",
   email: "",
-  deliveryType: "Самовивіз з відділення",
-  recipientName: "",
-  recipientLastName: "",
-  recipientPhone: "",
-  postOfficeNumber: "",
-  paymentMethod: "liqPay",
+  delivery_type: "Самовивіз з відділення",
+  recipient_name: "",
+  recipient_last_name: "",
+  recipient_phone: "",
+  post_office_number: "",
+  payment_method: "liqPay",
 };
 
 interface ICartFormProps {
@@ -149,13 +149,15 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
       order_items: orderItemsConverter(addedItems),
       total_amount,
     };
-    if (values.paymentMethod === "liqPay") {
+    if (values.payment_method === "liqPay") {
       makeOrder(newOrder).then((resp) => {
         console.log("resp", resp);
         makePayment(resp);
       });
     } else {
-      makeOrder(newOrder).then(() => navigate(`/ordered?email=${values.email}`));
+      makeOrder(newOrder).then(() =>
+        navigate(`/ordered?email=${values.email}`)
+      );
     }
   };
 
@@ -193,20 +195,20 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
                 </ErrorMessage>
               </label>
 
-              <label htmlFor="lastName">
+              <label htmlFor="last_name">
                 <Field
-                  name="lastName"
+                  name="last_name"
                   type="text"
                   placeholder="Прізвище"
                   css={[
                     inputStyle,
-                    errorBorder(!!(errors.lastName && touched.lastName)),
+                    errorBorder(!!(errors.last_name && touched.last_name)),
                   ]}
-                  onFocus={() => setFieldTouched("lastName", false, false)}
+                  onFocus={() => setFieldTouched("last_name", false, false)}
                   onKeyDown={preventNumberInput}
                 />
-                <p css={inputLabel(!!values.lastName)}>Прізвище</p>
-                <ErrorMessage name="lastName">
+                <p css={inputLabel(!!values.last_name)}>Прізвище</p>
+                <ErrorMessage name="last_name">
                   {(msg) => <div css={errorStyle}>{msg}</div>}
                 </ErrorMessage>
               </label>
@@ -273,40 +275,43 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
               <div css={deliveryTypes}>
                 <Field
                   type="radio"
-                  name="deliveryType"
+                  name="delivery_type"
                   value="Самовивіз з відділення"
                   id="postPickup"
                 />
                 <label htmlFor="postPickup">Самовивіз з відділення</label>
                 <Field
                   type="radio"
-                  name="deliveryType"
+                  name="delivery_type"
                   value="Самовивіз"
                   id="selfPickup"
                 />
                 <label htmlFor="selfPickup">Самовивіз</label>
               </div>
-              {values.deliveryType === "Самовивіз з відділення" && (
-                <label htmlFor="postOfficeNumber">
+              {values.delivery_type === "Самовивіз з відділення" && (
+                <label htmlFor="post_office_number">
                   <Field
-                    name="postOfficeNumber"
+                    name="post_office_number"
                     type="text"
                     placeholder="Номер відділення"
                     css={[
                       inputStyle,
                       errorBorder(
-                        !!(errors.postOfficeNumber && touched.postOfficeNumber)
+                        !!(
+                          errors.post_office_number &&
+                          touched.post_office_number
+                        )
                       ),
                     ]}
                     onKeyPress={handleNumericInput}
                     onFocus={() =>
-                      setFieldTouched("postOfficeNumber", false, false)
+                      setFieldTouched("post_office_number", false, false)
                     }
                   />
-                  <p css={inputLabel(!!values.postOfficeNumber)}>
+                  <p css={inputLabel(!!values.post_office_number)}>
                     Номер відділення
                   </p>
-                  <ErrorMessage name="postOfficeNumber">
+                  <ErrorMessage name="post_office_number">
                     {(msg) => <div css={errorStyle}>{msg}</div>}
                   </ErrorMessage>
                 </label>
@@ -328,89 +333,92 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
             >
               <h3>Контактні дані отримувача</h3>
               <div>
-                <label htmlFor="recipientName">
+                <label htmlFor="recipient_name">
                   <Field
-                    name="recipientName"
+                    name="recipient_name"
                     type="text"
                     placeholder="Ім’я"
                     css={[
                       inputStyle,
                       errorBorder(
-                        !!(errors.recipientName && touched.recipientName)
+                        !!(errors.recipient_name && touched.recipient_name)
                       ),
                     ]}
                     onFocus={() =>
-                      setFieldTouched("recipientName", false, false)
+                      setFieldTouched("recipient_name", false, false)
                     }
                     onKeyDown={preventNumberInput}
                   />
-                  <p css={inputLabel(!!values.recipientName)}>Ім’я</p>
-                  <ErrorMessage name="recipientName">
+                  <p css={inputLabel(!!values.recipient_name)}>Ім’я</p>
+                  <ErrorMessage name="recipient_name">
                     {(msg) => <div css={errorStyle}>{msg}</div>}
                   </ErrorMessage>
                 </label>
 
-                <label htmlFor="recipientLastName">
+                <label htmlFor="recipient_last_name">
                   <Field
-                    name="recipientLastName"
+                    name="recipient_last_name"
                     type="text"
                     placeholder="Прізвище"
                     css={[
                       inputStyle,
                       errorBorder(
                         !!(
-                          errors.recipientLastName && touched.recipientLastName
+                          errors.recipient_last_name &&
+                          touched.recipient_last_name
                         )
                       ),
                     ]}
                     onFocus={() =>
-                      setFieldTouched("recipientLastName", false, false)
+                      setFieldTouched("recipient_last_name", false, false)
                     }
                     onKeyDown={preventNumberInput}
                   />
-                  <p css={inputLabel(!!values.recipientLastName)}>Прізвище</p>
-                  <ErrorMessage name="recipientLastName">
+                  <p css={inputLabel(!!values.recipient_last_name)}>Прізвище</p>
+                  <ErrorMessage name="recipient_last_name">
                     {(msg) => <div css={errorStyle}>{msg}</div>}
                   </ErrorMessage>
                 </label>
 
-                <label htmlFor="recipientPhone">
-                  <Field name="recipientPhone">
+                <label htmlFor="recipient_phone">
+                  <Field name="recipient_phone">
                     {(props: FieldProps<string>) => (
                       <input
                         {...props.field}
                         type="tel"
                         placeholder="Номер телефону"
                         onFocus={() => {
-                          setFieldTouched("recipientPhone", false, false);
+                          setFieldTouched("recipient_phone", false, false);
                           if (!props.field.value) {
-                            setFieldValue("recipientPhone", "+380");
+                            setFieldValue("recipient_phone", "+380");
                           }
                         }}
                         onChange={(e) => {
                           const value = e.target.value;
                           if (value.match(/^\+380\d{0,9}$/)) {
-                            setFieldValue("recipientPhone", value);
+                            setFieldValue("recipient_phone", value);
                           }
                         }}
                         onBlur={() => {
                           if (props.field.value === "+380") {
-                            setFieldValue("recipientPhone", "");
+                            setFieldValue("recipient_phone", "");
                           }
                         }}
                         css={[
                           inputStyle,
                           errorBorder(
-                            !!(errors.recipientPhone && touched.recipientPhone)
+                            !!(
+                              errors.recipient_phone && touched.recipient_phone
+                            )
                           ),
                         ]}
                       />
                     )}
                   </Field>
-                  <p css={inputLabel(!!values.recipientPhone)}>
+                  <p css={inputLabel(!!values.recipient_phone)}>
                     Номер телефону
                   </p>
-                  <ErrorMessage name="recipientPhone">
+                  <ErrorMessage name="recipient_phone">
                     {(msg) => <div css={errorStyle}>{msg}</div>}
                   </ErrorMessage>
                 </label>
@@ -423,7 +431,7 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
             <div css={paymentMethods}>
               <Field
                 type="radio"
-                name="paymentMethod"
+                name="payment_method"
                 value="liqPay"
                 id="liqPay"
               />
@@ -432,7 +440,7 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
               </label>
               <Field
                 type="radio"
-                name="paymentMethod"
+                name="payment_method"
                 value="deliveryPayment"
                 id="deliveryPayment"
               />
@@ -441,7 +449,7 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
               </label>
               <Field
                 type="radio"
-                name="paymentMethod"
+                name="payment_method"
                 value="other"
                 id="other"
               />
