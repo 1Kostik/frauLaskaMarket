@@ -290,7 +290,7 @@ function StorePage() {
               </SearchContainer>
 
               <ProductListContainer>
-                {products &&
+              {products &&
                   products.map((item: Product) => (
                     <ProductCard
                       key={item.id}

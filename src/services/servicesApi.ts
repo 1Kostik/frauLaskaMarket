@@ -126,7 +126,7 @@ export const makePayment = async (totalAmount: number) => {
 };
 
 export const makeOrder = async (orderInfo: IOrder) => {
-  console.log('orderInfo', orderInfo)
+  console.log("orderInfo", orderInfo);
   try {
     const { data } = await axios.post("orders", orderInfo);
     toast.success("Замовлення створено");
@@ -136,3 +136,20 @@ export const makeOrder = async (orderInfo: IOrder) => {
     console.log(error);
   }
 };
+
+export const getOrders = async () => {
+  try {
+    const data = await axios.get("orders");
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getOrderById = async(id:number)=>{
+try {
+  const data = await axios.get(`orders/${id}`)
+  return data.data;
+} catch (error) {
+  console.log(error);
+}
+}
