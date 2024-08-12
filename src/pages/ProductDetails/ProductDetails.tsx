@@ -108,7 +108,7 @@ const ProductDetails = () => {
 
   const benefit = product && product.benefit;
   const composition = product && product.composition.toLowerCase();
-  const productCode = product && product.productCode;
+  const product_code = product && product.product_code;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -210,10 +210,10 @@ const ProductDetails = () => {
         size: selectedOption,
         discount: product.variations[0].discount,
         img: product.imageUrls[0],
-        productCode: product.productCode,
+        product_code: product.product_code,
         count: 1,
         color: addedColor,
-        totalCost: Math.round(
+        total_cost: Math.round(
           productPrice -
             (productPrice * (product.variations[0].discount || 0)) / 100
         ),
@@ -256,7 +256,7 @@ const ProductDetails = () => {
                   <H3>{title}</H3>
                   <P>Є в наявності</P>
                 </TitleContainer>
-                <P1>Код товару:№{productCode}</P1>
+                <P1>Код товару:№{product_code}</P1>
                 <P2>{productPrice} ₴</P2>
                 <P3>{description}</P3>
                 {colors && colors.length > 0 && (
