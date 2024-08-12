@@ -46,7 +46,7 @@ const cartSlice = createSlice({
       );
       if (item) {
         item.count += 1;
-        item.totalCost =
+        item.total_cost =
           Math.round(item.price - (item.price * (item.discount || 0)) / 100) *
           item.count;
       }
@@ -62,7 +62,7 @@ const cartSlice = createSlice({
       );
       if (item && item.count > 1) {
         item.count -= 1;
-        item.totalCost =
+        item.total_cost =
           Math.round(item.price - (item.price * (item.discount || 0)) / 100) *
           item.count;
       }

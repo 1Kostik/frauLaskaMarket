@@ -74,7 +74,7 @@ const CartPage = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const totalPrice = cart.reduce((acc, item) => {
-    return acc + item.totalCost;
+    return acc + item.total_cost;
   }, 0);
 
   // useEffect для обновления addedItems на основе состояния корзины
@@ -84,24 +84,24 @@ const CartPage = () => {
         product_id,
         title,
         img,
-        productCode,
+        product_code,
         size,
         discount,
         price,
         count,
         color,
-        totalCost,
+        total_cost,
       }: IAddedToCartProduct) => ({
         product_id,
         title,
         img,
-        productCode,
+        product_code,
         size,
         discount,
         price,
         count,
         color,
-        totalCost,
+        total_cost,
       })
     );
     setAddedItems(updatedItems);
@@ -215,7 +215,7 @@ const CartPage = () => {
                               <Close css={svgClose} />
                             </DeleteBtn>
                           </InfoTitle>
-                          <P>Код товару: №{item.productCode}</P>
+                          <P>Код товару: №{item.product_code}</P>
                           <PriceContainer>
                             <BtnContainer>
                               <Decrement
@@ -238,7 +238,7 @@ const CartPage = () => {
                               {item.discount && item.discount > 0 && (
                                 <OldPrice>{item.price} ₴</OldPrice>
                               )}
-                              <NewPrice>{item.totalCost}₴</NewPrice>
+                              <NewPrice>{item.total_cost}₴</NewPrice>
                             </Price>
                           </PriceContainer>
                         </InfoContainer>

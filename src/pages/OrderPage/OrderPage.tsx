@@ -1,27 +1,22 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import {  useAppSelector } from "../../redux/hooks";
 import {
   selectCart,
   selectCartTotalQuantity,
 } from "../../redux/cart/selectors";
-import {
-  decreaseQuantity,
-  increaseQuantity,
-  removeFromCart,
-} from "../../redux/cart/slice";
+
 import { containerStyles } from "@styles/variables";
 import {
   BtnContainer,
   Button,
   CheckBoxContainer,
-  Decrement,
-  DeleteBtn,
+ 
   EndPrice,
   H2,
   H3,
   ImgContainer,
-  Increment,
+ 
   InfoContainer,
   InfoPaymentContainer,
   InfoPrice,
@@ -40,7 +35,7 @@ import {
   PriceContainer,
   Score,
   sectionCart,
-  svgClose,
+
   TitleContainer,
   TitleInfo,
   TitleItem,
@@ -50,7 +45,7 @@ import {
 } from "./OrderPage.styled";
 
 import CartForm from "@components/CartForm";
-import { ReactComponent as Close } from "@assets/icons/close2.svg";
+
 import {
   BackStore,
   ContainerTopSeller,
@@ -67,7 +62,7 @@ import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+
   const cart = useAppSelector(selectCart);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
 
@@ -75,7 +70,7 @@ const CartPage = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const totalPrice = cart.reduce((acc, item) => {
-    return acc + item.totalCost;
+    return acc + item.total_cost;
   }, 0);
 
   // useEffect для обновления addedItems на основе состояния корзины
@@ -85,76 +80,76 @@ const CartPage = () => {
         product_id,
         title,
         img,
-        productCode,
+        product_code,
         size,
         discount,
         price,
         count,
         color,
-        totalCost,
+        total_cost,
       }: IAddedToCartProduct) => ({
         product_id,
         title,
         img,
-        productCode,
+        product_code,
         size,
         discount,
         price,
         count,
         color,
-        totalCost,
+        total_cost,
       })
     );
     setAddedItems(updatedItems);
   }, [cart]); // Зависимость от cart
 
-  const handleAddItem = (id: number, size?: number | null) => {
-    setAddedItems((prev) => {
-      return prev.map((item) => {
-        if (id === item.product_id && item.size === size) {
-          return {
-            ...item,
-            count: item.count + 1,
-          };
-        }
-        return item;
-      });
-    });
-    dispatch(increaseQuantity({ id, size }));
-  };
+  // const handleAddItem = (id: number, size?: number | null) => {
+  //   setAddedItems((prev) => {
+  //     return prev.map((item) => {
+  //       if (id === item.product_id && item.size === size) {
+  //         return {
+  //           ...item,
+  //           count: item.count + 1,
+  //         };
+  //       }
+  //       return item;
+  //     });
+  //   });
+  //   dispatch(increaseQuantity({ id, size }));
+  // };
 
-  const handleDeleteItem = (id: number, size?: number | null) => {
-    setAddedItems((prev) => {
-      return prev.map((item) => {
-        if (id === item.product_id && item.size === size && item.count > 1) {
-          return {
-            ...item,
-            count: item.count - 1,
-          };
-        }
-        return item;
-      });
-    });
-    dispatch(decreaseQuantity({ id, size }));
-  };
+  // const handleDeleteItem = (id: number, size?: number | null) => {
+  //   setAddedItems((prev) => {
+  //     return prev.map((item) => {
+  //       if (id === item.product_id && item.size === size && item.count > 1) {
+  //         return {
+  //           ...item,
+  //           count: item.count - 1,
+  //         };
+  //       }
+  //       return item;
+  //     });
+  //   });
+  //   dispatch(decreaseQuantity({ id, size }));
+  // };
 
-  const handleRemove = (
-    id: number,
-    size?: number | null,
-    color?: string | null
-  ) => {
-    setAddedItems((prev) => {
-      return prev.filter(
-        (item) =>
-          !(
-            item.product_id === id &&
-            item.size === size &&
-            item.color === color
-          )
-      );
-    });
-    dispatch(removeFromCart({ id, size, color }));
-  };
+  // const handleRemove = (
+  //   id: number,
+  //   size?: number | null,
+  //   color?: string | null
+  // ) => {
+  //   setAddedItems((prev) => {
+  //     return prev.filter(
+  //       (item) =>
+  //         !(
+  //           item.product_id === id &&
+  //           item.size === size &&
+  //           item.color === color
+  //         )
+  //     );
+  //   });
+  //   dispatch(removeFromCart({ id, size, color }));
+  // };
 
   const handleBackClick = () => {
     navigate("/store");
@@ -179,12 +174,11 @@ const CartPage = () => {
       ? "306px"
       : "100%";
 
-  const title = addedItems.length !== 0 ? "Кошик" : "Кошик порожній";
 
   return (
     <>
       <HeroSection viewType={"other"} isEmpty={addedItems.length === 0}>
-        {title}
+        Замовлення
       </HeroSection>
       <section css={sectionCart}>
         <div css={containerStyles}>
@@ -204,42 +198,20 @@ const CartPage = () => {
                         <InfoContainer>
                           <InfoTitle>
                             <TitleItem>{item.title}</TitleItem>
-                            <DeleteBtn
-                              onClick={() =>
-                                handleRemove(
-                                  item.product_id,
-                                  item.size,
-                                  item.color
-                                )
-                              }
-                            >
-                              <Close css={svgClose} />
-                            </DeleteBtn>
+                       
                           </InfoTitle>
-                          <P>Код товару: №{item.productCode}</P>
+                          <P>Код товару: №{item.product_code}</P>
                           <PriceContainer>
                             <BtnContainer>
-                              <Decrement
-                                onClick={() =>
-                                  handleDeleteItem(item.product_id, item.size)
-                                }
-                              >
-                                -
-                              </Decrement>
+                      
                               <Score>{item.count}</Score>
-                              <Increment
-                                onClick={() =>
-                                  handleAddItem(item.product_id, item.size)
-                                }
-                              >
-                                +
-                              </Increment>
+                    
                             </BtnContainer>
                             <Price>
                               {item.discount && item.discount > 0 && (
                                 <OldPrice>{item.price} ₴</OldPrice>
                               )}
-                              <NewPrice>{item.totalCost}₴</NewPrice>
+                              <NewPrice>{item.total_cost}₴</NewPrice>
                             </Price>
                           </PriceContainer>
                         </InfoContainer>
