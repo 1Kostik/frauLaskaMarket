@@ -187,9 +187,9 @@ const handleVueOrders =()=>{
               )}
               <CartIcon css={cartStylesWithColor(istrue.toString())} />
             </Cart>
-            <Links to={"/aroma-school#target-section"} istrue={istrue}>
+          {!isAuth &&  <Links to={"/aroma-school#target-section"} istrue={istrue}>
               Звʼязатись зі мною
-            </Links>
+            </Links>}
             <Button istrue={istrue} onClick={handleBurgerMenuClick}>
               <BurgerMenu css={burgerStyles(istrue.toString())} />
             </Button>

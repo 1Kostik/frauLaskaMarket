@@ -138,6 +138,23 @@ export const makeOrder = async (orderInfo: IOrder) => {
   }
 };
 
+export const getOrders = async () => {
+  try {
+    const data = await axios.get("orders");
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getOrderById = async(id:number)=>{
+try {
+  const data = await axios.get(`orders/${id}`)
+  return data.data;
+} catch (error) {
+  console.log(error);
+}
+}
+
 // export const updateOrder = async (orderId: number, status: string) => {
 //   try {
 //     const { data } = await axios.put(`orders/${orderId}`, { status });
@@ -148,3 +165,4 @@ export const makeOrder = async (orderInfo: IOrder) => {
 //     console.log(error);
 //   }
 // };
+
