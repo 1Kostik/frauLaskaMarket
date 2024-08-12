@@ -14,7 +14,7 @@ import {
 } from "./CartForm.styled";
 
 import { handleNumericInput } from "@utils/handleNumericInput";
-// import { makePayment } from "@services/servicesApi";
+import { makePayment } from "@services/servicesApi";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 
@@ -22,6 +22,7 @@ import { makeOrder } from "@services/servicesApi";
 
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import { orderItemsConverter } from "@utils/orderItemsConverter";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = (isOtherRecipient: boolean) =>
   Yup.object({
@@ -121,7 +122,9 @@ interface ICartFormProps {
 
 const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
   const [isOtherRecipient, setIsOtherRecipient] = useState(false);
-console.log('addedItems', addedItems)
+
+  const navigate = useNavigate();
+
   const handleRecipient = () => {
     setIsOtherRecipient((prev) => !prev);
   };
@@ -132,27 +135,35 @@ console.log('addedItems', addedItems)
     }
   };
 
+  const onOrderSubmit = (values: IInitialValue) => {
+    const date: Date = new Date();
+    const offset = date.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(date.getTime() - offset)
+      .toISOString()
+      .split(".")[0];
+    console.log(localISOTime);
+    const newOrder = {
+      status: "В очікуванні",
+      order_date: localISOTime,
+      ...replaceNullsWithEmptyStrings(values),
+      order_items: orderItemsConverter(addedItems),
+      total_amount,
+    };
+    if (values.paymentMethod === "liqPay") {
+      makeOrder(newOrder).then((resp) => {
+        console.log("resp", resp);
+        makePayment(resp);
+      });
+    } else {
+      makeOrder(newOrder).then(() => navigate(`/ordered?email=${values.email}`));
+    }
+  };
+
   return (
     <Formik
       initialValues={initialValue}
       validationSchema={validationSchema(isOtherRecipient)}
-      onSubmit={async (values) => {
-        const date: Date = new Date();
-        const offset = date.getTimezoneOffset() * 60000;
-        const localISOTime = new Date(date.getTime() - offset)
-          .toISOString()
-          .split(".")[0];
-        console.log(localISOTime);
-        const newOrder = {
-          status: "В очікуванні",
-          order_date: localISOTime,
-          ...replaceNullsWithEmptyStrings(values),
-          order_items: orderItemsConverter(addedItems),
-          total_amount,
-        };
-        makeOrder(newOrder);
-        // makePayment(50);
-      }}
+      onSubmit={(values) => onOrderSubmit(values)}
       validateOnBlur={false}
     >
       {({ setFieldValue, setFieldTouched, touched, errors, values }) => (
