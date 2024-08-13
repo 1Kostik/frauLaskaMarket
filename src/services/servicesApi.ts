@@ -113,7 +113,6 @@ export const deleteProductFeedbackById = async (id: number) => {
 export const makePayment = async (orderDetails: IOrder) => {
   try {
     const { data } = await axios.post("/orders/payment", orderDetails);
-    // console.log("data.redirectUrl", data.redirectUrl);
     if (data.redirectUrl) {
       console.log("data.order_id", data.order_id);
       window.location.href = data.redirectUrl;
@@ -146,23 +145,22 @@ export const getOrders = async () => {
     console.log(error);
   }
 };
-export const getOrderById = async(id:number)=>{
-try {
-  const data = await axios.get(`orders/${id}`)
-  return data.data;
-} catch (error) {
-  console.log(error);
-}
-}
+export const getOrderById = async (id: number) => {
+  try {
+    const data = await axios.get(`orders/${id}`);
+    return data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-// export const updateOrder = async (orderId: number, status: string) => {
-//   try {
-//     const { data } = await axios.put(`orders/${orderId}`, { status });
-//     toast.success("Статус замовлення змінено");
-//     return data;
-//   } catch (error) {
-//     toast.error("Шось пішло не так");
-//     console.log(error);
-//   }
-// };
-
+export const updateOrder = async (orderId: number, status: string) => {
+  try {
+    const { data } = await axios.put(`orders/${orderId}`, { status });
+    toast.success("Статус замовлення змінено");
+    return data;
+  } catch (error) {
+    toast.error("Шось пішло не так");
+    console.log(error);
+  }
+};

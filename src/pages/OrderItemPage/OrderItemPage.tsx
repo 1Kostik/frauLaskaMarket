@@ -1,7 +1,7 @@
 import OrderItemCard from "@components/OrderItemCard/OrderItemCard";
 import ProductCard from "@components/ProductCard/ProductCard";
 import { formatDate } from "@pages/OrdersPage/OrdersPage";
-import { getOrderById, getProductById } from "@services/servicesApi";
+import { getOrderById, getProductById, updateOrder } from "@services/servicesApi";
 import { containerStyles } from "@styles/variables";
 import { IOrder } from "Interfaces/IOrder";
 import { Product } from "Interfaces/Product";
@@ -52,7 +52,11 @@ const OrderItemPage = () => {
       }
     }
   }, [productIdArray]);
-
+  
+const handleChangStatus = async()=>{
+const status = "Виконано"
+ await updateOrder(Number(id),status)
+}
   // const handleOnClickCard = (id: number) => {
   //   navigate(`${id}`);
   // };
@@ -96,7 +100,7 @@ const OrderItemPage = () => {
                     marginBottom: "20px",
                   }}
                 >
-                  Спосіб оплати: {data!.paymentMethod}
+                  Спосіб оплати: {data!.payment_method}
                 </p>
               )}{" "}
               {data && (
@@ -127,7 +131,7 @@ const OrderItemPage = () => {
                     marginBottom: "20px",
                   }}
                 >
-                  Доставка: {data!.deliveryType}
+                  Доставка: {data!.delivery_type}
                 </p>
               )}
               {data && (
@@ -138,7 +142,7 @@ const OrderItemPage = () => {
                     marginBottom: "20px",
                   }}
                 >
-                  Номер відділення: {data!.postOfficeNumber}
+                  Номер відділення: {data!.post_office_number}
                 </p>
               )}
               {data && (
@@ -171,7 +175,7 @@ const OrderItemPage = () => {
                     marginBottom: "20px",
                   }}
                 >
-                  Призвище та ім'я замовника: {data!.lastName} {data!.name}
+                  Призвище та ім'я замовника: {data!.last_name} {data!.name}
                 </p>
               )}
               {data && (
@@ -213,7 +217,7 @@ const OrderItemPage = () => {
                     marginBottom: "20px",
                   }}
                 >
-                  Прізвище та ім'я отримувача: {data!.recipientLastName}
+                  Прізвище та ім'я отримувача: {data!.recipient_last_name}
                 </p>
               )}
               {data && (
@@ -224,7 +228,7 @@ const OrderItemPage = () => {
                     marginBottom: "20px",
                   }}
                 >
-                  Им'я отримувача: {data!.recipientName}
+                  Им'я отримувача: {data!.recipient_name}
                 </p>
               )}
               {data && (
@@ -235,7 +239,7 @@ const OrderItemPage = () => {
                     marginBottom: "20px",
                   }}
                 >
-                  Телефон отримувача: {data!.recipientName}
+                  Телефон отримувача: {data!.recipient_name}
                 </p>
               )}
               {/* {data && data.order_items.map(item=>(
@@ -264,6 +268,7 @@ const OrderItemPage = () => {
         </div>
         <button
           style={{ color: "white", fontSize: "25px", marginBottom: "20px" }}
+        onClick={handleChangStatus}
         >
           Замовлення виконано
         </button>
