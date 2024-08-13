@@ -7,11 +7,11 @@ export const orderItemsConverter = (addedItems: IAddedToCartProduct[]) => {
     return {
       color,
       count,
-      product_code: product_code,
+      // product_code: product_code,
       product_id,
       size,
-      title,
-      total_cost: total_cost,
+      // title,
+      // total_cost: total_cost,
     };
   });
 };
