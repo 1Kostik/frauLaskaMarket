@@ -1,11 +1,11 @@
 export interface IOrderItem {
   product_id: number;
-  title: string;
+  // title: string;
   count: number;
-  total_cost: number;
+  // total_cost: number;
   color: string | undefined;
   size: number | null | undefined;
-  product_code: number;
+  // product_code: number;
 }
 
 export interface IOrder {
@@ -18,8 +18,8 @@ export interface IOrder {
   order_items: IOrderItem[];
   payment_method: string;
   phone: string;
-  status: string;
-  total_amount: number;
+  // status: string;
+  // total_amount: number;
   post_office_number: string | number;
   recipient_name: string;
   recipient_last_name: string;

@@ -141,13 +141,13 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
     const localISOTime = new Date(date.getTime() - offset)
       .toISOString()
       .split(".")[0];
-    console.log(localISOTime);
+
     const newOrder = {
-      status: "В очікуванні",
+      // status: "В очікуванні",
       order_date: localISOTime,
       ...replaceNullsWithEmptyStrings(values),
       order_items: orderItemsConverter(addedItems),
-      total_amount,
+      // total_amount,
     };
     if (values.payment_method === "liqPay") {
       makeOrder(newOrder).then((resp) => {
