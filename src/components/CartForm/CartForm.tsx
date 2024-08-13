@@ -120,7 +120,7 @@ interface ICartFormProps {
   total_amount: number;
 }
 
-const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
+const CartForm: React.FC<ICartFormProps> = ({ addedItems }) => {
   const [isOtherRecipient, setIsOtherRecipient] = useState(false);
 
   const navigate = useNavigate();
@@ -136,18 +136,9 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, total_amount }) => {
   };
 
   const onOrderSubmit = (values: IInitialValue) => {
-    const date: Date = new Date();
-    const offset = date.getTimezoneOffset() * 60000;
-    const localISOTime = new Date(date.getTime() - offset)
-      .toISOString()
-      .split(".")[0];
-
     const newOrder = {
-      // status: "В очікуванні",
-      order_date: localISOTime,
       ...replaceNullsWithEmptyStrings(values),
       order_items: orderItemsConverter(addedItems),
-      // total_amount,
     };
     if (values.payment_method === "liqPay") {
       makeOrder(newOrder).then((resp) => {
