@@ -118,9 +118,10 @@ const initialValue: IInitialValue = {
 interface ICartFormProps {
   addedItems: IAddedToCartProduct[];
   total_amount: number;
+  callMeBack: boolean;
 }
 
-const CartForm: React.FC<ICartFormProps> = ({ addedItems }) => {
+const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
   const [isOtherRecipient, setIsOtherRecipient] = useState(false);
 
   const navigate = useNavigate();
@@ -139,6 +140,7 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems }) => {
     const newOrder = {
       ...replaceNullsWithEmptyStrings(values),
       order_items: orderItemsConverter(addedItems),
+      call_me_back:callMeBack,
     };
     if (values.payment_method === "liqPay") {
       makeOrder(newOrder).then((resp) => {
@@ -146,9 +148,10 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems }) => {
         makePayment(resp);
       });
     } else {
-      makeOrder(newOrder).then(() =>
-        navigate(`/ordered?email=${values.email}`)
-      );
+      makeOrder(newOrder).then((resp) => {
+        console.log("resp", resp);
+        navigate(`/ordered?email=${values.email}`);
+      });
     }
   };
 

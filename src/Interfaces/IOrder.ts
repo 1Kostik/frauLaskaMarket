@@ -1,7 +1,7 @@
 export interface IOrderItem {
   product_id: number;
   count: number;
-  color: string | undefined;
+  color: string | undefined | null;
   size: number | null | undefined;
 }
 
@@ -18,4 +18,5 @@ export interface IOrder {
   recipient_name: string;
   recipient_last_name: string;
   recipient_phone: string;
+  call_me_back: boolean;
 }

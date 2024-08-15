@@ -90,7 +90,7 @@ const ProductDetails = () => {
     null
   );
   const [productPrice, setProductPrice] = useState<number | null>(null);
-  const [addedColor, setAddedColor] = useState("");
+  const [addedColor, setAddedColor] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [product, setProduct] = useState<Product | null>(null);
   const [feedBacks, setFeedBacks] = useState<Feedback[]>([]);
