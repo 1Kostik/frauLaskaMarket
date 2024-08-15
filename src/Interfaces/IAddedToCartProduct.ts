@@ -7,6 +7,6 @@ export interface IAddedToCartProduct {
   discount: number | null;
   price: number;
   count: number;
-  color: string | undefined;
+  color: string | undefined | null;
   total_cost: number;
 }

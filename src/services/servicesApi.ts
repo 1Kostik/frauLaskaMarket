@@ -126,7 +126,6 @@ export const makePayment = async (orderDetails: IOrder) => {
 };
 
 export const makeOrder = async (orderInfo: IOrder) => {
-  console.log("orderInfo", orderInfo);
   try {
     const { data } = await axios.post("orders", orderInfo);
     toast.success("Замовлення створено");
