@@ -19,9 +19,13 @@ import { useNavigate } from "react-router-dom";
 
 interface IPaymentBlockProps {
   setCallMeBack?: React.Dispatch<React.SetStateAction<boolean>>;
+  isOrderPage?: boolean;
 }
 
-const PaymentBlock: React.FC<IPaymentBlockProps> = ({ setCallMeBack }) => {
+const PaymentBlock: React.FC<IPaymentBlockProps> = ({
+  setCallMeBack,
+  isOrderPage,
+}) => {
   const navigate = useNavigate();
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
   const cart = useAppSelector(selectCart);
@@ -63,9 +67,15 @@ const PaymentBlock: React.FC<IPaymentBlockProps> = ({ setCallMeBack }) => {
         </CheckBoxContainer>
       )}
 
-      <Button type="submit" onClick={() => navigate("/order")}>
-        Перейти до замовлення
-      </Button>
+      {isOrderPage ? (
+        <Button type="submit" form="orderForm">
+          Оформити замовлення
+        </Button>
+      ) : (
+        <Button type="submit" onClick={() => navigate("/order")}>
+          Перейти до замовлення
+        </Button>
+      )}
     </PaymentContainer>
   );
 };

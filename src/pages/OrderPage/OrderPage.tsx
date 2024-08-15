@@ -58,7 +58,7 @@ const CartPage = () => {
               />
             </MainInfoContainer>
 
-            <PaymentBlock setCallMeBack={setCallMeBack} />
+            <PaymentBlock setCallMeBack={setCallMeBack} isOrderPage />
           </MainContainer>
         </div>
       </section>
