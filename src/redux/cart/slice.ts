@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
+import { toast } from "react-toastify";
 export interface CartState {
   cart: IAddedToCartProduct[];
 }
@@ -13,6 +14,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart(state, action: PayloadAction<IAddedToCartProduct>) {
+      toast.success("Товар додано в кошик");
       state.cart = [...state.cart, action.payload];
     },
     removeFromCart(
