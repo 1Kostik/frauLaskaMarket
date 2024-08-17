@@ -15,6 +15,7 @@ import {
   Score,
   svgClose,
   TitleItem,
+  typeWrapper,
 } from "./CartItemCard.styled";
 
 import { ReactComponent as Close } from "@assets/icons/close2.svg";
@@ -38,11 +39,13 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
   handleAddItem,
   handleDeleteItem,
   handleRemove,
+  isOrderPage,
 }) => {
+  console.log("item", item);
   return (
     <ItemInfoContainer>
       <ImgContainer>
-        <img src={item.img.img_url} alt="" />
+        <img src={item.img.img_url} alt={item.title} />
       </ImgContainer>
       <InfoContainer>
         <InfoTitle>
@@ -57,25 +60,35 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
             </DeleteBtn>
           )}
         </InfoTitle>
+        <div css={typeWrapper(item.color)}>
+          <p>Тип: </p>
+          {item.color && <span />}
+          <p>{item.size} мл</p>
+        </div>
         <P>Код товару: №{item.product_code}</P>
         <PriceContainer>
-          <BtnContainer>
-            {handleDeleteItem && (
-              <Decrement
-                onClick={() => handleDeleteItem(item.product_id, item.size)}
-              >
-                -
-              </Decrement>
-            )}
+          {!isOrderPage ? (
+            <BtnContainer>
+              {handleDeleteItem && (
+                <Decrement
+                  onClick={() => handleDeleteItem(item.product_id, item.size)}
+                >
+                  -
+                </Decrement>
+              )}
+              <Score>{item.count}</Score>
+              {handleAddItem && (
+                <Increment
+                  onClick={() => handleAddItem(item.product_id, item.size)}
+                >
+                  +
+                </Increment>
+              )}
+            </BtnContainer>
+          ) : (
             <Score>{item.count}</Score>
-            {handleAddItem && (
-              <Increment
-                onClick={() => handleAddItem(item.product_id, item.size)}
-              >
-                +
-              </Increment>
-            )}
-          </BtnContainer>
+          )}
+
           <Price>
             {item.discount && item.discount > 0 && (
               <OldPrice>{item.price} ₴</OldPrice>
