@@ -4,7 +4,6 @@ import { onDesktop, onTablet } from "@styles/mixins";
 
 export const ItemInfoContainer = styled.div`
   width: 100%;
-  height: 120px;
   display: flex;
   border: 1px solid var(--bg-light-grey);
   border-radius: 16px;
@@ -22,11 +21,11 @@ export const ItemInfoContainer = styled.div`
 `;
 
 export const ImgContainer = styled.div`
-  width: 96px;
+  display: block;
+  min-width: 96px;
   height: 96px;
-  & img {
-    width: 96px;
-  }
+  border-radius: 12px;
+  overflow: hidden;
 `;
 
 export const InfoContainer = styled.div`
@@ -57,12 +56,27 @@ export const TitleItem = styled.h2`
 export const P = styled.p`
   font-family: Arial;
   font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
   line-height: 16px;
   letter-spacing: 0.4px;
   color: var(--text-light-grey);
   margin-bottom: 4px;
+`;
+
+export const typeWrapper = (color: string | undefined | null) => css`
+  display: flex;
+  column-gap: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+  color: var(--text-light-grey);
+  margin-bottom: 4px;
+
+  & span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: ${color};
+  }
 `;
 
 export const BtnContainer = styled.div`
@@ -84,6 +98,7 @@ export const PriceContainer = styled.div`
 `;
 
 export const DeleteBtn = styled.button`
+  align-self: flex-start;
   padding: 4px;
 `;
 
