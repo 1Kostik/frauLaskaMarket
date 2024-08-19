@@ -33,6 +33,7 @@ import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import CartItemCard from "@components/CartItemCard";
 import { nanoid } from "nanoid";
 import PaymentBlock from "@components/PaymentBlock";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ const CartPage = () => {
         count,
         color,
         total_cost,
+        quantity,
       }: IAddedToCartProduct) => ({
         product_id,
         title,
@@ -67,12 +69,20 @@ const CartPage = () => {
         count,
         color,
         total_cost,
+        quantity,
       })
     );
     setAddedItems(updatedItems);
   }, [cart]); // Зависимость от cart
 
   const handleAddItem = (id: number, size?: number | null) => {
+    const addedItem = addedItems.find(
+      (item) => id === item.product_id && item.size === size
+    );
+    if (addedItem && addedItem.count >= addedItem.quantity) {
+      toast.warn("Товару на складі більше немає");
+      return;
+    }
     setAddedItems((prev) => {
       return prev.map((item) => {
         if (id === item.product_id && item.size === size) {

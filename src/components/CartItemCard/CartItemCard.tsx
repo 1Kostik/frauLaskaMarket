@@ -41,7 +41,7 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
   handleRemove,
   isOrderPage,
 }) => {
-  console.log("item", item);
+
   return (
     <ItemInfoContainer>
       <ImgContainer>
@@ -61,9 +61,8 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
           )}
         </InfoTitle>
         <div css={typeWrapper(item.color)}>
-          <p>Тип: </p>
-          {item.color && <span />}
-          <p>{item.size} мл</p>
+          {item.color && <p className="color">Колір: </p>}
+          {item.size && <p className="size">Об'єм: {item.size} мл</p>}
         </div>
         <P>Код товару: №{item.product_code}</P>
         <PriceContainer>

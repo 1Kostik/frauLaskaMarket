@@ -64,16 +64,24 @@ export const P = styled.p`
 
 export const typeWrapper = (color: string | undefined | null) => css`
   display: flex;
-  column-gap: 4px;
+  flex-direction: column;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.4px;
   color: var(--text-light-grey);
   margin-bottom: 4px;
 
-  & span {
+  & .color {
+    display: flex;
+    margin-bottom: 4px;
+  }
+
+  & .color::after {
+    content: "";
+    display: block;
     width: 12px;
     height: 12px;
+    margin-left: 4px;
     border-radius: 50%;
     background-color: ${color};
   }
