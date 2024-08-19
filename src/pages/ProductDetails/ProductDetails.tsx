@@ -217,6 +217,7 @@ const ProductDetails = () => {
           productPrice -
             (productPrice * (product.variations[0].discount || 0)) / 100
         ),
+        quantity: product.variations[0].count
       };
 
       dispatch(addToCart(productToAdd));

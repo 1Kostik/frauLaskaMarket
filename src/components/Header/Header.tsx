@@ -21,7 +21,7 @@ import {
   cartCount,
   addProductStyle,
 } from "./Header.styled";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
 import { selectCartTotalQuantity } from "@redux/cart/selectors";
 import { useAppSelector } from "@redux/hooks";
@@ -48,10 +48,7 @@ const Header = () => {
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
   // const isAuth = useAppSelector(getAuth);
   const isAuth = true;
-  const navigate = useNavigate();
-  const handleCreateAdvert = () => {
-    navigate("/admin/create-advert");
-  };
+
   const handleBurgerMenuClick = () => {
     setIsOpen((prev) => !prev);
   };
@@ -121,9 +118,7 @@ const Header = () => {
       }
     }
   }, [isOpen, isScrolled]);
-  const handleVueOrders = () => {
-    navigate("admin/orders");
-  };
+
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
@@ -164,23 +159,15 @@ const Header = () => {
             </Nav>
           </NavWrapper>
           {isAuth && (
-            <button
-              type="button"
-              onClick={handleVueOrders}
-              css={addProductStyle(istrue)}
-            >
+            <NavLink to="admin/orders" css={addProductStyle(istrue)}>
               Замовлення
-            </button>
+            </NavLink>
           )}
           {isAuth && (
-            <button
-              type="button"
-              onClick={handleCreateAdvert}
-              css={addProductStyle(istrue)}
-            >
+            <NavLink to="/admin/create-advert" css={addProductStyle(istrue)}>
               <MdOutlinePostAdd />
               Додати товар
-            </button>
+            </NavLink>
           )}
           <WrapperMenu>
             <Cart to={"/cart"} istrue={istrue}>

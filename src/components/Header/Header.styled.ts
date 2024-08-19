@@ -1,12 +1,15 @@
 import styled from "@emotion/styled";
 import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
 import { Link, NavLink } from "react-router-dom";
-import { css } from "@emotion/react";
+import { css, SerializedStyles } from "@emotion/react";
 import { onDesktop, onTablet } from "@styles/mixins";
 interface SectionProps {
   istrue?: string;
 }
-const combineStyles = (styles1: any, styles2: any) => css`
+const combineStyles = (
+  styles1: SerializedStyles,
+  styles2: SerializedStyles
+) => css`
   ${styles1};
   ${styles2};
 `;

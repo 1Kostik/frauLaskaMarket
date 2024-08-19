@@ -9,4 +9,5 @@ export interface IAddedToCartProduct {
   count: number;
   color: string | undefined | null;
   total_cost: number;
+  quantity: number;
 }
