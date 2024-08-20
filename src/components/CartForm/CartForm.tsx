@@ -144,12 +144,10 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
     };
     if (values.payment_method === "liqPay") {
       makeOrder(newOrder).then((resp) => {
-        console.log("resp", resp);
         makePayment(resp);
       });
     } else {
-      makeOrder(newOrder).then((resp) => {
-        console.log("resp", resp);
+      makeOrder(newOrder).then(() => {
         navigate(`/ordered?email=${values.email}`);
       });
     }

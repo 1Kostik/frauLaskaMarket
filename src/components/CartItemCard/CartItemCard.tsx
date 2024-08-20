@@ -19,8 +19,10 @@ import {
 } from "./CartItemCard.styled";
 
 import { ReactComponent as Close } from "@assets/icons/close2.svg";
+import { handleImgError } from "@utils/handleImgError";
 
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
+
 
 interface ICartItemCardProps {
   item: IAddedToCartProduct;
@@ -41,11 +43,12 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
   handleRemove,
   isOrderPage,
 }) => {
+ 
 
   return (
     <ItemInfoContainer>
       <ImgContainer>
-        <img src={item.img.img_url} alt={item.title} />
+        <img src={item.img.img_url} alt={item.title} onError={handleImgError} />
       </ImgContainer>
       <InfoContainer>
         <InfoTitle>
