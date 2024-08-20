@@ -7,9 +7,10 @@ import {
   H5,
   P,
 } from "./ProductCard.styled";
-import { Product } from "Interfaces/Product";
 import ProductInterface from "@components/ProductInterface";
-import emptyPlug from "@assets/images/emptyPlug.webp"
+import { handleImgError } from "@utils/handleImgError";
+
+import { Product } from "Interfaces/Product";
 
 interface Props {
   show?: boolean;
@@ -26,10 +27,7 @@ const ProductCard: React.FC<Props> = ({
 }) => {
   const { id, imageUrls, title, variations } = item;
 
-  const onSrcImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const target = e.target as HTMLImageElement;
-    target.src = emptyPlug;
-  };
+  
 
   return (
     <Container
@@ -44,7 +42,7 @@ const ProductCard: React.FC<Props> = ({
             src={imageUrls[0].img_url}
             alt=""
             style={{ width: `${width}` }}
-            onError={onSrcImageError}
+            onError={handleImgError}
           />
           <ProductInterface productId={id} />
         </ImageContainer>
