@@ -14,7 +14,7 @@ const SharedLayout = () => {
   return (
     <>
       <ToastContainer autoClose={1500} position="top-center" theme="dark" />
-      <Overlay>
+      <Overlay type="loader">
         <RingLoader color="#cabcbc" size={120} />
       </Overlay>
       <Header />

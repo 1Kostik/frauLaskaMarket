@@ -43,9 +43,9 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
   selectedCategoryId,
 }) => {
   const [isShowDropdown, setIsShowDropdown] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<number | string | undefined>(
-    selectedCategoryId
-  );
+  const [selectedCategory, setSelectedCategory] = useState<
+    number | string | undefined
+  >(selectedCategoryId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editAction, setEditAction] = useState<IEditAction | undefined>(
     undefined

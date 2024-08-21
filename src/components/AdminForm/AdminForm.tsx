@@ -71,10 +71,10 @@ interface IAdminFormProps {
 const initialValues: IAdvert = {
   category_id: "",
   imageUrls: [],
-  mainImage: "",
+  main_image: "",
 
   title: "",
-  productCode: "",
+  product_code: "",
   composition: "",
   benefit: "",
   description: "",
@@ -92,9 +92,9 @@ const initialValues: IAdvert = {
 const validationSchema = Yup.object({
   category_id: Yup.mixed().required("Оберіть категорію"),
   imageUrls: Yup.array().min(1, "Необхідно вибрати принаймні одне зображення"),
-  mainImage: Yup.string(),
+  main_image: Yup.string(),
   title: Yup.string().required("Назва обов'язкова"),
-  productCode: Yup.number().required("Код обов'язковий"),
+  product_code: Yup.number().required("Код обов'язковий"),
   composition: Yup.string(),
   description: Yup.string().required("Опис обов'язковий"),
 
@@ -153,17 +153,20 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const categories = useAppSelector(selectCategories).map(
     (item: ICategory) => item.title
   );
 
   const [feedbacksArr, setFeedbacksArr] = useState<number[]>([]);
   const feedbackRefArr = useRef<(HTMLAreaElement | null)[]>([]);
+
   useEffect(() => {
     feedbackRefArr.current = feedbacksArr.map(
       (i) => feedbackRefArr.current[i] || null
     );
   }, [feedbacksArr]);
+
   useEffect(() => {
     feedbackRefArr.current.forEach((item) =>
       item?.addEventListener(
@@ -171,6 +174,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
         () => (item.style.height = `${item.scrollHeight}px`)
       )
     );
+
     return () => {
       feedbackRefArr.current.forEach((item) =>
         item?.removeEventListener(
@@ -180,6 +184,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
       );
     };
   }, [feedbacksArr]);
+
   useEffect(() => {
     const textAreaElemets = document.querySelectorAll("textarea");
     textAreaElemets.forEach((textArea) =>
@@ -318,11 +323,11 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     const mainImg = values.imageUrls[0];
     if (mainImg instanceof File) {
       const mainImgName = mainImg.name;
-      values.mainImage = mainImgName;
+      values.main_image = mainImgName;
     } else {
       const regex = /\/([^/?#]+)$/;
       const pureName = mainImg.img_url.match(regex);
-      values.mainImage = pureName ? pureName[1] : mainImg.img_url;
+      values.main_image = pureName ? pureName[1] : mainImg.img_url;
     }
     delete values.newCategory;
     values.popularity = 1;
@@ -370,18 +375,17 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
         }
       }
     }
-    // formData.forEach((value, key) => {
-    //   console.log(key, value);
-    // });
 
     if (!product) {
-      dispatch(createProduct(formData)).then(({ payload }) =>
-        navigate(`/store/${payload.id}`)
-      );
+      dispatch(createProduct(formData))
+        .unwrap()
+        .then(({ payload }) => navigate(`/store/${payload.id}`))
+        .catch(() => navigate("/errorPage"));
     } else if (product?.id !== undefined) {
-      dispatch(updateProduct({ id: product.id, formData })).then(() =>
-        navigate(`/store/${product.id}`)
-      );
+      dispatch(updateProduct({ id: product.id, formData }))
+        .unwrap()
+        .then(() => navigate(`/store/${product.id}`))
+        .catch(() => navigate("/errorPage"));
     }
   };
 
@@ -404,7 +408,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
               feedbacks,
               newCategory,
               title,
-              productCode,
+              product_code,
               benefit,
               composition,
               description,
@@ -552,23 +556,23 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                         </ErrorMessage>
                       </label>
 
-                      <label htmlFor="productCode" className="errorContainer">
+                      <label htmlFor="product_code" className="errorContainer">
                         <Field
-                          name="productCode"
+                          name="product_code"
                           type="text"
-                          id="productCode"
+                          id="product_code"
                           placeholder="Код"
                           onKeyPress={handleNumericInput}
                           onFocus={() =>
-                            setFieldError("productCode", undefined)
+                            setFieldError("product_code", undefined)
                           }
                           css={handleInputFieldStyles(
-                            errors.productCode,
-                            touched.productCode
+                            errors.product_code,
+                            touched.product_code
                           )}
                         />
-                        <p css={inputLabel(!!productCode)}>Код</p>
-                        <ErrorMessage name="productCode">
+                        <p css={inputLabel(!!product_code)}>Код</p>
+                        <ErrorMessage name="product_code">
                           {(msg) => <div css={errorStyle}>{msg}</div>}
                         </ErrorMessage>
                       </label>
@@ -961,9 +965,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                   </div>
                   <div css={submitWrapper}>
                     <button type="submit">
-                      {product
-                        ? "Зберегти зміни"
-                        : "Опублікувати оголошення"}
+                      {product ? "Зберегти зміни" : "Опублікувати оголошення"}
                     </button>
                   </div>
                 </div>
