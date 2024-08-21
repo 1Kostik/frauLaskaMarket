@@ -2,10 +2,10 @@ export interface IAdvert {
   id?: number;
   category_id: number | string;
   imageUrls: File[] | IImageUrl[];
-  mainImage: string;
+  main_image: string;
 
   title: string;
-  productCode: string | number;
+  product_code: string | number;
   composition: string;
   benefit: string;
   description: string;

@@ -6,9 +6,10 @@ import { selectIsAdsLoading } from "@redux/ads/selectors";
 interface IOverlayProps {
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
+  type?: string;
 }
 
-const Overlay: React.FC<IOverlayProps> = ({ setIsOpen, children }) => {
+const Overlay: React.FC<IOverlayProps> = ({ setIsOpen, children, type }) => {
   const isLoadingProduct = useAppSelector(selectIsAdsLoading);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -24,8 +25,9 @@ const Overlay: React.FC<IOverlayProps> = ({ setIsOpen, children }) => {
       document.body.classList.remove("no-scroll");
     };
   }, []);
+
   {
-    if (!isLoadingProduct) {
+    if (!isLoadingProduct && type === "loader") {
       return null;
     } else {
       return (
