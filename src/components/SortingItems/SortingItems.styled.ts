@@ -6,9 +6,19 @@ interface Props {
   isChange?: boolean;
   isOpenSearch?: boolean;
   padding?: string;
+  border?: string;
   borderRadius?: string;
   width?: string;
+  widthTagP?: string;
+  height?: string;
   disableWidth?: string;
+  justifyContent?: string;
+  backGround?: string;
+  color?: string;
+  fontSize?: string;
+  top?: string;
+  gap?: string;
+  widthContainer?: string;
 }
 interface Ih4 {
   isNone?: boolean;
@@ -32,10 +42,10 @@ export const H4 = styled.h4<Ih4>`
   letter-spacing: 0.1px;
 `;
 
-export const SelectContainer = styled.div`
+export const SelectContainer = styled.div<Props>`
   position: relative;
-  height: 40px;
-  width: 100%;
+  height: ${({ height }) => (height ? height : "40px")};
+  width: ${({ widthContainer }) => (widthContainer ? widthContainer : "100%")};
 `;
 
 export const SelectOptionContainer = styled.ul<Props>`
@@ -43,21 +53,22 @@ export const SelectOptionContainer = styled.ul<Props>`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  top: 44px;
+  top: ${({ top }) => (top ? top : "44px")};
   right: 0px;
   width: ${({ width }) => (width ? width : "100%")};
   height: auto;
-  border: 1px solid #d7d7d7;
+  border: ${({ border }) => (border ? border : "1px solid #d7d7d7")};
   border-radius: 12px;
   padding: 8px;
-  background: var(--bg-black);
+  background: ${({ backGround }) =>
+    backGround ? backGround : "var(--bg-black)"};
   z-index: 100;
   transition: var(--effectDuration);
 `;
 
-export const SelectOption = styled.li`
+export const SelectOption = styled.li<Props>`
   width: 204px;
-  color: var(--text-light-grey);
+  color: ${({ color }) => (color ? color : "var(--text-light-grey)")};
   font-family: Arial;
   font-size: 12px;
   font-style: normal;
@@ -73,25 +84,35 @@ export const SelectTitleContainer = styled.div<Props>`
   height: 100%;
   padding: ${({ padding }) => (padding ? padding : "8px 17px 8px 17px")};
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${({ justifyContent }) =>
+    justifyContent ? justifyContent : "space-between"};
   border-radius: ${({ borderRadius }) =>
     borderRadius ? borderRadius : "24px"};
   gap: 6px;
-  border: 1px solid #d7d7d7;
-  background: ${({ isOpen }) =>
-    isOpen ? "var(--bg-light-grey)" : "var(--bg-black)"};
+  border: ${({ border }) => (border ? border : "1px solid #d7d7d7")};
+  background: ${({ isOpen, backGround }) =>
+    isOpen
+      ? "var(--bg-light-grey)"
+      : backGround
+      ? backGround
+      : "var(--bg-black)"};
 `;
 
 export const P = styled.p<Props>`
-  width: ${({ disableWidth, isOpenSearch }) =>
-    disableWidth ? disableWidth : isOpenSearch ? "14px" : "100%"};
-
-  max-width: 180px;
-  color: ${({ isOpen }) =>
-    isOpen ? "var(--text-black)" : "var(--text-light-grey)"};
+  width: ${({ disableWidth, isOpenSearch, widthTagP }) =>
+    disableWidth
+      ? disableWidth
+      : isOpenSearch
+      ? "14px"
+      : widthTagP
+      ? widthTagP
+      : "100%"};
+  max-width: ${({ widthTagP }) => (widthTagP ? widthTagP : "180px")};
+  color: ${({ isOpen, color }) =>
+    isOpen ? "var(--text-black)" : color ? color : "var(--text-light-grey)"};
   text-align: right;
   font-family: Fixel;
-  font-size: 12px;
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : "12px")};
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
@@ -104,21 +125,21 @@ export const P = styled.p<Props>`
       width: ${disableWidth ? disableWidth : isChange ? "38px" : "100%"};
       max-width: unset;
     `)};
-  ${({ disableWidth }) =>
+  ${({ disableWidth, widthTagP, fontSize }) =>
     onDesktop(css`
-      width: ${disableWidth ? disableWidth : "100%"};
-      font-size: 14px;
+      width: ${disableWidth ? disableWidth : widthTagP ? widthTagP : "100%"};
+      font-size: ${fontSize ? fontSize : "14px"};
     `)}
 `;
-export const svgCheckedStyles = css`
-  &path {
-    fill: var(--bg-light-grey);
+export const svgCheckedStyles = (color: string | undefined) => css`
+  & path {
+    fill: ${color ? color : "var(--bg-light-grey)"};
   }
 `;
-export const SelectOne = styled.div`
+export const SelectOne = styled.div<Props>`
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: ${({ gap }) => (gap ? gap : "14px")};
   width: 242px;
   height: 24px;
 `;
@@ -128,13 +149,13 @@ export const SvgContainer = styled.div`
   height: 24px;
 `;
 
-export const svgArrowUp = css`
+export const svgArrowUp = (color: string | undefined) => css`
   & path {
-    fill: var(--bg-black);
+    fill: ${color ? color : "var(--bg-black)"};
   }
 `;
-export const svgArrowDpwn = css`
+export const svgArrowDpwn = (color: string | undefined) => css`
   & path {
-    fill: var(--bg-light-grey);
+    fill: ${color ? color : "var(--bg-light-grey)"};
   }
 `;
