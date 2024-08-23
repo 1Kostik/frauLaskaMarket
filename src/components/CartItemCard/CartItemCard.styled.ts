@@ -1,8 +1,10 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
-
-export const ItemInfoContainer = styled.div`
+interface Props {
+  width?: string;
+}
+export const ItemInfoContainer = styled.div<Props>`
   width: 100%;
   display: flex;
   border: 1px solid var(--bg-light-grey);
@@ -12,12 +14,13 @@ export const ItemInfoContainer = styled.div`
   ${onTablet(css`
     width: 360px;
   `)};
-  ${onDesktop(css`
-    height: auto;
-    width: 512px;
-    gap: 12px;
-    padding: 15px;
-  `)};
+  ${({ width }) =>
+    onDesktop(css`
+      height: auto;
+      width: ${width ? width : "512px"};
+      gap: 12px;
+      padding: 15px;
+    `)};
 `;
 
 export const ImgContainer = styled.div`

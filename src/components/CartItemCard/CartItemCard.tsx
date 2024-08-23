@@ -26,6 +26,7 @@ import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 
 interface ICartItemCardProps {
   item: IAddedToCartProduct;
+  width?:string;
   handleAddItem?: (id: number, size?: number | null) => void;
   handleDeleteItem?: (id: number, size?: number | null) => void;
   handleRemove?: (
@@ -38,6 +39,7 @@ interface ICartItemCardProps {
 
 const CartItemCard: React.FC<ICartItemCardProps> = ({
   item,
+  width,
   handleAddItem,
   handleDeleteItem,
   handleRemove,
@@ -46,7 +48,7 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
  
 
   return (
-    <ItemInfoContainer>
+    <ItemInfoContainer width={width}>
       <ImgContainer>
         <img src={item.img.img_url} alt={item.title} onError={handleImgError} />
       </ImgContainer>

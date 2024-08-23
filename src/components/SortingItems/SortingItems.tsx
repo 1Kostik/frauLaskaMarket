@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState,Dispatch, SetStateAction } from "react";
+import { useEffect, useRef, useState, Dispatch, SetStateAction } from "react";
 import { ReactComponent as Checked } from "@assets/icons/checked.svg";
 import { ReactComponent as ArrowUp } from "@assets/icons/arrow-up-select.svg";
 import { ReactComponent as ArrowDpwn } from "@assets/icons/arrow-down-select.svg";
@@ -19,25 +19,47 @@ import {
 
 interface ISortingItProps<T> {
   width?: string;
+  widthTagP?: string;
+  widthContainer?: string;
+  height?: string;
+  border?: string;
   options: T[] | null;
   padding?: string;
+  color?: string;
+  top?: string;
+  gap?: string;
+  fontSize?: string;
   borderRadius?: string;
+  justifyContent?: string;
+  backGround?: string;
   isOpenSearch?: boolean;
   isOpenFilter?: boolean;
   disableWidth?: string;
   setSelectedOption?: Dispatch<SetStateAction<T | null>>;
   selectedOption?: T | null;
+  setIsOpenModal?: Dispatch<SetStateAction<boolean>>;
 }
 const SortingItems = <T extends number | string>({
   width,
+  widthTagP,
+  widthContainer,
+  height,
+  border,
   options,
   padding,
+  top,
+  gap,
+  color,
+  fontSize,
   borderRadius,
+  justifyContent,
+  backGround,
   isOpenSearch,
   isOpenFilter,
   disableWidth,
   setSelectedOption,
   selectedOption,
+  setIsOpenModal,
 }: ISortingItProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -53,18 +75,20 @@ const SortingItems = <T extends number | string>({
       }
       isInitialMount.current = false;
     }
-  
+
     const handleClickOutside = (event: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setSelectedOption, options]);
-  
 
   const handleClick = () => {
     setIsOpen((prev) => !prev);
@@ -75,42 +99,68 @@ const SortingItems = <T extends number | string>({
       setSelectedOption(option);
       setChecked(true);
       setIsOpen(false);
+      if (setIsOpenModal && option === "Відхилено") {
+        setIsOpenModal(true);
+      } else if(setIsOpenModal){
+        setIsOpenModal(false);
+      }
     }
   };
 
   const isChange = isOpenFilter && isOpenSearch;
   return (
     <Container>
-      <SelectContainer>
+      <SelectContainer height={height} widthContainer={widthContainer}>
         <SelectTitleContainer
           onClick={handleClick}
           isOpen={isOpen}
           padding={padding}
+          border={border}
           borderRadius={borderRadius}
+          justifyContent={justifyContent}
+          backGround={backGround}
         >
-          <P isOpen={isOpen} isChange={isChange} isOpenSearch={isOpenSearch} disableWidth={disableWidth}>
-            {selectedOption ? selectedOption : ''}
+          <P
+            widthTagP={widthTagP}
+            isOpen={isOpen}
+            isChange={isChange}
+            isOpenSearch={isOpenSearch}
+            disableWidth={disableWidth}
+            color={color}
+            fontSize={fontSize}
+          >
+            {selectedOption ? selectedOption : ""}
           </P>
           {isOpen ? (
-            <ArrowUp css={svgArrowUp} />
+            <ArrowUp css={svgArrowUp(color)} />
           ) : (
-            <ArrowDpwn css={svgArrowDpwn} />
+            <ArrowDpwn css={svgArrowDpwn(color)} />
           )}
         </SelectTitleContainer>
         {isOpen && (
-          <SelectOptionContainer width={width}>
-            {options && options.map((option, i) => (
-              <SelectOne key={option + `${i}`}>
-                <SvgContainer>
-                  {checked && selectedOption === option && (
-                    <Checked css={svgCheckedStyles} />
-                  )}
-                </SvgContainer>
-                <SelectOption key={i} onClick={() => handleSelect(option)}>
-                  {option}
-                </SelectOption>
-              </SelectOne>
-            ))}
+          <SelectOptionContainer
+            width={width}
+            color={color}
+            backGround={backGround}
+            top={top}
+          >
+            {options &&
+              options.map((option, i) => (
+                <SelectOne key={option + `${i}`} gap={gap}>
+                  <SvgContainer>
+                    {checked && selectedOption === option && (
+                      <Checked css={svgCheckedStyles(color)} />
+                    )}
+                  </SvgContainer>
+                  <SelectOption
+                    key={i}
+                    onClick={() => handleSelect(option)}
+                    color={color}
+                  >
+                    {option}
+                  </SelectOption>
+                </SelectOne>
+              ))}
           </SelectOptionContainer>
         )}
       </SelectContainer>

@@ -5,8 +5,8 @@ export interface IAddedToCartProduct {
   product_code: number;
   size: number | null | undefined;
   discount: number | null;
-  price: number;
-  count: number;
+  price: number | null;
+  count: number | null;
   color: string | undefined | null;
   total_cost: number;
   quantity: number;
