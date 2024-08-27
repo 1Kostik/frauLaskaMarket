@@ -191,6 +191,13 @@ export const paymentMethods = css`
   }
 `;
 
+export const NPDeliveryWrapper = css`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+`;
+
 export const inputStyle = css`
   width: 100%;
   padding: 12px;

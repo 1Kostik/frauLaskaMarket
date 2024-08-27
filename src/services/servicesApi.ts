@@ -132,7 +132,16 @@ export const makeOrder = async (orderInfo: IOrder) => {
     return data;
   } catch (error) {
     toast.error("Шось пішло не так");
-    console.log(error);
+    if (axios.isAxiosError(error)) {
+      console.log("Axios error:", error.message);
+      console.log("Response:", error.response?.data);
+      const errorMessage =
+        error.response?.data?.message || "Unknown Axios error";
+      throw new Error(errorMessage);
+    } else {
+      console.error("Non-Axios error:", error);
+      throw new Error("Non-Axios error occurred");
+    }
   }
 };
 
@@ -162,4 +171,14 @@ export const updateOrder = async (orderId: number, status: string) => {
     toast.error("Шось пішло не так");
     console.log(error);
   }
+};
+
+export const getNPCities = async (cityName: string) => {
+  const { data } = await axios.post("/new-post/settlements", { cityName });
+  return data;
+};
+
+export const getWarehouses = async (cityRef: string) => {
+  const { data } = await axios.post("/new-post/warehouses", { cityRef });
+  return data;
 };
