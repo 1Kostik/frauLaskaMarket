@@ -30,7 +30,8 @@ export interface IOrder {
   payment_method: string;
   payment_status:string;
   phone: string;
-  post_office_number: string | number;
+  delivery_city: string;
+  delivery_destination: string;
   recipient_name: string;
   recipient_last_name: string;
   recipient_phone: string;

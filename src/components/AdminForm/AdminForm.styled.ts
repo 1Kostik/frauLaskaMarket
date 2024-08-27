@@ -89,6 +89,8 @@ export const inputLabel = (isShow: boolean) => css`
   border-radius: 10px;
   background-color: var(--bg-black);
 
+  pointer-events: none;
+
   font-family: Fixel;
   font-size: 12px;
   font-weight: 600;
