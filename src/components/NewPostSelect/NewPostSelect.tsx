@@ -68,6 +68,9 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
         setCities(cities);
       })();
     }
+    if (searchCity.length === 0) {
+      setCities(null);
+    }
   }, [searchCity]);
 
   useEffect(() => {
@@ -139,7 +142,7 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
 
           {!searchCity && <div>{selectedCity?.Present}</div>}
         </div>
-        {isShowSelectCities && cities && (
+        {isShowSelectCities && cities && cities.length > 0 && (
           <div css={listStyle}>
             {cities.map((сity) => (
               <p
