@@ -226,11 +226,11 @@ const OrderItemPage = () => {
                   <>
                     <div css={infoWrapper}>
                       <h2 css={titleH2}>Адреса:</h2>
-                      <p css={description}>{data.delivery_type}</p>
+                      <p css={description}>{data.delivery_city}</p>
                     </div>
                     <div css={infoWrapper}>
                       <h2 css={titleH2}>Відділення/поштомат:</h2>
-                      <p css={description}>{data.post_office_number}</p>
+                      <p css={description}>{data.delivery_destination}</p>
                     </div>
                   </>
                 )}
