@@ -1,9 +1,12 @@
-import OrderItemCard from "@components/OrderItemCard/OrderItemCard";
+// import OrderItemCard from "@components/OrderItemCard/OrderItemCard";
 import { formatDate } from "@pages/OrdersPage/OrdersPage";
 import {
+  deleteOrder,
   getOrderById,
   getProductById,
   updateOrder,
+  updateProductCountDecrease,
+  updateProductCountIncrease,
 } from "@services/servicesApi";
 import { containerStyles } from "@styles/variables";
 import { IOrder } from "Interfaces/IOrder";
@@ -19,7 +22,7 @@ import {
   infoWrapper,
   infoWrapperBtn,
   itemsContainer,
-  tdTrash,
+  // tdTrash,
   title,
   titleContainer,
   titleH2,
@@ -29,20 +32,38 @@ import {
 import CartItemCard from "@components/CartItemCard";
 import { nanoid } from "nanoid";
 import SortingItems from "@components/SortingItems/SortingItems";
-import { MdDeleteOutline } from "react-icons/md";
+// import { MdDeleteOutline } from "react-icons/md";
+import Modal from "@components/Modal";
+import StatusWarningModal from "@components/StatusWarningModal/StatusWarningModal";
+import { createPortal } from "react-dom";
+const modalPortal = document.querySelector("#portal-root");
 
 const OrderItemPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState<IOrder>();
   const [orderProducts, setOrderProducts] = useState<Product[]>([]);
   const [previousProductIds, setPreviousProductIds] = useState<number[]>([]);
   const [pymentStatus, setPymentStatus] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
+  // const [idForUpdCount, setIdForUpdCount] = useState<number | null>(null);
+  const [disableOrder, setDisableOrder] = useState<boolean>(false);
+
   const productIdArray: number[] =
     data?.order_items.map((item) => Number(item.product_id)) ?? [];
-  const optionsPayment = ["В очікуванні", "Оплачено"];
-  const optionStatus = ["В очікуванні", "Відправлено", "Відхилено"];
+
+  const optionsPayment =
+    data?.payment_status === "Оплачено"
+      ? ["Оплачено"]
+      : ["В очікуванні", "Оплачено"];
+  const optionStatus =
+    data?.status === "Відправлено"
+      ? ["Відправлено"]
+      : data?.status === "Відхилено"
+      ? ["Відхилено"]
+      : ["В очікуванні", "Відправлено", "Відхилено"];
+
   useEffect(() => {
     async function fetchOrder(id: number) {
       const result = await getOrderById(id);
@@ -85,39 +106,89 @@ const OrderItemPage = () => {
       );
 
       if (orderItem) {
-        const variation = item.variations.find((variation) => {
+        const variations = item.variations.filter((variation) => {
           const sizeMatch = orderItem.size
-            ? variation.size === orderItem.size
+            ? String(variation.size) === String(orderItem.size)
             : true;
           const colorMatch = orderItem.color
-            ? variation.color === orderItem.color
+            ? String(variation.color).toLowerCase() ===
+              String(orderItem.color).toLowerCase()
             : true;
+
           return sizeMatch && colorMatch;
         });
-
         return {
           product_id: item.id,
           title: item.title,
           img: item.imageUrls[0],
           product_code: orderItem.product_id,
           size: orderItem.size,
-          discount: variation?.discount ?? null,
-          price: variation?.price ?? null,
+          discount: variations[0].discount ?? null,
+          price: variations[0].price ?? null,
           count: orderItem.count,
           color: orderItem.color,
           total_cost: orderItem.total_cost,
           quantity: orderItem.count,
+          variation_id: variations[0].id,
         };
       }
       return null;
     })
     .filter((product) => product !== null);
+  const variation_ids = productsForRender.map((item) => {
+    return { id: item.variation_id, count: item.quantity };
+  });
+  useEffect(() => {
+    async function IncreaseCountProduct(id: number, count: number) {
+      await updateProductCountIncrease(id, count);
+    }
+    if (variation_ids.length > 0 && status === "Відхилено" && isModalOpen)
+      variation_ids.forEach((item) => {
+        IncreaseCountProduct(item.id, item.count);
+      });
+  }, [variation_ids, status, isModalOpen]);
 
-  const handleChangStatus = async () => {
-    const status = "Виконано";
-    await updateOrder(Number(id), status);
+  useEffect(() => {
+    async function DecreaseCountProduct(id: number, count: number) {
+      await updateProductCountDecrease(id, count);
+    }
+    if (
+      variation_ids.length > 0 &&
+      status === "Відправлено" &&
+      data?.status !== "Відправлено"
+    ) {
+      variation_ids.forEach((item) => {
+        DecreaseCountProduct(item.id, item.count);
+      });
+    }
+  }, [variation_ids, status, data?.status]);
+
+  useEffect(() => {
+    if (data?.status === "Відхилено" || data?.status === "Відправлено") {
+      setDisableOrder(true);
+    }
+  }, [data?.status]);
+
+  useEffect(() => {
+    if (status === "Відправлено") {
+      setDisableOrder(true);
+    }
+  }, [status]);
+
+  async function updateStatus(orderId: number, status: string) {
+    await updateOrder(orderId, status);
+  }
+  const handleUpdateStatus = (id: number) => {
+    if (id && status === "Відхилено") {
+      setDisableOrder(true);
+      updateStatus(id, status);
+      navigate(-1);
+    }
   };
-
+  const handleDelete = async (id: number) => {
+    await deleteOrder(id);
+    navigate(-1);
+  };
   return (
     <section style={{ height: "100vh", width: "100vw", paddingTop: "100px" }}>
       <div css={containerStyles}>
@@ -165,7 +236,6 @@ const OrderItemPage = () => {
                 )}
                 <div css={infoWrapper}>
                   <h2 css={titleH2}>Статус оплати:</h2>
-                  {/* <p css={description}>{data.payment_status}</p> */}
                   <p css={description}>
                     {" "}
                     <SortingItems<string>
@@ -185,15 +255,16 @@ const OrderItemPage = () => {
                       gap={"8px"}
                       setSelectedOption={setPymentStatus}
                       selectedOption={pymentStatus}
+                      disable={status === "Відправлено" ? false : disableOrder}
                     />
                   </p>
                 </div>
                 <div css={infoWrapper}>
                   <h2 css={titleH2}>Статус замовлення:</h2>
-                  {/* <p css={description}>{data.status}</p> */}
                   <p css={description}>
                     {" "}
                     <SortingItems<string>
+                      idOrders={data.id}
                       options={optionStatus}
                       width={"127px"}
                       widthTagP={"auto"}
@@ -208,6 +279,8 @@ const OrderItemPage = () => {
                       fontSize={"12px"}
                       top={"30px"}
                       gap={"8px"}
+                      disable={disableOrder}
+                      setIsOpenModal={setIsModalOpen}
                       setSelectedOption={setStatus}
                       selectedOption={status}
                     />
@@ -223,12 +296,29 @@ const OrderItemPage = () => {
                     {data.recipient_phone ? data.recipient_phone : ""}
                   </p>
                 </div>
+                {isModalOpen &&
+                  modalPortal &&
+                  createPortal(
+                    <Modal setIsOpen={setIsModalOpen}>
+                      {status === "Відхилено" && (
+                        <StatusWarningModal
+                          updateStatus={() =>
+                            handleUpdateStatus(Number(data.id))
+                          }
+                          name={data.id ? Number(data.id) : null}
+                        />
+                      )}
+                    </Modal>,
+                    modalPortal
+                  )}
               </>
             )}
             <div css={infoWrapperBtn}>
               <h2 css={titleH2}>Видалити замовлення:</h2>
               <p css={description}>
-                <button css={btnDelete}>Видалити</button>
+                <button css={btnDelete} onClick={() => handleDelete(Number(data?.id))}>
+                  Видалити
+                </button>
               </p>
             </div>
           </div>
