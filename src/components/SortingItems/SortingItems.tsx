@@ -16,8 +16,10 @@ import {
   svgArrowUp,
   svgArrowDpwn,
 } from "./SortingItems.styled";
+import { updateOrder } from "@services/servicesApi";
 
 interface ISortingItProps<T> {
+  idOrders?:number;
   width?: string;
   widthTagP?: string;
   widthContainer?: string;
@@ -38,9 +40,12 @@ interface ISortingItProps<T> {
   setSelectedOption?: Dispatch<SetStateAction<T | null>>;
   selectedOption?: T | null;
   setIsOpenModal?: Dispatch<SetStateAction<boolean>>;
+  setIdForUpdCount?:Dispatch<SetStateAction<number | null>>;
+  disable?:boolean;
 }
 const SortingItems = <T extends number | string>({
   width,
+  idOrders,
   widthTagP,
   widthContainer,
   height,
@@ -60,6 +65,8 @@ const SortingItems = <T extends number | string>({
   setSelectedOption,
   selectedOption,
   setIsOpenModal,
+  disable,
+  setIdForUpdCount,
 }: ISortingItProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -91,9 +98,14 @@ const SortingItems = <T extends number | string>({
   }, [setSelectedOption, options]);
 
   const handleClick = () => {
+    if(disable){
+      return
+    }
     setIsOpen((prev) => !prev);
   };
-
+  async function updateStatus(orderId: number, status: string) {
+    await updateOrder(orderId, status);
+  }
   const handleSelect = (option: T) => {
     if (setSelectedOption) {
       setSelectedOption(option);
@@ -104,6 +116,10 @@ const SortingItems = <T extends number | string>({
       } else if(setIsOpenModal){
         setIsOpenModal(false);
       }
+    }
+    if(idOrders && setIdForUpdCount && option === "Відправлено"){
+      setIdForUpdCount(Number(idOrders))
+      updateStatus(idOrders, option);
     }
   };
 
@@ -131,7 +147,7 @@ const SortingItems = <T extends number | string>({
           >
             {selectedOption ? selectedOption : ""}
           </P>
-          {isOpen ? (
+          {isOpen && !disable ? (
             <ArrowUp css={svgArrowUp(color)} />
           ) : (
             <ArrowDpwn css={svgArrowDpwn(color)} />

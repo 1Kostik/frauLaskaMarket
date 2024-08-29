@@ -1,10 +1,10 @@
 import React from 'react'
 import { buttonStyle, wrapper } from './StatusWarningModal.styled';
 interface StatusWarningProps{
-    name?: number | null;
-    updateStatus?:()=>void;
+    name: number | null;
+    updateStatus:()=>void;
 }
-const StatusWarningModal:React.FC<StatusWarningProps> = ({name}) => {
+const StatusWarningModal:React.FC<StatusWarningProps> = ({name,updateStatus}) => {
   return (
     <div css={wrapper}>
         <h2>Ви збираєтесь відхилити замовлення!</h2> 
@@ -14,7 +14,7 @@ const StatusWarningModal:React.FC<StatusWarningProps> = ({name}) => {
       </p>
       <p>Підтвердіть відхилиння замовлення:</p>
       <span>{name}</span>
-      <button type="button" css={buttonStyle}>
+      <button type="button" onClick={() => updateStatus()} css={buttonStyle}>
         Підтвердіть
       </button>
     </div>
@@ -22,4 +22,3 @@ const StatusWarningModal:React.FC<StatusWarningProps> = ({name}) => {
 }
 
 export default StatusWarningModal
-/* onClick={() => updateStatus()} */
