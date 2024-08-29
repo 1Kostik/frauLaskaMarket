@@ -278,6 +278,7 @@ export const updatePamentStatus = async (id: number) => {
       throw new Error("Non-Axios error occurred");
     }
   }
+};
 export const getNPCities = async (cityName: string) => {
   const { data } = await axios.post("/new-post/settlements", { cityName });
   return data;
@@ -285,5 +286,4 @@ export const getNPCities = async (cityName: string) => {
 export const getWarehouses = async (cityRef: string) => {
   const { data } = await axios.post("/new-post/warehouses", { cityRef });
   return data;
-
 };
