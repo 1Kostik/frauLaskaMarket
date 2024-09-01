@@ -61,6 +61,7 @@ import { deleteImage } from "@redux/ads/slice";
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 import { useNavigate } from "react-router-dom";
 import { handleNumericInput } from "@utils/handleNumericInput";
+import { toast } from "react-toastify";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -224,14 +225,15 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     const {
       values: { imageUrls },
       setFieldValue,
+      setFieldError,
     } = formik;
+    setFieldError("imageUrls", undefined);
     const files = Array.from(e.target.files || []) as File[];
     const filesForAdd = files.filter((file) => file.size < FILE_SIZE);
     const fileUrls = filesForAdd.map((file) => URL.createObjectURL(file));
     if (imageUrls.length + fileUrls.length > 8) {
       return;
     }
-
     setFieldValue("imageUrls", [...imageUrls, ...filesForAdd]);
   };
 
@@ -378,12 +380,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
 
     if (!product) {
       dispatch(createProduct(formData))
-        .unwrap()
         .then(({ payload }) => navigate(`/store/${payload.id}`))
         .catch(() => navigate("/errorPage"));
     } else if (product?.id !== undefined) {
       dispatch(updateProduct({ id: product.id, formData }))
-        .unwrap()
         .then(() => navigate(`/store/${product.id}`))
         .catch(() => navigate("/errorPage"));
     }
@@ -417,6 +417,15 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
             errors,
             touched,
           } = formik;
+
+          const handleFormSubmit = () => {
+            formik.validateForm().then((formErrors) => {
+              if (Object.keys(formErrors).length > 0) {
+                toast.error("Будь ласка, заповніть обов'язкові поля.");
+              }
+              formik.handleSubmit();
+            });
+          };
 
           return (
             <>
@@ -964,7 +973,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                     </FieldArray>
                   </div>
                   <div css={submitWrapper}>
-                    <button type="submit">
+                    <button type="button" onClick={handleFormSubmit}>
                       {product ? "Зберегти зміни" : "Опублікувати оголошення"}
                     </button>
                   </div>

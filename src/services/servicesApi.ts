@@ -1,5 +1,6 @@
 import axios from "axios";
 import { IOrder } from "Interfaces/IOrder";
+import { IOrderCreation } from "Interfaces/IOrderCreation";
 import { toast } from "react-toastify";
 
 axios.defaults.baseURL = "http://localhost:8081/api/";
@@ -32,8 +33,18 @@ export const deleteCategory = async (id: number) => {
 };
 
 export const postAdvert = async (formData: FormData) => {
-  const { data } = await axios.post("products", formData);
-  return data;
+  try {
+    const { data } = await axios.post("products", formData);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("Axios error:", error.message);
+      throw new Error(error.message);
+    } else {
+      console.error("Non-Axios error:", error);
+      throw new Error("Non-Axios error occurred");
+    }
+  }
 };
 
 export const deleteAdvert = async (id: number) => {
@@ -149,7 +160,7 @@ export const makePayment = async (orderDetails: IOrder) => {
   }
 };
 
-export const makeOrder = async (orderInfo: IOrder) => {
+export const makeOrder = async (orderInfo: IOrderCreation) => {
   try {
     const { data } = await axios.post("orders", orderInfo);
     toast.success("Замовлення створено");
