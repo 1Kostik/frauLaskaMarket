@@ -335,6 +335,16 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     values.popularity = 1;
     values.ranking = 1;
 
+    values.variations = values.variations.map((item) => {
+      return {
+        ...item,
+        price: item.discount
+          ? Number(item.price) -
+            (Number(item.discount) / 100) * Number(item.price)
+          : item.price,
+      };
+    });
+    console.log("values", values.variations);
     const formData = new FormData();
 
     values.imageUrls.forEach((file) => {
@@ -380,11 +390,11 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
 
     if (!product) {
       dispatch(createProduct(formData))
-        .then(({ payload }) => navigate(`/store/${payload.id}`))
+        .then(({ payload }) => navigate(`/store/product/${payload.id}`))
         .catch(() => navigate("/errorPage"));
     } else if (product?.id !== undefined) {
       dispatch(updateProduct({ id: product.id, formData }))
-        .then(() => navigate(`/store/${product.id}`))
+        .then(() => navigate(`/store/product/${product.id}`))
         .catch(() => navigate("/errorPage"));
     }
   };

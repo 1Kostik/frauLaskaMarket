@@ -77,7 +77,6 @@ const adsSlice = createSlice({
       .addMatcher(
         isAnyOf(
           createProduct.pending,
-          deleteProduct.pending,
           updateProduct.pending,
           getProduct.pending
         ),
