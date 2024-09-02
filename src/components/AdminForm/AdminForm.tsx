@@ -344,7 +344,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
           : item.price,
       };
     });
-    console.log("values", values.variations);
+
     const formData = new FormData();
 
     values.imageUrls.forEach((file) => {
