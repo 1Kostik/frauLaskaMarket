@@ -66,7 +66,7 @@ function StorePage() {
   ];
 
   const isInitialMount = useRef(true);
-  console.log("sortOrder", sortOrder);
+
   useEffect(() => {
     if (isInitialMount.current) {
       switch (`sortOrder=${sortOrder}&sortField=${sortField}`) {
@@ -197,7 +197,7 @@ function StorePage() {
     sortField,
     isAdvertDeleted,
   ]);
-  console.log("typeOfSort", typeOfSort);
+
   // useEffect(() => {
   //   if (filteredProducts.length > 0) {
   //     setSearchItem("");

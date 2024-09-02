@@ -9,7 +9,7 @@ import { deleteProduct, getProduct } from "@redux/ads/operations";
 
 interface IProductInterfaceProps {
   productId: number;
-  setIsAdvertDeleted: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsAdvertDeleted?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProductInterface: React.FC<IProductInterfaceProps> = ({
@@ -21,9 +21,6 @@ const ProductInterface: React.FC<IProductInterfaceProps> = ({
   // const isAuth = useAppSelector(getAuth);
   const isAuth = true;
 
-  const location = useLocation();
-  console.log('location', location.pathname)
-
   const handleProductEdit = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     dispatch(getProduct(productId)).then(() => {
@@ -34,9 +31,12 @@ const ProductInterface: React.FC<IProductInterfaceProps> = ({
   const handleProductDelete = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     dispatch(deleteProduct(productId)).then(() => {
-      setIsAdvertDeleted((prev) => !prev);
+      if (setIsAdvertDeleted) {
+        setIsAdvertDeleted((prev) => !prev);
+      } else {
+        navigate("/store");
+      }
     });
-    // navigate("/store");
   };
 
   return (
