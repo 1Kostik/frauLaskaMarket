@@ -22,6 +22,7 @@ import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
 import { getProductsAndSorted } from "@services/servicesApi";
 import { getSavedFilter } from "@utils/getSavedFilter";
+
 interface SavedFilter {
   id: string;
   productsId: string[];
@@ -52,6 +53,8 @@ function StorePage() {
     useState<Record<string, string>[]>(savedFilteredItemsId);
   const [totalPage, setTotalPage] = useState<number>(0);
 
+  const [isAdvertDeleted, setIsAdvertDeleted] = useState(false);
+
   const countItemPages = 12;
   const lastPage = totalPage && Math.ceil(totalPage / countItemPages);
 
@@ -63,7 +66,7 @@ function StorePage() {
   ];
 
   const isInitialMount = useRef(true);
-
+  console.log("sortOrder", sortOrder);
   useEffect(() => {
     if (isInitialMount.current) {
       switch (`sortOrder=${sortOrder}&sortField=${sortField}`) {
@@ -121,7 +124,7 @@ function StorePage() {
       default:
         break;
     }
-  }, [typeOfSort]);
+  }, [typeOfSort, isAdvertDeleted]);
 
   // Основной эффект для обновления продуктов при изменении параметров поиска
   useEffect(() => {
@@ -172,6 +175,7 @@ function StorePage() {
         searchParamsString.append(key, value);
       }
     });
+
     async function fetchProducts() {
       try {
         const result = await getProductsAndSorted(
@@ -185,8 +189,15 @@ function StorePage() {
       }
     }
     fetchProducts();
-  }, [filteredItemsId, currentPage, searchItem, sortOrder, sortField]);
-
+  }, [
+    filteredItemsId,
+    currentPage,
+    searchItem,
+    sortOrder,
+    sortField,
+    isAdvertDeleted,
+  ]);
+  console.log("typeOfSort", typeOfSort);
   // useEffect(() => {
   //   if (filteredProducts.length > 0) {
   //     setSearchItem("");
@@ -251,7 +262,7 @@ function StorePage() {
     setOpenFilter((prev) => !prev);
   };
   const handleOnClickCard = (id: number) => {
-    navigate(`${id}`);
+    navigate(`product/${id}`);
   };
 
   return (
@@ -290,28 +301,31 @@ function StorePage() {
               </SearchContainer>
 
               <ProductListContainer>
-              {products &&
+                {products &&
                   products.map((item: Product) => (
                     <ProductCard
                       key={item.id}
                       show={openFilter}
                       handleOnClickCard={() => handleOnClickCard(item.id)}
                       item={item}
+                      setIsAdvertDeleted={setIsAdvertDeleted}
                     />
                   ))}
               </ProductListContainer>
             </Container>
           </MaineContainer>
         </div>
-       {products && products.length > 0 && <Pagination
-          totalPage={totalPage}
-          countItemPages={countItemPages}
-          paginate={paginate}
-          nextPage={nextPage}
-          prevPage={prevPage}
-          currentPage={currentPage}
-          lastPage={lastPage}
-        />}
+        {products && products.length > 0 && (
+          <Pagination
+            totalPage={totalPage}
+            countItemPages={countItemPages}
+            paginate={paginate}
+            nextPage={nextPage}
+            prevPage={prevPage}
+            currentPage={currentPage}
+            lastPage={lastPage}
+          />
+        )}
       </Section>
     </>
   );

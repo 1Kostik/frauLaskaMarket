@@ -17,6 +17,7 @@ interface Props {
   handleOnClickCard?: (id: number) => void;
   item: Product;
   width?: string;
+  setIsAdvertDeleted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ProductCard: React.FC<Props> = ({
@@ -24,10 +25,9 @@ const ProductCard: React.FC<Props> = ({
   handleOnClickCard,
   item,
   width,
+  setIsAdvertDeleted,
 }) => {
   const { id, imageUrls, title, variations } = item;
-
-  
 
   return (
     <Container
@@ -44,7 +44,10 @@ const ProductCard: React.FC<Props> = ({
             style={{ width: `${width}` }}
             onError={handleImgError}
           />
-          <ProductInterface productId={id} />
+          <ProductInterface
+            productId={id}
+            setIsAdvertDeleted={setIsAdvertDeleted}
+          />
         </ImageContainer>
         <InfoContainer>
           <H5>{title}</H5>
