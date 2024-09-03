@@ -5,12 +5,13 @@ import {
   ImageContainer,
   InfoContainer,
   H5,
-  P,
 } from "./ProductCard.styled";
 import ProductInterface from "@components/ProductInterface";
 import { handleImgError } from "@utils/handleImgError";
 
 import { Product } from "Interfaces/Product";
+
+import PriceItem from "@components/PriceItem/PriceItem";
 
 interface Props {
   show?: boolean;
@@ -30,7 +31,7 @@ const ProductCard: React.FC<Props> = ({
   type,
 }) => {
   const { id, imageUrls, title, variations } = item;
-
+  
   return (
     <Container
       show={show}
@@ -55,9 +56,7 @@ const ProductCard: React.FC<Props> = ({
         </ImageContainer>
         <InfoContainer>
           <H5>{title}</H5>
-          <P>
-            {variations && variations.length > 0 ? variations[0].price : ""} грн
-          </P>
+          <PriceItem variations={variations[0]} />
         </InfoContainer>
       </CardWrapper>
     </Container>

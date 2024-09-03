@@ -208,3 +208,15 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
+
+
+/*
+let priceWithDiscount = 900; // Цена со скидкой
+let discountPercent = 10; // Процент скидки
+
+let fullPrice = (priceWithDiscount * 100) / (100 - discountPercent);
+
+console.log(fullPrice); // Выведет 1000
+
+*/
