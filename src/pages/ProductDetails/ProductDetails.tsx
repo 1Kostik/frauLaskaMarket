@@ -351,7 +351,7 @@ const ProductDetails = () => {
             <ProductListContainer>
               {popularity &&
                 popularity.map((item: Product) => (
-                  <ProductCard key={item.id} width={widthImg} item={item} />
+                  <ProductCard key={item.id} width={widthImg} item={item} type="popularity"/>
                 ))}
             </ProductListContainer>
           </ContainerTopSeller>
