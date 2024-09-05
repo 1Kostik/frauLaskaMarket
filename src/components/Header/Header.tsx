@@ -36,7 +36,7 @@ const Header = () => {
   const isAromaSchool = location.pathname === "/aroma-school";
   const isConsultations = location.pathname === "/consultations";
   const isStore = location.pathname === "/store";
-  const isProductDetails = location.pathname === `/store/${id}`;
+  const isProductDetails = location.pathname === `/store/product/${id}`;
   const isCart = location.pathname === "/cart";
   const isOrder = location.pathname === "/order";
   const isAdmin = location.pathname.startsWith("/admin");

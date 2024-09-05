@@ -15,7 +15,6 @@ import {
   P,
   TitleContainer,
   P1,
-  P2,
   P3,
   ColorContainer,
   H4,
@@ -49,6 +48,7 @@ import { selectCart } from "@redux/cart/selectors";
 import ProductInterface from "@components/ProductInterface";
 import { getProductById } from "@services/servicesApi";
 import { popularity } from "@utils/popularity";
+import PriceItem from "@components/PriceItem/PriceItem";
 
 const ProductDetailsProps = {
   container: {
@@ -86,14 +86,14 @@ const ProductDetailsPropsText = {
 const ProductDetails = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [selectedOption, setSelectedOption] = useState<number | null>(
-    null
-  );
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [productPrice, setProductPrice] = useState<number | null>(null);
   const [addedColor, setAddedColor] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [product, setProduct] = useState<Product | null>(null);
   const [feedBacks, setFeedBacks] = useState<Feedback[]>([]);
+  const [variationItem, setVariationItem] = useState<Variation>();
+
   const cart = useAppSelector(selectCart);
   const dispatch = useAppDispatch();
   const { id } = useParams();
@@ -122,6 +122,7 @@ const ProductDetails = () => {
         setSelectedOption(data.variations[0].size);
         setAddedColor(data.variations[0].color);
         setFeedBacks(data.feedbacks);
+        setVariationItem(data.variations[0]);
       } catch (error) {
         console.log("error :>> ", error);
       }
@@ -137,16 +138,19 @@ const ProductDetails = () => {
           setProductPrice(item.price);
           const color = item.color ? item.color : "";
           setAddedColor(color);
+          setVariationItem(item);
         }
       });
     }
   }, [selectedOption]);
+
   useEffect(() => {
     if (product) {
       product.variations.forEach((item: Variation) => {
         if (addedColor === item.color) {
           setProductPrice(item.price);
           setSelectedOption(item.size);
+          setVariationItem(item);
         }
       });
     }
@@ -213,11 +217,8 @@ const ProductDetails = () => {
         product_code: product.product_code,
         count: 1,
         color: addedColor,
-        total_cost: Math.round(
-          productPrice -
-            (productPrice * (product.variations[0].discount || 0)) / 100
-        ),
-        quantity: product.variations[0].count
+        total_cost: productPrice,
+        quantity: product.variations[0].count,
       };
 
       dispatch(addToCart(productToAdd));
@@ -258,7 +259,14 @@ const ProductDetails = () => {
                   <P>Є в наявності</P>
                 </TitleContainer>
                 <P1>Код товару:№{product_code}</P1>
-                <P2>{productPrice} ₴</P2>
+                {/* <P2>{productPrice} ₴</P2> */}
+                {variationItem && (
+                  <PriceItem
+                    price={variationItem.price}
+                    discount={variationItem.discount}
+                    style_item={"productDetailsPage"}
+                  />
+                )}
                 <P3>{description}</P3>
                 {colors && colors.length > 0 && (
                   <ColorContainer
@@ -351,7 +359,12 @@ const ProductDetails = () => {
             <ProductListContainer>
               {popularity &&
                 popularity.map((item: Product) => (
-                  <ProductCard key={item.id} width={widthImg} item={item} type="popularity"/>
+                  <ProductCard
+                    key={item.id}
+                    width={widthImg}
+                    item={item}
+                    type="popularity"
+                  />
                 ))}
             </ProductListContainer>
           </ContainerTopSeller>

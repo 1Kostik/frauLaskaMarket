@@ -7,8 +7,8 @@ import {
   InfoContainer,
   InfoTitle,
   ItemInfoContainer,
-  NewPrice,
-  OldPrice,
+  // NewPrice,
+  // OldPrice,
   P,
   Price,
   PriceContainer,
@@ -19,14 +19,15 @@ import {
 } from "./CartItemCard.styled";
 
 import { ReactComponent as Close } from "@assets/icons/close2.svg";
+import PriceItem from "@components/PriceItem/PriceItem";
+// import PriceItem from "@components/PriceItem/PriceItem";
 import { handleImgError } from "@utils/handleImgError";
 
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 
-
 interface ICartItemCardProps {
   item: IAddedToCartProduct;
-  width?:string;
+  width?: string;
   handleAddItem?: (id: number, size?: number | null) => void;
   handleDeleteItem?: (id: number, size?: number | null) => void;
   handleRemove?: (
@@ -45,8 +46,6 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
   handleRemove,
   isOrderPage,
 }) => {
- 
-
   return (
     <ItemInfoContainer width={width}>
       <ImgContainer>
@@ -94,10 +93,14 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
           )}
 
           <Price>
-            {item.discount && item.discount > 0 && (
-              <OldPrice>{item.price} ₴</OldPrice>
+            {item && (
+              <PriceItem
+                price={item.price!}
+                discount={item.discount}
+                total_cost={item.total_cost}
+                style_item={"cartPage"}
+              />
             )}
-            <NewPrice>{item.total_cost}₴</NewPrice>
           </Price>
         </PriceContainer>
       </InfoContainer>

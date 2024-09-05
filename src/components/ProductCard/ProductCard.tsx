@@ -31,7 +31,10 @@ const ProductCard: React.FC<Props> = ({
   type,
 }) => {
   const { id, imageUrls, title, variations } = item;
-  
+
+  const firstImageUrl =
+    imageUrls && imageUrls.length > 0 ? imageUrls[0].img_url : "";
+
   return (
     <Container
       show={show}
@@ -42,7 +45,7 @@ const ProductCard: React.FC<Props> = ({
       <CardWrapper>
         <ImageContainer>
           <img
-            src={imageUrls[0].img_url}
+            src={firstImageUrl}
             alt=""
             style={{ width: `${width}` }}
             onError={handleImgError}
@@ -56,7 +59,9 @@ const ProductCard: React.FC<Props> = ({
         </ImageContainer>
         <InfoContainer>
           <H5>{title}</H5>
-          <PriceItem variations={variations[0]} />
+          {variations && variations.length > 0 && (
+            <PriceItem price={variations[0].price} discount={variations[0].discount}  style_item={"storePage"} />
+          )}
         </InfoContainer>
       </CardWrapper>
     </Container>

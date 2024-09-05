@@ -339,8 +339,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
       return {
         ...item,
         price: item.discount
-          ? Number(item.price) -
-            (Number(item.discount) / 100) * Number(item.price)
+          ? Math.round(
+              Number(item.price) -
+                (Number(item.discount) / 100) * Number(item.price)
+            )
           : item.price,
       };
     });

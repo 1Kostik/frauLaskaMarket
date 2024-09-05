@@ -48,9 +48,7 @@ const cartSlice = createSlice({
       );
       if (item) {
         item.count += 1;
-        item.total_cost =
-          Math.round(item.price - (item.price * (item.discount || 0)) / 100) *
-          item.count;
+        item.total_cost = item.price! * item.count;
       }
     },
     decreaseQuantity(
@@ -64,9 +62,7 @@ const cartSlice = createSlice({
       );
       if (item && item.count > 1) {
         item.count -= 1;
-        item.total_cost =
-          Math.round(item.price - (item.price * (item.discount || 0)) / 100) *
-          item.count;
+        item.total_cost = item.price! * item.count;
       }
     },
   },
