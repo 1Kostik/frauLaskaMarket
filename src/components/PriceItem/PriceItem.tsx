@@ -1,23 +1,54 @@
 import { fullPrice } from "@utils/fullPrice";
-import { Variation } from "Interfaces/Product";
 import React from "react";
-import { old_price, P } from "./PriceItem.styled";
+import {
+  newPriceCartItemCArd,
+  oldPriceCartItemCArd,
+  oldPriceProductDetails,
+  oldPriceStore,
+  productDetailsStyle,
+  storeStyle,
+} from "./PriceItem.styled";
 interface IPriceItemProps {
-  variations: Variation;
+  price: number;
+  discount?: number | null;
+  style_item?: string;
+  total_cost?: number;
 }
-const PriceItem: React.FC<IPriceItemProps> = ({ variations }) => {
-  const { price, discount } = variations;
+const PriceItem: React.FC<IPriceItemProps> = ({
+  price,
+  discount,
+  style_item,
+  total_cost,
+}) => {
+  const style_props =
+    style_item === "storePage"
+      ? storeStyle
+      : style_item === "productDetailsPage"
+      ? productDetailsStyle
+      : style_item === "cartPage"
+      ? newPriceCartItemCArd
+      : "";
+  const old_price =
+    style_item === "storePage"
+      ? oldPriceStore
+      : style_item === "productDetailsPage"
+      ? oldPriceProductDetails
+      : style_item === "cartPage"
+      ? oldPriceCartItemCArd
+      : "";
+  const switchTitle = style_item === "storePage" ? "грн" : "₴";
+  const switchPrice = style_item === "cartPage" ? total_cost : price;
   return (
-    <P>
+    <p css={style_props}>
       {discount && (
         <span>
           {" "}
           <span css={old_price}>{fullPrice(price, discount)}</span> -{" "}
         </span>
       )}
-      {price}
-      грн
-    </P>
+      {switchPrice}{" "}
+      {switchTitle}
+    </p>
   );
 };
 
