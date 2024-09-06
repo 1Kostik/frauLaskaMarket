@@ -109,7 +109,7 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
   }, []);
 
   useEffect(() => {
-    setFieldValue("delivery_city", selectedCity?.Present);
+    setFieldValue("delivery_city", selectedCity?.Present || "");
     setFieldValue("delivery_destination", selectedWarehouse);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedWarehouse, selectedCity]);

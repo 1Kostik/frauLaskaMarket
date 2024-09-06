@@ -43,7 +43,20 @@ const validationSchema = (isOtherRecipient: boolean) =>
       .required("Обов'язковий"),
 
     delivery_type: Yup.string().oneOf(["Нова пошта", "Самовивіз"]),
-    delivery_city: Yup.string().required(),
+    delivery_city: Yup.string().test(
+      "is-postPickup",
+      "Поля доставки обов'язкові",
+      function (value) {
+        const { delivery_type } = this.parent;
+        if (
+          delivery_type === "Нова пошта" &&
+          (value === null || value === undefined)
+        ) {
+          return false;
+        }
+        return true;
+      }
+    ),
     delivery_destination: Yup.string().test(
       "is-postPickup",
       "Поля доставки обов'язкові",
@@ -132,6 +145,7 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
 
   const onOrderSubmit = (values: IInitialCartFormValue) => {
     console.log("values", values);
+     
     const newOrder = {
       ...replaceNullsWithEmptyStrings(values),
       order_items: orderItemsConverter(addedItems),
