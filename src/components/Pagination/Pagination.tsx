@@ -1,5 +1,9 @@
 import React from "react";
-import { ButtonPage, Container, PaginationContainer } from "./Pagination.styled";
+import {
+  ButtonPage,
+  Container,
+  PaginationContainer,
+} from "./Pagination.styled";
 import { ReactComponent as ArrowNext } from "@assets/icons/arrow_next.svg";
 import { ReactComponent as ArrowPrev } from "@assets/icons/arrow_prev.svg";
 interface IPagination {
@@ -26,6 +30,20 @@ const Pagination: React.FC<IPagination> = ({
     btnNumber.push(i);
   }
 
+  console.log("countItemPages :>> ", countItemPages);
+  console.log("currentPage :>> ", currentPage);
+
+  const start = currentPage - 1;
+  const end = lastPage - (5 - currentPage);
+
+  console.log("start :>> ", start);
+  console.log("end :>> ", end);
+
+  const numberOfPagesToDisplay = btnNumber.slice(
+    start === 1 ? 0 : start < 4 ? 0 : start > 4 ? 4 : start,
+    end <= 8 ? 5 : end
+  );
+
   return (
     <Container>
       <PaginationContainer>
@@ -35,8 +53,13 @@ const Pagination: React.FC<IPagination> = ({
         >
           <ArrowPrev />
         </button>
-        { btnNumber.map((item) => (
-          <ButtonPage key={item} onClick={() => paginate(item)} currentPage={currentPage===item}  style={{ visibility: btnNumber.length > 1 ? "visible" :"hidden"  }}>
+        {numberOfPagesToDisplay.map((item) => (
+          <ButtonPage
+            key={item}
+            onClick={() => paginate(item)}
+            currentPage={currentPage === item}
+            style={{ visibility: btnNumber.length > 1 ? "visible" : "hidden" }}
+          >
             {item}
           </ButtonPage>
         ))}
