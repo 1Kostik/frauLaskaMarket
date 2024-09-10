@@ -2,8 +2,8 @@ import { MouseEvent } from "react";
 import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { interfaceStyle } from "./ProductInterface.styled";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@redux/hooks";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "@redux/hooks";
 // import { getAuth } from "@redux/auth/selectors";
 import { deleteProduct, getProduct } from "@redux/ads/operations";
 

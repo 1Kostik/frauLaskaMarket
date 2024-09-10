@@ -1,17 +1,24 @@
 import React from "react";
 import {
+  arrow,
   ButtonPage,
   Container,
+  doubleArrow,
   PaginationContainer,
 } from "./Pagination.styled";
 import { ReactComponent as ArrowNext } from "@assets/icons/arrow_next.svg";
 import { ReactComponent as ArrowPrev } from "@assets/icons/arrow_prev.svg";
+import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+
 interface IPagination {
   totalPage: number;
   countItemPages: number;
-  paginate: (pageNamber: number) => void;
+  paginate: (pageNumber: number) => void;
   nextPage: () => void;
   prevPage: () => void;
+  firstPageBtn:() => void;
+  lastPageBtn:() => void;
   currentPage: number;
   lastPage: number;
 }
@@ -22,54 +29,80 @@ const Pagination: React.FC<IPagination> = ({
   paginate,
   prevPage,
   nextPage,
+  firstPageBtn,
+  lastPageBtn,
   currentPage,
   lastPage,
 }) => {
-  const btnNumber = [];
-  for (let i = 1; i <= Math.ceil(totalPage / countItemPages); i++) {
-    btnNumber.push(i);
-  }
+  const totalPages = Math.ceil(totalPage / countItemPages);
 
-  console.log("countItemPages :>> ", countItemPages);
-  console.log("currentPage :>> ", currentPage);
+  const numberOfPagesToDisplay = () => {
+    const range = 5;
+    let start: number;
+    let end: number;
 
-  const start = currentPage - 1;
-  const end = lastPage - (5 - currentPage);
+    if (totalPages <= range) {
+      // If there are 5 or fewer pages, display all pages
+      start = 0;
+      end = totalPages;
+    } else {
+      // If more than 5 pages, calculate the start and end of the range
+      const halfRange = Math.floor(range / 2);
 
-  console.log("start :>> ", start);
-  console.log("end :>> ", end);
+      if (currentPage <= halfRange) {
+        // If current page is near the start
+        start = 0;
+        end = range;
+      } else if (currentPage + halfRange >= totalPages) {
+        // If current page is near the end
+        start = totalPages - range;
+        end = totalPages;
+      } else {
+        // If current page is in the middle
+        start = currentPage - halfRange - 1;
+        end = currentPage + halfRange;
+      }
+    }
 
-  const numberOfPagesToDisplay = btnNumber.slice(
-    start === 1 ? 0 : start < 4 ? 0 : start > 4 ? 4 : start,
-    end <= 8 ? 5 : end
-  );
+    return Array.from({ length: end - start }, (_, i) => i + start + 1);
+  };
 
   return (
     <Container>
       <PaginationContainer>
+      <button
+          onClick={() => firstPageBtn()}
+          style={{ visibility: totalPages < 3 || currentPage === 1 ? "hidden" : "visible" }}         
+        >
+      <MdKeyboardDoubleArrowLeft css={doubleArrow}/>
+      </button>
         <button
           onClick={() => prevPage()}
           style={{ visibility: currentPage === 1 ? "hidden" : "visible" }}
         >
-          <ArrowPrev />
+          <ArrowPrev css={arrow}/>
         </button>
-        {numberOfPagesToDisplay.map((item) => (
+        {numberOfPagesToDisplay().map((page) => (
           <ButtonPage
-            key={item}
-            onClick={() => paginate(item)}
-            currentPage={currentPage === item}
-            style={{ visibility: btnNumber.length > 1 ? "visible" : "hidden" }}
+            key={page}
+            onClick={() => paginate(page)}
+            currentPage={currentPage === page}
+            style={{ visibility: totalPages > 1 ? "visible" : "hidden" }}
           >
-            {item}
+            {page}
           </ButtonPage>
         ))}
         <button
           onClick={() => nextPage()}
-          style={{
-            visibility: currentPage === lastPage ? "hidden" : "visible",
-          }}
+          style={{ visibility: currentPage === lastPage ? "hidden" : "visible" }}
         >
-          <ArrowNext />
+          <ArrowNext css={arrow}/>
+        </button>
+        <button
+          onClick={() => lastPageBtn()}    
+          style={{ visibility: totalPages < 3 || currentPage === lastPage ? "hidden" : "visible" }}    
+        >
+        <MdKeyboardDoubleArrowRight  css={doubleArrow}/>
         </button>
       </PaginationContainer>
     </Container>

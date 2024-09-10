@@ -1,15 +1,16 @@
 import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
-import { ImageUrl, Product } from "Interfaces/Product";
+import { Product } from "Interfaces/Product";
 import {
   createProduct,
   deleteProduct,
   getProduct,
   updateProduct,
 } from "./operations";
+import { IAdvert, IImageUrl } from "Interfaces/IAdvert";
 
 interface IAdsState {
   ads: Product[];
-  product: Product | null;
+  product: IAdvert | null;
   isLoading: boolean;
   error: unknown;
 }
@@ -23,7 +24,7 @@ const initialState: IAdsState = {
 
 const handleFulfilled = (
   state: IAdsState,
-  { payload }: PayloadAction<Product>
+  { payload }: PayloadAction<IAdvert>
 ) => {
   state.product = payload;
   state.isLoading = false;
@@ -55,10 +56,10 @@ const adsSlice = createSlice({
   reducers: {
     deleteImage(state: IAdsState, { payload }: { payload: number }) {
       state.product = {
-        ...(state.product as Product),
+        ...(state.product as IAdvert),
         imageUrls:
           state.product?.imageUrls.filter(
-            (image: ImageUrl) => image.id !== payload
+            (image: File | IImageUrl) => "id" in image && image.id !== payload
           ) || [],
       };
     },

@@ -6,7 +6,7 @@ interface Props {
 }
 
 const OrderItemCard: React.FC<Props> = ({ item }) => {
-  const { id, imageUrls, title, productCode, variations } = item;
+  const {imageUrls, title, product_code, variations } = item;
   return (
     <div
       style={{
@@ -41,7 +41,7 @@ const OrderItemCard: React.FC<Props> = ({ item }) => {
             marginBottom: "20px",
           }}
         >
-          Код продукту: {productCode}
+          Код продукту: {product_code}
         </p>
         <p
           style={{

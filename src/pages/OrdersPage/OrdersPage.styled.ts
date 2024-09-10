@@ -1,25 +1,25 @@
 import { css } from "@emotion/react";
-// import styled from "@emotion/styled";
+
 
 export const tableStyles = css`
   width: 100%;
   height: 100%;
-  /* border: 1px solid white; */
+ 
   & th,
   td {
     text-align: left;
   }
-  & th:nth-child(9),
+  & th:nth-of-type(9),
   & th:last-child {
     text-align: center;
   }
 
-  & td:nth-child(9) {
+  & td:nth-of-type(9) {
     text-align: center;
     height: 24px;
     cursor: pointer;
   }
-  & td:nth-child(9):hover {
+  & td:nth-of-type(9):hover {
     transform: scale(1.4);
     transition: transform 0.3s ease;
   }
@@ -34,8 +34,8 @@ export const tableStyles = css`
     transform: scale(1.4);
     transition: transform 0.3s ease;
   }
-  & td:nth-child(7),
-  & td:nth-child(8) {
+  & td:nth-of-type(7),
+  & td:nth-of-type(8) {
     overflow: visible;
     cursor: pointer;
   }
@@ -58,14 +58,12 @@ export const thHeadsStyles = css`
   color: var(--White, #d7d7d7);
   font-variant-numeric: stacked-fractions ordinal;
   font-feature-settings: "case" on, "rvrn" on, "hist" on;
-  text-overflow: ellipsis;
-
-  /* Body/Body Medium */
+  text-overflow: ellipsis; 
   font-family: Arial;
   font-size: var(--Typography-sm, 14px);
   font-style: normal;
   font-weight: 400;
-  line-height: 24px; /* 171.429% */
+  line-height: 24px; 
   letter-spacing: 0.25px;
 `;
 export const tbodyStyles = css`

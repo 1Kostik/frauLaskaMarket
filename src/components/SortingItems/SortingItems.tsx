@@ -16,7 +16,7 @@ import {
   svgArrowUp,
   svgArrowDpwn,
 } from "./SortingItems.styled";
-import { updateOrder } from "@services/servicesApi";
+import { updateOrder, updatePamentStatus } from "@services/servicesApi";
 
 interface ISortingItProps<T> {
   idOrders?:number;
@@ -106,6 +106,9 @@ const SortingItems = <T extends number | string>({
   async function updateStatus(orderId: number, status: string) {
     await updateOrder(orderId, status);
   }
+  async function changePamentStatus(id: number) {
+    await updatePamentStatus(id)
+  }
   const handleSelect = (option: T) => {
     if (setSelectedOption) {
       setSelectedOption(option);
@@ -120,6 +123,9 @@ const SortingItems = <T extends number | string>({
     if(idOrders && setIdForUpdCount && option === "Відправлено"){
       setIdForUpdCount(Number(idOrders))
       updateStatus(idOrders, option);
+    }
+    if(idOrders && option === "Оплачено"){
+      changePamentStatus(idOrders)
     }
   };
 

@@ -326,7 +326,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     if (mainImg instanceof File) {
       const mainImgName = mainImg.name;
       values.main_image = mainImgName;
-    } else {
+    } else if (typeof mainImg.img_url === "string") {
       const regex = /\/([^/?#]+)$/;
       const pureName = mainImg.img_url.match(regex);
       values.main_image = pureName ? pureName[1] : mainImg.img_url;
@@ -537,7 +537,9 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                   src={
                                     image instanceof File
                                       ? URL.createObjectURL(image)
-                                      : image.img_url
+                                      : typeof image.img_url === "string"
+                                      ? image.img_url
+                                      : undefined
                                   }
                                   alt={`preview ${i}`}
                                 />

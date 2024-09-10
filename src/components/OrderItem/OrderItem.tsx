@@ -1,7 +1,6 @@
 import Modal from "@components/Modal";
 import SortingItems from "@components/SortingItems/SortingItems";
 import StatusWarningModal from "@components/StatusWarningModal/StatusWarningModal";
-import { formatDate } from "@pages/OrdersPage/OrdersPage";
 import {
   tdArrow,
   tdTrash,
@@ -20,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { MdDeleteOutline } from "react-icons/md";
 import { Product } from "Interfaces/Product";
+import { formatDate } from "@utils/formatDate";
+import DeleteOrderWarningModal from "@components/DeleteOrderWarningModal/DeleteOrderWarningModal";
 
 interface IOrderItemProps {
   item: IOrder;
@@ -30,7 +31,8 @@ const modalPortal = document.querySelector("#portal-root");
 const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
   const navigate = useNavigate();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChangeStatusModalOpen, setIsChangeStatusModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [pymentStatus, setPymentStatus] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
 
@@ -38,11 +40,6 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
   const [orderProducts, setOrderProducts] = useState<Product[]>([]);
   const [previousProductIds, setPreviousProductIds] = useState<number[]>([]);
   const [disableOrder, setDisableOrder] = useState<boolean>(false);
-
-  const product_ids =
-    item.id === idForUpdCount
-      ? item.order_items.map((orderItem) => orderItem.product_id)
-      : [];
 
   const variation_ids = orderProducts.flatMap((product) => {
     const orderItem = item.order_items.find(
@@ -70,6 +67,10 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
   });
 
   useEffect(() => {
+    const product_ids =
+      item.id === idForUpdCount
+        ? item.order_items.map((orderItem) => orderItem.product_id)
+        : [];
     async function fetchOrderProducts() {
       const fetchedProducts = await Promise.all(
         product_ids.map((productId) => getProductById(productId))
@@ -90,7 +91,7 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
         setPreviousProductIds(product_ids);
       }
     }
-  }, [item, product_ids, previousProductIds]);
+  }, [item, previousProductIds, idForUpdCount]);
 
   async function updateStatus(orderId: number, status: string) {
     await updateOrder(orderId, status);
@@ -100,11 +101,15 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
     async function IncreaseCountProduct(id: number, count: number) {
       await updateProductCountIncrease(id, count);
     }
-    if (variation_ids.length > 0 && status === "Відхилено" && isModalOpen)
+    if (
+      variation_ids.length > 0 &&
+      status === "Відхилено" &&
+      isChangeStatusModalOpen
+    )
       variation_ids.forEach((item) => {
         IncreaseCountProduct(item.id, item.count);
       });
-  }, [variation_ids, status, isModalOpen]);
+  }, [variation_ids, status, isChangeStatusModalOpen]);
 
   useEffect(() => {
     async function DecreaseCountProduct(id: number, count: number) {
@@ -123,12 +128,6 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
     }
   }, [item.status]);
 
-  // useEffect(() => {
-  //   if (status === "Відправлено") {
-  //     setDisableOrder(true);
-  //   }
-  // }, [status]);
-
   const handleUpdateStatus = (id: number) => {
     if (id && status === "Відхилено") {
       setIdForUpdCount(id);
@@ -136,11 +135,6 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       updateStatus(id, status);
     }
   };
-
-  // const handleDeleteOrder = async(id: number) => {
-  //  await deleteOrder(id);
-
-  // };
 
   const handlePageRedirects = (id: number) => {
     if (id && !disableOrder) {
@@ -157,6 +151,7 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       : item.status === "Відхилено"
       ? ["Відхилено"]
       : ["В очікуванні", "Відправлено", "Відхилено"];
+
   return (
     <tr key={item.id}>
       <td css={thHeadsStyles}>{item.id}</td>
@@ -168,9 +163,10 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       <td css={thHeadsStyles}>
         {" "}
         <SortingItems<string>
+          idOrders={item.id}
           options={optionsPayment}
           width={"127px"}
-          widthTagP={"auto"}
+          widthTagP={"50%"}
           widthContainer={"110px"}
           height={"auto"}
           border={"unset"}
@@ -184,7 +180,13 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
           gap={"8px"}
           setSelectedOption={setPymentStatus}
           selectedOption={pymentStatus}
-          disable={status === "Відправлено" ? false : disableOrder}
+          disable={
+            pymentStatus === "Оплачено"
+              ? true
+              : status === "Відправлено"
+              ? false
+              : disableOrder
+          }
         />
       </td>
       <td css={thHeadsStyles}>
@@ -192,7 +194,7 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
           idOrders={item.id}
           options={optionStatus}
           width={"127px"}
-          widthTagP={"auto"}
+          widthTagP={"50%"}
           widthContainer={"110px"}
           height={"auto"}
           border={"unset"}
@@ -205,13 +207,13 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
           top={"30px"}
           gap={"8px"}
           disable={disableOrder}
-          setIsOpenModal={setIsModalOpen}
+          setIsOpenModal={setIsChangeStatusModalOpen}
           setSelectedOption={setStatus}
           selectedOption={status}
           setIdForUpdCount={setIdForUpdCount}
         />
       </td>
-      <td onClick={() => onDelete(Number(item.id))} css={thHeadsStyles}>
+      <td onClick={() => setIsDeleteModalOpen(true)} css={thHeadsStyles}>
         <MdDeleteOutline css={tdTrash} />
       </td>
       <td
@@ -220,16 +222,28 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       >
         <FaArrowRightLong css={tdArrow} />
       </td>
-      {isModalOpen &&
+      {isChangeStatusModalOpen &&
         modalPortal &&
         createPortal(
-          <Modal setIsOpen={setIsModalOpen}>
+          <Modal setIsOpen={setIsChangeStatusModalOpen}>
             {status === "Відхилено" && (
               <StatusWarningModal
                 updateStatus={() => handleUpdateStatus(Number(item.id))}
                 name={item.id ? Number(item.id) : null}
+                setIsOpen={setIsChangeStatusModalOpen}
               />
             )}
+          </Modal>,
+          modalPortal
+        )}
+      {isDeleteModalOpen &&
+        modalPortal &&
+        createPortal(
+          <Modal setIsOpen={setIsDeleteModalOpen}>
+            <DeleteOrderWarningModal
+              id={item.id ? Number(item.id) : null}
+              deleteOrder={onDelete}
+            />
           </Modal>,
           modalPortal
         )}
