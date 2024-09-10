@@ -1,14 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+// import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  orders: [],
-  isLoading: false,
-  error: null,
-};
+// const initialState = {
+//   orders: [],
+//   isLoading: false,
+//   error: null,
+// };
 
-const ordersSlice = createSlice({
-  name: "orders",
-  initialState,
-  reducers: {},
-  extraReducers: () => {},
-});
+// const ordersSlice = createSlice({
+//   name: "orders",
+//   initialState,
+//   reducers: {},
+//   extraReducers: () => {},
+// });

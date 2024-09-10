@@ -25,6 +25,7 @@ interface Ih4 {
 }
 
 export const Container = styled.div`
+  cursor: pointer;
   display: flex;
   gap: 12px;
   align-items: center;
@@ -38,7 +39,7 @@ export const H4 = styled.h4<Ih4>`
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 166.667% */
+  line-height: 20px;
   letter-spacing: 0.1px;
 `;
 

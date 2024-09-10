@@ -4,6 +4,10 @@ export const btnBack = css`
   display: flex;
   color: #d7d7d7;
   font-size: 25px;
+  &:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+  }
 `;
 export const titleContainer = css`
   width: 100%;
@@ -65,7 +69,7 @@ export const infoWrapper = css`
   justify-content: space-between;
 `;
 export const infoWrapperBtn = css`
-margin-top: 50px;
+  margin-top: 50px;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -96,15 +100,18 @@ export const totalAmount = css`
   line-height: 24px; /* 133.333% */
   letter-spacing: 0.15px;
 `;
-export const tdTrash=css`
-font-size: 16px;
-color: var(--White, #d7d7d7);
+export const tdTrash = css`
+  font-size: 16px;
+  color: var(--White, #d7d7d7);
 `;
-export const btnDelete=css`
-font-size: 14px;
-/* color: var(--White, #d7d7d7); */
-border-radius:16px;
-background-color: #d7d7d7;
-padding: 5px 23px;
-
+export const btnDelete = css`
+  font-size: 14px;
+  /* color: var(--White, #d7d7d7); */
+  border-radius: 16px;
+  background-color: #d7d7d7;
+  padding: 5px 23px;
+  &:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+  }
 `;

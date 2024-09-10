@@ -1,7 +1,7 @@
 export interface IAdvert {
   id?: number;
   category_id: number | string;
-  imageUrls: File[] | IImageUrl[];
+  imageUrls: (File | IImageUrl)[];
   main_image: string;
 
   title: string;
@@ -38,5 +38,5 @@ export interface IFeedback {
 
 export interface IImageUrl {
   id?: number;
-  img_url: string;
+  img_url: string | File;
 }

@@ -12,44 +12,27 @@ import {
 import OrderItem from "@components/OrderItem/OrderItem";
 import { nanoid } from "nanoid";
 import SortingItems from "@components/SortingItems/SortingItems";
-import SearchStore from "@components/SearchStore/SearchStore";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "@components/Pagination/Pagination";
-
-
-export function formatDate(dateString: Date | string): string {
-  const date = new Date(dateString);
-
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}.${month}.${year}`;
-}
 
 const OrdersPage = () => {
   const [data, setData] = useState<IOrder[]>([]);
   const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
-  const [searchItem, setSearchItem] = useState<string>("");
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [totalPage, setTotalPage] = useState<number>(34);
+  const [totalPage, setTotalPage] = useState<number>(0);
 
   const params = useMemo(
     () => Object.fromEntries([...searchParams]),
     [searchParams]
   );
-  const { sortOrder = "ASC", sortField = "id", page } = params;
+  const { sortOrder = "ASC", page } = params;
 
   const [currentPage, setCurrentPage] = useState(Number(page || 1));
+  const [isDeleted, setIsDeleted] = useState(false);
 
-  const fetchOrders = async () => {
-
-    const data = await getOrders();
-    setData(data);
-  };
-
-  const countItemPages = 12;
+  const countItemPages = 20;
   const lastPage = totalPage && Math.ceil(totalPage / countItemPages);
 
   const updateSearchParams = useCallback(
@@ -70,70 +53,44 @@ const OrdersPage = () => {
     [setSearchParams]
   );
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
   const handleDeleteOrder = async (id: number) => {
-    await deleteOrder(id);
-    fetchOrders();
+    try {
+      await deleteOrder(id);
+      setIsDeleted((prev) => !prev);
+    } catch (error) {
+      console.log("error :>> ", error);
+    }
   };
 
   useEffect(() => {
+    let sortOrder = "ASC";
+
     switch (typeOfSort) {
-      // case "Номер: від меншого до більшого":
-      //   updateSearchParams({ sortOrder: "ASC", sortField: "id" });
-      //   break;
-      // case "Номер: від більшого до меншого":
-      //   updateSearchParams({ sortOrder: "DESC", sortField: "id" });
-      //   break;
       case "Дата: від новіших до старіших":
-        updateSearchParams({ sortOrder: "ASC", sortField: "order_date" });
+        sortOrder = "DESC";
         break;
       case "Дата: від старіших до новіших":
-        updateSearchParams({ sortOrder: "DESC", sortField: "order_date" });
+        sortOrder = "ASC";
         break;
-        // case "Сума: від меншої до більшої":
-        // updateSearchParams({ sortOrder: "DESC", sortField: "total_amount" });
-        // break;
-        // case "Сума: від більшої до меншої":
-        // updateSearchParams({ sortOrder: "DESC", sortField: "total_amount" });
-        // break;
-        case "Статус: в очікуванні спочатку":
-          updateSearchParams({ sortOrder: "DESC", sortField: "status" });
-          break;
-          case "Статус: виконані спочатку":
-            updateSearchParams({ sortOrder: "DESC", sortField: "status" });
-            break;
       default:
+        sortOrder = "ASC";
         break;
     }
-  }, [typeOfSort]);
+    updateSearchParams({ sortOrder, page: currentPage.toString() });
+  }, [typeOfSort, currentPage, updateSearchParams]);
 
   useEffect(() => {
-    // const categoryIds = filteredItemsId.map((item) => item.categoryId);
-    // const productIds = filteredItemsId.flatMap((item) =>
-    //   item.productId.split(",")
-    // );
-
     const newSearchParams = {
       ...params,
-      sortOrder: sortOrder,
-      sortField: sortField,
-      // categoryId: categoryIds,
-      // productId: productIds,
+      sortOrder: sortOrder,     
       page: currentPage.toString(),
-      limit: countItemPages.toString(),
-      search: searchItem.trim(),
     };
 
     const nonEmptyParams = Object.entries(newSearchParams).reduce(
       (acc, [key, value]) => {
         if (Array.isArray(value)) {
           const filteredValue = value.filter((v) => v !== "");
-
-          // if (filteredValue.length > 0) {
           acc[key] = filteredValue;
-          // }
         } else if (value !== undefined && value !== "") {
           acc[key] = value;
         }
@@ -158,35 +115,31 @@ const OrdersPage = () => {
       }
     });
 
-    // async function fetchProducts() {
-    //   try {
-    //     const result = await getProductsAndSorted(
-    //       searchParamsString.toString()
-    //     );
-
-    //     setTotalPage(Number(result.total_products));
-    //     setProducts(result.productData);
-    //   } catch (error) {
-    //     console.error("Failed to fetch products:", error);
-    //   }
-    // }
-    // fetchProducts();
-  }, [  
+    async function fetchOrders() {
+      try {
+        const result = await getOrders(searchParamsString.toString());
+        setTotalPage(Number(result.totalOrders));
+        setData(result.data);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    }
+    fetchOrders();
+  }, [
     currentPage,
-    searchItem,
     sortOrder,
-    sortField  
+    params,
+    updateSearchParams,
+    isDeleted,
   ]);
+
   const options = [
-    // "Номер: від меншого до більшого",
-    // "Номер: від більшого до меншого",
     "Дата: від новіших до старіших",
     "Дата: від старіших до новіших",
-    // "Сума: від меншої до більшої",
-    // "Сума: від більшої до меншої",
-    "Статус: в очікуванні спочатку",
-    "Статус: виконані спочатку",
   ];
+
+  const firstPageBtn = () => setCurrentPage(1);
+  const lastPageBtn = () => setCurrentPage(lastPage);
   const paginate = (page: number) => setCurrentPage(page);
   const nextPage = () =>
     setCurrentPage((prev) => {
@@ -202,8 +155,9 @@ const OrdersPage = () => {
       }
       return prev - 1;
     });
+
   return (
-    <section style={{ height: "100vh", width: "100vw", paddingTop: "100px" }}>
+    <section style={{ width: "100vw", paddingTop: "100px" }}>
       <div css={containerStyles}>
         <div
           style={{
@@ -214,24 +168,14 @@ const OrdersPage = () => {
           }}
         >
           <h1 style={{ color: "white", fontSize: "25px" }}>Всі замовлення</h1>
-          <div
-            style={{
-              width: "550px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <SearchStore           
-              setSearchItem={setSearchItem}             
+
+          <div style={{ width: "265px" }}>
+            <SortingItems<string>
+              options={options}
+              width={"285px"}
+              setSelectedOption={setTypeOfSort}
+              selectedOption={typeOfSort}
             />
-            <div style={{ width: "285px" }}>
-              <SortingItems<string>
-                options={options}
-                width={"285px"}            
-                setSelectedOption={setTypeOfSort}
-                selectedOption={typeOfSort}
-              />
-            </div>
           </div>
         </div>
 
@@ -262,17 +206,19 @@ const OrdersPage = () => {
           </tbody>
         </table>
       </div>
-      {data && data.length > 0 && (
-          <Pagination
-            totalPage={totalPage}
-            countItemPages={countItemPages}
-            paginate={paginate}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            currentPage={currentPage}
-            lastPage={lastPage}
-          />
-        )}
+      {totalPage > 10 && (
+        <Pagination
+          totalPage={totalPage}
+          countItemPages={countItemPages}
+          paginate={paginate}
+          nextPage={nextPage}
+          prevPage={prevPage}
+          firstPageBtn={firstPageBtn}
+          lastPageBtn={lastPageBtn}
+          currentPage={currentPage}
+          lastPage={lastPage}
+        />
+      )}
     </section>
   );
 };

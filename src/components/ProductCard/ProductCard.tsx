@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  CardWrapper,
   Container,
   ImageContainer,
   InfoContainer,
@@ -42,7 +41,7 @@ const ProductCard: React.FC<Props> = ({
         id !== undefined && handleOnClickCard && handleOnClickCard(id)
       }
     >
-      <CardWrapper>
+      <div>
         <ImageContainer>
           <img
             src={firstImageUrl}
@@ -63,7 +62,7 @@ const ProductCard: React.FC<Props> = ({
             <PriceItem price={variations[0].price} discount={variations[0].discount}  style_item={"storePage"} />
           )}
         </InfoContainer>
-      </CardWrapper>
+      </div>
     </Container>
   );
 };

@@ -170,12 +170,14 @@ const Header = () => {
             </NavLink>
           )}
           <WrapperMenu>
-            <Cart to={"/cart"} istrue={istrue}>
-              {totalQuantity > 0 && (
-                <div css={cartCount(istrue.toString())}>{totalQuantity}</div>
-              )}
-              <CartIcon css={cartStylesWithColor(istrue.toString())} />
-            </Cart>
+            {!isAuth && (
+              <Cart to={"/cart"} istrue={istrue}>
+                {totalQuantity > 0 && (
+                  <div css={cartCount(istrue.toString())}>{totalQuantity}</div>
+                )}
+                <CartIcon css={cartStylesWithColor(istrue.toString())} />
+              </Cart>
+            )}
             {!isAuth && (
               <Links to={"/aroma-school#target-section"} istrue={istrue}>
                 Звʼязатись зі мною
