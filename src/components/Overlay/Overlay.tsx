@@ -15,8 +15,10 @@ const Overlay: React.FC<IOverlayProps> = ({ setIsOpen, children, type }) => {
   const handleOverlayClick = (e: React.MouseEvent) => {
     const { id } = e.target as HTMLDivElement;
     if (id === "overlay") {
+      e.stopPropagation();
       setIsOpen && setIsOpen(false);
     }
+    e.stopPropagation();
   };
 
   useEffect(() => {

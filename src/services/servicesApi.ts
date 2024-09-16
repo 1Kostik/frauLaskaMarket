@@ -141,7 +141,7 @@ export const deleteProductFeedbackById = async (id: number) => {
 
 export const makePayment = async (orderDetails: IOrder) => {
   try {
-    const { data } = await axios.post("orders/payment", orderDetails);
+    const { data } = await axios.post("payment", orderDetails);
     if (data.redirectUrl) {
       console.log("data.order_id", data.order_id);
       window.location.href = data.redirectUrl;

@@ -222,6 +222,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     e: React.ChangeEvent<HTMLInputElement>,
     formik: FormikProps<IAdvert>
   ) => {
+    const sanitizeFileName = (fileName: string) => {
+      return fileName
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w.-]/g, "");
+    };
+
     const {
       values: { imageUrls },
       setFieldValue,
@@ -230,11 +237,17 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     setFieldError("imageUrls", undefined);
     const files = Array.from(e.target.files || []) as File[];
     const filesForAdd = files.filter((file) => file.size < FILE_SIZE);
-    const fileUrls = filesForAdd.map((file) => URL.createObjectURL(file));
+     const sanitizedFilesForAdd = filesForAdd.map((file) => {
+       const sanitizedFileName = sanitizeFileName(file.name);
+       return new File([file], sanitizedFileName, { type: file.type });
+     });
+    const fileUrls = sanitizedFilesForAdd.map((file) =>
+      URL.createObjectURL(file)
+    );
     if (imageUrls.length + fileUrls.length > 8) {
       return;
     }
-    setFieldValue("imageUrls", [...imageUrls, ...filesForAdd]);
+    setFieldValue("imageUrls", [...imageUrls, ...sanitizedFilesForAdd]);
   };
 
   const handlePhotoRemove = (

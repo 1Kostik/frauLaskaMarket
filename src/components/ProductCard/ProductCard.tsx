@@ -53,6 +53,7 @@ const ProductCard: React.FC<Props> = ({
           {type !== "popularity" && (
             <ProductInterface
               productId={id}
+              title={title}
               setIsAdvertDeleted={setIsAdvertDeleted}
             />
           )}
@@ -60,7 +61,11 @@ const ProductCard: React.FC<Props> = ({
         <InfoContainer>
           <H5>{title}</H5>
           {variations && variations.length > 0 && (
-            <PriceItem price={variations[0].price} discount={variations[0].discount}  style_item={"storePage"} />
+            <PriceItem
+              price={variations[0].price}
+              discount={variations[0].discount}
+              style_item={"storePage"}
+            />
           )}
         </InfoContainer>
       </CardWrapper>
