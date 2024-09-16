@@ -5,10 +5,10 @@ export const orderItemsConverter = (addedItems: IAddedToCartProduct[]) => {
     const { color, count, product_id, size } = item;
 
     return {
-      color,
+      color: color ? color : null,
       count,
       product_id,
-      size,
+      size: size ? size : null,
     };
   });
 };
