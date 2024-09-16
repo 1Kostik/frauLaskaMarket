@@ -60,11 +60,41 @@ const CardSlider: React.FC<CardSliderProps> = ({
   });
   const [key, setKey] = useState(0);
 
+  const [hiddenButton, setHiddenButton] = useState(true);
+
+  const getVisibleSlides = (width: number) => {
+    if (width >= 1440) return 3.5;
+    if (width >= 768) return 2;
+    return 1;
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+
+      const visibleSlides = getVisibleSlides(screenWidth);
+
+      const shouldHideButtons = !!(
+        (renderArrayText && renderArrayText.length <= visibleSlides) ||
+        (renderArrayImg && renderArrayImg.length <= visibleSlides)
+      );
+
+      setHiddenButton(shouldHideButtons);
+    };
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [renderArrayImg, renderArrayText]);
+
   useEffect(() => {
     const prevEl = document.getElementById(stylesProps.prevEl?.[0] || "");
     const nextEl = document.getElementById(stylesProps.nextEl?.[0] || "");
     setNavigation({ prevEl, nextEl });
-  }, [stylesProps.prevEl, stylesProps.nextEl]);
+  }, [stylesProps.nextEl, stylesProps.prevEl, hiddenButton]);
 
   useEffect(() => {
     if (swiperRef) {
@@ -113,24 +143,27 @@ const CardSlider: React.FC<CardSliderProps> = ({
             <H2>Діяльність у фотографіях</H2>
           )}
           {stylesProps.display?.[1] !== "none" && <H2>Відгуки</H2>}
-          <ArrowContainer stylesProps={stylesProps}>
-            <Button id={stylesProps.prevEl?.[0]}>
-              {stylesProps.display?.[0] !== "none" && (
-                <ArrowLeft css={arrowBigLeft} />
-              )}
-              {stylesProps.display?.[1] !== "none" && (
-                <ArrowShortLeft css={arrowLeft} />
-              )}
-            </Button>
-            <Button id={stylesProps.nextEl?.[0]}>
-              {stylesProps.display?.[0] !== "none" && (
-                <ArrowRight css={arrowBigRight} />
-              )}
-              {stylesProps.display?.[1] !== "none" && (
-                <ArrowShortRight css={arrowRight} />
-              )}
-            </Button>
-          </ArrowContainer>
+
+          {!hiddenButton && (
+            <ArrowContainer stylesProps={stylesProps}>
+              <Button id={stylesProps.prevEl?.[0]}>
+                {stylesProps.display?.[0] !== "none" && (
+                  <ArrowLeft css={arrowBigLeft} />
+                )}
+                {stylesProps.display?.[1] !== "none" && (
+                  <ArrowShortLeft css={arrowLeft} />
+                )}
+              </Button>
+              <Button id={stylesProps.nextEl?.[0]}>
+                {stylesProps.display?.[0] !== "none" && (
+                  <ArrowRight css={arrowBigRight} />
+                )}
+                {stylesProps.display?.[1] !== "none" && (
+                  <ArrowShortRight css={arrowRight} />
+                )}
+              </Button>
+            </ArrowContainer>
+          )}
         </TitleContainer>
       )}
       {stylesProps.display?.[2] !== "none" && (

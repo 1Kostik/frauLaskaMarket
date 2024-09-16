@@ -21,14 +21,14 @@ import {
 import {
   BackStore,
   ContainerTopSeller,
-  ProductListContainer,
+  // ProductListContainer,
   Title,
   TitleWrapper,
 } from "@pages/ProductDetails/ProductDetails.styled";
 import { useNavigate } from "react-router-dom";
-import { Product } from "Interfaces/Product";
-import ProductCard from "@components/ProductCard/ProductCard";
-import { popularity } from "@utils/popularity";
+// import { Product } from "Interfaces/Product";
+// import ProductCard from "@components/ProductCard/ProductCard";
+// import { popularity } from "@utils/popularity";
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import CartItemCard from "@components/CartItemCard";
 import { nanoid } from "nanoid";
@@ -41,7 +41,7 @@ const CartPage = () => {
   const cart = useAppSelector(selectCart);
 
   const [addedItems, setAddedItems] = useState<IAddedToCartProduct[]>([]);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   // useEffect для обновления addedItems на основе состояния корзины
   useEffect(() => {
@@ -134,24 +134,24 @@ const CartPage = () => {
     navigate("/store");
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setWindowWidth(window.innerWidth);
+  //   };
+  //   window.addEventListener("resize", handleResize);
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
-  const widthImg: string =
-    windowWidth >= 360 && windowWidth < 768
-      ? "320px"
-      : windowWidth >= 768 && windowWidth < 1440
-      ? "336px"
-      : windowWidth >= 1440
-      ? "306px"
-      : "100%";
+  // const widthImg: string =
+  //   windowWidth >= 360 && windowWidth < 768
+  //     ? "320px"
+  //     : windowWidth >= 768 && windowWidth < 1440
+  //     ? "336px"
+  //     : windowWidth >= 1440
+  //     ? "306px"
+  //     : "100%";
 
   const title = addedItems.length !== 0 ? "Кошик" : "Кошик порожній";
 
@@ -192,12 +192,12 @@ const CartPage = () => {
                   <BackStore onClick={handleBackClick}>Button</BackStore>
                 </TitleWrapper>
 
-                <ProductListContainer>
+                {/* <ProductListContainer>
                   {popularity &&
                     popularity.map((item: Product) => (
                       <ProductCard key={item.id} width={widthImg} item={item} />
                     ))}
-                </ProductListContainer>
+                </ProductListContainer> */}
               </ContainerTopSeller>
             </>
           )}

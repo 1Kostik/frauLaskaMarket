@@ -3,7 +3,7 @@ export interface Product {
   category_id: number;
   title: string;
   imageUrls: ImageUrl[];
-  mainImage: string;
+  main_image: string;
   description: string;
   ranking: number;
   benefit: string;

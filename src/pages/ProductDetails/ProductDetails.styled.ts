@@ -465,3 +465,51 @@ export const checkedColor = css`
   top: -5px;
   left: -5px;
 `;
+// export const swiper = (stylesProps: StyleProps) => css`
+//   width: ${stylesProps.width?.[0]};
+//   height: ${stylesProps.height?.[0]};
+//   img {
+//     object-fit: cover;
+//   }
+//   ${onTablet(css`
+//     width: ${stylesProps.width?.[1]};
+//     height: ${stylesProps.height?.[1]};
+//   `)}
+
+//   ${onDesktop(css`
+//     width: ${stylesProps.width?.[2]};
+//     height: ${stylesProps.height?.[2]};
+//   `)}
+// `;
+// export const breakpoints = (stylesProps: StyleProps) => {
+//   return {
+//     360: {
+//       slidesPerView: stylesProps.slidesPerView?.[0],
+//       spaceBetween: stylesProps.spaceBetween?.[0],
+//     },
+//     768: {
+//       slidesPerView: stylesProps.slidesPerView?.[1],
+//       spaceBetween: stylesProps.spaceBetween?.[0],
+//     },
+//     1440: {
+//       slidesPerView: stylesProps.slidesPerView?.[2],
+//       spaceBetween: stylesProps.spaceBetween?.[1],
+//     },
+//   };
+// };
+export const arrowContainer = () => css`
+  display: flex;
+  width: 197px;
+  height: 40px;
+  justify-content: space-between;
+`;
+export const arrowLeft = css`
+  & path {
+    fill: var(--bg-light-grey);
+  }
+`;
+export const arrowRight = css`
+  & path {
+    fill: var(--bg-light-grey);
+  }
+`;

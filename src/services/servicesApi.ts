@@ -177,9 +177,9 @@ export const makeOrder = async (orderInfo: IOrderCreation) => {
   }
 };
 
-export const getOrders = async () => {
+export const getOrders = async (queryParams: string) => {
   try {
-    const data = await axios.get("orders");
+    const data = await axios.get(`orders?${queryParams}`);
     return data.data;
   } catch (error) {
     toast.error("Шось пішло не так");
@@ -296,5 +296,9 @@ export const getNPCities = async (cityName: string) => {
 };
 export const getWarehouses = async (cityRef: string) => {
   const { data } = await axios.post("/new-post/warehouses", { cityRef });
+  return data;
+};
+export const getPopularityProducts = async () => {
+  const { data } = await axios.get("products-popularity");
   return data;
 };

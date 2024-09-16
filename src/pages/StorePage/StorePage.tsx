@@ -124,9 +124,8 @@ function StorePage() {
       default:
         break;
     }
-  }, [typeOfSort, isAdvertDeleted]);
+  }, [typeOfSort, isAdvertDeleted, updateSearchParams]);
 
-  // Основной эффект для обновления продуктов при изменении параметров поиска
   useEffect(() => {
     const categoryIds = filteredItemsId.map((item) => item.categoryId);
     const productIds = filteredItemsId.flatMap((item) =>
@@ -148,10 +147,7 @@ function StorePage() {
       (acc, [key, value]) => {
         if (Array.isArray(value)) {
           const filteredValue = value.filter((v) => v !== "");
-
-          // if (filteredValue.length > 0) {
           acc[key] = filteredValue;
-          // }
         } else if (value !== undefined && value !== "") {
           acc[key] = value;
         }
@@ -196,32 +192,9 @@ function StorePage() {
     sortOrder,
     sortField,
     isAdvertDeleted,
+    params,
+    updateSearchParams,
   ]);
-
-  // useEffect(() => {
-  //   if (filteredProducts.length > 0) {
-  //     setSearchItem("");
-  //     setFindProduct([]);
-  //   }
-  // }, [filteredProducts]);
-
-  // useEffect(() => {
-  //   if (searchItem !== "") {
-  //     setFilteredProducts([]);
-  //   }
-  // }, [searchItem]);
-
-  // useEffect(() => {
-  //   if (products && searchItem !== "" && products.length > 0) {
-  //     const findItem = products.filter((item: Product) =>
-  //       item.title.toLowerCase().startsWith(searchItem.toLowerCase())
-  //     );
-  //     setFindProduct(findItem);
-  //   } else {
-  //     setFindProduct([]);
-  //   }
-  // }, [searchItem]);
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -243,6 +216,8 @@ function StorePage() {
   }, [openFilter, windowWidth]);
 
   const paginate = (page: number) => setCurrentPage(page);
+  const firstPageBtn = () => setCurrentPage(1);
+  const lastPageBtn = () => setCurrentPage(lastPage);
   const nextPage = () =>
     setCurrentPage((prev) => {
       if (prev === lastPage) {
@@ -322,6 +297,8 @@ function StorePage() {
             paginate={paginate}
             nextPage={nextPage}
             prevPage={prevPage}
+            firstPageBtn={firstPageBtn}
+            lastPageBtn={lastPageBtn}
             currentPage={currentPage}
             lastPage={lastPage}
           />

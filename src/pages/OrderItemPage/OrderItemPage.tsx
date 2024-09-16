@@ -1,5 +1,3 @@
-// import OrderItemCard from "@components/OrderItemCard/OrderItemCard";
-import { formatDate } from "@pages/OrdersPage/OrdersPage";
 import {
   deleteOrder,
   getOrderById,
@@ -22,7 +20,6 @@ import {
   infoWrapper,
   infoWrapperBtn,
   itemsContainer,
-  // tdTrash,
   title,
   titleContainer,
   titleH2,
@@ -32,10 +29,10 @@ import {
 import CartItemCard from "@components/CartItemCard";
 import { nanoid } from "nanoid";
 import SortingItems from "@components/SortingItems/SortingItems";
-// import { MdDeleteOutline } from "react-icons/md";
 import Modal from "@components/Modal";
 import StatusWarningModal from "@components/StatusWarningModal/StatusWarningModal";
 import { createPortal } from "react-dom";
+import { formatDate } from "@utils/formatDate";
 const modalPortal = document.querySelector("#portal-root");
 
 const OrderItemPage = () => {
@@ -47,11 +44,7 @@ const OrderItemPage = () => {
   const [previousProductIds, setPreviousProductIds] = useState<number[]>([]);
   const [pymentStatus, setPymentStatus] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
-  // const [idForUpdCount, setIdForUpdCount] = useState<number | null>(null);
   const [disableOrder, setDisableOrder] = useState<boolean>(false);
-
-  const productIdArray: number[] =
-    data?.order_items.map((item) => Number(item.product_id)) ?? [];
 
   const optionsPayment =
     data?.payment_status === "Оплачено"
@@ -76,6 +69,8 @@ const OrderItemPage = () => {
   }, [id]);
 
   useEffect(() => {
+    const productIdArray: number[] =
+      data?.order_items.map((item) => Number(item.product_id)) ?? [];
     async function fetchOrderProducts() {
       if (data) {
         const fetchedProducts = await Promise.all(
@@ -97,7 +92,7 @@ const OrderItemPage = () => {
         setPreviousProductIds(productIdArray);
       }
     }
-  }, [data, productIdArray, previousProductIds]);
+  }, [data, previousProductIds]);
 
   const productsForRender = orderProducts
     .map((item) => {
@@ -136,7 +131,7 @@ const OrderItemPage = () => {
     })
     .filter((product) => product !== null);
   const variation_ids = productsForRender.map((item) => {
-    return { id: item.variation_id, count: item.quantity };
+    return { id: item!.variation_id, count: item!.quantity };
   });
   useEffect(() => {
     async function IncreaseCountProduct(id: number, count: number) {
@@ -144,7 +139,7 @@ const OrderItemPage = () => {
     }
     if (variation_ids.length > 0 && status === "Відхилено" && isModalOpen)
       variation_ids.forEach((item) => {
-        IncreaseCountProduct(item.id, item.count);
+        IncreaseCountProduct(item!.id, item!.count);
       });
   }, [variation_ids, status, isModalOpen]);
 
@@ -236,13 +231,14 @@ const OrderItemPage = () => {
                 )}
                 <div css={infoWrapper}>
                   <h2 css={titleH2}>Статус оплати:</h2>
-                  <p css={description}>
+                  <div css={description}>
                     {" "}
                     <SortingItems<string>
+                      idOrders={data.id}
                       options={optionsPayment}
                       width={"127px"}
-                      widthTagP={"auto"}
-                      widthContainer={"110px"}
+                      widthTagP={"60%"}
+                      widthContainer={"120px"}
                       height={"auto"}
                       border={"unset"}
                       padding={"unset"}
@@ -255,20 +251,26 @@ const OrderItemPage = () => {
                       gap={"8px"}
                       setSelectedOption={setPymentStatus}
                       selectedOption={pymentStatus}
-                      disable={status === "Відправлено" ? false : disableOrder}
+                      disable={
+                        pymentStatus === "Оплачено"
+                          ? true
+                          : status === "Відправлено"
+                          ? false
+                          : disableOrder
+                      }
                     />
-                  </p>
+                  </div>
                 </div>
                 <div css={infoWrapper}>
                   <h2 css={titleH2}>Статус замовлення:</h2>
-                  <p css={description}>
+                  <div css={description}>
                     {" "}
                     <SortingItems<string>
                       idOrders={data.id}
                       options={optionStatus}
                       width={"127px"}
-                      widthTagP={"auto"}
-                      widthContainer={"110px"}
+                      widthTagP={"60%"}
+                      widthContainer={"120px"}
                       height={"auto"}
                       border={"unset"}
                       padding={"unset"}
@@ -284,7 +286,7 @@ const OrderItemPage = () => {
                       setSelectedOption={setStatus}
                       selectedOption={status}
                     />
-                  </p>
+                  </div>
                 </div>
                 <div css={infoWrapper}>
                   <h2 css={titleH2}>Отримувач:</h2>
@@ -295,6 +297,10 @@ const OrderItemPage = () => {
                     {data.recipient_name ? data.recipient_name : data.name}{" "}
                     {data.recipient_phone ? data.recipient_phone : ""}
                   </p>
+                </div>
+                <div css={infoWrapper}>
+                  <h2 css={titleH2}>Передзвонити:</h2>
+                  <p css={description}>{data.call_me_back ? "Так" : "Ні"}</p>
                 </div>
                 {isModalOpen &&
                   modalPortal &&
@@ -316,7 +322,10 @@ const OrderItemPage = () => {
             <div css={infoWrapperBtn}>
               <h2 css={titleH2}>Видалити замовлення:</h2>
               <p css={description}>
-                <button css={btnDelete} onClick={() => handleDelete(Number(data?.id))}>
+                <button
+                  css={btnDelete}
+                  onClick={() => handleDelete(Number(data?.id))}
+                >
                   Видалити
                 </button>
               </p>
@@ -324,7 +333,7 @@ const OrderItemPage = () => {
           </div>
           <div css={itemsContainer}>
             {productsForRender.map((item) => (
-              <CartItemCard key={nanoid()} item={item} width={"100%"} />
+              <CartItemCard key={nanoid()} item={item!} width={"100%"} />
             ))}
             <div css={infoWrapper}>
               <h2 css={titleH2}>Загальна ціна</h2>

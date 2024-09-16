@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  CardWrapper,
   Container,
   ImageContainer,
   InfoContainer,
@@ -12,14 +11,16 @@ import { handleImgError } from "@utils/handleImgError";
 import { Product } from "Interfaces/Product";
 
 import PriceItem from "@components/PriceItem/PriceItem";
+import { IPopularityProducts } from "Interfaces/IPopularityProduct";
 
 interface Props {
   show?: boolean;
   handleOnClickCard?: (id: number) => void;
-  item: Product;
+  item: Product | IPopularityProducts;
   width?: string;
   setIsAdvertDeleted?: React.Dispatch<React.SetStateAction<boolean>>;
   type?: string;
+  widthContainer?:string;
 }
 
 const ProductCard: React.FC<Props> = ({
@@ -29,20 +30,37 @@ const ProductCard: React.FC<Props> = ({
   width,
   setIsAdvertDeleted,
   type,
+  widthContainer
 }) => {
-  const { id, imageUrls, title, variations } = item;
+  const { id, title } = item;
 
+  // Условная проверка на наличие imageUrls для Product и image_url для IPopularityProducts
   const firstImageUrl =
-    imageUrls && imageUrls.length > 0 ? imageUrls[0].img_url : "";
+    "imageUrls" in item && item.imageUrls.length > 0
+      ? item.imageUrls[0].img_url
+      : "image_url" in item
+      ? item.image_url
+      : "";
+  const price =
+    "variations" in item && item.variations.length > 0
+      ? item.variations[0].price
+      : "price" in item
+      ? item.price
+      : 0;
 
+  const discount =
+    "variations" in item && item.variations.length > 0
+      ? item.variations[0].discount
+      : null;
   return (
     <Container
+      widthContainer={widthContainer}
       show={show}
       onClick={() =>
         id !== undefined && handleOnClickCard && handleOnClickCard(id)
       }
     >
-      <CardWrapper>
+      <div>
         <ImageContainer>
           <img
             src={firstImageUrl}
@@ -60,15 +78,13 @@ const ProductCard: React.FC<Props> = ({
         </ImageContainer>
         <InfoContainer>
           <H5>{title}</H5>
-          {variations && variations.length > 0 && (
-            <PriceItem
-              price={variations[0].price}
-              discount={variations[0].discount}
-              style_item={"storePage"}
-            />
-          )}
+          <PriceItem
+            price={Number(price)}
+            discount={discount}
+            style_item={"storePage"}
+          />
         </InfoContainer>
-      </CardWrapper>
+      </div>
     </Container>
   );
 };
