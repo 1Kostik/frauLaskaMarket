@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
 interface Props {
   show?: boolean;
+  widthContainer?: string;
 }
 
 export const Container = styled.div<Props>`
@@ -10,14 +11,18 @@ export const Container = styled.div<Props>`
   box-sizing: border-box;
   cursor: pointer;
   width: 100%;
-  ${({ show }) =>
+  ${({ show, widthContainer }) =>
     onTablet(css`
-      width: calc((100% - ((${show ? 1 : 3}) - 1) * 10px) / ${show ? 1 : 2});
+      width: ${widthContainer
+        ? widthContainer
+        : `calc((100% - ((${show ? 1 : 3}) - 1) * 10px) / ${show ? 1 : 2})`};
       height: 391px;
     `)}
-  ${({ show }) =>
+  ${({ show, widthContainer }) =>
     onDesktop(css`
-      width: calc((100% - ((${show ? 3 : 4}) - 1) * 20px) / ${show ? 3 : 4});
+      width: ${widthContainer
+        ? widthContainer
+        : `calc((100% - ((${show ? 3 : 4}) - 1) * 20px) / ${show ? 3 : 4})`};
       height: 396px;
     `)}
     

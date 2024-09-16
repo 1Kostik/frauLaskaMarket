@@ -30,25 +30,34 @@ import {
   Span,
   ContainerTopSeller,
   TitleWrapper,
-  BackStore,
-  ProductListContainer,
+  arrowContainer, 
+  arrowLeft,
+  arrowRight,
   checkedColor,
+  ProductListContainer,
 } from "./ProductDetails.styled";
+import { ReactComponent as ArrowRight } from "@assets/icons/arrow-right.svg";
+import { ReactComponent as ArrowLeft } from "@assets/icons/arrow-left.svg";
 import { LuArrowLeft } from "react-icons/lu";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { containerStyles } from "@styles/variables";
 import SortingItems from "@components/SortingItems/SortingItems";
 import { useNavigate, useParams } from "react-router-dom";
-import ProductCard from "@components/ProductCard/ProductCard";
 import CardSlider from "@components/CardSlider/CardSlider";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cart/slice";
 import { Feedback, Product, Variation } from "Interfaces/Product";
 import { selectCart } from "@redux/cart/selectors";
 import ProductInterface from "@components/ProductInterface";
-import { getProductById } from "@services/servicesApi";
-import { popularity } from "@utils/popularity";
+import { getPopularityProducts, getProductById } from "@services/servicesApi";
 import PriceItem from "@components/PriceItem/PriceItem";
+import ProductCard from "@components/ProductCard/ProductCard";
+import { IPopularityProducts } from "Interfaces/IPopularityProduct";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore from "swiper";
+import { Navigation } from "swiper/modules";
+import "swiper/css/navigation";
+import "swiper/css";
 
 const ProductDetailsProps = {
   container: {
@@ -63,9 +72,10 @@ const ProductDetailsProps = {
   gap: ["6px", "12px"],
   slidesPerView: [1, 1, 1],
   spaceBetween: [16, 12],
-  prevEl: ["#prevSmButton"],
-  nextEl: ["#nextSmButton"],
+  prevEl: ["prevSmButton"],
+  nextEl: ["nextSmButton"],
 };
+
 const ProductDetailsPropsText = {
   container: {
     "padding-top": ["24px", "40px"],
@@ -79,8 +89,8 @@ const ProductDetailsPropsText = {
   gap: ["6px", "12px"],
   slidesPerView: [1, 2, 3.5],
   spaceBetween: [16, 12],
-  prevEl: ["#prevMdButton"],
-  nextEl: ["#nextMdButton"],
+  prevEl: ["prevMdButton"],
+  nextEl: ["nextMdButton"],
 };
 
 const ProductDetails = () => {
@@ -93,7 +103,9 @@ const ProductDetails = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [feedBacks, setFeedBacks] = useState<Feedback[]>([]);
   const [variationItem, setVariationItem] = useState<Variation>();
-
+  const [popularityProducts, setPopularityProducts] = useState<
+    IPopularityProducts[]
+  >([]);
   const cart = useAppSelector(selectCart);
   const dispatch = useAppDispatch();
   const { id } = useParams();
@@ -109,6 +121,25 @@ const ProductDetails = () => {
   const benefit = product && product.benefit;
   const composition = product && product.composition.toLowerCase();
   const product_code = product && product.product_code;
+  const [key, setKey] = useState(0);
+  const [swiperRef, setSwiperRef] = useState<SwiperCore | null>(null);
+  const [navigation, setNavigation] = useState<{
+    prevEl: HTMLElement | null;
+    nextEl: HTMLElement | null;
+  }>({
+    prevEl: null,
+    nextEl: null,
+  });
+
+  useEffect(() => {
+    setKey((prevKey) => prevKey + 1);
+  }, []);
+
+  useEffect(() => {
+    const prevEl = document.getElementById("prevBigButton");
+    const nextEl = document.getElementById("nextBigButton");
+    setNavigation({ prevEl, nextEl });
+  }, []);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -130,6 +161,17 @@ const ProductDetails = () => {
 
     fetchProduct();
   }, [id]);
+  useEffect(() => {
+    const fetchPopularityProducts = async () => {
+      try {
+        const data = await getPopularityProducts();
+        setPopularityProducts(data);
+      } catch (error) {
+        console.log("error :>> ", error);
+      }
+    };
+    fetchPopularityProducts();
+  }, []);
 
   useEffect(() => {
     if (selectedOption && product) {
@@ -142,7 +184,7 @@ const ProductDetails = () => {
         }
       });
     }
-  }, [selectedOption]);
+  }, [product, selectedOption]);
 
   useEffect(() => {
     if (product) {
@@ -154,7 +196,7 @@ const ProductDetails = () => {
         }
       });
     }
-  }, [addedColor]);
+  }, [addedColor, product]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -165,6 +207,36 @@ const ProductDetails = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    if (swiperRef) {
+      const updateNavigationState = () => {
+        const prevButton = navigation.prevEl;
+        const nextButton = navigation.nextEl;
+
+        if (prevButton && nextButton) {
+          if (swiperRef.isBeginning) {
+            prevButton.style.visibility = "hidden";
+          } else {
+            prevButton.style.visibility = "visible";
+          }
+
+          if (swiperRef.isEnd) {
+            nextButton.style.visibility = "hidden";
+          } else {
+            nextButton.style.visibility = "visible";
+          }
+        }
+      };
+      swiperRef.on("slideChange", updateNavigationState);
+      updateNavigationState();
+
+      return () => {
+        swiperRef.off("slideChange", updateNavigationState);
+      };
+    }
+  }, [swiperRef, navigation]);
+
   const widthImg: string =
     windowWidth >= 360 && windowWidth < 768
       ? "320px"
@@ -180,7 +252,9 @@ const ProductDetails = () => {
           .map((item: Variation) => item.size)
           .filter((size): size is number => size !== null)
       : null;
+
   const isOptions = options && options.length > 0 ? true : false;
+
   const handleBackClick = () => {
     navigate("/store");
   };
@@ -202,10 +276,8 @@ const ProductDetails = () => {
     }
     if (
       product &&
-      id &&
-      // selectedOption &&
-      productPrice !== null
-      // addedColor !== ""
+      id &&   
+      productPrice !== null   
     ) {
       const productToAdd = {
         product_id: product.id,
@@ -231,6 +303,15 @@ const ProductDetails = () => {
     setAddedColor(color);
     setMessage(null);
   };
+
+  const handleOnClickCard = (id: number) => {
+    navigate(`/store/product/${id}`);
+  };
+
+  const handleSwiper = (swiper: SwiperCore) => {
+    setSwiperRef(swiper);
+  };
+
   return (
     <Section>
       <div css={containerStyles}>
@@ -258,8 +339,7 @@ const ProductDetails = () => {
                   <H3>{title}</H3>
                   <P>Є в наявності</P>
                 </TitleContainer>
-                <P1>Код товару:№{product_code}</P1>
-                {/* <P2>{productPrice} ₴</P2> */}
+                <P1>Код товару:№{product_code}</P1>               
                 {variationItem && (
                   <PriceItem
                     price={variationItem.price}
@@ -353,19 +433,44 @@ const ProductDetails = () => {
           <ContainerTopSeller>
             <TitleWrapper>
               <Title>Топ продажів</Title>
-              <BackStore onClick={handleBackClick}>Button</BackStore>
+              <div css={arrowContainer}>
+                <button id="prevBigButton">
+                  <ArrowLeft css={arrowLeft} />
+                </button>
+                <button id="nextBigButton"> 
+                  <ArrowRight css={arrowRight} />
+                </button>
+              </div>
             </TitleWrapper>
 
             <ProductListContainer>
-              {popularity &&
-                popularity.map((item: Product) => (
-                  <ProductCard
-                    key={item.id}
-                    width={widthImg}
-                    item={item}
-                    type="popularity"
-                  />
-                ))}
+              <Swiper
+                key={key}
+                onSwiper={handleSwiper}
+                slidesPerView={4}
+                spaceBetween={10}
+                breakpoints={{
+                  360: { slidesPerView: 1, spaceBetween: 10 },
+                  768: { slidesPerView: 2.2, spaceBetween: 10 },
+                  1440: { slidesPerView: 4.2, spaceBetween: 10 },
+                }}
+                modules={[Navigation]}
+                navigation={navigation}
+              >
+                {popularityProducts &&
+                  popularityProducts.map((item: IPopularityProducts) => (
+                    <SwiperSlide key={item.id}>
+                      <ProductCard
+                        widthContainer={"100%"}
+                        key={item.id}
+                        handleOnClickCard={handleOnClickCard}
+                        width={widthImg}
+                        item={item}
+                        type="popularity"
+                      />
+                    </SwiperSlide>
+                  ))}
+              </Swiper>
             </ProductListContainer>
           </ContainerTopSeller>
         </Container>
