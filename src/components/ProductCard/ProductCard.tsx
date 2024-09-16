@@ -71,13 +71,13 @@ const ProductCard: React.FC<Props> = ({
           {type !== "popularity" && (
             <ProductInterface
               productId={id}
+              title={title}
               setIsAdvertDeleted={setIsAdvertDeleted}
             />
           )}
         </ImageContainer>
         <InfoContainer>
           <H5>{title}</H5>
-
           <PriceItem
             price={Number(price)}
             discount={discount}

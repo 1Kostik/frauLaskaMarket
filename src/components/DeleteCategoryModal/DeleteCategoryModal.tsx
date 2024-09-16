@@ -21,7 +21,7 @@ const DeleteCategoryModal: React.FC<IDeleteCategoryProps> = ({
       <span>{name}</span>
 
       <button type="button" onClick={() => onDelete(name)} css={buttonStyle}>
-        Підтвердіть
+        Підтвердити
       </button>
     </div>
   );
