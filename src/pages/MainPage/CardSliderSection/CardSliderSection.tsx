@@ -2,6 +2,7 @@ import CardSlider from "@components/CardSlider/CardSlider";
 import { containerStyles } from "@styles/variables";
 import { Feedback, ImageUrl } from "Interfaces/Product";
 import React from "react";
+
 export interface StyleProps {
   container?: {
     "padding-top": string[];

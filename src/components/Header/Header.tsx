@@ -170,7 +170,7 @@ const Header = () => {
             </NavLink>
           )}
           <WrapperMenu>
-            {!isAuth && (
+            {isAuth && (
               <Cart to={"/cart"} istrue={istrue}>
                 {totalQuantity > 0 && (
                   <div css={cartCount(istrue.toString())}>{totalQuantity}</div>

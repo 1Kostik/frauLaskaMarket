@@ -131,7 +131,7 @@ const OrderItemPage = () => {
     })
     .filter((product) => product !== null);
   const variation_ids = productsForRender.map((item) => {
-    return { id: item.variation_id, count: item.quantity };
+    return { id: item!.variation_id, count: item!.quantity };
   });
   useEffect(() => {
     async function IncreaseCountProduct(id: number, count: number) {
@@ -139,7 +139,7 @@ const OrderItemPage = () => {
     }
     if (variation_ids.length > 0 && status === "Відхилено" && isModalOpen)
       variation_ids.forEach((item) => {
-        IncreaseCountProduct(item.id, item.count);
+        IncreaseCountProduct(item!.id, item!.count);
       });
   }, [variation_ids, status, isModalOpen]);
 
@@ -333,7 +333,7 @@ const OrderItemPage = () => {
           </div>
           <div css={itemsContainer}>
             {productsForRender.map((item) => (
-              <CartItemCard key={nanoid()} item={item} width={"100%"} />
+              <CartItemCard key={nanoid()} item={item!} width={"100%"} />
             ))}
             <div css={infoWrapper}>
               <h2 css={titleH2}>Загальна ціна</h2>

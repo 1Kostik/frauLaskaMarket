@@ -5,7 +5,6 @@ import { text } from "@assets/answers";
 import InfoSection from "./InfoSection/InfoSection";
 import PlansSection from "./PlansSection/PlansSection";
 
-
 const HealthyPage = () => {
   const healthyPageProps = {
     container: {
@@ -14,11 +13,11 @@ const HealthyPage = () => {
       width: ["100%"],
       height: ["563px", "616px"],
     },
-    display: ["none", "Flex","none"],
+    display: ["none", "Flex", "none"],
     width: ["320px", "728px", "1360px"],
     height: ["451px", "451px", "456px"],
     gap: ["6px", "12px"],
-    slidesPerView: [1, 2,3.5],
+    slidesPerView: [1, 2, 3.5],
     spaceBetween: [16, 20],
     prevEl: ["#prevMdButton"],
     nextEl: ["#nextMdButton"],
@@ -28,12 +27,13 @@ const HealthyPage = () => {
       <HeroSection bgImage={bgImage} viewType="school">
         <p>Сильна і міцна нація починається зі здорового способу життя.</p>
         <h1>Оздоровлення</h1>
-      </HeroSection>    
+      </HeroSection>
       <InfoSection />
-        <CardSliderSection renderArrayText={text}
-      stylesProps={healthyPageProps}
+      <CardSliderSection
+        renderArrayText={text}
+        stylesProps={healthyPageProps}
       />
-         <PlansSection />
+      <PlansSection />
     </>
   );
 };

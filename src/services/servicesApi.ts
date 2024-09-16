@@ -298,3 +298,7 @@ export const getWarehouses = async (cityRef: string) => {
   const { data } = await axios.post("/new-post/warehouses", { cityRef });
   return data;
 };
+export const getPopularityProducts = async () => {
+  const { data } = await axios.get("products-popularity");
+  return data;
+};
