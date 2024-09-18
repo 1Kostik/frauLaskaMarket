@@ -30,7 +30,7 @@ import {
   Span,
   ContainerTopSeller,
   TitleWrapper,
-  arrowContainer, 
+  arrowContainer,
   arrowLeft,
   arrowRight,
   checkedColor,
@@ -214,10 +214,12 @@ const ProductDetails = () => {
         const prevButton = navigation.prevEl;
         const nextButton = navigation.nextEl;
 
-        if (prevButton && nextButton) {
-          if (swiperRef.isBeginning) {
+        if (prevButton && nextButton) {         
+          if (swiperRef.isBeginning) {  
+            console.log('swiperRef.isBeginning :>> ', swiperRef.isBeginning);
+            console.log('visibility "hidden":>> ', prevButton);  
             prevButton.style.visibility = "hidden";
-          } else {
+          } else {           
             prevButton.style.visibility = "visible";
           }
 
@@ -235,8 +237,9 @@ const ProductDetails = () => {
         swiperRef.off("slideChange", updateNavigationState);
       };
     }
-  }, [swiperRef, navigation]);
-
+  }, [swiperRef, navigation,key]); 
+  
+  
   const widthImg: string =
     windowWidth >= 360 && windowWidth < 768
       ? "320px"
@@ -274,11 +277,7 @@ const ProductDetails = () => {
     if (productSearch) {
       return;
     }
-    if (
-      product &&
-      id &&   
-      productPrice !== null   
-    ) {
+    if (product && id && productPrice !== null) {
       const productToAdd = {
         product_id: product.id,
         title: product.title,
@@ -339,7 +338,7 @@ const ProductDetails = () => {
                   <H3>{title}</H3>
                   <P>Є в наявності</P>
                 </TitleContainer>
-                <P1>Код товару:№{product_code}</P1>               
+                <P1>Код товару:№{product_code}</P1>
                 {variationItem && (
                   <PriceItem
                     price={variationItem.price}
@@ -437,7 +436,7 @@ const ProductDetails = () => {
                 <button id="prevBigButton">
                   <ArrowLeft css={arrowLeft} />
                 </button>
-                <button id="nextBigButton"> 
+                <button id="nextBigButton">
                   <ArrowRight css={arrowRight} />
                 </button>
               </div>

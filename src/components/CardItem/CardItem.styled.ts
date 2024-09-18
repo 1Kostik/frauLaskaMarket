@@ -12,6 +12,9 @@ export const Wrapper = styled.div`
   border: 1px solid var(--bg-light-grey);
   padding: 24px;
   border-radius: 16px;
+  overflow: auto;
+  white-space: normal;
+  word-wrap: break-word;
   ${onDesktop(css`
     height: 456px;
   `)}
