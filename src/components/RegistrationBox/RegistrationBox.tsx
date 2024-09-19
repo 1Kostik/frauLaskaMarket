@@ -19,18 +19,21 @@ import {
 } from "./RegistrationBox.styled";
 
 import checkedIcon from "@assets/icons/checked.svg";
+import { useLocation } from "react-router-dom";
+import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 
 const options = [
-  { value: "NY", label: "New York" },
-  { value: "SF", label: "San Francisco" },
-  { value: "CH", label: "Chicago" },
+  { value: "Health", label: "Оздоровлення" },
+  { value: "Pregnant", label: "Для вагітних" },
+  { value: "Recovery", label: "Відновлення" },
+  { value: "Preparation", label: "Підготовка" },
 ];
 
 const validationSchema = Yup.object({
   name: Yup.string()
     .max(30, "Має бути 30 символів або менше")
     .required("Обов'язкове"),
-  interest: Yup.string().required("Обов'язковий"),
+  course: Yup.string().required("Обов'язковий"),
   email: Yup.string()
     .email("Невірна адреса електронної пошти")
     .required("Обов'язковий"),
@@ -53,6 +56,10 @@ interface IRegistrationBoxProps {
 }
 
 const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
+  const location = useLocation();
+  const initialCourse =
+    options.find(({ label }) => location.state === label) || null;
+
   return (
     <div css={container}>
       <div css={descriptionWrapper}>{children}</div>
@@ -60,7 +67,7 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
         <Formik
           initialValues={{
             name: "",
-            interest: "",
+            course: initialCourse?.value || "",
             email: "",
             phone: "",
             message: "",
@@ -76,7 +83,7 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
           // validateOnChange={true}
           validateOnBlur={false}
         >
-          {({ setFieldValue, setFieldTouched, touched, errors }) => (
+          {({ setFieldValue, setFieldTouched, touched, errors, values }) => (
             <Form css={formStyle}>
               <label htmlFor="name">
                 <Field
@@ -91,23 +98,26 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
                       : {}
                   }
                 />
+                <p css={inputLabel(!!values.name)}>Ім’я</p>
                 <ErrorMessage name="name">
                   {(msg) => <div css={errorStyle}>{msg}</div>}
                 </ErrorMessage>
               </label>
 
-              <label htmlFor="interest">
+              <label htmlFor="course">
                 <Select
                   isMulti={false}
-                  name="interest"
+                  name="course"
                   options={options}
+                  value={
+                    options.find((option) => option.value === values.course) ||
+                    null
+                  }
                   styles={{
                     ...customStyles,
                     control: (provided) => ({
                       ...provided,
-                      ...selectInputStyle(
-                        !!(touched.interest && errors.interest)
-                      ),
+                      ...selectInputStyle(!!(touched.course && errors.course)),
                     }),
                   }}
                   className="basic-multi-select"
@@ -116,12 +126,13 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
                   components={{ Option: CustomOption }}
                   onChange={(option) =>
                     setFieldValue(
-                      "interest",
+                      "course",
                       (option as SingleValue<OptionType>)?.value
                     )
                   }
                 />
-                <ErrorMessage name="interest">
+                <p css={inputLabel(!!values.course)}>Курс</p>
+                <ErrorMessage name="course">
                   {(msg) => <div css={errorStyle}>{msg}</div>}
                 </ErrorMessage>
               </label>
@@ -139,6 +150,7 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
                       : {}
                   }
                 />
+                <p css={inputLabel(!!values.email)}>E-mail</p>
                 <ErrorMessage name="email">
                   {(msg) => <div css={errorStyle}>{msg}</div>}
                 </ErrorMessage>
@@ -177,6 +189,7 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
                     />
                   )}
                 </Field>
+                <p css={inputLabel(!!values.phone)}>Номер телефону</p>
                 <ErrorMessage name="phone">
                   {(msg) => <div css={errorStyle}>{msg}</div>}
                 </ErrorMessage>
@@ -189,6 +202,7 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
                   placeholder="Текст повідомлення"
                   css={messageInput}
                 />
+                <p css={inputLabel(!!values.message)}>Текст повідомлення</p>
                 <ErrorMessage name="message">
                   {(msg) => <div css={errorStyle}>{msg}</div>}
                 </ErrorMessage>

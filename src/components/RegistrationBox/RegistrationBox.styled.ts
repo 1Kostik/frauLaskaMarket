@@ -58,7 +58,11 @@ export const formWrapper = css`
 export const formStyle = css`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: 20px;
+
+  & label {
+    position: relative;
+  }
 `;
 
 export const inputStyle = css`
@@ -90,6 +94,7 @@ export const messageInput = css`
 `;
 
 export const errorStyle = css`
+  position: absolute;
   font-size: 12px;
   line-height: 16px;
   color: red;
@@ -185,6 +190,8 @@ export const optionStyle = css`
   letter-spacing: 0.4px;
   color: var(--text-light-grey);
 
+  cursor: pointer;
+
   & img {
     position: absolute;
     width: 24px;
@@ -199,6 +206,7 @@ export const optionStyle = css`
 
 const menuStyle = css`
   position: absolute;
+  z-index: 100;
   width: 100%;
   margin-top: 6px;
   background-color: var(--bg-black);

@@ -17,7 +17,7 @@ export const pregnantPlan: IPlan = {
       ],
     },
     {
-      contentTitle: "Для вагідних",
+      contentTitle: "Для вагітних",
       price: "4 500 грн",
       info: [
         "визначення основних проблем за допомогою опросників та результатів аналізів",
