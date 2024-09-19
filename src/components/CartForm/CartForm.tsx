@@ -105,7 +105,7 @@ const validationSchema = (isOtherRecipient: boolean) =>
         }
       ),
 
-    payment_method: Yup.string().oneOf(["liqPay", "deliveryPayment", "other"]),
+    payment_method: Yup.string().oneOf(["LiqPay", "Накладний платіж"]),
   });
 
 const initialValue: IInitialCartFormValue = {
@@ -119,7 +119,7 @@ const initialValue: IInitialCartFormValue = {
   recipient_name: "",
   recipient_last_name: "",
   recipient_phone: "",
-  payment_method: "liqPay",
+  payment_method: "LiqPay",
 };
 
 interface ICartFormProps {
@@ -145,13 +145,13 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
 
   const onOrderSubmit = (values: IInitialCartFormValue) => {
     console.log("values", values);
-     
+
     const newOrder = {
       ...replaceNullsWithEmptyStrings(values),
       order_items: orderItemsConverter(addedItems),
       call_me_back: callMeBack,
     };
-    if (values.payment_method === "liqPay") {
+    if (values.payment_method === "LiqPay") {
       makeOrder(newOrder).then((resp) => {
         makePayment(resp).catch(() => navigate("/"));
       });
@@ -425,28 +425,21 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
                 <Field
                   type="radio"
                   name="payment_method"
-                  value="liqPay"
-                  id="liqPay"
+                  value="LiqPay"
+                  id="LiqPay"
                 />
-                <label htmlFor="liqPay">
+                <label htmlFor="LiqPay">
                   LiqPay - моментальні платежі по всьому світу
                 </label>
                 <Field
                   type="radio"
                   name="payment_method"
-                  value="deliveryPayment"
+                  value="Накладний платіж"
                   id="deliveryPayment"
                 />
                 <label htmlFor="deliveryPayment">
                   Оплата при отриманні замовлення
                 </label>
-                <Field
-                  type="radio"
-                  name="payment_method"
-                  value="other"
-                  id="other"
-                />
-                <label htmlFor="other">Other Text</label>
               </div>
             </div>
           </Form>

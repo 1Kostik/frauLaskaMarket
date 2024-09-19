@@ -33,7 +33,7 @@ export const cardContainer = (cardHeight: number | undefined) => css`
     `)}
   }
 
-  & a {
+  & button {
     display: block;
     width: 100%;
     padding: 10px 16px;
