@@ -41,6 +41,7 @@ const Header = () => {
   const isOrder = location.pathname === "/order";
   const isAdmin = location.pathname.startsWith("/admin");
   const isOrdered = location.pathname.startsWith("/ordered");
+  const isCertificates =location.pathname === "/certificates";
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
@@ -63,7 +64,8 @@ const Header = () => {
     isProductDetails ||
     isAdmin ||
     isOrdered ||
-    isScrolled
+    isScrolled ||
+    isCertificates
       ? "true"
       : "false";
 

@@ -47,9 +47,9 @@ const OrderItemPage = () => {
   const [disableOrder, setDisableOrder] = useState<boolean>(false);
 
   const optionsPayment =
-    data?.payment_status === "Оплачено"
-      ? ["Оплачено"]
-      : ["В очікуванні", "Оплачено"];
+    data?.payment_status === "Сплачено"
+      ? ["Сплачено"]
+      : ["В очікуванні", "Сплачено"];
   const optionStatus =
     data?.status === "Відправлено"
       ? ["Відправлено"]
@@ -252,7 +252,7 @@ const OrderItemPage = () => {
                       setSelectedOption={setPymentStatus}
                       selectedOption={pymentStatus}
                       disable={
-                        pymentStatus === "Оплачено"
+                        pymentStatus === "Сплачено"
                           ? true
                           : status === "Відправлено"
                           ? false

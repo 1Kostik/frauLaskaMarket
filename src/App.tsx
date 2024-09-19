@@ -7,6 +7,9 @@ const MainPage = lazy(() => import("@pages/MainPage/MainPage"));
 const HealthyPage = lazy(() => import("@pages/HealthyPage/HealthyPage"));
 const AromaSchool = lazy(() => import("@pages/SchoolPage/SchoolPage"));
 const StorePage = lazy(() => import("@pages/StorePage/StorePage"));
+const CertificatesPage = lazy(
+  () => import("@pages/CertificatesPage/CertificatesPage")
+);
 const ProductDetails = lazy(
   () => import("@pages/ProductDetails/ProductDetails")
 );
@@ -30,6 +33,7 @@ function App() {
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<MainPage />} />
           <Route path="consultations" element={<HealthyPage />} />
+          <Route path="certificates" element={<CertificatesPage />} />
           <Route path="aroma-school" element={<AromaSchool />} />
           <Route path="store" element={<StorePage />} />
           <Route path="store/product/:id" element={<ProductDetails />} />
@@ -44,6 +48,7 @@ function App() {
           <Route path="admin/orders" element={<OrdersPage />} />
           <Route path="admin/orders/:id" element={<OrderItemPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
       </Routes>
