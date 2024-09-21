@@ -14,22 +14,47 @@ export const sectionStyle = css`
 export const imgGalery = css`
   width: 100%;
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
-  background: var(--bg-btn-grey);
+  ${onTablet(css`
+    gap: 15px;
+  `)}
+  ${onDesktop(css`
+    gap: 12px;
+  `)}
 `;
 export const title = css`
   width: 100%;
   color: var(--text-light-grey);
-  font-size: 160px;
+  font-family: Fixel;
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 100%;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  ${onTablet(css`
+    font-size: 88px;
+  `)}
+  ${onDesktop(css`
+    font-size: 125px;
+    
+  `)}
 `;
-export const imgStyles = css`
-  width: 420px;
-  height: 294px;
+export const itemStyles = css`
+  width: 320px;
+  height: auto;
+  
   & img {
-    display: block;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+    object-fit: fill;
+  }
+  ${onTablet(css`
+    width: 336px;
+  `)}
+  ${onDesktop(css`
+    width: 420px;
+  `)}
+  &:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
   }
 `;
