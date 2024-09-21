@@ -6,7 +6,7 @@ import { ReactComponent as CloseEyeIcon } from "@assets/icons/eye-close.svg";
 import { ReactComponent as OpenEyeIcon } from "@assets/icons/eye-open.svg";
 import { useState } from "react";
 import {
-    errorAuthStyle,
+  errorAuthStyle,
   errorBorder,
   errorStyle,
   eyeWrapper,
@@ -17,19 +17,18 @@ import {
   submitStyle,
 } from "./LoginForm.styled";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { handleAuth } from "@redux/auth/slice";
-
-const LOGIN = "Frau";
-const PASSWORD = "Laska123";
+import { authUser } from "@redux/auth/operations";
+import { useAppDispatch } from "@redux/hooks";
+import { useSelector } from "react-redux";
+import { selectAuthError, selectToken } from "@redux/auth/selectors";
 
 const initialValues = {
-  login: "",
+  email: "",
   password: "",
 };
 
 const validationSchema = Yup.object({
-  login: Yup.string()
+  email: Yup.string()
     .max(40, "Логін має бути не більше 40 символів")
     .required("Обов'язкове поле"),
   password: Yup.string()
@@ -47,11 +46,12 @@ const validationSchema = Yup.object({
 });
 
 const LoginForm = () => {
-  const [isErrorAuth, setIsErrorAuth] = useState(false);
-  const [isShowPassword, setIsShowPassword] = useState(false);
-
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const token = useSelector(selectToken);
+  const authError = useSelector(selectAuthError);
+
+  const [isShowPassword, setIsShowPassword] = useState(false);
 
   const handleShowPassword = () => {
     setIsShowPassword((prev) => !prev);
@@ -62,14 +62,10 @@ const LoginForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values: ILogin) => {
-          if (values.login === LOGIN && values.password === PASSWORD) {
-            dispatch(handleAuth(true));
-            navigate("/store");
-          } else {
-            setIsErrorAuth(true);
+          dispatch(authUser(values));
+          if (token) {
+            navigate("/");
           }
-
-          console.log("values", values);
         }}
         validateOnChange={false}
         validateOnBlur={false}
@@ -77,20 +73,22 @@ const LoginForm = () => {
         {({ touched, errors, setFieldError }) => (
           <div css={formWrapper}>
             <Form css={formStyle}>
-              {isErrorAuth && <div css={errorAuthStyle}>Невірний логін, пароль!</div>}
-              <label htmlFor="login" css={labelStyle}>
+              {authError && (
+                <div css={errorAuthStyle}>Невірний логін, пароль!</div>
+              )}
+              <label htmlFor="email" css={labelStyle}>
                 <Field
                   type="string"
-                  name="login"
-                  id="login"
+                  name="email"
+                  id="email"
                   placeholder="Логін"
                   css={[
                     inputStyle,
-                    errorBorder(!!(errors.login && touched.login)),
+                    errorBorder(!!(errors.email && touched.email)),
                   ]}
-                  onFocus={() => setFieldError("login", undefined)}
+                  onFocus={() => setFieldError("email", undefined)}
                 />
-                <ErrorMessage name="login">
+                <ErrorMessage name="email">
                   {(msg) => <div css={errorStyle}>{msg}</div>}
                 </ErrorMessage>
               </label>
@@ -103,7 +101,7 @@ const LoginForm = () => {
                   placeholder="Пароль"
                   css={[
                     inputStyle,
-                    errorBorder(!!(errors.login && touched.login)),
+                    errorBorder(!!(errors.password && touched.password)),
                   ]}
                 />
 
