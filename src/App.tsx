@@ -1,7 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import SharedLayout from "./components/SharedLayout/SharedLayout";
 import { lazy, Suspense } from "react";
+import RingLoader from "react-spinners/RingLoader";
+
+import SharedLayout from "./components/SharedLayout/SharedLayout";
 import ClearLocalStorageOnNavigate from "./components/ClearLocalStorageOnNavigate";
+import Overlay from "@components/Overlay";
 
 const MainPage = lazy(() => import("@pages/MainPage/MainPage"));
 const HealthyPage = lazy(() => import("@pages/HealthyPage/HealthyPage"));
@@ -29,6 +32,9 @@ function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ClearLocalStorageOnNavigate />
+      <Overlay type="loader">
+        <RingLoader color="#cabcbc" size={120} />
+      </Overlay>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<MainPage />} />
@@ -48,7 +54,6 @@ function App() {
           <Route path="admin/orders" element={<OrdersPage />} />
           <Route path="admin/orders/:id" element={<OrderItemPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
-          
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
       </Routes>
