@@ -37,6 +37,14 @@ const ModalMobileHeader:React.FC<IModalHeader> = ({setIsOpen}) => {
               Консультації
             </Nav>
             <Nav
+              to={"/certificates"}
+              className={({ isActive }) =>
+                isActive ? "active-link" : "inactive-link"
+              }
+              onClick={handleCloseClick} >
+              Сертифікати
+            </Nav>
+            <Nav
               to={"/aroma-school"}
               className={({ isActive }) =>
                 isActive ? "active-link" : "inactive-link"
@@ -53,6 +61,7 @@ const ModalMobileHeader:React.FC<IModalHeader> = ({setIsOpen}) => {
               onClick={handleCloseClick} >
               Магазин
             </Nav>
+            
           </NavWrapper>
           <div css={contactContainer}>
             {/* <h2>Як зі мною звʼязатись?</h2> */}

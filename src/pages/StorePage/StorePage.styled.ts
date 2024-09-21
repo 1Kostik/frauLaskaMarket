@@ -10,9 +10,7 @@ export const Container = styled.div`
 export const SearchContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 24px;
-  /* ${onTablet(css``)}
-  ${onDesktop(css``)} */
+  margin-bottom: 24px;  
 `;
 
 export const Button = styled.button`

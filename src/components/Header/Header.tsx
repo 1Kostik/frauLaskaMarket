@@ -25,7 +25,7 @@ import { NavLink, useLocation, useParams } from "react-router-dom";
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
 import { selectCartTotalQuantity } from "@redux/cart/selectors";
 import { useAppSelector } from "@redux/hooks";
-// import { getAuth } from "@redux/auth/selectors";
+import { getAuth } from "@redux/auth/selectors";
 import { MdOutlinePostAdd } from "react-icons/md";
 const modalPortal = document.querySelector("#portal-root");
 
@@ -41,13 +41,16 @@ const Header = () => {
   const isOrder = location.pathname === "/order";
   const isAdmin = location.pathname.startsWith("/admin");
   const isOrdered = location.pathname.startsWith("/ordered");
+  const isCertificates =location.pathname === "/certificates";
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // const cart = useAppSelector(selectCart);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
-  // const isAuth = useAppSelector(getAuth);
-  const isAuth = true;
+  const isAuth = useAppSelector(getAuth);
+  // const isAuth = true;
+const show = windowWidth < 1440 ? false : true ;
 
   const handleBurgerMenuClick = () => {
     setIsOpen((prev) => !prev);
@@ -63,7 +66,8 @@ const Header = () => {
     isProductDetails ||
     isAdmin ||
     isOrdered ||
-    isScrolled
+    isScrolled ||
+    isCertificates
       ? "true"
       : "false";
 
@@ -118,7 +122,16 @@ const Header = () => {
       }
     }
   }, [isOpen, isScrolled]);
-
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
@@ -157,20 +170,29 @@ const Header = () => {
             >
               Магазин
             </Nav>
+            <Nav
+              to={"/certificates"}
+              className={({ isActive }) =>
+                isActive ? "active-link" : "inactive-link"
+              }
+              istrue={istrue}
+            >
+              Сертифікати
+            </Nav>
           </NavWrapper>
-          {isAuth && (
+          {isAuth && show && (
             <NavLink to="admin/orders" css={addProductStyle(istrue)}>
               Замовлення
             </NavLink>
           )}
-          {isAuth && (
+          {isAuth && show &&(
             <NavLink to="/admin/create-advert" css={addProductStyle(istrue)}>
               <MdOutlinePostAdd />
               Додати товар
             </NavLink>
           )}
           <WrapperMenu>
-            {isAuth && (
+            {!isAuth && (
               <Cart to={"/cart"} istrue={istrue}>
                 {totalQuantity > 0 && (
                   <div css={cartCount(istrue.toString())}>{totalQuantity}</div>

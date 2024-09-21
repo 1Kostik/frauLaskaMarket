@@ -72,11 +72,11 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
         ? item.order_items.map((orderItem) => orderItem.product_id)
         : [];
     async function fetchOrderProducts() {
-      const fetchedProducts = await Promise.all(
+      const result = await Promise.all(
         product_ids.map((productId) => getProductById(productId))
       );
 
-      setOrderProducts(fetchedProducts);
+      setOrderProducts(result);
     }
 
     if (product_ids.length > 0) {
@@ -143,7 +143,10 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       navigate(`/admin/orders/${id}`);
     }
   };
-  const optionsPayment = ["В очікуванні", "Оплачено"];
+  const optionsPayment =
+    item.payment_status === "Сплачено"
+      ? ["Сплачено"]
+      : ["В очікуванні", "Сплачено"];
 
   const optionStatus =
     item.status === "Відправлено"

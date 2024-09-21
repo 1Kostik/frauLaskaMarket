@@ -124,7 +124,7 @@ const ContentBox: React.FC<ContentBoxProps> = ({
               ))}
           </Swiper>
           <div css={linkWrapper}>
-            <Link to="/cart" css={linkStyle}>
+            <Link to="/certificates" css={linkStyle}>
               Сертифікати
             </Link>
           </div>
