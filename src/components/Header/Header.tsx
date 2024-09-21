@@ -25,8 +25,9 @@ import { NavLink, useLocation, useParams } from "react-router-dom";
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
 import { selectCartTotalQuantity } from "@redux/cart/selectors";
 import { useAppSelector } from "@redux/hooks";
-import { getAuth } from "@redux/auth/selectors";
+import { selectToken } from "@redux/auth/selectors";
 import { MdOutlinePostAdd } from "react-icons/md";
+import { useSelector } from "react-redux";
 const modalPortal = document.querySelector("#portal-root");
 
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
@@ -41,16 +42,16 @@ const Header = () => {
   const isOrder = location.pathname === "/order";
   const isAdmin = location.pathname.startsWith("/admin");
   const isOrdered = location.pathname.startsWith("/ordered");
-  const isCertificates =location.pathname === "/certificates";
+  const isCertificates = location.pathname === "/certificates";
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // const cart = useAppSelector(selectCart);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
-  const isAuth = useAppSelector(getAuth);
-  // const isAuth = true;
-const show = windowWidth < 1440 ? false : true ;
+  const token = useSelector(selectToken);
+
+  const show = windowWidth < 1440 ? false : true;
 
   const handleBurgerMenuClick = () => {
     setIsOpen((prev) => !prev);
@@ -180,19 +181,19 @@ const show = windowWidth < 1440 ? false : true ;
               Сертифікати
             </Nav>
           </NavWrapper>
-          {isAuth && show && (
+          {token && show && (
             <NavLink to="admin/orders" css={addProductStyle(istrue)}>
               Замовлення
             </NavLink>
           )}
-          {isAuth && show &&(
+          {token && show && (
             <NavLink to="/admin/create-advert" css={addProductStyle(istrue)}>
               <MdOutlinePostAdd />
               Додати товар
             </NavLink>
           )}
           <WrapperMenu>
-            {!isAuth && (
+            {!token && (
               <Cart to={"/cart"} istrue={istrue}>
                 {totalQuantity > 0 && (
                   <div css={cartCount(istrue.toString())}>{totalQuantity}</div>
@@ -200,7 +201,7 @@ const show = windowWidth < 1440 ? false : true ;
                 <CartIcon css={cartStylesWithColor(istrue.toString())} />
               </Cart>
             )}
-            {!isAuth && (
+            {!token && (
               <Links to={"/aroma-school#target-section"} istrue={istrue}>
                 Звʼязатись зі мною
               </Links>

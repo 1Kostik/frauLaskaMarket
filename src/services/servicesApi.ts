@@ -5,6 +5,21 @@ import { toast } from "react-toastify";
 
 axios.defaults.baseURL = "http://localhost:8081/api/";
 
+export const authenticateUser = async (email: string, password: string) => {
+  try {
+    const { data } = await axios.post("/login", { email, password });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log("Axios error:", error.message);
+      throw new Error(error.message);
+    } else {
+      console.error("Non-Axios error:", error);
+      throw new Error("Non-Axios error occurred");
+    }
+  }
+};
+
 export const getCategories = async () => {
   const { data } = await axios.get("categories");
   return data;
