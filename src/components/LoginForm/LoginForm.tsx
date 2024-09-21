@@ -29,10 +29,12 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object({
-  login: Yup.string().max(15).required("Обов'язкове поле"),
+  login: Yup.string()
+    .max(40, "Логін має бути не більше 40 символів")
+    .required("Обов'язкове поле"),
   password: Yup.string()
     .matches(
-      /^[a-zA-Z0-9]+$/,
+      /^[a-zA-Z0-9!]+$/,
       "Пароль повинен містити лише англійські літери та цифри"
     )
     .matches(
