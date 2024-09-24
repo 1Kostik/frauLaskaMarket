@@ -5,7 +5,7 @@ const Advise = () => {
   return (
     <div css={adviseContainer}>
       <h3>Прочитай щось корисне, підпишись на наш телеграм</h3>
-      <button>
+      <button id="registrationForm">
         <ArrowIcon />
       </button>
     </div>

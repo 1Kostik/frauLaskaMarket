@@ -19,15 +19,8 @@ import {
 } from "./RegistrationBox.styled";
 
 import checkedIcon from "@assets/icons/checked.svg";
-import { useLocation } from "react-router-dom";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
-
-const options = [
-  { value: "Health", label: "Оздоровлення" },
-  { value: "Pregnant", label: "Для вагітних" },
-  { value: "Recovery", label: "Відновлення" },
-  { value: "Preparation", label: "Підготовка" },
-];
+import { useEffect, useState } from "react";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -52,13 +45,26 @@ const CustomOption = (props: OptionProps<OptionType>) => (
 );
 
 interface IRegistrationBoxProps {
+  options: { value: string; label: string }[];
+  pickedCourse?: string;
   children: React.ReactNode;
 }
 
-const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
-  const location = useLocation();
+const RegistrationBox: React.FC<IRegistrationBoxProps> = ({
+  children,
+  options,
+  pickedCourse,
+}) => {
   const initialCourse =
-    options.find(({ label }) => location.state === label) || null;
+    options.find(({ label }) => pickedCourse === label) || null;
+
+  const [selectedCourse, setSelectedCourse] = useState<string | undefined>(
+    initialCourse?.value || ""
+  );
+
+  useEffect(() => {
+    setSelectedCourse(initialCourse?.value);
+  }, [initialCourse]);
 
   return (
     <div css={container}>
@@ -67,7 +73,7 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
         <Formik
           initialValues={{
             name: "",
-            course: initialCourse?.value || "",
+            course: pickedCourse || "",
             email: "",
             phone: "",
             message: "",
@@ -110,7 +116,7 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
                   name="course"
                   options={options}
                   value={
-                    options.find((option) => option.value === values.course) ||
+                    options.find((option) => option.value === selectedCourse) ||
                     null
                   }
                   styles={{
@@ -124,12 +130,13 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({ children }) => {
                   classNamePrefix="select"
                   placeholder="Що цікавить?"
                   components={{ Option: CustomOption }}
-                  onChange={(option) =>
+                  onChange={(option) => {
                     setFieldValue(
                       "course",
                       (option as SingleValue<OptionType>)?.value
-                    )
-                  }
+                    );
+                    option && setSelectedCourse(option.value);
+                  }}
                 />
                 <p css={inputLabel(!!values.course)}>Курс</p>
                 <ErrorMessage name="course">

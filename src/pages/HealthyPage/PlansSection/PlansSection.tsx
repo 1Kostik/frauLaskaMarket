@@ -4,14 +4,19 @@ import { recoveryPlan } from "@assets/recoveryPlan";
 import { pregnantPlan } from "@assets/pregnantPlan";
 import { containerStyles } from "@styles/variables";
 import { photo } from "./PlansSection.styled";
+import { SetStateAction } from "react";
 
-const PlansSection = () => {
+interface IPlansSection {
+  setPickedCourse: React.Dispatch<SetStateAction<string>>
+}
+
+const PlansSection: React.FC<IPlansSection> = ({ setPickedCourse }) => {
   return (
     <section>
       <div css={containerStyles}>
-        <PlanContent plan={recoveryPlan} />
+        <PlanContent plan={recoveryPlan} setPickedCourse={setPickedCourse} />
         <div css={photo}></div>
-        <PlanContent plan={pregnantPlan} />
+        <PlanContent plan={pregnantPlan} setPickedCourse={setPickedCourse} />
       </div>
     </section>
   );
