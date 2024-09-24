@@ -31,15 +31,15 @@ const Overlay: React.FC<IOverlayProps> = ({ setIsOpen, children, type }) => {
   }, []);
 
   {
-    if ((!isLoadingProduct || !isLoadingAuth) && type === "loader") {
-      return null;
-    } else {
+    if (type !== "loader" || isLoadingProduct || isLoadingAuth) {
       return (
         <div css={overlayStyle} onClick={handleOverlayClick} id="overlay">
           {children}
         </div>
       );
     }
+
+    return null;
   }
 };
 

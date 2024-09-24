@@ -12,6 +12,8 @@ import { Product } from "Interfaces/Product";
 
 import PriceItem from "@components/PriceItem/PriceItem";
 import { IPopularityProducts } from "Interfaces/IPopularityProduct";
+import { useSelector } from "react-redux";
+import { selectToken } from "@redux/auth/selectors";
 
 interface Props {
   show?: boolean;
@@ -20,7 +22,7 @@ interface Props {
   width?: string;
   setIsAdvertDeleted?: React.Dispatch<React.SetStateAction<boolean>>;
   type?: string;
-  widthContainer?:string;
+  widthContainer?: string;
 }
 
 const ProductCard: React.FC<Props> = ({
@@ -30,9 +32,10 @@ const ProductCard: React.FC<Props> = ({
   width,
   setIsAdvertDeleted,
   type,
-  widthContainer
+  widthContainer,
 }) => {
   const { id, title } = item;
+  const token = useSelector(selectToken);
 
   // Условная проверка на наличие imageUrls для Product и image_url для IPopularityProducts
   const firstImageUrl =
@@ -68,7 +71,7 @@ const ProductCard: React.FC<Props> = ({
             style={{ width: `${width}` }}
             onError={handleImgError}
           />
-          {type !== "popularity" && (
+          {type !== "popularity" && token && (
             <ProductInterface
               productId={id}
               title={title}
