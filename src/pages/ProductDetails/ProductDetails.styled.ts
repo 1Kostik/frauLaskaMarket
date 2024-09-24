@@ -27,7 +27,19 @@ export const H2 = styled.h2`
     font-size: 14px;
   `)}
 `;
-
+export const titleH2 = css`
+  color: var(--text-active-link-milk);
+  font-family: Fixel;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 142.857% */
+  letter-spacing: 0.1px;
+  text-decoration: underline;
+  ${onDesktop(css`
+    font-size: 14px;
+  `)}
+`;
 export const Wrapper = styled.div`
   width: 100%;
   /* height: 678px; */

@@ -37,13 +37,12 @@ export const title = css`
   `)}
   ${onDesktop(css`
     font-size: 125px;
-    
   `)}
 `;
 export const itemStyles = css`
   width: 320px;
   height: auto;
-  
+
   & img {
     object-fit: fill;
   }
@@ -56,5 +55,12 @@ export const itemStyles = css`
   &:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
+  }
+`;
+export const btnBackStyles = css`
+  cursor: pointer;
+  & :hover {
+    transform: scale(1.09);
+    transition: transform 0.3 ease;
   }
 `;

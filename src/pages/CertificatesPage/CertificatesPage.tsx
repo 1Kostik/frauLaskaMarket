@@ -2,6 +2,7 @@ import { containerStyles } from "@styles/variables";
 import { createPortal } from "react-dom";
 import Modal from "@components/Modal";
 import {
+  btnBackStyles,
   imgGalery,
   itemStyles,
   sectionStyle,
@@ -47,8 +48,10 @@ import img37 from "@assets/images/imagesCertificates/updatePhoto/certificate (36
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import OneImageModal from "@components/OneImageModal/OneImageModal";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { svgArrowRight } from "@pages/ProductDetails/ProductDetails.styled";
 const modalPortal = document.querySelector("#portal-root");
 
 const imgArrayCertificates = [
@@ -93,9 +96,14 @@ const imgArrayCertificates = [
 
 const CertificatesPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isCertificates = location.pathname === "/certificates";
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [oneImg, setOneImg] = useState<string>();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   const widthImg: string =
     windowWidth >= 360 && windowWidth < 768
       ? "90%"
@@ -104,20 +112,14 @@ const CertificatesPage = () => {
       : windowWidth >= 1440
       ? "55%"
       : "90%";
-  const fontSizeBtn: string =
-    windowWidth >= 360 && windowWidth < 768
-      ? "30px"
-      : windowWidth >= 768 && windowWidth < 1440
-      ? "35px"
-      : windowWidth >= 1440
-      ? "50px"
-      : "";
+
   const handleClickImg = (item: string) => {
     if (item !== "") {
       setIsModalOpen(true);
       setOneImg(item);
     }
   };
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -132,20 +134,68 @@ const CertificatesPage = () => {
   const handleBackClik = () => {
     navigate("/");
   };
+
   const myStyles = {
     width: widthImg,
     height: "auto",
     unset: "unset",
   };
+
   return (
     <section css={sectionStyle}>
       <div css={containerStyles}>
-        <div style={{ width: "100%", display: "flex", gap: "10px" }}>
-          <button onClick={handleBackClik}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            gap: "10px",
+            alignItems: "center",
+          }}
+        >
+          <button onClick={handleBackClik} css={btnBackStyles}>
             <BiArrowBack
-              style={{ fontSize: fontSizeBtn, color: "var(--text-light-grey)" }}
+              style={{ fontSize: "16px", color: "var(--text-light-grey)" }}
             />
           </button>
+          <span
+            style={{
+              width: "auto",
+              display: "flex",
+              gap: "10px",
+              fontFamily:"Fixel",
+              fontSize:"16px",
+              color: "var(--text-light-grey)",
+            }}
+          >
+            Головна сторінка
+          </span>
+          <span
+            style={{
+              width: "auto",
+              display: "flex",
+              gap: "10px",
+              color: "var(--text-light-grey)",
+            }}
+          >
+            <MdOutlineKeyboardArrowRight css={svgArrowRight} />
+          </span>
+          <span
+            style={{
+              width: "auto",
+              display: "flex",
+              gap: "10px",
+              fontFamily:"Fixel",
+              fontSize:"16px",
+              color: isCertificates
+                ? "var( --text-active-link-milk)"
+                : "var(--text-light-grey)",
+                textDecoration:"underline"
+            }}
+          >
+            Сертифікати
+          </span>
+        </div>
+        <div style={{ width: "100%", display: "flex", gap: "10px" }}>
           <h1 css={title}>Сертифікати</h1>
         </div>
         <ul css={imgGalery}>
