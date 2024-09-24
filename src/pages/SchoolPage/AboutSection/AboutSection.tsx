@@ -46,13 +46,17 @@ const About = () => {
             своєму життю.
           </p>
         </ContentBox>
-        <TabBox title="Title" content={tabArr}>
+        <TabBox title="Title" content={tabArr} imgThumbHeight={600}>
           Ти навчишся самостійно обирати ефірну олію для будь-якої мети.
           Складати аромакомпозиції для всіх способів застосування ароматерапії.
           Дізнаєшся про основні властивості популярних в ароматерапії ефірних
           олій . Ти станеш домашнім лікарем, аромадизайнером та косметологом.
         </TabBox>
-        <TabBox title="Для кого цей курс?" content={foWhoCourse} />
+        <TabBox
+          title="Для кого цей курс?"
+          content={foWhoCourse}
+          imgThumbHeight={400}
+        />
       </div>
     </section>
   );

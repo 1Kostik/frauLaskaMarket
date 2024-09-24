@@ -84,7 +84,11 @@ export const contentWrapper = css`
   `)}
 `;
 
-export const imgThumb = (wrapperWidth: number | undefined, isHideRadius: boolean) => css`
+export const imgThumb = (
+  wrapperWidth: number | undefined,
+  isHideRadius: boolean,
+  imgThumbHeight: number
+) => css`
   display: none;
   width: ${wrapperWidth && wrapperWidth / 2}px;
   border-radius: ${isHideRadius ? "0" : "34px"};
@@ -102,8 +106,7 @@ export const imgThumb = (wrapperWidth: number | undefined, isHideRadius: boolean
   `)}
 
   ${onDesktop(css`
-    height: 600px;
-
+    height: ${imgThumbHeight + "px"};
     font-size: 20px;
   `)}
 
@@ -114,7 +117,11 @@ export const imgThumb = (wrapperWidth: number | undefined, isHideRadius: boolean
   }
 `;
 
-export const infoContainer = (wrapperWidth: number | undefined) => css`
+export const infoContainer = (
+  wrapperWidth: number | undefined,
+  imgThumbHeight: number,
+  isShowMore: boolean
+) => css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -127,6 +134,7 @@ export const infoContainer = (wrapperWidth: number | undefined) => css`
   `)}
 
   ${onDesktop(css`
+    height: ${!isShowMore ? imgThumbHeight + "px" : "auto"};
     row-gap: 20px;
   `)}
 `;
