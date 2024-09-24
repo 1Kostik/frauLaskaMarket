@@ -21,9 +21,16 @@ interface TabBoxProps {
   content: Tab[];
   photo?: string;
   children?: string;
+  imgThumbHeight: number;
 }
 
-const TabBox: React.FC<TabBoxProps> = ({ title, content, photo, children }) => {
+const TabBox: React.FC<TabBoxProps> = ({
+  title,
+  content,
+  photo,
+  children,
+  imgThumbHeight,
+}) => {
   const [wrapperWidth, setWrapperWidth] = useState<number | undefined>(
     undefined
   );
@@ -102,11 +109,11 @@ const TabBox: React.FC<TabBoxProps> = ({ title, content, photo, children }) => {
         )}
       </div>
       <div css={contentWrapper}>
-        <div css={imgThumb(wrapperWidth, !!children)}>
+        <div css={imgThumb(wrapperWidth, !!children, imgThumbHeight)}>
           {children ? children : photo && <img src={photo} alt="photo" />}
         </div>
 
-        <div css={infoContainer(wrapperWidth)}>
+        <div css={infoContainer(wrapperWidth, imgThumbHeight, isShowMore)}>
           <div css={textWrapper(isShowMore)} ref={textWrapperRef}>
             {content[activeBtn].info.map((info: Info) => {
               return (

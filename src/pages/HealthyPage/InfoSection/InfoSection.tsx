@@ -29,8 +29,17 @@ const InfoSection = () => {
           Головне - бажання і спеціалист з оздоровлення, який стане підтримкою
           та опорою на шляху.
         </ContentBox>
-        <TabBox content={tabArr} photo={frauLaska} title={"Title"} />
-        <TabBox title="Для кого ця послуга?" content={foWhoCourse} />
+        <TabBox
+          content={tabArr}
+          photo={frauLaska}
+          title={"Title"}
+          imgThumbHeight={600}
+        />
+        <TabBox
+          title="Для кого ця послуга?"
+          content={foWhoCourse}
+          imgThumbHeight={400}
+        />
       </div>
     </section>
   );
