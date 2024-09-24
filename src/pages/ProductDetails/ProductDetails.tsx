@@ -35,6 +35,7 @@ import {
   arrowRight,
   checkedColor,
   ProductListContainer,
+  titleH2,
 } from "./ProductDetails.styled";
 import { ReactComponent as ArrowRight } from "@assets/icons/arrow-right.svg";
 import { ReactComponent as ArrowLeft } from "@assets/icons/arrow-left.svg";
@@ -322,7 +323,7 @@ const ProductDetails = () => {
               </ButtonBack>
               <H2>Магазин</H2>
               <MdOutlineKeyboardArrowRight css={svgArrowRight} />
-              <H2>Сторінка товару</H2>
+              <h2 css={titleH2}>Сторінка товару</h2>
             </NavContainer>
             <InfoContainer>
               <ImageContainer>
