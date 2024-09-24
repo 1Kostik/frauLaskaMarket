@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { SetStateAction, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
@@ -19,9 +19,10 @@ import {
 
 interface IPlanProps {
   plan: IPlan;
+  setPickedCourse: React.Dispatch<SetStateAction<string>>
 }
 
-const PlanContent: React.FC<IPlanProps> = ({ plan }) => {
+const PlanContent: React.FC<IPlanProps> = ({ plan, setPickedCourse }) => {
   const [swiper, setSwiper] = useState<SwiperCore | null>(null);
   const [cardHeight, setCardHeight] = useState<number | undefined>(undefined);
   const { planTitle, content } = plan;
@@ -71,7 +72,11 @@ const PlanContent: React.FC<IPlanProps> = ({ plan }) => {
         {content.map((content: IContent) => {
           return (
             <SwiperSlide key={nanoid()}>
-              <PlanCard content={content} cardHeight={cardHeight} />
+              <PlanCard
+                content={content}
+                cardHeight={cardHeight}
+                setPickedCourse={setPickedCourse}
+              />
             </SwiperSlide>
           );
         })}

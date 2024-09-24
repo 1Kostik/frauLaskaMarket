@@ -2,13 +2,24 @@ import RegistrationBox from "@components/RegistrationBox";
 // import { section } from "@pages/MainPage/ProjectsSection/ProjectsSection.styled";
 import { containerStyles } from "@styles/variables";
 
-const options = [{ value: "aroma", label: "Аромотерапія" }];
+const options = [
+  { value: "health", label: "Оздоровлення" },
+  { value: "pregnant", label: "Для вагітних" },
+  { value: "recovery", label: "Відновлення" },
+  { value: "preparation", label: "Підготовка" },
+];
 
-const RegistrationSection = () => {
+interface IRegistrationSectionProps {
+  pickedCourse: string;
+}
+
+const RegistrationSection: React.FC<IRegistrationSectionProps> = ({
+  pickedCourse,
+}) => {
   return (
-    <section id="registrationForm">
+    <section>
       <div css={containerStyles}>
-        <RegistrationBox options={options} pickedCourse="Аромотерапія">
+        <RegistrationBox options={options} pickedCourse={pickedCourse}>
           <h3>Реєстрація на курс</h3>
           <p>
             Eu mi et tellus etiam tellus varius ut fermentum. Lorem egestas
