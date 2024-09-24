@@ -59,6 +59,8 @@ import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/navigation";
 import "swiper/css";
+import { useSelector } from "react-redux";
+import { selectToken } from "@redux/auth/selectors";
 
 const ProductDetailsProps = {
   container: {
@@ -96,6 +98,7 @@ const ProductDetailsPropsText = {
 
 const ProductDetails = () => {
   const navigate = useNavigate();
+  const token = useSelector(selectToken);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [productPrice, setProductPrice] = useState<number | null>(null);
@@ -215,15 +218,12 @@ const ProductDetails = () => {
         const prevButton = navigation.prevEl;
         const nextButton = navigation.nextEl;
 
-        if (prevButton && nextButton) {         
-          if (swiperRef.isBeginning) {  
-            console.log('swiperRef.isBeginning :>> ', swiperRef.isBeginning);
-            console.log('visibility "hidden":>> ', prevButton);  
+        if (prevButton && nextButton) {
+          if (swiperRef.isBeginning) {
             prevButton.style.visibility = "hidden";
-          } else {           
+          } else {
             prevButton.style.visibility = "visible";
           }
-
           if (swiperRef.isEnd) {
             nextButton.style.visibility = "hidden";
           } else {
@@ -238,9 +238,8 @@ const ProductDetails = () => {
         swiperRef.off("slideChange", updateNavigationState);
       };
     }
-  }, [swiperRef, navigation,key]); 
-  
-  
+  }, [swiperRef, navigation, key]);
+
   const widthImg: string =
     windowWidth >= 360 && windowWidth < 768
       ? "320px"
@@ -331,7 +330,7 @@ const ProductDetails = () => {
                   renderArrayImg={imageArray}
                   stylesProps={ProductDetailsProps}
                 />
-                <ProductInterface productId={Number(id)} />
+                {token && <ProductInterface productId={Number(id)} />}
               </ImageContainer>
 
               <TextContainer>
