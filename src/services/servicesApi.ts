@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
 import { IOrderCreation } from "Interfaces/IOrderCreation";
 import { toast } from "react-toastify";
@@ -316,4 +317,23 @@ export const getWarehouses = async (cityRef: string) => {
 export const getPopularityProducts = async () => {
   const { data } = await axios.get("products-popularity");
   return data;
+};
+
+export const sendCourseNotification = async (
+  registrationFormData: ICourseRegistrationData
+) => {
+  try {
+    const { data } = await axios.post("/courses", registrationFormData);
+    toast.success(`Ви зареєструвалися на курс: ${registrationFormData.course}`);
+    return data;
+  } catch (error) {
+    toast.error("Шось пішло не так");
+    if (axios.isAxiosError(error)) {
+      console.log("Axios error:", error.message);
+      throw new Error(error.message);
+    } else {
+      console.error("Non-Axios error:", error);
+      throw new Error("Non-Axios error occurred");
+    }
+  }
 };
