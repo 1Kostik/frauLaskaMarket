@@ -30,6 +30,7 @@ const initialValues = {
 
 const validationSchema = Yup.object({
   email: Yup.string()
+    .email("Введіть коректну електронну адресу")
     .max(40, "Логін має бути не більше 40 символів")
     .required("Обов'язкове поле"),
   password: Yup.string()
@@ -110,7 +111,8 @@ const LoginForm = () => {
                     errorBorder(!!(errors.password && touched.password)),
                   ]}
                   onFocus={() => {
-                    dispatch(clearError());                    
+                    dispatch(clearError());
+                    setFieldError("password", undefined);
                   }}
                 />
 

@@ -1,6 +1,7 @@
 import { clearToken } from "@redux/auth/slice";
 import { AppDispatch } from "@redux/store";
 import axios from "axios";
+import { handlerAxiosError } from "../errorHandler/errorHandler";
 import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
 import { IOrderCreation } from "Interfaces/IOrderCreation";
@@ -25,54 +26,38 @@ export const authenticateUser = async (email: string, password: string) => {
     const { data } = await axios.post("/login", { email, password });
     return data;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      if (error.response) {    
-
-        const status = error.response.status;
-        const message = error.response.data?.message || "Сталася помилка";
-        console.log(`Axios error: ${message}, статус: ${status}`);
-        throw new Error(message);
-
-      } else if (error.request) {  
-
-        console.log("Сервер не відповів:", error.request);
-        throw new Error("Сервер не відповів. Спробуйте пізніше.");
-
-      } else {   
-
-        console.log("Щось пішло не так при запиті:", error.message);
-        throw new Error("Сталася невідома помилка");
-      }
-    } else {
-   
-      console.error("Non-Axios error:", error);
-      throw new Error("Виникла невідома помилка");
-    }
+    handlerAxiosError(error);
   }
 };
 
 export const logOut = async (dispatch: AppDispatch) => {
   getAuth();
-  
-  try { 
-
+  try {
     await axios.post("logout");
     dispatch(clearToken());
-  } catch (error) {
-    console.error("Error during logout:", error);
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 
 export const getCategories = async () => {
-  const { data } = await axios.get("categories");
-  return data;
+  try {
+    const { data } = await axios.get("categories");
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const postCategory = async (title: string) => {
   getAuth();
-  const newCategory = { title };
-  const { data } = await axios.post("categories", newCategory);
-  return data;
+  try {
+    const newCategory = { title };
+    const { data } = await axios.post("categories", newCategory);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const patchCategory = async ({
@@ -83,14 +68,22 @@ export const patchCategory = async ({
   name: string;
 }) => {
   getAuth();
-  const { data } = await axios.patch(`categories/${id}`, { title: name });
-  return data;
+  try {
+    const { data } = await axios.patch(`categories/${id}`, { title: name });
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const deleteCategory = async (id: number) => {
   getAuth();
-  const { data } = await axios.delete(`categories/${id}`);
-  return data;
+  try {
+    const { data } = await axios.delete(`categories/${id}`);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const postAdvert = async (formData: FormData) => {
@@ -98,21 +91,19 @@ export const postAdvert = async (formData: FormData) => {
   try {
     const { data } = await axios.post("products", formData);
     return data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 
 export const deleteAdvert = async (id: number) => {
   getAuth();
-  const { data } = await axios.delete(`products/${id}`);
-  return data;
+  try {
+    const { data } = await axios.delete(`products/${id}`);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const putchAdvert = async ({
@@ -123,34 +114,58 @@ export const putchAdvert = async ({
   formData: FormData;
 }) => {
   getAuth();
-  const { data } = await axios.patch(`products/${id}`, formData);
-  return data;
+  try {
+    const { data } = await axios.patch(`products/${id}`, formData);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const getProductById = async (id: number) => {
-  const { data } = await axios.get(`products/${id}`);
-  return data;
+  try {
+    const { data } = await axios.get(`products/${id}`);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const getAllProducts = async () => {
-  const { data } = await axios.get(`products`);
-  return data;
+  try {
+    const { data } = await axios.get(`products`);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const getProductsAndSorted = async (queryParams: string) => {
-  const { data } = await axios.get(`products?${queryParams}`);
-  return data;
+  try {
+    const { data } = await axios.get(`products?${queryParams}`);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const findProducts = async (queryParams: string) => {
-  const { data } = await axios.get(`products?${queryParams}`);
-  return data;
+  try {
+    const { data } = await axios.get(`products?${queryParams}`);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const getCategoriesProductCount = async () => {
   getAuth();
-  const { data } = await axios.get(`categories/product-count`);
-  return data;
+  try {
+    const { data } = await axios.get(`categories/product-count`);
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const deleteProductImage = async (id: number) => {
@@ -159,15 +174,8 @@ export const deleteProductImage = async (id: number) => {
     const { data } = await axios.delete(`products/images/${id}`);
     toast.success("Зображення видалено");
     return data;
-  } catch (error) {
-    toast.error("Не вдалося видалити зображення");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 
@@ -177,15 +185,8 @@ export const deleteProductVariationById = async (id: number) => {
     const { data } = await axios.delete(`products/variations/${id}`);
     toast.success("Варіацію видалено");
     return data;
-  } catch (error) {
-    toast.error("Не вдалося видалити варіацію");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 
@@ -195,15 +196,8 @@ export const deleteProductFeedbackById = async (id: number) => {
     const { data } = await axios.delete(`products/feedbacks/${id}`);
     toast.success("Відгук видалено");
     return data;
-  } catch (error) {
-    toast.error("Не вдалося видалити відгук");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 
@@ -217,15 +211,8 @@ export const makePayment = async (orderDetails: IOrder) => {
     } else {
       toast.error("Шось пішло не так");
     }
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 
@@ -235,15 +222,8 @@ export const makeOrder = async (orderInfo: IOrderCreation) => {
     const { data } = await axios.post("orders", orderInfo);
     toast.success("Замовлення створено");
     return data;
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 
@@ -252,15 +232,8 @@ export const getOrders = async (queryParams: string) => {
   try {
     const data = await axios.get(`orders?${queryParams}`);
     return data.data;
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 export const getOrderById = async (id: number) => {
@@ -268,15 +241,8 @@ export const getOrderById = async (id: number) => {
   try {
     const data = await axios.get(`orders/${id}`);
     return data.data;
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 
@@ -286,15 +252,8 @@ export const updateOrder = async (orderId: number, status: string) => {
     const { data } = await axios.put(`orders/${orderId}`, { status });
     toast.success("Статус замовлення змінено");
     return data;
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 export const updateProductCountIncrease = async (id: number, count: number) => {
@@ -304,15 +263,8 @@ export const updateProductCountIncrease = async (id: number, count: number) => {
   try {
     await axios.patch(`products/variations/increase/${id}`, data);
     toast.success("Кількість продукту успішно оновлено!");
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 export const updateProductCountDecrease = async (id: number, count: number) => {
@@ -322,15 +274,8 @@ export const updateProductCountDecrease = async (id: number, count: number) => {
   try {
     await axios.patch(`products/variations/decrease/${id}`, data);
     toast.success("Кількість продукту успішно оновлено!");
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 export const deleteOrder = async (id: number) => {
@@ -338,15 +283,8 @@ export const deleteOrder = async (id: number) => {
   try {
     await axios.delete(`orders/${id}`);
     toast.success("Замовлення успішно видалено!");
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 export const updatePamentStatus = async (id: number) => {
@@ -354,28 +292,33 @@ export const updatePamentStatus = async (id: number) => {
   try {
     await axios.patch(`orders/payment-status/${id}`);
     toast.success("Сатус оплати успішно змінено!");
-  } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };
 export const getNPCities = async (cityName: string) => {
-  const { data } = await axios.post("/new-post/settlements", { cityName });
-  return data;
+  try {
+    const { data } = await axios.post("/new-post/settlements", { cityName });
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 export const getWarehouses = async (cityRef: string) => {
-  const { data } = await axios.post("/new-post/warehouses", { cityRef });
-  return data;
+  try {
+    const { data } = await axios.post("/new-post/warehouses", { cityRef });
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 export const getPopularityProducts = async () => {
-  const { data } = await axios.get("products-popularity");
-  return data;
+  try {
+    const { data } = await axios.get("products-popularity");
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
+  }
 };
 
 export const sendCourseNotification = async (
