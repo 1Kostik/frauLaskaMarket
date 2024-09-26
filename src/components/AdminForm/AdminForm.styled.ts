@@ -156,10 +156,6 @@ export const imageWrapper = css`
   &:first-of-type {
     border-radius: 16px;
     border: 1px solid green;
-
-    & .main-photo-btn {
-      /* background-color: green; */
-    }
   }
 
   & .main-photo-btn {

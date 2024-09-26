@@ -7,8 +7,6 @@ import {
   InfoContainer,
   InfoTitle,
   ItemInfoContainer,
-  // NewPrice,
-  // OldPrice,
   P,
   Price,
   PriceContainer,
@@ -19,8 +17,9 @@ import {
 } from "./CartItemCard.styled";
 
 import { ReactComponent as Close } from "@assets/icons/close2.svg";
+
 import PriceItem from "@components/PriceItem/PriceItem";
-// import PriceItem from "@components/PriceItem/PriceItem";
+
 import { handleImgError } from "@utils/handleImgError";
 
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";

@@ -4,10 +4,10 @@ import { containerStyles } from "@styles/variables";
 
 import plug from "@assets/images/plug3.svg";
 import TabBox from "@components/TabBox";
-import { tabArr } from "@assets/tabArr";
+import { tabArr } from "@constants/tabArr";
 
 import frauLaska from "@assets/images/frau-laska.webp";
-import { foWhoCourse } from "@assets/forWhoCourse";
+import { foWhoCourse } from "@constants/forWhoCourse";
 
 const InfoSection = () => {
   return (

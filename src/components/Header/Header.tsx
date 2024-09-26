@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
+
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as CartIcon } from "../../assets/icons/shopping_bag.svg";
 import { ReactComponent as BurgerMenu } from "../../assets/icons/menu.svg";
@@ -22,14 +24,17 @@ import {
   addProductStyle,
   btnLogOut,
 } from "./Header.styled";
-import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
+
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
+
 import { selectCartTotalQuantity } from "@redux/cart/selectors";
 import { useAppSelector } from "@redux/hooks";
 import { selectToken } from "@redux/auth/selectors";
-import { MdOutlinePostAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+
+import { MdOutlinePostAdd } from "react-icons/md";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+
 import { logOut } from "@services/servicesApi";
 
 const modalPortal = document.querySelector("#portal-root");
@@ -37,7 +42,7 @@ const modalPortal = document.querySelector("#portal-root");
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
 
 const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -143,13 +148,12 @@ const Header = () => {
   const handleClickLogOut = async () => {
     try {
       await logOut(dispatch);
-     navigate("/")
+      navigate("/");
     } catch (error) {
-      console.error('Error during logout process:', error);
-     
+      console.error("Error during logout process:", error);
     }
   };
-  
+
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>

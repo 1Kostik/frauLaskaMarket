@@ -6,22 +6,21 @@ interface Props {
 }
 
 const OrderItemCard: React.FC<Props> = ({ item }) => {
-  const {imageUrls, title, product_code, variations } = item;
+  const { imageUrls, title, product_code, variations } = item;
   return (
     <div
       style={{
         display: "flex",
-        width:"100%",
-        // height:"400px",
+        width: "100%",
         marginBottom: "20px",
       }}
     >
-      <div  style={{
-       
-        width:"150px",
-        height:"150px",
-        // marginBottom: "20px",
-      }}>
+      <div
+        style={{
+          width: "150px",
+          height: "150px",
+        }}
+      >
         <img src={imageUrls[0].img_url} alt="" />
       </div>
       <div>

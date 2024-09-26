@@ -1,9 +1,11 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
+
 interface Props {
   width?: string;
 }
+
 export const ItemInfoContainer = styled.div<Props>`
   width: 100%;
   display: flex;
@@ -11,9 +13,11 @@ export const ItemInfoContainer = styled.div<Props>`
   border-radius: 16px;
   gap: 8px;
   padding: 11px;
+
   ${onTablet(css`
     width: 360px;
   `)};
+
   ${({ width }) =>
     onDesktop(css`
       height: auto;

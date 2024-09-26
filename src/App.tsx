@@ -28,9 +28,17 @@ const LoginPage = lazy(() => import("@pages/LoginPage/LoginPage"));
 const OrderedPage = lazy(() => import("@pages/OrderedPage/OrderedPage"));
 const OrdersPage = lazy(() => import("@pages/OrdersPage/OrdersPage"));
 const OrderItemPage = lazy(() => import("@pages/OrderItemPage/OrderItemPage"));
+
 function App() {
+  
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <Overlay type="loader">
+          <RingLoader color="#cabcbc" size={120} />
+        </Overlay>
+      }
+    >
       <ClearLocalStorageOnNavigate />
       <Overlay type="loader">
         <RingLoader color="#cabcbc" size={120} />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { nanoid } from "nanoid";
-import { QaType } from "@assets/questionsArr";
+
 import {
   boxContainer,
   contentContainer,
@@ -10,6 +10,8 @@ import {
   titleStyle,
   titleWrapper,
 } from "./QABox.styled";
+
+import { QaType } from "@constants/questionsArr";
 import { ReactComponent as ArrowIcon } from "@assets/icons/arrow-up.svg";
 
 interface QaProps {

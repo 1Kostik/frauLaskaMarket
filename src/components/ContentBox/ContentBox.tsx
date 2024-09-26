@@ -22,7 +22,7 @@ import {
 import { ReactComponent as ArrowLeft } from "/src/assets/icons/arrow-left.svg";
 import { ReactComponent as ArrowRight } from "/src/assets/icons/arrow-right.svg";
 
-import { MyWay, myWayHistoryArr } from "@assets/myWayHistoryArr";
+import { MyWay, myWayHistoryArr } from "@constants/myWayHistoryArr";
 import {
   handleNext,
   handlePrev,
@@ -46,26 +46,11 @@ const ContentBox: React.FC<ContentBoxProps> = ({
   changeDirection,
   type,
 }) => {
-  // const [textHeight, setTextHeight] = useState<number | undefined>(undefined);
   const [swiper, setSwiper] = useState<SwiperCore | null>(null);
 
   const textRef = useRef<HTMLDivElement | null>(null);
   const refPrevBtn = useRef<HTMLButtonElement | null>(null);
   const refNextBtn = useRef<HTMLButtonElement | null>(null);
-
-  // useLayoutEffect(() => {
-  //   const resizeObserver = new ResizeObserver((entries) => {
-  //     setTextHeight((entries[0].target as HTMLElement).offsetHeight);
-  //   });
-
-  //   if (textRef.current) {
-  //     resizeObserver.observe(textRef.current);
-  //   }
-
-  //   return () => {
-  //     resizeObserver.disconnect();
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (swiper) {

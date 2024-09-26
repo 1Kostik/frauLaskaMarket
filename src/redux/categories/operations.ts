@@ -1,12 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+
 import {
   deleteCategory,
   getCategories,
   patchCategory,
   postCategory,
 } from "@services/servicesApi";
-import { AxiosError } from "axios";
-import { toast } from "react-toastify";
 
 export type KnownError = {
   errorMessage: string;

@@ -1,1 +1,1 @@
-export {default} from "./RegistrationBox"
+export { default } from "./RegistrationBox";

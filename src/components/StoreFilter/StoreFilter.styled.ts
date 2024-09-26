@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onTablet } from "@styles/mixins";
+
 interface Props {
   isOpen: boolean;
 }
@@ -15,6 +16,7 @@ export const FilterWrapper = styled.div`
   z-index: 100;
   pointer-events: auto;
   padding: 26px 20px;
+
   ${onTablet(css`
     position: relative;
     top: unset;
@@ -42,6 +44,7 @@ export const svgClose = css`
     fill: var(--bg-light-grey);
   }
 `;
+
 export const TitleContainer = styled.div`
   width: 100%;
   display: flex;
@@ -52,6 +55,7 @@ export const TitleContainer = styled.div`
     width: 272px;
   `)};
 `;
+
 export const ButtonClose = styled.button`
   width: 40px;
   height: 40px;
@@ -75,6 +79,7 @@ export const ItemContainer = styled.div<Props>`
   border-bottom: ${({ isOpen }) =>
     isOpen ? "" : "1px solid var(--bg-light-grey)"};
 `;
+
 export const SubItemContainer = styled.div<Props>`
   width: 88%;
   height: 40px;
@@ -85,6 +90,7 @@ export const SubItemContainer = styled.div<Props>`
       isOpen ? "1px solid var(--bg-light-grey)" : ""};
   }
 `;
+
 export const P1 = styled.p`
   width: 175px;
   color: var(--text-light-grey);
@@ -96,6 +102,7 @@ export const P1 = styled.p`
   letter-spacing: 0.1px;
   white-space: normal;
 `;
+
 export const P2 = styled.p`
   color: var(--text-light-grey);
   font-family: Fixel;
@@ -108,7 +115,6 @@ export const P2 = styled.p`
 export const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  /* gap: 8px; */
 `;
 
 export const Label = styled.label`
@@ -120,6 +126,7 @@ export const Label = styled.label`
 export const Input = styled.input`
   display: none;
 `;
+
 export const svgCheckBox = css`
   & path {
     fill: var(--bg-light-grey);
@@ -128,7 +135,6 @@ export const svgCheckBox = css`
 
 export const FilterBtn = styled.button`
   width: 100%;
-  /* height: 40px; */
   background: inherit;
   padding: 6px 24px;
   border-radius: 24px;
@@ -142,11 +148,13 @@ export const FilterBtn = styled.button`
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
-  line-height: 24px; /* 133.333% */
+  line-height: 24px;
   letter-spacing: 0.15px;
 `;
+
 export const Container = styled.div`
   width: 100%;
+
   ${onTablet(css`
     width: 272px;
   `)};

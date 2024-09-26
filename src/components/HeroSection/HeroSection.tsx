@@ -1,4 +1,6 @@
 import React, { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Container,
   Section,
@@ -7,7 +9,6 @@ import {
   titleStyle,
 } from "./HeroSection.styled";
 import { containerStyles } from "@styles/variables";
-import { useNavigate } from "react-router-dom";
 
 export interface HeroSectionProps {
   children?: ReactNode;
@@ -40,9 +41,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           ) : (
             <>
               <h1 css={titleStyle(viewType)}>{children[0].props.children}</h1>
-              <p css={paragraphStyle(pageName)}>
-                {children[1].props.children}
-              </p>
+              <p css={paragraphStyle(pageName)}>{children[1].props.children}</p>
             </>
           )
         ) : (

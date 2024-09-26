@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+
 export const wrapper = css`
   display: flex;
   flex-direction: column;
@@ -28,9 +29,11 @@ export const wrapper = css`
   & p:first-of-type {
     margin-bottom: 20px;
   }
+
   & p:last-of-type {
     margin-bottom: 10px;
   }
+
   & span {
     margin-bottom: auto;
     font-family: Arial;

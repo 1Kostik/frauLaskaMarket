@@ -1,6 +1,4 @@
-import { useAppSelector } from "@redux/hooks";
-
-import { selectCart, selectCartTotalQuantity } from "@redux/cart/selectors";
+import { useNavigate } from "react-router-dom";
 
 import {
   Button,
@@ -15,7 +13,9 @@ import {
   TitlePayment,
   WrapperTitle,
 } from "./PaymentBlock.styled";
-import { useNavigate } from "react-router-dom";
+
+import { useAppSelector } from "@redux/hooks";
+import { selectCart, selectCartTotalQuantity } from "@redux/cart/selectors";
 
 interface IPaymentBlockProps {
   setCallMeBack?: React.Dispatch<React.SetStateAction<boolean>>;

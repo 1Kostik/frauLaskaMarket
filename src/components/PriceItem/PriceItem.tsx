@@ -1,5 +1,5 @@
-import { fullPrice } from "@utils/fullPrice";
 import React from "react";
+
 import {
   newPriceCartItemCArd,
   oldPriceCartItemCArd,
@@ -8,12 +8,16 @@ import {
   productDetailsStyle,
   storeStyle,
 } from "./PriceItem.styled";
+
+import { fullPrice } from "@utils/fullPrice";
+
 interface IPriceItemProps {
   price: number;
   discount?: number | null;
   style_item?: string;
   total_cost?: number;
 }
+
 const PriceItem: React.FC<IPriceItemProps> = ({
   price,
   discount,
@@ -46,8 +50,7 @@ const PriceItem: React.FC<IPriceItemProps> = ({
           <span css={old_price}>{fullPrice(price, discount)}</span> -{" "}
         </span>
       )}
-      {switchPrice}{" "}
-      {switchTitle}
+      {switchPrice} {switchTitle}
     </p>
   );
 };

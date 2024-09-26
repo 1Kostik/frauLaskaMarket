@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+
 import { onDesktop, onTablet } from "@styles/mixins";
 
 import checkboxChecked from "@assets/icons/checkbox-active.svg";
@@ -13,9 +14,11 @@ export const PaymentContainer = styled.div`
   border: 1px solid var(--bg-light-grey);
   background: var(--bg-light-grey);
   padding: 16px;
+
   ${onTablet(css`
     width: 688px;
   `)};
+
   ${onDesktop(css`
     width: 420px;
   `)};
@@ -38,6 +41,7 @@ export const TitlePayment = styled.h2`
   line-height: 120%;
   letter-spacing: 0.36px;
   margin-bottom: 24px;
+
   ${onDesktop(css`
     font-size: 24px;
     letter-spacing: 0.48px;
@@ -52,6 +56,7 @@ export const TitleInfo = styled.span`
   font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.1px;
+
   ${onDesktop(css`
     font-size: 14px;
   `)};
@@ -65,6 +70,7 @@ export const InfoPrice = styled.span`
   font-weight: 400;
   line-height: 24px;
   letter-spacing: 0.25px;
+
   ${onDesktop(css`
     font-size: 14px;
   `)};
@@ -93,6 +99,7 @@ export const WrapperTitle = styled.h2`
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0.15px;
+
   ${onDesktop(css`
     font-size: 18px;
   `)};
@@ -106,6 +113,7 @@ export const EndPrice = styled.span`
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0.15px;
+
   ${onDesktop(css`
     font-size: 18px;
   `)};
@@ -122,6 +130,7 @@ export const Button = styled.button`
   padding: 10px 16px;
   border-radius: 24px;
   border: 1px solid var(--bg-black);
+
   ${onDesktop(css`
     font-size: 14px;
   `)};

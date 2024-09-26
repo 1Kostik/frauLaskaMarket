@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage, FieldProps } from "formik";
 import * as Yup from "yup";
 import Select, { OptionProps, SingleValue, components } from "react-select";
@@ -19,9 +20,9 @@ import {
 } from "./RegistrationBox.styled";
 
 import checkedIcon from "@assets/icons/checked.svg";
-import { inputLabel } from "@components/AdminForm/AdminForm.styled";
-import { useEffect, useState } from "react";
 import { sendCourseNotification } from "@services/servicesApi";
+
+import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 
 const validationSchema = Yup.object({
   name: Yup.string()

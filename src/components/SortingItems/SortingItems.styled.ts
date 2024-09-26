@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
+
 interface Props {
   isOpen?: boolean;
   isChange?: boolean;
@@ -20,6 +21,7 @@ interface Props {
   gap?: string;
   widthContainer?: string;
 }
+
 interface Ih4 {
   isNone?: boolean;
 }
@@ -132,11 +134,13 @@ export const P = styled.p<Props>`
       font-size: ${fontSize ? fontSize : "14px"};
     `)}
 `;
+
 export const svgCheckedStyles = (color: string | undefined) => css`
   & path {
     fill: ${color ? color : "var(--bg-light-grey)"};
   }
 `;
+
 export const SelectOne = styled.div<Props>`
   display: flex;
   align-items: center;
@@ -155,6 +159,7 @@ export const svgArrowUp = (color: string | undefined) => css`
     fill: ${color ? color : "var(--bg-black)"};
   }
 `;
+
 export const svgArrowDpwn = (color: string | undefined) => css`
   & path {
     fill: ${color ? color : "var(--bg-light-grey)"};

@@ -3,14 +3,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
-
-import { IContent, IPlan } from "@assets/recoveryPlan";
-
-import PlanCard from "./PlanCard";
 import { nanoid } from "nanoid";
+
 import { swiperContainer, titleWrapper } from "./PlanContent.styled";
+
+import { IContent, IPlan } from "@constants/recoveryPlan";
+import PlanCard from "./PlanCard";
+
 import { ReactComponent as ArrowLeft } from "@assets/icons/arrow-left-swapper32.svg";
 import { ReactComponent as ArrowRight } from "@assets/icons/arrow-right-swapper32.svg";
+
 import {
   handleNext,
   handlePrev,
@@ -19,7 +21,7 @@ import {
 
 interface IPlanProps {
   plan: IPlan;
-  setPickedCourse: React.Dispatch<SetStateAction<string>>
+  setPickedCourse: React.Dispatch<SetStateAction<string>>;
 }
 
 const PlanContent: React.FC<IPlanProps> = ({ plan, setPickedCourse }) => {

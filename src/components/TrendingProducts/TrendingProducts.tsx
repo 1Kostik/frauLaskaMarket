@@ -1,6 +1,11 @@
-import ProductCard from "@components/ProductCard/ProductCard";
-import { IPopularityProducts } from "Interfaces/IPopularityProduct";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore from "swiper";
+import { Navigation } from "swiper/modules";
+import "swiper/css/navigation";
+import "swiper/css";
+
 import {
   ProductListContainer,
   Title,
@@ -9,15 +14,16 @@ import {
   arrowLeft,
   arrowRight,
 } from "./TrendingProducts.styled";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
-import { Navigation } from "swiper/modules";
-import "swiper/css/navigation";
-import "swiper/css";
-import { useNavigate } from "react-router-dom";
+
 import { getPopularityProducts } from "@services/servicesApi";
+
+import { IPopularityProducts } from "Interfaces/IPopularityProduct";
+
 import { ReactComponent as ArrowRight } from "@assets/icons/arrow-right.svg";
 import { ReactComponent as ArrowLeft } from "@assets/icons/arrow-left.svg";
+
+import ProductCard from "@components/ProductCard/ProductCard";
+
 const TrendingProducts = () => {
   const navigate = useNavigate();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

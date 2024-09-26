@@ -1,7 +1,7 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import bgImage from "../../../public/gradient.svg";
 import CardSliderSection from "@pages/MainPage/CardSliderSection/CardSliderSection";
-import { text } from "@assets/answers";
+import { text } from "@constants/answers";
 import InfoSection from "./InfoSection/InfoSection";
 import PlansSection from "./PlansSection/PlansSection";
 import QASection from "./QASection/QASection";

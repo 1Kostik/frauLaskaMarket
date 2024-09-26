@@ -1,4 +1,3 @@
-
 import { container } from "./Achievements.styled";
 
 const Achievements = () => {

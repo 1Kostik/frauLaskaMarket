@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
+
 interface Props {
   show?: boolean;
   widthContainer?: string;
@@ -96,7 +97,7 @@ export const H5 = styled.h5`
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: 22px; /* 133.333% */
+  line-height: 22px;
   letter-spacing: 0.15px;
 
   ${onDesktop(css`

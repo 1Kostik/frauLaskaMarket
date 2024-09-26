@@ -1,5 +1,7 @@
 import { useEffect } from "react";
+
 import { overlayStyle } from "./Overlay.styled";
+
 import { useAppSelector } from "@redux/hooks";
 import { selectIsAdsLoading } from "@redux/ads/selectors";
 import { selectAuthIsLoading } from "@redux/auth/selectors";

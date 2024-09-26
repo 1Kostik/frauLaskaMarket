@@ -1,13 +1,13 @@
 import PlanContent from "@components/PlanContent";
 
-import { recoveryPlan } from "@assets/recoveryPlan";
-import { pregnantPlan } from "@assets/pregnantPlan";
+import { recoveryPlan } from "@constants/recoveryPlan";
+import { pregnantPlan } from "@constants/pregnantPlan";
 import { containerStyles } from "@styles/variables";
 import { photo } from "./PlansSection.styled";
 import { SetStateAction } from "react";
 
 interface IPlansSection {
-  setPickedCourse: React.Dispatch<SetStateAction<string>>
+  setPickedCourse: React.Dispatch<SetStateAction<string>>;
 }
 
 const PlansSection: React.FC<IPlansSection> = ({ setPickedCourse }) => {

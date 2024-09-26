@@ -14,7 +14,8 @@
       "@assets/*": ["assets/*"],
       "@utils/*": ["utils/*"],
       "@services/*": ["services/*"],
-      "@redux/*": ["redux/*"]
+      "@redux/*": ["redux/*"],
+      "@constants/*": ["constants/*"]
     },
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

@@ -1,6 +1,7 @@
 interface IOneImageModalProps {
   item: string;
 }
+
 const OneImageModal: React.FC<IOneImageModalProps> = ({ item }) => {
   return (
     <div>

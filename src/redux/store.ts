@@ -10,7 +10,9 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+
 import storage from "redux-persist/lib/storage";
+
 import cartReducer from "./cart/slice";
 import authReducer from "./auth/slice";
 import categoriesReducer from "./categories/slice";

@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
+import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { onDesktop, onTablet } from "@styles/mixins";
 
@@ -25,6 +25,7 @@ export const Overlay = styled.div`
   z-index: 100;
   pointer-events: auto;
 `;
+
 export const Container = styled.div`
   display: flex;
   padding: 24px 20px;
@@ -37,17 +38,19 @@ export const Container = styled.div`
     padding: 24px 40px;
   `)};
 `;
+
 export const NavContainer = styled.div`
-  display: flex;  
+  display: flex;
   width: 360px;
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
   ${onTablet(css`
     width: 340px;
-    padding-right:40px;
+    padding-right: 40px;
   `)};
 `;
+
 export const NavWrapper = styled.nav`
   display: flex;
   gap: 12px;
@@ -57,6 +60,7 @@ export const NavWrapper = styled.nav`
   width: 100%;
   height: 100%;
 `;
+
 export const Nav = styled(NavLink)`
   padding: 8px 20px;
   color: var(--text-light-grey);
@@ -71,21 +75,25 @@ export const Nav = styled(NavLink)`
   border: 1px solid var(--bg-light-grey);
   border-radius: 32px;
   background-color: var(--bg-black);
+
   &:hover {
     color: var(--text-black);
     border: 1px solid var(--bg-light-grey);
     background-color: var(--bg-light-grey);
   }
+
   &.active {
     color: var(--text-black);
     background-color: var(--bg-light-grey);
     border: 1px solid var(--bg-light-grey);
   }
 `;
+
 export const contactContainer = css`
   display: flex;
   flex-direction: column;
 `;
+
 export const contactLink = css`
   font-family: Fixel;
   font-size: 22px;
@@ -95,10 +103,12 @@ export const contactLink = css`
   color: var(--text-light-grey);
   margin-bottom: 16px;
 `;
+
 export const SocialContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
+
 export const SocialLink = styled.a`
   display: flex;
   align-items: center;
@@ -128,15 +138,17 @@ export const SocialLink = styled.a`
     line-height: 20px;
   `)}
 `;
-export const ImageContainer=styled.div`
- display: none;  
+
+export const ImageContainer = styled.div`
+  display: none;
   ${onTablet(css`
     display: block;
     width: 340px;
     height: 100%;
-    padding-left:40px;
+    padding-left: 40px;
   `)};
 `;
-export const image=css`
-height: 520px;
+
+export const image = css`
+  height: 520px;
 `;

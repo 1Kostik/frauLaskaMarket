@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import { toast } from "react-toastify";
+
+import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
+
 export interface CartState {
   cart: IAddedToCartProduct[];
 }

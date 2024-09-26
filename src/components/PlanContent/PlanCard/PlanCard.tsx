@@ -1,8 +1,10 @@
 import React, { SetStateAction } from "react";
-import { IContent } from "@assets/recoveryPlan";
-import { ReactComponent as CheckedIcon } from "@assets/icons/checked.svg";
 import { nanoid } from "nanoid";
+
 import { cardContainer, infoWrapper } from "./PlanCard.styled";
+
+import { IContent } from "@constants/recoveryPlan";
+import { ReactComponent as CheckedIcon } from "@assets/icons/checked.svg";
 
 interface IPlanCardProps {
   content: IContent;

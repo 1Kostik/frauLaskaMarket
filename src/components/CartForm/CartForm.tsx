@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage, FieldProps } from "formik";
 import * as Yup from "yup";
 
@@ -14,17 +15,17 @@ import {
   recipientStyle,
 } from "./CartForm.styled";
 
-// import { handleNumericInput } from "@utils/handleNumericInput";
 import { makePayment } from "@services/servicesApi";
-import { inputLabel } from "@components/AdminForm/AdminForm.styled";
-import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
-
 import { makeOrder } from "@services/servicesApi";
 
-import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
+import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 import { orderItemsConverter } from "@utils/orderItemsConverter";
-import { useNavigate } from "react-router-dom";
+
+
+import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 import NewPostSelect from "@components/NewPostSelect";
+
+import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import { IInitialCartFormValue } from "Interfaces/IInitialCartFormValue";
 
 const validationSchema = (isOtherRecipient: boolean) =>
