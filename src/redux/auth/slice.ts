@@ -1,10 +1,11 @@
 import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
 import { IAuthState } from "Interfaces/IAuthState";
 import { authUser } from "./operations";
+import { LoginError } from "Interfaces/IloginError";
 
 const initialState: IAuthState = {
-  token: "",
-  username: "",
+  token: null,
+  username: null,
   isLoading: false,
   error: null,
 };
@@ -20,20 +21,34 @@ const handelAuthFulfilled = (
   state.token = payload.token;
   state.username = payload.name;
   state.isLoading = false;
+  state.error = null;
 };
 
 const handelRejected = (
   state: IAuthState,
-  { payload }: PayloadAction<unknown>
+  action: PayloadAction<LoginError | undefined>
 ) => {
-  state.error = typeof payload === "string" ? payload : "Unknown error";
+  if (action.payload) {
+    state.error = action.payload.errorMessage;
+  } else {
+    state.error = "Невідома помилка";
+  }
   state.isLoading = false;
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    clearToken: (state: IAuthState) => {
+      state.token = "";
+      state.username = "";
+      state.error = null;
+    },
+    clearError: (state: IAuthState) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(isAnyOf(authUser.fulfilled), handelAuthFulfilled)
@@ -41,5 +56,7 @@ const authSlice = createSlice({
       .addMatcher(isAnyOf(authUser.rejected), handelRejected);
   },
 });
+
+export const { clearToken, clearError } = authSlice.actions;
 
 export default authSlice.reducer;

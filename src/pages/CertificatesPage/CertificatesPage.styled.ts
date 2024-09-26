@@ -42,7 +42,7 @@ export const title = css`
 export const itemStyles = css`
   width: 320px;
   height: auto;
-
+  cursor: pointer;
   & img {
     object-fit: fill;
   }
@@ -59,8 +59,8 @@ export const itemStyles = css`
 `;
 export const btnBackStyles = css`
   cursor: pointer;
-  & :hover {
-    transform: scale(1.09);
+  &:hover {
+    transform: scale(1.4);
     transition: transform 0.3 ease;
   }
 `;

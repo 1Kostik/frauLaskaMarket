@@ -1,3 +1,5 @@
+import { clearToken } from "@redux/auth/slice";
+import { AppDispatch } from "@redux/store";
 import axios from "axios";
 import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
@@ -6,18 +8,58 @@ import { toast } from "react-toastify";
 
 axios.defaults.baseURL = "http://localhost:8081/api/";
 
+const setAuthHeader = (token: string) => {
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
+const getAuth = () => {
+  const jsonString = localStorage.getItem("persist:auth");
+  const authToken =
+    jsonString && JSON.parse(jsonString).token.replace(/^"(.*)"$/, "$1");
+  if (authToken !== "null") {
+    setAuthHeader(authToken);
+  }
+};
+
 export const authenticateUser = async (email: string, password: string) => {
   try {
     const { data } = await axios.post("/login", { email, password });
     return data;
-  } catch (error) {
+  } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
+      if (error.response) {    
+
+        const status = error.response.status;
+        const message = error.response.data?.message || "Сталася помилка";
+        console.log(`Axios error: ${message}, статус: ${status}`);
+        throw new Error(message);
+
+      } else if (error.request) {  
+
+        console.log("Сервер не відповів:", error.request);
+        throw new Error("Сервер не відповів. Спробуйте пізніше.");
+
+      } else {   
+
+        console.log("Щось пішло не так при запиті:", error.message);
+        throw new Error("Сталася невідома помилка");
+      }
     } else {
+   
       console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
+      throw new Error("Виникла невідома помилка");
     }
+  }
+};
+
+export const logOut = async (dispatch: AppDispatch) => {
+  getAuth();
+  
+  try { 
+
+    await axios.post("logout");
+    dispatch(clearToken());
+  } catch (error) {
+    console.error("Error during logout:", error);
   }
 };
 
@@ -27,6 +69,7 @@ export const getCategories = async () => {
 };
 
 export const postCategory = async (title: string) => {
+  getAuth();
   const newCategory = { title };
   const { data } = await axios.post("categories", newCategory);
   return data;
@@ -39,16 +82,19 @@ export const patchCategory = async ({
   id: number;
   name: string;
 }) => {
+  getAuth();
   const { data } = await axios.patch(`categories/${id}`, { title: name });
   return data;
 };
 
 export const deleteCategory = async (id: number) => {
+  getAuth();
   const { data } = await axios.delete(`categories/${id}`);
   return data;
 };
 
 export const postAdvert = async (formData: FormData) => {
+  getAuth();
   try {
     const { data } = await axios.post("products", formData);
     return data;
@@ -64,6 +110,7 @@ export const postAdvert = async (formData: FormData) => {
 };
 
 export const deleteAdvert = async (id: number) => {
+  getAuth();
   const { data } = await axios.delete(`products/${id}`);
   return data;
 };
@@ -75,6 +122,7 @@ export const putchAdvert = async ({
   id: number;
   formData: FormData;
 }) => {
+  getAuth();
   const { data } = await axios.patch(`products/${id}`, formData);
   return data;
 };
@@ -100,11 +148,13 @@ export const findProducts = async (queryParams: string) => {
 };
 
 export const getCategoriesProductCount = async () => {
+  getAuth();
   const { data } = await axios.get(`categories/product-count`);
   return data;
 };
 
 export const deleteProductImage = async (id: number) => {
+  getAuth();
   try {
     const { data } = await axios.delete(`products/images/${id}`);
     toast.success("Зображення видалено");
@@ -122,6 +172,7 @@ export const deleteProductImage = async (id: number) => {
 };
 
 export const deleteProductVariationById = async (id: number) => {
+  getAuth();
   try {
     const { data } = await axios.delete(`products/variations/${id}`);
     toast.success("Варіацію видалено");
@@ -139,6 +190,7 @@ export const deleteProductVariationById = async (id: number) => {
 };
 
 export const deleteProductFeedbackById = async (id: number) => {
+  getAuth();
   try {
     const { data } = await axios.delete(`products/feedbacks/${id}`);
     toast.success("Відгук видалено");
@@ -156,6 +208,7 @@ export const deleteProductFeedbackById = async (id: number) => {
 };
 
 export const makePayment = async (orderDetails: IOrder) => {
+  getAuth();
   try {
     const { data } = await axios.post("payment", orderDetails);
     if (data.redirectUrl) {
@@ -177,6 +230,7 @@ export const makePayment = async (orderDetails: IOrder) => {
 };
 
 export const makeOrder = async (orderInfo: IOrderCreation) => {
+  getAuth();
   try {
     const { data } = await axios.post("orders", orderInfo);
     toast.success("Замовлення створено");
@@ -194,6 +248,7 @@ export const makeOrder = async (orderInfo: IOrderCreation) => {
 };
 
 export const getOrders = async (queryParams: string) => {
+  getAuth();
   try {
     const data = await axios.get(`orders?${queryParams}`);
     return data.data;
@@ -209,6 +264,7 @@ export const getOrders = async (queryParams: string) => {
   }
 };
 export const getOrderById = async (id: number) => {
+  getAuth();
   try {
     const data = await axios.get(`orders/${id}`);
     return data.data;
@@ -225,6 +281,7 @@ export const getOrderById = async (id: number) => {
 };
 
 export const updateOrder = async (orderId: number, status: string) => {
+  getAuth();
   try {
     const { data } = await axios.put(`orders/${orderId}`, { status });
     toast.success("Статус замовлення змінено");
@@ -277,6 +334,7 @@ export const updateProductCountDecrease = async (id: number, count: number) => {
   }
 };
 export const deleteOrder = async (id: number) => {
+  getAuth();
   try {
     await axios.delete(`orders/${id}`);
     toast.success("Замовлення успішно видалено!");
@@ -292,6 +350,7 @@ export const deleteOrder = async (id: number) => {
   }
 };
 export const updatePamentStatus = async (id: number) => {
+  getAuth();
   try {
     await axios.patch(`orders/payment-status/${id}`);
     toast.success("Сатус оплати успішно змінено!");

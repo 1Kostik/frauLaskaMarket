@@ -20,20 +20,27 @@ import {
   WrapperMenu,
   cartCount,
   addProductStyle,
+  btnLogOut,
 } from "./Header.styled";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import ModalMobileHeader from "../ModalMobileHeader/ModalMobileHeader";
 import { selectCartTotalQuantity } from "@redux/cart/selectors";
 import { useAppSelector } from "@redux/hooks";
 import { selectToken } from "@redux/auth/selectors";
 import { MdOutlinePostAdd } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RiLogoutBoxRLine } from "react-icons/ri";
+import { logOut } from "@services/servicesApi";
+
 const modalPortal = document.querySelector("#portal-root");
 
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
+
 const Header = () => {
+  const navigate = useNavigate()
   const location = useLocation();
   const { id } = useParams();
+  const dispatch = useDispatch();
   const isAromaSchool = location.pathname === "/aroma-school";
   const isConsultations = location.pathname === "/consultations";
   const isStore = location.pathname === "/store";
@@ -47,7 +54,6 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  // const cart = useAppSelector(selectCart);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
   const token = useSelector(selectToken);
 
@@ -82,7 +88,6 @@ const Header = () => {
       setIsScrolled(false);
       return;
     }
-
     if (
       section1 &&
       scrollY >= section1.offsetTop &&
@@ -123,6 +128,7 @@ const Header = () => {
       }
     }
   }, [isOpen, isScrolled]);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -133,6 +139,17 @@ const Header = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const handleClickLogOut = async () => {
+    try {
+      await logOut(dispatch);
+     navigate("/")
+    } catch (error) {
+      console.error('Error during logout process:', error);
+     
+    }
+  };
+  
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
@@ -191,6 +208,11 @@ const Header = () => {
               <MdOutlinePostAdd />
               Додати товар
             </NavLink>
+          )}
+          {token && show && (
+            <button css={btnLogOut(istrue)} onClick={handleClickLogOut}>
+              <RiLogoutBoxRLine />
+            </button>
           )}
           <WrapperMenu>
             {!token && (

@@ -1,16 +1,17 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onDesktop, onTablet } from "@styles/mixins";
+
 interface PropsProdDet {
   isErrorMessage?: boolean;
   isOptions?: boolean;
 }
+
 export const Section = styled.section`
   padding-top: 80px;
 `;
 export const Container = styled.div`
   padding: 24px 0px 24px 0px;
-
   ${onDesktop(css`
     padding: 40px 0px 40px 0px;
   `)}
@@ -21,29 +22,31 @@ export const H2 = styled.h2`
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   letter-spacing: 0.1px;
   ${onDesktop(css`
     font-size: 14px;
   `)}
 `;
+
 export const titleH2 = css`
   color: var(--text-active-link-milk);
   font-family: Fixel;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   letter-spacing: 0.1px;
   text-decoration: underline;
   ${onDesktop(css`
     font-size: 14px;
   `)}
 `;
+
 export const Wrapper = styled.div`
   width: 100%;
-  /* height: 678px; */
 `;
+
 export const ImageContainer = styled.div`
   position: relative;
   border-radius: 8px;
@@ -102,7 +105,6 @@ export const InfoContainer = styled.div`
 `;
 
 export const TextContainer = styled.div`
-  /* display: flex;  */
   ${onTablet(css`
     width: 332px;
     height: 100%;
@@ -112,13 +114,14 @@ export const TextContainer = styled.div`
     height: 100%;
   `)}
 `;
+
 export const H3 = styled.h3`
   color: var(--text-light-grey);
   font-family: Fixel;
   font-size: 22px;
   font-style: normal;
   font-weight: 600;
-  line-height: 100%; /* 32px */
+  line-height: 100%;
   letter-spacing: 0.44px;
   width: 201px;
   ${onTablet(css`
@@ -130,13 +133,14 @@ export const H3 = styled.h3`
     letter-spacing: 0.64px;
   `)}
 `;
+
 export const P = styled.p`
   color: var(--text-black);
   font-family: Arial;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 24px; /* 171.429% */
+  line-height: 24px;
   letter-spacing: 0.25px;
   display: flex;
   padding: 2px 8px;
@@ -146,6 +150,7 @@ export const P = styled.p`
     font-size: 14px;
   `)}
 `;
+
 export const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -158,6 +163,7 @@ export const TitleContainer = styled.div`
     height: 32px;
   `)}
 `;
+
 export const P1 = styled.p`
   color: var(--text-light-grey);
   font-family: Arial;
@@ -168,6 +174,7 @@ export const P1 = styled.p`
   letter-spacing: 0.4px;
   margin-bottom: 12px;
 `;
+
 export const P2 = styled.p`
   color: var(--text-light-grey);
   font-family: Fixel;
@@ -182,8 +189,8 @@ export const P2 = styled.p`
     letter-spacing: 0.64px;
   `)}
 `;
+
 export const P3 = styled.p`
-  /* height: 66px; */
   color: var(--text-light-grey);
   font-family: Arial;
   font-size: 12px;
@@ -287,7 +294,6 @@ export const Button = styled.button`
 
 export const SelectWrapper = styled.div`
   width: 216px;
-  /* height: 40px; */
   ${onTablet(css`
     width: 228px;
   `)}
@@ -436,38 +442,6 @@ export const BackStore = styled.button`
   border: 1px solid var(--bg-light-grey);
 `;
 
-export const TitleWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 41px;
-  ${onDesktop(css`
-    margin-bottom: 36px;
-  `)};
-`;
-export const ProductListContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  overflow-x: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  width: 100%;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  ${onTablet(css`
-    display: flex;
-    width: 100%;
-    gap: 20px;
-  `)}
-
-  ${onDesktop(css`
-    width: 100%;
-    display: flex;
-    /* flex-wrap: wrap; */
-  `)}
-`;
 export const checkedColor = css`
   position: absolute;
   border-radius: 50%;
@@ -476,52 +450,4 @@ export const checkedColor = css`
   width: 30px;
   top: -5px;
   left: -5px;
-`;
-// export const swiper = (stylesProps: StyleProps) => css`
-//   width: ${stylesProps.width?.[0]};
-//   height: ${stylesProps.height?.[0]};
-//   img {
-//     object-fit: cover;
-//   }
-//   ${onTablet(css`
-//     width: ${stylesProps.width?.[1]};
-//     height: ${stylesProps.height?.[1]};
-//   `)}
-
-//   ${onDesktop(css`
-//     width: ${stylesProps.width?.[2]};
-//     height: ${stylesProps.height?.[2]};
-//   `)}
-// `;
-// export const breakpoints = (stylesProps: StyleProps) => {
-//   return {
-//     360: {
-//       slidesPerView: stylesProps.slidesPerView?.[0],
-//       spaceBetween: stylesProps.spaceBetween?.[0],
-//     },
-//     768: {
-//       slidesPerView: stylesProps.slidesPerView?.[1],
-//       spaceBetween: stylesProps.spaceBetween?.[0],
-//     },
-//     1440: {
-//       slidesPerView: stylesProps.slidesPerView?.[2],
-//       spaceBetween: stylesProps.spaceBetween?.[1],
-//     },
-//   };
-// };
-export const arrowContainer = () => css`
-  display: flex;
-  width: 197px;
-  height: 40px;
-  justify-content: space-between;
-`;
-export const arrowLeft = css`
-  & path {
-    fill: var(--bg-light-grey);
-  }
-`;
-export const arrowRight = css`
-  & path {
-    fill: var(--bg-light-grey);
-  }
 `;
