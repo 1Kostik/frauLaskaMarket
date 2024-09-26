@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-// import styled from "@emotion/styled";
 import { onDesktop } from "@styles/mixins";
 
 export const storeStyle = css`
@@ -9,7 +8,7 @@ export const storeStyle = css`
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 22px; /* 133.333% */
+  line-height: 22px;
   letter-spacing: 1px;
 
   ${onDesktop(css`
@@ -17,17 +16,24 @@ export const storeStyle = css`
     font-size: 20px;
   `)}
 `;
+
 export const oldPriceStore = css`
   height: 24px;
   color: var(--text-light-grey);
   font-family: Arial;
-  font-size: 20px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 133.333% */
+  line-height: 22px;
   letter-spacing: 1px;
   text-decoration: line-through;
+
+  ${onDesktop(css`
+    line-height: 24px;
+    font-size: 20px;
+  `)}
 `;
+
 export const productDetailsStyle = css`
   color: var(--text-light-grey);
   font-family: Fixel;
@@ -42,6 +48,7 @@ export const productDetailsStyle = css`
     letter-spacing: 0.64px;
   `)}
 `;
+
 export const oldPriceProductDetails = css`
   color: var(--text-light-grey);
   font-family: Fixel;
