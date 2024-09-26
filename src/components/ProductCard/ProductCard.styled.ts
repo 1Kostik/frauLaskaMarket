@@ -8,6 +8,8 @@ interface Props {
 
 export const Container = styled.div<Props>`
   border-radius: 16px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   box-sizing: border-box;
   cursor: pointer;
   width: 100%;
@@ -89,12 +91,16 @@ export const InfoContainer = styled.div`
 
 export const H5 = styled.h5`
   width: 100%;
-  height: 24px;
   color: var(--text-light-grey);
   font-family: Fixel;
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: 24px; /* 133.333% */
+  line-height: 22px; /* 133.333% */
   letter-spacing: 0.15px;
+
+  ${onDesktop(css`
+    font-size: 18px;
+    line-height: 24px;
+  `)}
 `;
