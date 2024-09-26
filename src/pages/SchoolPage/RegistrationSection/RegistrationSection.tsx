@@ -1,5 +1,4 @@
 import RegistrationBox from "@components/RegistrationBox";
-// import { section } from "@pages/MainPage/ProjectsSection/ProjectsSection.styled";
 import { containerStyles } from "@styles/variables";
 
 const options = [{ value: "aroma", label: "Аромотерапія" }];
