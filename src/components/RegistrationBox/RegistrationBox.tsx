@@ -25,7 +25,7 @@ import { sendCourseNotification } from "@services/servicesApi";
 
 const validationSchema = Yup.object({
   name: Yup.string()
-    .max(30, "Має бути 30 символів або менше")
+    .max(30, "Має бути не більше 30 символів")
     .required("Обов'язкове"),
   course: Yup.string().required("Обов'язковий"),
   email: Yup.string()
