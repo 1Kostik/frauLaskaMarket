@@ -84,9 +84,8 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({
           onSubmit={async (values, { resetForm }) => {
             console.log({ ...values, phone: values.phone });
             await sendCourseNotification(values).then(() => resetForm());
-            setSelectedCourse(undefined)
+            setSelectedCourse(undefined);
           }}
-          // validateOnChange={true}
           validateOnBlur={false}
         >
           {({ setFieldValue, setFieldTouched, touched, errors, values }) => (
