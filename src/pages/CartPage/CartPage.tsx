@@ -19,31 +19,21 @@ import {
 } from "./CartPage.styled";
 
 import {
-  BackStore,
-  ContainerTopSeller,
-  // ProductListContainer,
-  Title,
-  TitleWrapper,
+  ContainerTopSeller, 
 } from "@pages/ProductDetails/ProductDetails.styled";
-import { useNavigate } from "react-router-dom";
-// import { Product } from "Interfaces/Product";
-// import ProductCard from "@components/ProductCard/ProductCard";
-// import { popularity } from "@utils/popularity";
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import CartItemCard from "@components/CartItemCard";
 import { nanoid } from "nanoid";
 import PaymentBlock from "@components/PaymentBlock";
 import { toast } from "react-toastify";
+import TrendingProducts from "@components/TrendingProducts/TrendingProducts";
 
 const CartPage = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const cart = useAppSelector(selectCart);
 
   const [addedItems, setAddedItems] = useState<IAddedToCartProduct[]>([]);
-  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // useEffect для обновления addedItems на основе состояния корзины
   useEffect(() => {
     const updatedItems = cart.map(
       ({
@@ -73,7 +63,7 @@ const CartPage = () => {
       })
     );
     setAddedItems(updatedItems);
-  }, [cart]); // Зависимость от cart
+  }, [cart]);
 
   const handleAddItem = (id: number, size?: number | null) => {
     const addedItem = addedItems.find(
@@ -130,29 +120,6 @@ const CartPage = () => {
     dispatch(removeFromCart({ id, size, color }));
   };
 
-  const handleBackClick = () => {
-    navigate("/store");
-  };
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setWindowWidth(window.innerWidth);
-  //   };
-  //   window.addEventListener("resize", handleResize);
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
-
-  // const widthImg: string =
-  //   windowWidth >= 360 && windowWidth < 768
-  //     ? "320px"
-  //     : windowWidth >= 768 && windowWidth < 1440
-  //     ? "336px"
-  //     : windowWidth >= 1440
-  //     ? "306px"
-  //     : "100%";
-
   const title = addedItems.length !== 0 ? "Кошик" : "Кошик порожній";
 
   return (
@@ -187,17 +154,7 @@ const CartPage = () => {
           ) : (
             <>
               <ContainerTopSeller>
-                <TitleWrapper>
-                  <Title>Топ продажів</Title>
-                  <BackStore onClick={handleBackClick}>Button</BackStore>
-                </TitleWrapper>
-
-                {/* <ProductListContainer>
-                  {popularity &&
-                    popularity.map((item: Product) => (
-                      <ProductCard key={item.id} width={widthImg} item={item} />
-                    ))}
-                </ProductListContainer> */}
+                <TrendingProducts />
               </ContainerTopSeller>
             </>
           )}

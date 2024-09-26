@@ -4,7 +4,7 @@ import * as Yup from "yup";
 
 import { ReactComponent as CloseEyeIcon } from "@assets/icons/eye-close.svg";
 import { ReactComponent as OpenEyeIcon } from "@assets/icons/eye-open.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   errorAuthStyle,
   errorBorder,
@@ -21,6 +21,7 @@ import { authUser } from "@redux/auth/operations";
 import { useAppDispatch } from "@redux/hooks";
 import { useSelector } from "react-redux";
 import { selectAuthError, selectToken } from "@redux/auth/selectors";
+import { clearError } from "@redux/auth/slice";
 
 const initialValues = {
   email: "",
@@ -50,8 +51,13 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
   const token = useSelector(selectToken);
   const authError = useSelector(selectAuthError);
-
   const [isShowPassword, setIsShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate, token]);
 
   const handleShowPassword = () => {
     setIsShowPassword((prev) => !prev);
@@ -63,9 +69,6 @@ const LoginForm = () => {
         validationSchema={validationSchema}
         onSubmit={(values: ILogin) => {
           dispatch(authUser(values));
-          if (token) {
-            navigate("/");
-          }
         }}
         validateOnChange={false}
         validateOnBlur={false}
@@ -73,7 +76,7 @@ const LoginForm = () => {
         {({ touched, errors, setFieldError }) => (
           <div css={formWrapper}>
             <Form css={formStyle}>
-              {authError && (
+              {authError === "Email or password invalid!" && (
                 <div css={errorAuthStyle}>Невірний логін, пароль!</div>
               )}
               <label htmlFor="email" css={labelStyle}>
@@ -86,7 +89,10 @@ const LoginForm = () => {
                     inputStyle,
                     errorBorder(!!(errors.email && touched.email)),
                   ]}
-                  onFocus={() => setFieldError("email", undefined)}
+                  onFocus={() => {
+                    dispatch(clearError());
+                    setFieldError("email", undefined);
+                  }}
                 />
                 <ErrorMessage name="email">
                   {(msg) => <div css={errorStyle}>{msg}</div>}
@@ -103,6 +109,9 @@ const LoginForm = () => {
                     inputStyle,
                     errorBorder(!!(errors.password && touched.password)),
                   ]}
+                  onFocus={() => {
+                    dispatch(clearError());                    
+                  }}
                 />
 
                 <div onClick={handleShowPassword} css={eyeWrapper}>

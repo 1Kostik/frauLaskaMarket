@@ -353,3 +353,19 @@ export const addProductStyle = (isTrue: string) =>
       margin-right: 6px;
     }
   `;
+export const btnLogOut = (isTrue: string) => css`
+  width: 20px;
+  & svg {
+    font-size: 20px;
+    }
+    color: ${isTrue === "true"
+      ? "var(--text-light-grey)"
+      : "var(--text-black)"};
+  &:hover {
+    & svg {
+      color: var(--text-active-link-milk);
+      transform: scale(1.1);
+      transition: var(--effectDuration);
+    }
+  }
+`;

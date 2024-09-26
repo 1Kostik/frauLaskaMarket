@@ -7,7 +7,7 @@ import frauLaska from "@assets/images/frau-laska.webp";
 const AboutSection = () => {
   return (
     <div css={containerStyles}>
-      <TabBox content={tabArr} photo={frauLaska} title={"Title"} />
+      <TabBox content={tabArr} photo={frauLaska} title={"Title"} imgThumbHeight={600} />
     </div>
   );
 };
