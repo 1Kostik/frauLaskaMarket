@@ -18,6 +18,7 @@ export default defineConfig({
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@redux": path.resolve(__dirname, "./src/redux"),
       "@services": path.resolve(__dirname, "./src/services"),
+      "@constants": path.resolve(__dirname, "./src/constants"),
     },
   },
   server: {

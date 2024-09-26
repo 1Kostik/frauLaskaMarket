@@ -1,12 +1,14 @@
 import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
+
 import { Product } from "Interfaces/Product";
+import { IAdvert, IImageUrl } from "Interfaces/IAdvert";
+
 import {
   createProduct,
   deleteProduct,
   getProduct,
   updateProduct,
 } from "./operations";
-import { IAdvert, IImageUrl } from "Interfaces/IAdvert";
 
 interface IAdsState {
   ads: Product[];

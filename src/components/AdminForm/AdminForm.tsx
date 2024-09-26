@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 import {
   Formik,
@@ -10,6 +11,12 @@ import {
   FormikErrors,
 } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
+
+import { SerializedStyles } from "@emotion/react";
+import { FiPlus } from "react-icons/fi";
+import { FaRegTrashAlt } from "react-icons/fa";
+
 import {
   errorStyle,
   imageWrapper,
@@ -39,29 +46,25 @@ import { ReactComponent as CloseIcon } from "@assets/icons/close.svg";
 import { ReactComponent as CheckedIcon } from "@assets/icons/radio-btn-checked.svg";
 import { ReactComponent as UncheckedIcon } from "@assets/icons/radio-btn-unchecked.svg";
 
-import { FiPlus } from "react-icons/fi";
-import { FaRegTrashAlt } from "react-icons/fa";
-
 import CustomSelect from "@components/CustomSelect";
 import ColorPicker from "@components/ColorPicker";
 
 import { createCategory, fetchCategories } from "@redux/categories/operations";
+import { createProduct, updateProduct } from "@redux/ads/operations";
 import { selectCategories } from "@redux/categories/selectors";
+import { deleteImage } from "@redux/ads/slice";
 
 import { ICategory } from "Interfaces/ICategory";
 import { IAdvert, IFeedback, IImageUrl, IVariation } from "Interfaces/IAdvert";
-import { createProduct, updateProduct } from "@redux/ads/operations";
-import { SerializedStyles } from "@emotion/react";
+
 import {
   deleteProductFeedbackById,
   deleteProductImage,
   deleteProductVariationById,
 } from "@services/servicesApi";
-import { deleteImage } from "@redux/ads/slice";
+
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
-import { useNavigate } from "react-router-dom";
 import { handleNumericInput } from "@utils/handleNumericInput";
-import { toast } from "react-toastify";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -237,10 +240,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     setFieldError("imageUrls", undefined);
     const files = Array.from(e.target.files || []) as File[];
     const filesForAdd = files.filter((file) => file.size < FILE_SIZE);
-     const sanitizedFilesForAdd = filesForAdd.map((file) => {
-       const sanitizedFileName = sanitizeFileName(file.name);
-       return new File([file], sanitizedFileName, { type: file.type });
-     });
+    const sanitizedFilesForAdd = filesForAdd.map((file) => {
+      const sanitizedFileName = sanitizeFileName(file.name);
+      return new File([file], sanitizedFileName, { type: file.type });
+    });
     const fileUrls = sanitizedFilesForAdd.map((file) =>
       URL.createObjectURL(file)
     );

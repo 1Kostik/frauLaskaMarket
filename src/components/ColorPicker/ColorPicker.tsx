@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import { FormikProps } from "formik";
 
+import { IoMdClose } from "react-icons/io";
+
 import {
   colorPickerStyle,
   colorsWrapper,
@@ -10,7 +12,6 @@ import {
 
 import { IAdvert, IVariation } from "Interfaces/IAdvert";
 
-import { IoMdClose } from "react-icons/io";
 import { ReactComponent as CheckedIcon } from "@assets/icons/radio-btn-checked.svg";
 import { ReactComponent as UncheckedIcon } from "@assets/icons/radio-btn-unchecked.svg";
 

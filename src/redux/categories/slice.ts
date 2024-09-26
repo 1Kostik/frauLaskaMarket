@@ -1,12 +1,14 @@
 import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
-import { ICategory } from "Interfaces/ICategory";
+
 import {
   createCategory,
   editCategory,
   fetchCategories,
   removeCategory,
 } from "./operations";
+
 import { ICategoriesState } from "Interfaces/ICategoriesState";
+import { ICategory } from "Interfaces/ICategory";
 
 const initialState = {
   list: [],

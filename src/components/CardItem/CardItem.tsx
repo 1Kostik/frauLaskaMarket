@@ -2,13 +2,6 @@ import React from "react";
 import { H3, P1, P2, TitleWrapper, Wrapper } from "./CardItem.styled";
 import { Feedback } from "Interfaces/Product";
 
-// interface IText {
-//   id: number;
-//   name: string;
-//   activity: string;
-//   description: string;
-// }
-
 interface Props {
   text: Feedback;
 }

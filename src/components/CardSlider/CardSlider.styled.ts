@@ -2,15 +2,19 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { StyleProps } from "@pages/MainPage/CardSliderSection/CardSliderSection";
 import { onDesktop, onTablet } from "@styles/mixins";
+
 interface Props {
   stylesProps: StyleProps;
 }
+
 export const swiper = (stylesProps: StyleProps) => css`
   width: ${stylesProps.width?.[0]};
   height: ${stylesProps.height?.[0]};
+
   img {
     object-fit: cover;
   }
+
   ${onTablet(css`
     width: ${stylesProps.width?.[1]};
     height: ${stylesProps.height?.[1]};
@@ -21,12 +25,15 @@ export const swiper = (stylesProps: StyleProps) => css`
     height: ${stylesProps.height?.[2]};
   `)}
 `;
+
 export const reviews = css`
   width: 343px;
   height: 456px;
+
   img {
     object-fit: cover;
   }
+
   ${onTablet(css`
     width: 728px;
     height: 456px;
@@ -37,18 +44,22 @@ export const reviews = css`
     height: 456px;
   `)}
 `;
+
 export const TitleContainer = styled.div`
-  display:flex ;
+  display: flex;
   margin-bottom: 24px;
   height: 40px;
   align-items: center;
   justify-content: space-between;
+
   ${onDesktop(css`
     margin-bottom: 40px;
   `)}
 `;
+
 export const Container = styled.div<Props>`
   position: relative;
+
   ${({ stylesProps }) => css`
     width: ${stylesProps.container?.width[0]};
     padding-top: ${stylesProps.container?.["padding-top"][0]};
@@ -61,30 +72,36 @@ export const Container = styled.div<Props>`
     `)};
   `}
 `;
+
 export const arrowLeft = css`
   & path {
     fill: var(--bg-light-grey);
   }
 `;
+
 export const arrowRight = css`
   & path {
     fill: var(--bg-light-grey);
   }
 `;
+
 export const arrowBigLeft = css`
   & path {
     fill: var(--bg-light-grey);
   }
 `;
+
 export const arrowBigRight = css`
   & path {
     fill: var(--bg-light-grey);
   }
 `;
+
 export const ArrowContainer = styled.div<Props>`
   ${({ stylesProps }) => css`
     display: flex;
     gap: ${stylesProps.gap?.[0]};
+
     ${onTablet(css`
       gap: ${stylesProps.gap?.[1]};
     `)};
@@ -101,12 +118,14 @@ export const H2 = styled.h2`
   font-family: Fixel;
   font-style: normal;
   font-weight: 600;
-  line-height: 100%; /* 22px */
+  line-height: 100%;
   letter-spacing: 0.44px;
+
   ${onDesktop(css`
     font-size: 32px;
   `)}
 `;
+
 export const arrowContainer = (stylesProps: StyleProps) => css`
   display: ${stylesProps.display?.[2]};
   position: absolute;
@@ -117,13 +136,16 @@ export const arrowContainer = (stylesProps: StyleProps) => css`
   padding: 0 12px;
   top: 140px;
   z-index: 50;
+
   ${onTablet(css`
     top: 146px;
   `)};
+
   ${onDesktop(css`
     top: 293px;
   `)};
 `;
+
 export const btnOnImg = css`
   width: 40px;
   height: 40px;
@@ -131,11 +153,13 @@ export const btnOnImg = css`
   border-radius: 12px;
   background: var(--bg-tranparent);
 `;
+
 export const arrowOnImg = css`
   width: 20px;
   height: 20px;
   color: var(--bg-black);
 `;
+
 export const breakpoints = (stylesProps: StyleProps) => {
   return {
     360: {
@@ -152,20 +176,3 @@ export const breakpoints = (stylesProps: StyleProps) => {
     },
   };
 };
-
-/*
-{
-          360: {
-            slidesPerView: 1.06,
-            spaceBetween: 16,
-          },
-          768: {
-            slidesPerView: isMainPage ? 1.5 : 2.1,
-            spaceBetween: isMainPage ? 12 : 16,
-          },
-          1440: {
-            slidesPerView: isMainPage ? 2.1 : 3.5,
-            spaceBetween: isMainPage ? 12 : 20,
-          },
-        }
-*/

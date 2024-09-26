@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   ButtonClose,
   Container,
@@ -17,13 +18,16 @@ import {
   FilterBtn,
   FilterWrapper,
 } from "./StoreFilter.styled";
+
 import { ReactComponent as Close } from "@assets/icons/close.svg";
 import { ReactComponent as ArrowUp } from "@assets/icons/arrow-up-select.svg";
 import { ReactComponent as ArrowDown } from "@assets/icons/arrow-down-select.svg";
 import { ReactComponent as CheckBox } from "@assets/icons/checkbox.svg";
 import { ReactComponent as CheckBoxActive } from "@assets/icons/checkbox-active.svg";
+
 import { useAppDispatch } from "@redux/hooks";
 import { fetchCategories } from "@redux/categories/operations";
+
 import { getCategoriesProductCount } from "@services/servicesApi";
 import { getSavedFilter } from "@utils/getSavedFilter";
 
@@ -144,7 +148,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const products =
     categoriesProductCount &&
     convertJSONToReadableFormat(categoriesProductCount);
- 
+
   return (
     <FilterWrapper>
       <Container>

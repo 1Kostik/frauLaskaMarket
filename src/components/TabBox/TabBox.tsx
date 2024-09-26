@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
+
 import {
   imgThumb,
   infoContainer,
@@ -13,8 +14,8 @@ import {
   textWrapper,
 } from "./TabBox.styled";
 
-import { Tab } from "@assets/tabArr";
-import { Info } from "@assets/tabArr";
+import { Tab } from "constants/tabArr";
+import { Info } from "constants/tabArr";
 
 interface TabBoxProps {
   title: string;

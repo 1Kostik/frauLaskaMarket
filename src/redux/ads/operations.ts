@@ -2,6 +2,7 @@ import { KnownError } from "@redux/categories/operations";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+
 import {
   deleteAdvert,
   getProductById,

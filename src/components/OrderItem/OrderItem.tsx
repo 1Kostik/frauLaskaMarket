@@ -1,26 +1,31 @@
-import Modal from "@components/Modal";
-import SortingItems from "@components/SortingItems/SortingItems";
-import StatusWarningModal from "@components/StatusWarningModal/StatusWarningModal";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
+
+import { FaArrowRightLong } from "react-icons/fa6";
+import { MdDeleteOutline } from "react-icons/md";
+
 import {
   tdArrow,
   tdTrash,
   thHeadsStyles,
 } from "@pages/OrdersPage/OrdersPage.styled";
+
 import {
   getProductById,
   updateOrder,
   updateProductCountDecrease,
   updateProductCountIncrease,
 } from "@services/servicesApi";
+
 import { IOrder, IOrderItem } from "Interfaces/IOrder";
-import React, { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { useNavigate } from "react-router-dom";
-import { FaArrowRightLong } from "react-icons/fa6";
-import { MdDeleteOutline } from "react-icons/md";
 import { Product } from "Interfaces/Product";
 import { formatDate } from "@utils/formatDate";
+
 import DeleteOrderWarningModal from "@components/DeleteOrderWarningModal/DeleteOrderWarningModal";
+import Modal from "@components/Modal";
+import SortingItems from "@components/SortingItems/SortingItems";
+import StatusWarningModal from "@components/StatusWarningModal/StatusWarningModal";
 
 interface IOrderItemProps {
   item: IOrder;

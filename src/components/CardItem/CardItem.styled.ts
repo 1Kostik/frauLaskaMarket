@@ -1,13 +1,12 @@
 import { css } from "@emotion/react";
-import styled from "@emotion/styled"
-import { onDesktop} from "@styles/mixins";
+import styled from "@emotion/styled";
+import { onDesktop } from "@styles/mixins";
 
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
-  /* width: 360; */
   height: 451px;
   border: 1px solid var(--bg-light-grey);
   padding: 24px;
@@ -15,10 +14,12 @@ export const Wrapper = styled.div`
   overflow: auto;
   white-space: normal;
   word-wrap: break-word;
+
   ${onDesktop(css`
     height: 456px;
   `)}
 `;
+
 export const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,6 +27,7 @@ export const TitleWrapper = styled.div`
   gap: 4px;
   width: 100%;
 `;
+
 export const P1 = styled.p`
   width: 100%;
   color: var(--text-light-grey);
@@ -36,6 +38,7 @@ export const P1 = styled.p`
   line-height: 20px;
   letter-spacing: 0.25px;
 `;
+
 export const H3 = styled.h3`
   color: var(--text-light-grey);
   font-family: Fixel;
@@ -45,6 +48,7 @@ export const H3 = styled.h3`
   line-height: 110%;
   letter-spacing: 1.6px;
 `;
+
 export const P2 = styled.p`
   color: var(--text-light-grey);
   font-family: Arial;

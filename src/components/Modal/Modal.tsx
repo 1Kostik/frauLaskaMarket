@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { modalContainer } from "./Modal.styled";
-import { ReactComponent as CloseIcon } from "@assets/icons/close.svg";
-import Overlay from "@components/Overlay";
-import { IMyStyles } from "Interfaces/IMyStyles";
 
+import { ReactComponent as CloseIcon } from "@assets/icons/close.svg";
+
+import Overlay from "@components/Overlay";
+
+import { IMyStyles } from "Interfaces/IMyStyles";
 
 interface IModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,8 +14,6 @@ interface IModalProps {
 }
 
 const Modal: React.FC<IModalProps> = ({ setIsOpen, children, myStyles }) => {
-  // const {width,height,unset}=myStyles;
-
   const handleModalClose = () => {
     setIsOpen(false);
   };

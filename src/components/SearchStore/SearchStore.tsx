@@ -1,6 +1,8 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
+
 import { HiOutlineSearch } from "react-icons/hi";
 import { IoIosClose } from "react-icons/io";
+
 import {
   inputSearch,
   svgSearch,
@@ -11,6 +13,7 @@ import {
   svgClose,
   btnClose,
 } from "./SearchStore.styled";
+
 import { Product } from "Interfaces/Product";
 
 interface PropsSearch {
@@ -18,7 +21,7 @@ interface PropsSearch {
   setSearchItem?: React.Dispatch<React.SetStateAction<string>>;
   setFindProduct?: React.Dispatch<React.SetStateAction<Product[]>>;
   hasFilteredProducts?: boolean;
-  setOpenFilter?:React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenFilter?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchStore: React.FC<PropsSearch> = ({
@@ -72,7 +75,7 @@ const SearchStore: React.FC<PropsSearch> = ({
   const handleSearchBtn = () => {
     if (setSearchItem && setOpenFilter) {
       setSearchItem(searchProduct.toLowerCase());
-      setOpenFilter(false)
+      setOpenFilter(false);
     }
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -101,7 +104,7 @@ const SearchStore: React.FC<PropsSearch> = ({
             autoComplete="off"
             onBlur={handleInputBlur}
             onChange={handleInputChange}
-            onKeyDown={handleKeyDown} 
+            onKeyDown={handleKeyDown}
           />
           <button css={btnClose} onClick={handleOpenInput}>
             <IoIosClose css={svgClose} />

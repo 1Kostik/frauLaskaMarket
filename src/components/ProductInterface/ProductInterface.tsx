@@ -1,12 +1,16 @@
 import { MouseEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
+
+import { useAppDispatch } from "@redux/hooks";
+
 import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteForever } from "react-icons/md";
+
 import { interfaceStyle } from "./ProductInterface.styled";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@redux/hooks";
-// import { getAuth } from "@redux/auth/selectors";
+
 import { deleteProduct, getProduct } from "@redux/ads/operations";
-import { createPortal } from "react-dom";
+
 import Modal from "@components/Modal";
 import DeleteProductModal from "@components/DeleteProductModal";
 
@@ -26,7 +30,6 @@ const ProductInterface: React.FC<IProductInterfaceProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const isAuth = useAppSelector(getAuth);
   const isAuth = true;
 
   const handleProductEdit = (e: MouseEvent<HTMLButtonElement>) => {

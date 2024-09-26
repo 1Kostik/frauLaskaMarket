@@ -1,18 +1,21 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
 import {
   Container,
   ImageContainer,
   InfoContainer,
   H5,
 } from "./ProductCard.styled";
+
 import ProductInterface from "@components/ProductInterface";
+import PriceItem from "@components/PriceItem/PriceItem";
+
 import { handleImgError } from "@utils/handleImgError";
 
 import { Product } from "Interfaces/Product";
-
-import PriceItem from "@components/PriceItem/PriceItem";
 import { IPopularityProducts } from "Interfaces/IPopularityProduct";
-import { useSelector } from "react-redux";
+
 import { selectToken } from "@redux/auth/selectors";
 
 interface Props {
@@ -37,7 +40,6 @@ const ProductCard: React.FC<Props> = ({
   const { id, title } = item;
   const token = useSelector(selectToken);
 
-  // Условная проверка на наличие imageUrls для Product и image_url для IPopularityProducts
   const firstImageUrl =
     "imageUrls" in item && item.imageUrls.length > 0
       ? item.imageUrls[0].img_url

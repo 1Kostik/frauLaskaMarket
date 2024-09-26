@@ -1,13 +1,17 @@
-import { nanoid } from "nanoid";
 import React, { useEffect, useState } from "react";
+import { FormikProps } from "formik";
+import { nanoid } from "nanoid";
+
 import {
   inputWrapper,
   listStyle,
   selectContainer,
 } from "./NewPostSelect.styled";
+
 import { getNPCities, getWarehouses } from "@services/servicesApi";
-import { FormikProps } from "formik";
+
 import { IInitialCartFormValue } from "Interfaces/IInitialCartFormValue";
+
 import { errorBorder, inputStyle } from "@components/CartForm/CartForm.styled";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 

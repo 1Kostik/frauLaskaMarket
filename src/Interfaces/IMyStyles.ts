@@ -1,5 +1,5 @@
 export interface IMyStyles {
-    width: string;
-    height: string;
-    unset: string;
-  }
+  width: string;
+  height: string;
+  unset: string;
+}

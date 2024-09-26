@@ -5,8 +5,8 @@ import TabBox from "@components/TabBox";
 
 import plug from "@assets/images/plug3.svg";
 
-import { tabArr } from "@assets/tabArr";
-import { foWhoCourse } from "@assets/forWhoCourse";
+import { tabArr } from "@constants/tabArr";
+import { foWhoCourse } from "@constants/forWhoCourse";
 
 const About = () => {
   return (

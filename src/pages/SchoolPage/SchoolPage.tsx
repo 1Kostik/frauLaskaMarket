@@ -1,10 +1,10 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import CardSliderSection from "@pages/MainPage/CardSliderSection/CardSliderSection";
-import { text } from "@assets/answers";
+import { text } from "@constants/answers";
 import About from "./AboutSection/AboutSection";
 import QASection from "./QASection/QASection";
 import RegistrationSection from "./RegistrationSection/RegistrationSection";
-import bgImage from "../../../public/gradient.svg"
+import bgImage from "../../../public/gradient.svg";
 
 const AromaSchool = () => {
   const AromaSchoolPageProps = {

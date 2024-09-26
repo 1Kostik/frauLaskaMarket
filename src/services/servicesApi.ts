@@ -1,11 +1,14 @@
+import axios from "axios";
+import { toast } from "react-toastify";
+
 import { clearToken } from "@redux/auth/slice";
 import { AppDispatch } from "@redux/store";
-import axios from "axios";
+
 import { handlerAxiosError } from "../errorHandler/errorHandler";
+
 import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
 import { IOrderCreation } from "Interfaces/IOrderCreation";
-import { toast } from "react-toastify";
 
 axios.defaults.baseURL = "http://localhost:8081/api/";
 

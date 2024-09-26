@@ -1,10 +1,8 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { ILogin } from "Interfaces/ILogin";
 import * as Yup from "yup";
 
-import { ReactComponent as CloseEyeIcon } from "@assets/icons/eye-close.svg";
-import { ReactComponent as OpenEyeIcon } from "@assets/icons/eye-open.svg";
-import { useEffect, useState } from "react";
 import {
   errorAuthStyle,
   errorBorder,
@@ -16,12 +14,17 @@ import {
   labelStyle,
   submitStyle,
 } from "./LoginForm.styled";
-import { useNavigate } from "react-router-dom";
+
 import { authUser } from "@redux/auth/operations";
 import { useAppDispatch } from "@redux/hooks";
 import { useSelector } from "react-redux";
 import { selectAuthError, selectToken } from "@redux/auth/selectors";
 import { clearError } from "@redux/auth/slice";
+
+import { ILogin } from "Interfaces/ILogin";
+
+import { ReactComponent as CloseEyeIcon } from "@assets/icons/eye-close.svg";
+import { ReactComponent as OpenEyeIcon } from "@assets/icons/eye-open.svg";
 
 const initialValues = {
   email: "",

@@ -1,6 +1,5 @@
-// CommonBtnStyles.ts
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
 
 export const containerStyles = css`
   display: flex;

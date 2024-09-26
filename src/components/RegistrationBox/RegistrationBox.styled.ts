@@ -1,6 +1,8 @@
 import { css } from "@emotion/react";
 import { StylesConfig } from "react-select";
+
 import { onDesktop, onTablet } from "@styles/mixins";
+
 import checkboxFalse from "@assets/icons/check_box_false.svg";
 import checkboxTrue from "@assets/icons/check_box_true.svg";
 

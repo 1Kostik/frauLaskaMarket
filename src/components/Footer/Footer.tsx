@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import { containerStyles } from "@styles/variables";
 import {
   Container,
@@ -15,6 +16,7 @@ import {
   copyrightContainer,
   StyledLogo,
 } from "./Footer.styled";
+
 import { ReactComponent as VisaIcon } from "/src/assets/icons/visa.svg";
 import { ReactComponent as MCIcon } from "/src/assets/icons/master_card.svg";
 

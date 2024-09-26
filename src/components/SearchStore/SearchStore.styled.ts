@@ -7,6 +7,7 @@ export const svgSearch = css`
   height: 20px;
   z-index: 10;
 `;
+
 export const inputSearch = css`
   color: var(--bg-light-grey);
   background: var(--bg-black);
@@ -15,6 +16,7 @@ export const inputSearch = css`
   border: 1px solid var(--bg-light-grey);
   padding: 8px 12px 8px 38px;
   border-radius: 24px;
+
   &::placeholder {
     color: var(--bg-light-grey);
     font-family: Arial;
@@ -24,6 +26,7 @@ export const inputSearch = css`
     line-height: 24px;
     letter-spacing: 0.25px;
   }
+
   &:focus {
     outline: none;
   }
@@ -38,6 +41,7 @@ export const openSearch = css`
   padding: 8px 8px 8px 8px;
   justify-content: flex-end;
 `;
+
 export const search = css`
   position: absolute;
   display: flex;
@@ -45,6 +49,7 @@ export const search = css`
   top: 10px;
   left: 12px;
 `;
+
 export const container = css`
   display: flex;
 `;
@@ -68,6 +73,7 @@ export const btnClose = css`
   padding: 12px;
   top: 0;
   right: 0;
+
   ${onDesktop(css`
     display: none;
   `)}

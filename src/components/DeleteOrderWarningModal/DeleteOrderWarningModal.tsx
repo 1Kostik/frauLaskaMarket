@@ -1,9 +1,11 @@
 import React from "react";
 import { buttonStyle, wrapper } from "./DeleteOrderWarningModal.styled";
+
 interface DeleteOrderWarningModalProps {
   id: number | null;
   deleteOrder: (id: number) => void;
 }
+
 const DeleteOrderWarningModal: React.FC<DeleteOrderWarningModalProps> = ({
   id,
   deleteOrder,

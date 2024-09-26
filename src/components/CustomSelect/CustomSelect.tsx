@@ -3,16 +3,17 @@ import { createPortal } from "react-dom";
 import { FormikProps } from "formik";
 import { nanoid } from "nanoid";
 
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectCategories } from "@redux/categories/selectors";
-import { editCategory, removeCategory } from "@redux/categories/operations";
-
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+
+import { selectCategories } from "@redux/categories/selectors";
+import { editCategory, removeCategory } from "@redux/categories/operations";
+
 import { ReactComponent as ArrowDownIcon } from "@assets/icons/arrow-down-select.svg";
-import { errorBorder } from "@components/CartForm/CartForm.styled";
+
 import {
   dropdownStyle,
   selectContainer,
@@ -25,6 +26,7 @@ import { ICategory } from "Interfaces/ICategory";
 import Modal from "@components/Modal";
 import DeleteCategoryModal from "@components/DeleteCategoryModal";
 import EditCategoryModal from "@components/EditCategoryModal";
+import { errorBorder } from "@components/CartForm/CartForm.styled";
 
 const modalPortal = document.querySelector("#portal-root");
 

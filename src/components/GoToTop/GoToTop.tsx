@@ -11,7 +11,7 @@ const GoToTop: React.FC = () => {
 
     const listenToScroll = () => {
         const heightToHidden = 500;
-        const winScroll = document.body.scrollTop || document.documentElement.scrollTop; // визначення позиції прокрутки сторінки
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop; 
 
         if (winScroll > heightToHidden) {
             setIsVisible(true);

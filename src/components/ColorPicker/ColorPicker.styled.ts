@@ -49,8 +49,4 @@ export const inputStyle = (color: string) => css`
     border: 1px solid transparent;
     cursor: pointer;
   }
-
-  /* &:checked + label {
-    border: 1px solid red;
-  } */
 `;

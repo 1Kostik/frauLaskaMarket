@@ -1,11 +1,13 @@
-import styled from "@emotion/styled";
-import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
 import { Link, NavLink } from "react-router-dom";
 import { css, SerializedStyles } from "@emotion/react";
+import styled from "@emotion/styled";
+import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
 import { onDesktop, onTablet } from "@styles/mixins";
+
 interface SectionProps {
   istrue?: string;
 }
+
 const combineStyles = (
   styles1: SerializedStyles,
   styles2: SerializedStyles
@@ -13,6 +15,7 @@ const combineStyles = (
   ${styles1};
   ${styles2};
 `;
+
 export const WrapperMenu = styled.div`
   display: flex;
   align-items: center;
@@ -23,14 +26,17 @@ export const burgerMenuStyles = css`
   border-radius: 50%;
   transition: var(--effectDuration);
   cursor: pointer;
+
   & path {
     fill: var(--bg-black);
   }
+
   &:hover {
     & path {
       fill: var(--fill-cart-hover);
     }
   }
+
   &:active {
     & path {
       fill: var(--bg-black);
@@ -41,11 +47,13 @@ export const burgerMenuStyles = css`
     display: none;
   `)};
 `;
+
 export const Button = styled.button<SectionProps>`
   z-index: 10;
   padding: 8px;
   border-radius: 50%;
   background-color: inherit;
+
   &:hover {
     ${burgerMenuStyles}:hover {
       & path {
@@ -53,6 +61,7 @@ export const Button = styled.button<SectionProps>`
       }
     }
   }
+
   &:active {
     background-color: ${({ istrue }) =>
       istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
@@ -63,6 +72,7 @@ export const Button = styled.button<SectionProps>`
       }
     }
   }
+
   ${onDesktop(css`
     display: none;
   `)};
@@ -104,16 +114,19 @@ export const LogoIcon = styled(Logo)<SectionProps>`
   height: 40px;
   transition: var(--effectDuration);
   cursor: pointer;
+
   & path {
     fill: ${({ istrue }) =>
       istrue === "true" ? "var(--text-light-grey)" : "var(--text-black)"};
   }
+
   &:hover {
     & path {
       fill: var(--text-active-link-milk);
     }
   }
 `;
+
 export const NavWrapper = styled.nav`
   display: flex;
   ${onDesktop(css`
@@ -124,6 +137,7 @@ export const NavWrapper = styled.nav`
     flex-grow: 1;
   `)}
 `;
+
 export const Nav = styled(NavLink)<SectionProps>`
   display: none;
   ${({ istrue }) =>
@@ -151,13 +165,13 @@ export const Nav = styled(NavLink)<SectionProps>`
       }
     `)}
 `;
+
 export const Links = styled(Link)<SectionProps>`
   display: none;
   ${({ istrue }) =>
     onDesktop(css`
       display: block;
       width: 222px;
-      /* height: 40px; */
       padding: 6px 24px;
       text-decoration: none;
       border-radius: 100px;
@@ -187,17 +201,19 @@ export const Links = styled(Link)<SectionProps>`
       }
     `)}
 `;
+
 export const Wrapper = styled.div`
   width: 320px;
-  /* height: 40px; */
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   ${onTablet(css`
     width: 688px;
     height: 40px;
     gap: 8px;
   `)}
+
   ${onDesktop(css`
     justify-content: unset;
     width: 1284px;
@@ -205,33 +221,40 @@ export const Wrapper = styled.div`
     gap: 8px;
   `)}
 `;
+
 export const LogoLink = styled(Link)`
   text-decoration: none;
 `;
+
 export const cartStyles = css`
   border-radius: 50%;
   transition: var(--effectDuration);
   cursor: pointer;
+
   & path {
     fill: var(--bg-black);
   }
+
   &:hover {
     & path {
       fill: var(--fill-cart-hover);
     }
   }
+
   &:active {
     & path {
       fill: var(--bg-black);
     }
   }
 `;
+
 export const Cart = styled(Link)<SectionProps>`
   position: relative;
   padding: 8px;
   border-radius: 50%;
   text-decoration: none;
   transition: var(--effectDuration);
+
   &:hover {
     ${cartStyles}:hover {
       & path {
@@ -239,6 +262,7 @@ export const Cart = styled(Link)<SectionProps>`
       }
     }
   }
+
   &:active {
     background-color: ${({ istrue }) =>
       istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
@@ -250,8 +274,10 @@ export const Cart = styled(Link)<SectionProps>`
     }
   }
 `;
+
 export const cartStylesWithColor = (istrue: string) => css`
   ${cartStyles};
+
   &:active {
     background-color: ${istrue === "true"
       ? "var(--bg-light-grey)"
@@ -260,6 +286,7 @@ export const cartStylesWithColor = (istrue: string) => css`
       fill: ${istrue === "true" ? "var(--bg-black)" : "var(--bg-light-grey)"};
     }
   }
+
   path {
     fill: ${istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
   }
@@ -281,10 +308,12 @@ export const anchorStyles = (istrue: string) => css`
     letter-spacing: 0.15px;
     text-decoration: none;
     transition: var(--effectDuration);
+
     &:hover {
       color: var(--text-active-link-milk);
       border-bottom: 2px solid var(--bg-light-grey);
     }
+
     &.active {
       color: var(--text-active-link-milk);
       border-bottom: 2px solid var(--bg-light-grey);
@@ -331,6 +360,7 @@ export const addProductStyle = (isTrue: string) =>
       margin-left: 350px;
       font-size: 18px;
     `)}
+
     ${onDesktop(css`
       margin-left: 0;
     `)}
@@ -353,14 +383,15 @@ export const addProductStyle = (isTrue: string) =>
       margin-right: 6px;
     }
   `;
+
 export const btnLogOut = (isTrue: string) => css`
   width: 20px;
+
   & svg {
     font-size: 20px;
-    }
-    color: ${isTrue === "true"
-      ? "var(--text-light-grey)"
-      : "var(--text-black)"};
+  }
+  color: ${isTrue === "true" ? "var(--text-light-grey)" : "var(--text-black)"};
+
   &:hover {
     & svg {
       color: var(--text-active-link-milk);

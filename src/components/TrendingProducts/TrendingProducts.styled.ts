@@ -23,7 +23,6 @@ export const ProductListContainer = styled.div`
   ${onDesktop(css`
     width: 100%;
     display: flex;
-    /* flex-wrap: wrap; */
   `)}
 `;
 export const TitleWrapper = styled.div`
@@ -41,16 +40,19 @@ export const arrowContainer = () => css`
   height: 40px;
   justify-content: space-between;
 `;
+
 export const arrowLeft = css`
   & path {
     fill: var(--bg-light-grey);
   }
 `;
+
 export const arrowRight = css`
   & path {
     fill: var(--bg-light-grey);
   }
 `;
+
 export const Title = styled.h4`
   width: 100%;
   color: var(--text-light-grey);
@@ -60,9 +62,11 @@ export const Title = styled.h4`
   font-weight: 600;
   line-height: 100%;
   letter-spacing: 0.44px;
+
   ${onTablet(css`
     width: 336px;
   `)}
+
   ${onDesktop(css`
     width: 632px;
     font-size: 32px;

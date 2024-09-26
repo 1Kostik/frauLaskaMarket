@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import SwiperCore from "swiper";
 import "swiper/css/navigation";
 import "swiper/css";
 import "./CardSlaider.css";
+
+import { LuArrowRight } from "react-icons/lu";
+import { LuArrowLeft } from "react-icons/lu";
+
 import {
   ArrowContainer,
   Button,
@@ -24,11 +30,9 @@ import { ReactComponent as ArrowRight } from "@assets/icons/arrow-right.svg";
 import { ReactComponent as ArrowLeft } from "@assets/icons/arrow-left.svg";
 import { ReactComponent as ArrowShortLeft } from "@assets/icons/arrow-short-left.svg";
 import { ReactComponent as ArrowShortRight } from "@assets/icons/arrow-short-right.svg";
+
 import { CardItem } from "@components/CardItem";
-import { Navigation } from "swiper/modules";
-import { LuArrowRight } from "react-icons/lu";
-import { LuArrowLeft } from "react-icons/lu";
-import SwiperCore from "swiper";
+
 import { StyleProps } from "@pages/MainPage/CardSliderSection/CardSliderSection";
 import { Feedback, ImageUrl } from "Interfaces/Product";
 

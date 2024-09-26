@@ -1,5 +1,6 @@
 import { Field, Formik, Form } from "formik";
 import * as Yup from "yup";
+
 import { formStyle } from "./EditCategoryModal.styled";
 
 interface IEditCategoryProps {

@@ -6,7 +6,7 @@ import MyWaySection from "./MyWaySection/MyWaySection";
 
 import bgImage from "/src/assets/images/hero_photo.webp";
 import CardSliderSection from "./CardSliderSection/CardSliderSection";
-import { imageArray } from "@assets/imagesArr";
+import { imageArray } from "@constants/imagesArr";
 
 const MainPage = () => {
   const mainPageProps = {

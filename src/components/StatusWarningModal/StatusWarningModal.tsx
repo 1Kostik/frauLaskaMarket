@@ -1,16 +1,18 @@
 import React from "react";
 import { buttonStyle, wrapper } from "./StatusWarningModal.styled";
+
 interface StatusWarningProps {
   name: number | null;
   updateStatus: () => void;
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 const StatusWarningModal: React.FC<StatusWarningProps> = ({
   name,
   updateStatus,
   setIsOpen,
 }) => {
-  const handleOnClick = () => {    
+  const handleOnClick = () => {
     updateStatus();
     setIsOpen!(false);
   };

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { HeroSectionProps } from "./HeroSection";
 import { css } from "@emotion/react";
+import { HeroSectionProps } from "./HeroSection";
 import { onDesktop, onTablet } from "@styles/mixins";
 
 export const Section = styled.section<HeroSectionProps>`
