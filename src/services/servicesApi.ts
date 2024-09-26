@@ -2,6 +2,7 @@ import { clearToken } from "@redux/auth/slice";
 import { AppDispatch } from "@redux/store";
 import axios from "axios";
 import { handlerAxiosError } from "../errorHandler/errorHandler";
+import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
 import { IOrderCreation } from "Interfaces/IOrderCreation";
 import { toast } from "react-toastify";
@@ -317,5 +318,24 @@ export const getPopularityProducts = async () => {
     return data;
   } catch (error: unknown) {
     handlerAxiosError(error);
+  }
+};
+
+export const sendCourseNotification = async (
+  registrationFormData: ICourseRegistrationData
+) => {
+  try {
+    const { data } = await axios.post("/courses", registrationFormData);
+    toast.success(`Ви зареєструвалися на курс`);
+    return data;
+  } catch (error) {
+    toast.error("Шось пішло не так");
+    if (axios.isAxiosError(error)) {
+      console.log("Axios error:", error.message);
+      throw new Error(error.message);
+    } else {
+      console.error("Non-Axios error:", error);
+      throw new Error("Non-Axios error occurred");
+    }
   }
 };

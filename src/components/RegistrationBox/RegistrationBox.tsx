@@ -21,10 +21,11 @@ import {
 import checkedIcon from "@assets/icons/checked.svg";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 import { useEffect, useState } from "react";
+import { sendCourseNotification } from "@services/servicesApi";
 
 const validationSchema = Yup.object({
   name: Yup.string()
-    .max(30, "Має бути 30 символів або менше")
+    .max(30, "Має бути не більше 30 символів")
     .required("Обов'язкове"),
   course: Yup.string().required("Обов'язковий"),
   email: Yup.string()
@@ -73,18 +74,17 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({
         <Formik
           initialValues={{
             name: "",
-            course: pickedCourse || "",
+            course: selectedCourse || "",
             email: "",
             phone: "",
             message: "",
             agreement: false,
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              console.log({ ...values, phone: values.phone.slice(3) });
-              setSubmitting(false);
-            }, 400);
+          onSubmit={async (values, { resetForm }) => {
+            console.log({ ...values, phone: values.phone });
+            await sendCourseNotification(values).then(() => resetForm());
+            setSelectedCourse(undefined)
           }}
           // validateOnChange={true}
           validateOnBlur={false}
@@ -235,7 +235,14 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({
                 Я погоджуюсь на обробку моїх персональних данних
               </label>
 
-              <button type="submit" css={submitStyle}>
+              <button
+                type="submit"
+                css={submitStyle}
+                onClick={() => {
+                  setFieldValue("course", selectedCourse);
+                  // handleCourseFormSubmit(values, resetForm);
+                }}
+              >
                 Зареєструватись
               </button>
             </Form>
