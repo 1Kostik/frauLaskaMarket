@@ -383,7 +383,7 @@ export const sendCourseNotification = async (
 ) => {
   try {
     const { data } = await axios.post("/courses", registrationFormData);
-    toast.success(`Ви зареєструвалися на курс: ${registrationFormData.course}`);
+    toast.success(`Ви зареєструвалися на курс`);
     return data;
   } catch (error) {
     toast.error("Шось пішло не так");
