@@ -122,7 +122,7 @@ export const imgThumb = (
   css`
     display: ${isHideMobileImg ? "none" : "block"};
     width: 100%;
-   /* //* height: {textHeight || "auto"}px;// */
+    /* //* height: {textHeight || "auto"}px;// */
     height: auto;
     border-radius: ${type === "myWay" ? "0" : "12px"};
     overflow: hidden;
@@ -230,6 +230,13 @@ export const titleContainer = css`
 export const btnWrapper = css`
   display: flex;
   gap: 6px;
+
+  transition: var(--effectDuration);
+
+  &:hover path {
+    fill: var(--btn-show-more-hover);
+  }
+
   ${onTablet(css`
     gap: 12px;
   `)}
@@ -275,6 +282,11 @@ export const linkStyle = css`
   font-size: 22px;
   line-height: 140%;
   color: var(--text-light-grey);
+  transition: var(--effectDuration);
+
+  &:hover {
+    color: var(--btn-show-more-hover);
+  }
 
   &::after {
     content: "";
@@ -286,6 +298,6 @@ export const linkStyle = css`
   }
 
   &:hover::after {
-    border-bottom: 2px solid var(--text-light-grey);
+    border-bottom: 3px solid var(--text-light-grey);
   }
 `;

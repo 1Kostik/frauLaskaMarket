@@ -127,6 +127,12 @@ export const contactLink = css`
   text-transform: uppercase;
   color: var(--text-light-grey);
   margin-bottom: 16px;
+
+  transition: var(--effectDuration);
+
+  &:hover {
+    color: var(--btn-show-more-hover);
+  }
 `;
 
 export const SocialContainer = styled.div`

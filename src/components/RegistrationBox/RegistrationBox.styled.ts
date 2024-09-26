@@ -109,6 +109,7 @@ export const agreementStyle = css`
   line-height: 24px;
   letter-spacing: 0.25px;
   color: var(--text-dark-grey);
+  cursor: pointer;
 
   &::before {
     content: "";
@@ -143,7 +144,7 @@ export const submitStyle = css`
   padding: 10px 16px;
 
   border-radius: 24px;
-  background-color: var(--bg-btn-submit);
+  background-color: var(--bg-btn-grey);
   box-shadow: -4px 4px 4px 0px rgba(30, 51, 86, 0.08);
 
   font-size: 12px;
@@ -151,9 +152,16 @@ export const submitStyle = css`
   line-height: 20px;
   letter-spacing: 0.1px;
 
+  transition: var(--effectDuration);
+
   ${onDesktop(css`
     font-size: 14px;
   `)}
+
+  &:hover {
+    background-color: var(--bg-btn-submit);
+    box-shadow: -4px 4px 4px 0px rgba(30, 51, 86, 0.08);
+  }
 `;
 
 export const selectInputStyle = (isError: boolean) => css`

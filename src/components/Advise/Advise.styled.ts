@@ -21,10 +21,16 @@ export const adviseContainer = css`
     letter-spacing: 0.64px;
   `)}
 
-  & button {
+  & a {
     height: 64px;
     border-radius: 4px;
     padding: 16px;
     background-color: var(--bg-light-grey);
+    transition: var(--effectDuration);
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--bg-btn-submit);
+    }
   }
 `;

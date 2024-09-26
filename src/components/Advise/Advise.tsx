@@ -5,9 +5,9 @@ const Advise = () => {
   return (
     <div css={adviseContainer}>
       <h3>Прочитай щось корисне, підпишись на наш телеграм</h3>
-      <button id="registrationForm">
+      <a href="tg://resolve?domain=dimside29" id="registrationForm">
         <ArrowIcon />
-      </button>
+      </a>
     </div>
   );
 };

@@ -63,15 +63,26 @@ export const titleButtons = css`
   letter-spacing: 1.6px;
   color: var(--bg-light-grey);
 
+  transition: var(--effectDuration);
+
   ${onDesktop(css`
     font-size: 16px;
     padding: 12px 24px;
   `)}
+
+  &:hover {
+    color: var(--btn-show-more-hover);
+    box-shadow: -4px 4px 4px 0px rgba(30, 51, 86, 0.08);
+  }
 `;
 
 export const activeStyle = css`
   background: var(--bg-btn-grey);
   color: var(--text-black);
+
+  &:hover {
+    color: var(--text-black);
+  }
 `;
 
 export const contentWrapper = css`

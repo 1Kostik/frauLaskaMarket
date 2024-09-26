@@ -239,7 +239,6 @@ const RegistrationBox: React.FC<IRegistrationBoxProps> = ({
                 css={submitStyle}
                 onClick={() => {
                   setFieldValue("course", selectedCourse);
-                  // handleCourseFormSubmit(values, resetForm);
                 }}
               >
                 Зареєструватись
