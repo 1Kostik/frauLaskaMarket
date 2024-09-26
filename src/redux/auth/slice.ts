@@ -41,8 +41,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     clearToken: (state: IAuthState) => {
-      state.token = "";
-      state.username = "";
+      state.token = null;
+      state.username = null;
       state.error = null;
     },
     clearError: (state: IAuthState) => {
