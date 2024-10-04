@@ -3,8 +3,8 @@ import { StylesConfig } from "react-select";
 
 import { onDesktop, onTablet } from "@styles/mixins";
 
-import checkboxFalse from "@assets/icons/check_box_false.svg";
-import checkboxTrue from "@assets/icons/check_box_true.svg";
+import checkboxFalse from "@assets/icons/check_box_false.png";
+import checkboxTrue from "@assets/icons/check_box_true.png";
 
 export const container = css`
   display: flex;
