@@ -33,16 +33,19 @@ import Modal from "@components/Modal";
 import StatusWarningModal from "@components/StatusWarningModal/StatusWarningModal";
 import { createPortal } from "react-dom";
 import { formatDate } from "@utils/formatDate";
+import { useCheckTokenExpiration } from "@hooks/useCheckTokenExpiration";
+
 const modalPortal = document.querySelector("#portal-root");
 
 const OrderItemPage = () => {
+  const checkExpiration = useCheckTokenExpiration();
   const navigate = useNavigate();
   const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState<IOrder>();
   const [orderProducts, setOrderProducts] = useState<Product[]>([]);
   const [previousProductIds, setPreviousProductIds] = useState<number[]>([]);
-  const [pymentStatus, setPymentStatus] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [disableOrder, setDisableOrder] = useState<boolean>(false);
 
@@ -58,6 +61,7 @@ const OrderItemPage = () => {
       : ["В очікуванні", "Відправлено", "Відхилено"];
 
   useEffect(() => {
+    checkExpiration();
     async function fetchOrder(id: number) {
       const result = await getOrderById(id);
       setData(result);
@@ -99,7 +103,6 @@ const OrderItemPage = () => {
       const orderItem = data?.order_items.find(
         (orderItem) => orderItem.product_id === item.id
       );
-
       if (orderItem) {
         const variations = item.variations.filter((variation) => {
           const sizeMatch = orderItem.size
@@ -112,6 +115,7 @@ const OrderItemPage = () => {
 
           return sizeMatch && colorMatch;
         });
+
         return {
           product_id: item.id,
           title: item.title,
@@ -249,10 +253,10 @@ const OrderItemPage = () => {
                       fontSize={"12px"}
                       top={"30px"}
                       gap={"8px"}
-                      setSelectedOption={setPymentStatus}
-                      selectedOption={pymentStatus}
+                      setSelectedOption={setPaymentStatus}
+                      selectedOption={paymentStatus}
                       disable={
-                        pymentStatus === "Сплачено"
+                        paymentStatus === "Сплачено"
                           ? true
                           : status === "Відправлено"
                           ? false

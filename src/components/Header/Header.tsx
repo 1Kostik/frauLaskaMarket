@@ -36,12 +36,14 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 
 import { logOut } from "@services/servicesApi";
+import { useCheckTokenExpiration } from "@hooks/useCheckTokenExpiration";
 
 const modalPortal = document.querySelector("#portal-root");
 
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
 
 const Header = () => {
+  const checkExpiration = useCheckTokenExpiration();
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
@@ -146,6 +148,7 @@ const Header = () => {
   }, []);
 
   const handleClickLogOut = async () => {
+    checkExpiration();
     try {
       await logOut(dispatch);
       navigate("/");

@@ -9,7 +9,7 @@ import { selectAuthIsLoading } from "@redux/auth/selectors";
 interface IOverlayProps {
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
-  type?: string;
+  type?: string | undefined;
 }
 
 const Overlay: React.FC<IOverlayProps> = ({ setIsOpen, children, type }) => {
@@ -33,14 +33,18 @@ const Overlay: React.FC<IOverlayProps> = ({ setIsOpen, children, type }) => {
   }, []);
 
   {
-    if (type !== "loader" || isLoadingProduct || isLoadingAuth) {
+    if (
+      type === "loader" ||
+      type === "modal" ||
+      isLoadingProduct ||
+      isLoadingAuth
+    ) {
       return (
         <div css={overlayStyle} onClick={handleOverlayClick} id="overlay">
           {children}
         </div>
       );
     }
-
     return null;
   }
 };

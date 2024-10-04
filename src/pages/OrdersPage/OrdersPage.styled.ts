@@ -1,10 +1,9 @@
 import { css } from "@emotion/react";
 
-
 export const tableStyles = css`
   width: 100%;
   height: 100%;
- 
+
   & th,
   td {
     text-align: left;
@@ -58,12 +57,12 @@ export const thHeadsStyles = css`
   color: var(--White, #d7d7d7);
   font-variant-numeric: stacked-fractions ordinal;
   font-feature-settings: "case" on, "rvrn" on, "hist" on;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   font-family: Arial;
   font-size: var(--Typography-sm, 14px);
   font-style: normal;
   font-weight: 400;
-  line-height: 24px; 
+  line-height: 24px;
   letter-spacing: 0.25px;
 `;
 export const tbodyStyles = css`

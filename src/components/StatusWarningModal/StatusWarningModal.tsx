@@ -14,7 +14,7 @@ const StatusWarningModal: React.FC<StatusWarningProps> = ({
 }) => {
   const handleOnClick = () => {
     updateStatus();
-    setIsOpen!(false);
+    setIsOpen && setIsOpen(false);
   };
   return (
     <div css={wrapper}>

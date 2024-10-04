@@ -1,5 +1,5 @@
 import HeroSection from "@components/HeroSection/HeroSection";
-import bgImage from "../../../public/gradient.svg";
+import bgImage from "../../assets/images/gradient.png";
 import CardSliderSection from "@pages/MainPage/CardSliderSection/CardSliderSection";
 import { text } from "@constants/answers";
 import InfoSection from "./InfoSection/InfoSection";

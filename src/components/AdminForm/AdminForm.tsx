@@ -65,6 +65,7 @@ import {
 
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 import { handleNumericInput } from "@utils/handleNumericInput";
+import { useCheckTokenExpiration } from "@hooks/useCheckTokenExpiration";
 
 const FILE_SIZE = 1024 * 1024 * 2;
 
@@ -143,6 +144,7 @@ const validationSchema = Yup.object({
 });
 
 const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
+  const checkExpiration = useCheckTokenExpiration();
   const [isShowColorPicker, setIsShowColorPicker] = useState<number[]>([]);
   const [isShowAddSize, setIsShowAddSize] = useState<number[]>(
     !product
@@ -208,6 +210,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
   }, []);
 
   useEffect(() => {
+    checkExpiration();
     dispatch(fetchCategories());
   }, [dispatch]);
 
@@ -258,6 +261,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     image: File | IImageUrl,
     formik: FormikProps<IAdvert>
   ) => {
+    checkExpiration();
     const {
       values: { imageUrls },
       setFieldValue,
@@ -291,6 +295,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     newCategory: string | undefined,
     formik: FormikProps<IAdvert>
   ) => {
+    checkExpiration();
     const { setFieldError, setFieldValue } = formik;
 
     if (newCategory) {
@@ -338,14 +343,13 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
   };
 
   const handleOnSubmit = (values: IAdvert) => {
+    checkExpiration();
     const mainImg = values.imageUrls[0];
     if (mainImg instanceof File) {
-      const mainImgName = mainImg.name;
+      const mainImgName = mainImg.name.split(".").slice(0, -1).join(".");
       values.main_image = mainImgName;
     } else if (typeof mainImg.img_url === "string") {
-      const regex = /\/([^/?#]+)$/;
-      const pureName = mainImg.img_url.match(regex);
-      values.main_image = pureName ? pureName[1] : mainImg.img_url;
+      values.main_image = mainImg.img_url;
     }
     delete values.newCategory;
     values.popularity = 1;
@@ -408,12 +412,14 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
 
     if (!product) {
       dispatch(createProduct(formData))
-        .then(({ payload }) => navigate(`/store/product/${payload.id}`))
-        .catch(() => navigate("/errorPage"));
+        .unwrap()
+        .then((result) => navigate(`/store/product/${result.id}`))
+        .catch((err) => console.log("err", err));
     } else if (product?.id !== undefined) {
       dispatch(updateProduct({ id: product.id, formData }))
+        .unwrap()
         .then(() => navigate(`/store/product/${product.id}`))
-        .catch(() => navigate("/errorPage"));
+        .catch((err) => console.log("err", err));
     }
   };
 

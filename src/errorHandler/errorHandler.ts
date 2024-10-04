@@ -7,7 +7,7 @@ export const handlerAxiosError = (error: unknown) => {
       const status = error.response.status;
       const message = error.response.data?.message || "Сталася помилка";
       console.log(`Axios error:${message},статус: ${status}`);
-      toast.error("Спробуйте пізніше");
+      toast.error("Вам потрібно увійти до системи.");
       throw new Error(message);
     } else if (error.request) {
       console.log("Сервер не відповів:", error.request);

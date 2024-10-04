@@ -7,6 +7,7 @@ const initialState: IAuthState = {
   token: null,
   username: null,
   isLoading: false,
+  isAuthenticated: false,
   error: null,
 };
 
@@ -21,6 +22,7 @@ const handelAuthFulfilled = (
   state.token = payload.token;
   state.username = payload.name;
   state.isLoading = false;
+  state.isAuthenticated = true;
   state.error = null;
 };
 
@@ -42,6 +44,7 @@ const authSlice = createSlice({
   reducers: {
     clearToken: (state: IAuthState) => {
       state.token = null;
+      state.isAuthenticated = false;
       state.username = null;
       state.error = null;
     },

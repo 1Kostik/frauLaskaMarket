@@ -13,8 +13,6 @@ import {
 
 import {
   getProductById,
-  updateOrder,
-  updateProductCountDecrease,
   updateProductCountIncrease,
 } from "@services/servicesApi";
 
@@ -26,6 +24,8 @@ import DeleteOrderWarningModal from "@components/DeleteOrderWarningModal/DeleteO
 import Modal from "@components/Modal";
 import SortingItems from "@components/SortingItems/SortingItems";
 import StatusWarningModal from "@components/StatusWarningModal/StatusWarningModal";
+import { updateStatus } from "@utils/updateStatus";
+import { orderStatusStyles } from "./OrderItem.styled";
 
 interface IOrderItemProps {
   item: IOrder;
@@ -38,10 +38,9 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
 
   const [isChangeStatusModalOpen, setIsChangeStatusModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [pymentStatus, setPymentStatus] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
 
-  const [idForUpdCount, setIdForUpdCount] = useState<number | null>(null);
   const [orderProducts, setOrderProducts] = useState<Product[]>([]);
   const [previousProductIds, setPreviousProductIds] = useState<number[]>([]);
   const [disableOrder, setDisableOrder] = useState<boolean>(false);
@@ -67,15 +66,15 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       return variations.map((variation) => {
         return { id: variation.id, count: orderItem.count };
       });
+    } else {
+      return [];
     }
-    return [];
   });
 
   useEffect(() => {
-    const product_ids =
-      item.id === idForUpdCount
-        ? item.order_items.map((orderItem) => orderItem.product_id)
-        : [];
+    const product_ids = item.id
+      ? item.order_items.map((orderItem) => orderItem.product_id)
+      : [];
     async function fetchOrderProducts() {
       const result = await Promise.all(
         product_ids.map((productId) => getProductById(productId))
@@ -96,48 +95,27 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
         setPreviousProductIds(product_ids);
       }
     }
-  }, [item, previousProductIds, idForUpdCount]);
+  }, [item.id, item.order_items, previousProductIds]);
 
-  async function updateStatus(orderId: number, status: string) {
-    await updateOrder(orderId, status);
-  }
-
-  useEffect(() => {
-    async function IncreaseCountProduct(id: number, count: number) {
-      await updateProductCountIncrease(id, count);
-    }
-    if (
-      variation_ids.length > 0 &&
-      status === "Відхилено" &&
-      isChangeStatusModalOpen
-    )
-      variation_ids.forEach((item) => {
-        IncreaseCountProduct(item.id, item.count);
-      });
-  }, [variation_ids, status, isChangeStatusModalOpen]);
+  const IncreaseCountProduct = async (id: number, count: number) => {
+    await updateProductCountIncrease(id, count);
+  };
 
   useEffect(() => {
-    async function DecreaseCountProduct(id: number, count: number) {
-      await updateProductCountDecrease(id, count);
-    }
-    if (variation_ids.length > 0 && status === "Відправлено") {
-      variation_ids.forEach((item) => {
-        DecreaseCountProduct(item.id, item.count);
-      });
-    }
-  }, [variation_ids, status]);
-
-  useEffect(() => {
-    if (item.status === "Відхилено" || item.status === "Відправлено") {
+    if (item.status === "Відхилено") {
       setDisableOrder(true);
     }
   }, [item.status]);
 
   const handleUpdateStatus = (id: number) => {
-    if (id && status === "Відхилено") {
-      setIdForUpdCount(id);
+    if (id && isChangeStatusModalOpen) {
       setDisableOrder(true);
-      updateStatus(id, status);
+      updateStatus(id, "Відхилено");
+      if (variation_ids.length > 0) {
+        variation_ids.forEach((item) => {
+          IncreaseCountProduct(item.id, item.count);
+        });
+      }
     }
   };
 
@@ -148,6 +126,7 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       navigate(`/admin/orders/${id}`);
     }
   };
+
   const optionsPayment =
     item.payment_status === "Сплачено"
       ? ["Сплачено"]
@@ -160,8 +139,15 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       ? ["Відхилено"]
       : ["В очікуванні", "Відправлено", "Відхилено"];
 
+  const colorStatus =
+    item.payment_status === "Сплачено" && item.status === "Відправлено"
+      ? "#154214"
+      : item.status === "Відхилено"
+      ? "#5a2323"
+      : "";
+
   return (
-    <tr key={item.id}>
+    <tr key={item.id} css={orderStatusStyles(colorStatus)}>
       <td css={thHeadsStyles}>{item.id}</td>
       <td css={thHeadsStyles}>{formatDate(item.order_date)}</td>
       <td css={thHeadsStyles}>{item.name}</td>
@@ -186,13 +172,11 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
           fontSize={"12px"}
           top={"30px"}
           gap={"8px"}
-          setSelectedOption={setPymentStatus}
-          selectedOption={pymentStatus}
+          setSelectedOption={setPaymentStatus}
+          selectedOption={paymentStatus}
           disable={
-            pymentStatus === "Оплачено"
+            paymentStatus === "Сплачено" || status === "Відхилено"
               ? true
-              : status === "Відправлено"
-              ? false
               : disableOrder
           }
         />
@@ -214,11 +198,10 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
           fontSize={"12px"}
           top={"30px"}
           gap={"8px"}
-          disable={disableOrder}
+          disable={status === "Відправлено" ? true : disableOrder}
           setIsOpenModal={setIsChangeStatusModalOpen}
           setSelectedOption={setStatus}
           selectedOption={status}
-          setIdForUpdCount={setIdForUpdCount}
         />
       </td>
       <td onClick={() => setIsDeleteModalOpen(true)} css={thHeadsStyles}>

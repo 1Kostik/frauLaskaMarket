@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 import { onDesktop, onTablet } from "@styles/mixins";
 
-import checkboxChecked from "@assets/icons/checkbox-active.svg";
+import checkboxChecked from "@assets/images/checkbox-active.png";
 
 export const PaymentContainer = styled.div`
   align-self: flex-start;

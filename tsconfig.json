@@ -15,7 +15,8 @@
       "@utils/*": ["utils/*"],
       "@services/*": ["services/*"],
       "@redux/*": ["redux/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@hooks/*": ["hooks/*"]
     },
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
