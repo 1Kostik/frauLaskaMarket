@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FormikProps } from "formik";
 import { nanoid } from "nanoid";
 
@@ -15,7 +15,7 @@ import { IInitialCartFormValue } from "Interfaces/IInitialCartFormValue";
 import { errorBorder, inputStyle } from "@components/CartForm/CartForm.styled";
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 
-interface INewPostSelectPorps {
+interface INewPostSelectProps {
   formik: FormikProps<IInitialCartFormValue>;
 }
 
@@ -23,23 +23,28 @@ interface ICity {
   Present: string;
   DeliveryCity: string;
 }
+
 interface IWarehouse {
   Description: string;
 }
 
-const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
+const NewPostSelect: React.FC<INewPostSelectProps> = ({ formik }) => {
   const { setFieldValue, setFieldTouched, touched, errors, values } = formik;
 
   const [isShowSelectCities, setIsShowSelectCities] = useState(false);
   const [selectedCity, setSelectedCity] = useState<null | ICity>(null);
   const [searchCity, setSearchCity] = useState("");
+  const [cities, setCities] = useState<ICity[] | null>(null);
+  const [highlightedCityIndex, setHighlightedCityIndex] = useState(0);
 
   const [isShowSelectWarehouse, setIsShowSelectWarehouse] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState<string>("");
   const [searchWarehouse, setSearchWarehouse] = useState("");
+  const [warehouses, setWarehouses] = useState<IWarehouse[] | null>(null);
+  const [highlightedWarehouseIndex, setHighlightedWarehouseIndex] = useState(0);
 
-  const [cities, setCities] = useState<ICity[] | null>(null);
-  const [warehouses, setWarehouses] = useState<[] | null>(null);
+  const cityListRef = useRef<HTMLDivElement>(null);
+  const warehouseListRef = useRef<HTMLDivElement>(null);
 
   const handleSearchValue = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -49,6 +54,9 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
     type === "city"
       ? setSearchCity(value.trim())
       : setSearchWarehouse(value.trim());
+
+    if (type === "city") setHighlightedCityIndex(0);
+    else setHighlightedWarehouseIndex(0);
   };
 
   const onSelectCity = (value: ICity) => {
@@ -56,12 +64,14 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
     setSearchCity("");
     setIsShowSelectCities(false);
     setCities(null);
+    setHighlightedCityIndex(0);
   };
 
   const onSelectWarehouse = (value: string) => {
     setSelectedWarehouse(value);
     setSearchWarehouse("");
     setIsShowSelectWarehouse(false);
+    setHighlightedWarehouseIndex(0);
   };
 
   useEffect(() => {
@@ -115,14 +125,75 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
   useEffect(() => {
     setFieldValue("delivery_city", selectedCity?.Present || "");
     setFieldValue("delivery_destination", selectedWarehouse);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedWarehouse, selectedCity]);
+  }, [selectedWarehouse, selectedCity, setFieldValue]);
 
-  const filteredWarehouses =
-    warehouses &&
-    warehouses.filter((warehous: IWarehouse) =>
-      warehous.Description.includes(searchWarehouse)
-    );
+  const filteredWarehouses: IWarehouse[] =
+    warehouses?.filter((warehouse: IWarehouse) =>
+      warehouse.Description.includes(searchWarehouse)
+    ) || [];
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    type: string
+  ) => {
+    if (type === "city") {
+      if (e.key === "ArrowDown" && cities) {
+        setHighlightedCityIndex((prev) =>
+          prev < cities.length - 1 ? prev + 1 : prev
+        );
+      } else if (e.key === "ArrowUp") {
+        setHighlightedCityIndex((prev) => (prev > 0 ? prev - 1 : prev));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (highlightedCityIndex >= 0 && cities) {
+          onSelectCity(cities[highlightedCityIndex]);
+        }
+      }
+    } else if (type === "warehouse") {
+      if (e.key === "ArrowDown" && filteredWarehouses) {
+        setHighlightedWarehouseIndex((prev) =>
+          prev < filteredWarehouses.length - 1 ? prev + 1 : prev
+        );
+      } else if (e.key === "ArrowUp") {
+        setHighlightedWarehouseIndex((prev) => (prev > 0 ? prev - 1 : prev));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (highlightedWarehouseIndex >= 0 && filteredWarehouses) {
+          onSelectWarehouse(
+            filteredWarehouses[highlightedWarehouseIndex].Description
+          );
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (cityListRef.current && highlightedCityIndex >= 0) {
+      const highlightedElement = cityListRef.current.children[
+        highlightedCityIndex
+      ] as HTMLDivElement;
+      if (highlightedElement) {
+        highlightedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+    }
+  }, [highlightedCityIndex]);
+
+  useEffect(() => {
+    if (warehouseListRef.current && highlightedWarehouseIndex >= 0) {
+      const highlightedElement = warehouseListRef.current.children[
+        highlightedWarehouseIndex
+      ] as HTMLDivElement;
+      if (highlightedElement) {
+        highlightedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+    }
+  }, [highlightedWarehouseIndex]);
 
   return (
     <>
@@ -137,6 +208,7 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
             value={searchCity}
             autoComplete="none"
             onFocus={() => setFieldTouched("delivery_city", false, false)}
+            onKeyDown={(e) => handleKeyDown(e, "city")}
             css={[
               inputStyle,
               errorBorder(!!(errors.delivery_city && touched.delivery_city)),
@@ -147,15 +219,19 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
           {!searchCity && <div>{selectedCity?.Present}</div>}
         </div>
         {isShowSelectCities && cities && cities.length > 0 && (
-          <div css={listStyle}>
-            {cities.map((сity) => (
+          <div css={listStyle} ref={cityListRef}>
+            {cities.map((city, index) => (
               <p
                 key={nanoid()}
                 onClick={() => {
-                  onSelectCity(сity);
+                  onSelectCity(city);
+                }}
+                style={{
+                  backgroundColor:
+                    highlightedCityIndex === index ? "#a6a4a450" : "none",
                 }}
               >
-                {сity.Present}
+                {city.Present}
               </p>
             ))}
           </div>
@@ -175,6 +251,7 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
             onFocus={() =>
               setFieldTouched("delivery_destination", false, false)
             }
+            onKeyDown={(e) => handleKeyDown(e, "warehouse")}
             css={[
               inputStyle,
               errorBorder(
@@ -190,24 +267,24 @@ const NewPostSelect: React.FC<INewPostSelectPorps> = ({ formik }) => {
 
           {!searchWarehouse && <div>{selectedWarehouse}</div>}
         </div>
-
-        {isShowSelectWarehouse && (
-          <div css={listStyle}>
-            {filteredWarehouses ? (
-              filteredWarehouses.map(({ Description }) => (
-                <p
-                  key={nanoid()}
-                  onClick={() => {
-                    onSelectWarehouse(Description);
-                  }}
-                >
-                  {Description}
-                </p>
-              ))
-            ) : (
-              <p style={{ cursor: "default" }}>Спочатку оберіть місто</p>
-            )}
+        {isShowSelectWarehouse && filteredWarehouses.length > 0 && (
+          <div css={listStyle} ref={warehouseListRef}>
+            {filteredWarehouses.map(({ Description }, index) => (
+              <p
+                key={nanoid()}
+                onClick={() => onSelectWarehouse(Description)}
+                style={{
+                  backgroundColor:
+                    highlightedWarehouseIndex === index ? "#a6a4a450" : "none",
+                }}
+              >
+                {Description}
+              </p>
+            ))}
           </div>
+        )}
+        {isShowSelectWarehouse && filteredWarehouses.length === 0 && (
+          <p>Немає відділень</p>
         )}
       </div>
     </>
