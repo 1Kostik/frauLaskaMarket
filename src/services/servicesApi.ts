@@ -10,7 +10,7 @@ import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
 import { IOrderCreation } from "Interfaces/IOrderCreation";
 
-axios.defaults.baseURL = "https://c40a-91-214-136-230.ngrok-free.app/api/";
+axios.defaults.baseURL = "http://localhost:8081/api/";
 axios.defaults.headers.common["Accept"] = "application/json";
 
 const setAuthHeader = (token: string) => {
