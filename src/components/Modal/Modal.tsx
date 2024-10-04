@@ -31,7 +31,7 @@ const Modal: React.FC<IModalProps> = ({ setIsOpen, children, myStyles }) => {
   }, [setIsOpen]);
 
   return (
-    <Overlay setIsOpen={handleModalClose}>
+    <Overlay setIsOpen={handleModalClose} type="modal">
       <div css={modalContainer(myStyles)}>
         <button type="button" onClick={handleModalClose} className="closeBtn">
           <CloseIcon />

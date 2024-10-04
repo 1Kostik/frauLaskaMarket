@@ -5,6 +5,8 @@ import RingLoader from "react-spinners/RingLoader";
 import SharedLayout from "./components/SharedLayout/SharedLayout";
 import ClearLocalStorageOnNavigate from "./components/ClearLocalStorageOnNavigate";
 import Overlay from "@components/Overlay";
+import { useAppSelector } from "@redux/hooks";
+import { selectIsAuthenticated } from "@redux/auth/selectors";
 
 const MainPage = lazy(() => import("@pages/MainPage/MainPage"));
 const HealthyPage = lazy(() => import("@pages/HealthyPage/HealthyPage"));
@@ -30,7 +32,7 @@ const OrdersPage = lazy(() => import("@pages/OrdersPage/OrdersPage"));
 const OrderItemPage = lazy(() => import("@pages/OrderItemPage/OrderItemPage"));
 
 function App() {
-  
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   return (
     <Suspense
       fallback={
@@ -40,7 +42,7 @@ function App() {
       }
     >
       <ClearLocalStorageOnNavigate />
-      <Overlay type="loader">
+      <Overlay>
         <RingLoader color="#cabcbc" size={120} />
       </Overlay>
       <Routes>
@@ -54,13 +56,25 @@ function App() {
           <Route path="cart" element={<CartPage />} />
           <Route path="order" element={<OrderPage />} />
           <Route path="ordered" element={<OrderedPage />} />
-          <Route path="admin/create-advert" element={<CreateAdvertPage />} />
-          <Route
-            path="admin/edit-advert/:productId"
-            element={<EditAdvertPage />}
-          />
-          <Route path="admin/orders" element={<OrdersPage />} />
-          <Route path="admin/orders/:id" element={<OrderItemPage />} />
+          {isAuthenticated ? (
+            <>
+              <Route
+                path="admin/create-advert"
+                element={<CreateAdvertPage />}
+              />
+              <Route
+                path="admin/edit-advert/:productId"
+                element={<EditAdvertPage />}
+              />
+              <Route path="admin/orders" element={<OrdersPage />} />
+              <Route path="admin/orders/:id" element={<OrderItemPage />} />
+            </>
+          ) : (
+            <Route
+              path="/admin/*"
+              element={<Navigate to="/admin/login" replace />}
+            />
+          )}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />

@@ -58,7 +58,7 @@ export const updateProduct = createAsyncThunk(
       toast.success("Оголошення змінено");
       return product;
     } catch (err) {
-      toast.error("Шось пійшло не так");
+      // toast.error("Шось пійшло не так");
       const error = err as AxiosError<KnownError>;
       if (!error.response) {
         throw err;

@@ -39,7 +39,7 @@ const ProductCard: React.FC<Props> = ({
 }) => {
   const { id, title } = item;
   const token = useSelector(selectToken);
-
+  
   const firstImageUrl =
     "imageUrls" in item && item.imageUrls.length > 0
       ? item.imageUrls[0].img_url

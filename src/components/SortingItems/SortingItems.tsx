@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Dispatch, SetStateAction } from "react";
+import { useEffect, useRef, useState, SetStateAction } from "react";
 
 import { ReactComponent as Checked } from "@assets/icons/checked.svg";
 import { ReactComponent as ArrowUp } from "@assets/icons/arrow-up-select.svg";
@@ -18,7 +18,8 @@ import {
   svgArrowDpwn,
 } from "./SortingItems.styled";
 
-import { updateOrder, updatePamentStatus } from "@services/servicesApi";
+import { updatePaymentStatus } from "@services/servicesApi";
+import { updateStatus } from "@utils/updateStatus";
 
 interface ISortingItProps<T> {
   idOrders?: number;
@@ -39,10 +40,9 @@ interface ISortingItProps<T> {
   isOpenSearch?: boolean;
   isOpenFilter?: boolean;
   disableWidth?: string;
-  setSelectedOption?: Dispatch<SetStateAction<T | null>>;
+  setSelectedOption?: React.Dispatch<SetStateAction<T | null>>;
   selectedOption?: T | null;
-  setIsOpenModal?: Dispatch<SetStateAction<boolean>>;
-  setIdForUpdCount?: Dispatch<SetStateAction<number | null>>;
+  setIsOpenModal?: React.Dispatch<SetStateAction<boolean>>;
   disable?: boolean;
 }
 const SortingItems = <T extends number | string>({
@@ -68,7 +68,6 @@ const SortingItems = <T extends number | string>({
   selectedOption,
   setIsOpenModal,
   disable,
-  setIdForUpdCount,
 }: ISortingItProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -105,13 +104,11 @@ const SortingItems = <T extends number | string>({
     }
     setIsOpen((prev) => !prev);
   };
-  async function updateStatus(orderId: number, status: string) {
-    await updateOrder(orderId, status);
-  }
-  async function changePamentStatus(id: number) {
-    await updatePamentStatus(id);
-  }
+
   const handleSelect = (option: T) => {
+    if (option === "Сплачено") {
+      updatePaymentStatus(Number(idOrders));
+    }
     if (setSelectedOption) {
       setSelectedOption(option);
       setChecked(true);
@@ -122,12 +119,8 @@ const SortingItems = <T extends number | string>({
         setIsOpenModal(false);
       }
     }
-    if (idOrders && setIdForUpdCount && option === "Відправлено") {
-      setIdForUpdCount(Number(idOrders));
+    if (idOrders && option === "Відправлено") {
       updateStatus(idOrders, option);
-    }
-    if (idOrders && option === "Оплачено") {
-      changePamentStatus(idOrders);
     }
   };
 

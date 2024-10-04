@@ -30,6 +30,9 @@ import { fetchCategories } from "@redux/categories/operations";
 
 import { getCategoriesProductCount } from "@services/servicesApi";
 import { getSavedFilter } from "@utils/getSavedFilter";
+import { CheckedItems } from "Interfaces/CheckedItems";
+import { CategoriesProductCount } from "Interfaces/CategoriesProductCount";
+import { IFilterProducts } from "Interfaces/IFilterProducts";
 
 interface ISorteFilter {
   closeFilter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,23 +40,7 @@ interface ISorteFilter {
     React.SetStateAction<Record<string, string>[]>
   >;
 }
-interface ProductsJSON {
-  categoryId: number;
-  product_id: number;
-  product_title: string;
-  product_quantity: number;
-}
 
-export interface CheckedItems {
-  id: number;
-  productsId: number[];
-}
-interface CategoriesProductCount {
-  id: number;
-  product_count: number;
-  products: string;
-  title: string;
-}
 const StoreFilter: React.FC<ISorteFilter> = ({
   closeFilter,
   setFilteredItemsId,
@@ -129,26 +116,6 @@ const StoreFilter: React.FC<ISorteFilter> = ({
     setFilteredItemsId(filteredItems);
   };
 
-  const convertJSONToReadableFormat = (data: CategoriesProductCount[]) => {
-    const uniqueProducts: ProductsJSON[] = [];
-    const productIds = new Set();
-
-    data.forEach((item: CategoriesProductCount) => {
-      JSON.parse(item.products).forEach((product: ProductsJSON) => {
-        if (!productIds.has(product.product_id)) {
-          uniqueProducts.push(product);
-          productIds.add(product.product_id);
-        }
-      });
-    });
-
-    return uniqueProducts;
-  };
-
-  const products =
-    categoriesProductCount &&
-    convertJSONToReadableFormat(categoriesProductCount);
-
   return (
     <FilterWrapper>
       <Container>
@@ -212,56 +179,50 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                 (checkedItem) => checkedItem.id === category.id
               ) ? (
                 <>
-                  {products &&
-                    products
-                      .filter(
-                        (item: ProductsJSON) => item.categoryId === category.id
-                      )
-                      .map((item: ProductsJSON) => (
-                        <SubItemContainer
-                          key={`${item.product_id}`}
-                          isOpen={openCategories[category.id]}
-                        >
-                          <Wrapper>
-                            <Label htmlFor={`checkBox${item.product_id}`}>
-                              {checkedItems
-                                .find(
-                                  (checkedItem) =>
-                                    checkedItem.id === item.categoryId
-                                )
-                                ?.productsId.includes(item.product_id) ? (
-                                <CheckBoxActive />
-                              ) : (
-                                <CheckBox css={svgCheckBox} />
-                              )}
-                            </Label>
-                            <Input
-                              type="checkbox"
-                              id={`checkBox${item.product_id}`}
-                              checked={
-                                checkedItems
-                                  .find(
-                                    (checkedItem) =>
-                                      checkedItem.id === item.categoryId
-                                  )
-                                  ?.productsId.includes(item.product_id) ||
-                                false
-                              }
-                              onChange={() =>
-                                handleCheckboxChange("product", {
-                                  id: item.product_id,
-                                  category_id: item.categoryId,
-                                })
-                              }
-                            />
-                            <P1>{item.product_title}</P1>
-                          </Wrapper>
+                  {category.products.map((product: IFilterProducts) => (
+                    <SubItemContainer
+                      key={`${product.product_id}`}
+                      isOpen={openCategories[category.id]}
+                    >
+                      <Wrapper>
+                        <Label htmlFor={`checkBox${product.product_id}`}>
+                          {checkedItems
+                            .find(
+                              (checkedItem) =>
+                                checkedItem.id === product.categoryId
+                            )
+                            ?.productsId.includes(product.product_id) ? (
+                            <CheckBoxActive />
+                          ) : (
+                            <CheckBox css={svgCheckBox} />
+                          )}
+                        </Label>
+                        <Input
+                          type="checkbox"
+                          id={`checkBox${product.product_id}`}
+                          checked={
+                            checkedItems
+                              .find(
+                                (checkedItem) =>
+                                  checkedItem.id === product.categoryId
+                              )
+                              ?.productsId.includes(product.product_id) || false
+                          }
+                          onChange={() =>
+                            handleCheckboxChange("product", {
+                              id: product.product_id,
+                              category_id: product.categoryId,
+                            })
+                          }
+                        />
+                        <P1>{product.product_title}</P1>
+                      </Wrapper>
 
-                          <Wrapper>
-                            <P2>{item.product_quantity}</P2>
-                          </Wrapper>
-                        </SubItemContainer>
-                      ))}
+                      <Wrapper>
+                        <P2>{product.product_quantity}</P2>
+                      </Wrapper>
+                    </SubItemContainer>
+                  ))}
                 </>
               ) : null}
             </div>

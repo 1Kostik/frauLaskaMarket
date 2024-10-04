@@ -176,8 +176,7 @@ function StorePage() {
       try {
         const result = await getProductsAndSorted(
           searchParamsString.toString()
-        );
-
+        );        
         setTotalPage(Number(result.total_products));
         setProducts(result.productData);
       } catch (error) {

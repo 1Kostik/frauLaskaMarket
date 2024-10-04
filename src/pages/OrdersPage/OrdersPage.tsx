@@ -14,8 +14,10 @@ import { nanoid } from "nanoid";
 import SortingItems from "@components/SortingItems/SortingItems";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "@components/Pagination/Pagination";
+import { useCheckTokenExpiration } from "@hooks/useCheckTokenExpiration";
 
 const OrdersPage = () => {
+  const checkExpiration = useCheckTokenExpiration();
   const [data, setData] = useState<IOrder[]>([]);
   const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
 
@@ -27,7 +29,7 @@ const OrdersPage = () => {
     () => Object.fromEntries([...searchParams]),
     [searchParams]
   );
-  const { sortOrder = "ASC", page } = params;
+  const { sortOrder = "DESC", page } = params;
 
   const [currentPage, setCurrentPage] = useState(Number(page || 1));
   const [isDeleted, setIsDeleted] = useState(false);
@@ -80,9 +82,10 @@ const OrdersPage = () => {
   }, [typeOfSort, currentPage, updateSearchParams]);
 
   useEffect(() => {
+    checkExpiration();
     const newSearchParams = {
       ...params,
-      sortOrder: sortOrder,     
+      sortOrder: sortOrder,
       page: currentPage.toString(),
     };
 
@@ -125,13 +128,7 @@ const OrdersPage = () => {
       }
     }
     fetchOrders();
-  }, [
-    currentPage,
-    sortOrder,
-    params,
-    updateSearchParams,
-    isDeleted,
-  ]);
+  }, [currentPage, sortOrder, params, updateSearchParams, isDeleted]);
 
   const options = [
     "Дата: від новіших до старіших",
