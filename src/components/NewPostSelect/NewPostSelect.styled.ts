@@ -40,7 +40,7 @@ export const listStyle = css`
   width: 100%;
   max-height: 150px;
   padding: 10px;
-  overflow: auto;
+  overflow-y: auto;
 
   border: 1px solid var(--border-color);
   border-radius: 12px;
