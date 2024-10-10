@@ -228,7 +228,9 @@ const ProductDetails = () => {
                   renderArrayImg={imageArray}
                   stylesProps={ProductDetailsProps}
                 />
-                {token && <ProductInterface productId={Number(id)} />}
+                {token && (
+                  <ProductInterface productId={Number(id)} title={title || ""} />
+                )}
               </ImageContainer>
 
               <TextContainer>
@@ -328,7 +330,6 @@ const ProductDetails = () => {
             />
           </div>
           <ContainerTopSeller>
-           
             <TrendingProducts />
           </ContainerTopSeller>
         </Container>

@@ -11,4 +11,3 @@ export const setAuthToken = (token: string): void => {
 
   localStorage.setItem("expirationDate", expirationDate.toString());
 };
-
