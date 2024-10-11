@@ -135,7 +135,7 @@ export const H3 = styled.h3`
 `;
 
 export const P = styled.p`
-  width: 96px;
+  width: 97px;
   color: var(--text-black);
   font-family: Arial;
   font-size: 12px;
