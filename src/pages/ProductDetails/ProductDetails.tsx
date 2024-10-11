@@ -166,7 +166,7 @@ const ProductDetails = () => {
   const isOptions = options && options.length > 0 ? true : false;
 
   const handleBackClick = () => {
-    navigate("/store");
+    navigate(-1);
   };
 
   const handleAddToCart = () => {
