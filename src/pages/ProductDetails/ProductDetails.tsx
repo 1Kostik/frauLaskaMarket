@@ -85,6 +85,7 @@ const ProductDetailsPropsText = {
 
 const ProductDetails = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const token = useSelector(selectToken);
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -94,8 +95,8 @@ const ProductDetails = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [feedBacks, setFeedBacks] = useState<Feedback[]>([]);
   const [variationItem, setVariationItem] = useState<Variation>();
+
   const cart = useAppSelector(selectCart);
-  const dispatch = useAppDispatch();
   const { id } = useParams();
   const imageArray = product && [...product.imageUrls];
   const title = product && product.title;
@@ -227,9 +228,13 @@ const ProductDetails = () => {
                 <CardSlider
                   renderArrayImg={imageArray}
                   stylesProps={ProductDetailsProps}
+                  type="photo"
                 />
                 {token && (
-                  <ProductInterface productId={Number(id)} title={title || ""} />
+                  <ProductInterface
+                    productId={Number(id)}
+                    title={title || ""}
+                  />
                 )}
               </ImageContainer>
 
@@ -327,10 +332,11 @@ const ProductDetails = () => {
             <CardSlider
               renderArrayText={feedBacks}
               stylesProps={ProductDetailsPropsText}
+              type="feedback"
             />
           </div>
           <ContainerTopSeller>
-            <TrendingProducts />
+            <TrendingProducts type="trending" />
           </ContainerTopSeller>
         </Container>
       </div>

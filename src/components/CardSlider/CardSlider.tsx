@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import SwiperCore from "swiper";
@@ -35,6 +35,11 @@ import { CardItem } from "@components/CardItem";
 
 import { StyleProps } from "@pages/MainPage/CardSliderSection/CardSliderSection";
 import { Feedback, ImageUrl } from "Interfaces/Product";
+import {
+  handleNext,
+  handlePrev,
+  updateButtonsVisibility,
+} from "@utils/swiperUtils";
 
 export interface Itext {
   id: number;
@@ -47,24 +52,21 @@ interface CardSliderProps {
   renderArrayImg?: ImageUrl[] | null;
   renderArrayText?: Feedback[];
   stylesProps: StyleProps;
+  type: string;
 }
 
 const CardSlider: React.FC<CardSliderProps> = ({
   renderArrayImg,
   renderArrayText,
   stylesProps,
+  type,
 }) => {
   const [swiperRef, setSwiperRef] = useState<SwiperCore | null>(null);
-  const [navigation, setNavigation] = useState<{
-    prevEl: HTMLElement | null;
-    nextEl: HTMLElement | null;
-  }>({
-    prevEl: null,
-    nextEl: null,
-  });
-  const [key, setKey] = useState(0);
-
+  const [key, setKey] = useState(type);
   const [hiddenButton, setHiddenButton] = useState(true);
+
+  const refPrevBtn = useRef<HTMLButtonElement | null>(null);
+  const refNextBtn = useRef<HTMLButtonElement | null>(null);
 
   const getVisibleSlides = (width: number) => {
     if (width >= 1440) return 3.5;
@@ -95,40 +97,18 @@ const CardSlider: React.FC<CardSliderProps> = ({
   }, [renderArrayImg, renderArrayText]);
 
   useEffect(() => {
-    const prevEl = document.getElementById(stylesProps.prevEl?.[0] || "");
-    const nextEl = document.getElementById(stylesProps.nextEl?.[0] || "");
-    setNavigation({ prevEl, nextEl });
-  }, [stylesProps.nextEl, stylesProps.prevEl, hiddenButton]);
+    if (swiperRef && refPrevBtn.current && refNextBtn.current) {
+      const handleSlideChange = () =>
+        updateButtonsVisibility(swiperRef, refPrevBtn, refNextBtn);
 
-  useEffect(() => {
-    if (swiperRef) {
-      const updateNavigationState = () => {
-        const prevButton = navigation.prevEl;
-        const nextButton = navigation.nextEl;
-
-        if (prevButton && nextButton) {
-          if (swiperRef.isBeginning) {
-            prevButton.style.visibility = "hidden";
-          } else {
-            prevButton.style.visibility = "visible";
-          }
-
-          if (swiperRef.isEnd) {
-            nextButton.style.visibility = "hidden";
-          } else {
-            nextButton.style.visibility = "visible";
-          }
-        }
-      };
-
-      swiperRef.on("slideChange", updateNavigationState);
-      updateNavigationState();
+      swiperRef.on("slideChange", handleSlideChange);
+      updateButtonsVisibility(swiperRef, refPrevBtn, refNextBtn);
 
       return () => {
-        swiperRef.off("slideChange", updateNavigationState);
+        swiperRef.off("slideChange", handleSlideChange);
       };
     }
-  }, [swiperRef, navigation]);
+  }, [swiperRef, hiddenButton, renderArrayImg]);
 
   const handleSwiper = (swiper: SwiperCore) => {
     setSwiperRef(swiper);
@@ -150,7 +130,11 @@ const CardSlider: React.FC<CardSliderProps> = ({
 
           {!hiddenButton && (
             <ArrowContainer stylesProps={stylesProps}>
-              <Button id={stylesProps.prevEl?.[0]}>
+              <Button
+                // id={stylesProps.prevEl?.[0]}
+                ref={refPrevBtn}
+                onClick={() => handlePrev(swiperRef!)}
+              >
                 {stylesProps.display?.[0] !== "none" && (
                   <ArrowLeft css={arrowBigLeft} />
                 )}
@@ -158,7 +142,11 @@ const CardSlider: React.FC<CardSliderProps> = ({
                   <ArrowShortLeft css={arrowLeft} />
                 )}
               </Button>
-              <Button id={stylesProps.nextEl?.[0]}>
+              <Button
+                // id={stylesProps.nextEl?.[0]}
+                ref={refNextBtn}
+                onClick={() => handleNext(swiperRef!)}
+              >
                 {stylesProps.display?.[0] !== "none" && (
                   <ArrowRight css={arrowBigRight} />
                 )}
@@ -172,10 +160,20 @@ const CardSlider: React.FC<CardSliderProps> = ({
       )}
       {stylesProps.display?.[2] !== "none" && (
         <div css={arrowContainer(stylesProps)}>
-          <button id={stylesProps.prevEl?.[0]} css={btnOnImg}>
+          <button
+            // id={stylesProps.prevEl?.[0]}
+            css={btnOnImg}
+            ref={refPrevBtn}
+            onClick={() => handlePrev(swiperRef!)}
+          >
             <LuArrowLeft css={arrowOnImg} />
           </button>
-          <button id={stylesProps.nextEl?.[0]} css={btnOnImg}>
+          <button
+            // id={stylesProps.nextEl?.[0]}
+            css={btnOnImg}
+            ref={refNextBtn}
+            onClick={() => handleNext(swiperRef!)}
+          >
             <LuArrowRight css={arrowOnImg} />
           </button>
         </div>
@@ -186,7 +184,6 @@ const CardSlider: React.FC<CardSliderProps> = ({
         css={swiper(stylesProps)}
         breakpoints={breakpoints(stylesProps)}
         modules={[Navigation]}
-        navigation={navigation}
       >
         {renderArrayImg
           ? renderArrayImg.length > 0 &&
