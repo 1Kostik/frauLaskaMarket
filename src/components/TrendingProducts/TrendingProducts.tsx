@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
@@ -23,32 +23,46 @@ import { ReactComponent as ArrowRight } from "@assets/icons/arrow-right.svg";
 import { ReactComponent as ArrowLeft } from "@assets/icons/arrow-left.svg";
 
 import ProductCard from "@components/ProductCard/ProductCard";
+import {
+  handleNext,
+  handlePrev,
+  updateButtonsVisibility,
+} from "@utils/swiperUtils";
 
-const TrendingProducts = () => {
+interface ITrendingProductsProps {
+  type: string;
+}
+
+const TrendingProducts: React.FC<ITrendingProductsProps> = ({ type }) => {
   const navigate = useNavigate();
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(type);
   const [swiperRef, setSwiperRef] = useState<SwiperCore | null>(null);
-  const [navigation, setNavigation] = useState<{
-    prevEl: HTMLElement | null;
-    nextEl: HTMLElement | null;
-  }>({
-    prevEl: null,
-    nextEl: null,
-  });
   const [popularProducts, setPopularProducts] = useState<IPopularityProducts[]>(
     []
   );
+
+  const refPrevBtn = useRef<HTMLButtonElement | null>(null);
+  const refNextBtn = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setKey((prevKey) => prevKey + 1);
   }, []);
 
   useEffect(() => {
-    const prevEl = document.getElementById("prevBigButton");
-    const nextEl = document.getElementById("nextBigButton");
-    setNavigation({ prevEl, nextEl });
-  }, []);
+    if (swiperRef) {
+      const handleSlideChange = () =>
+        updateButtonsVisibility(swiperRef, refPrevBtn, refNextBtn);
+
+      swiperRef.on("slideChange", handleSlideChange);
+      updateButtonsVisibility(swiperRef, refPrevBtn, refNextBtn);
+
+      return () => {
+        swiperRef.off("slideChange", handleSlideChange);
+      };
+    }
+  }, [swiperRef, key]);
 
   useEffect(() => {
     const fetchPopularityProducts = async () => {
@@ -72,33 +86,6 @@ const TrendingProducts = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (swiperRef) {
-      const updateNavigationState = () => {
-        const prevButton = navigation.prevEl;
-        const nextButton = navigation.nextEl;
-
-        if (prevButton && nextButton) {
-          if (swiperRef.isBeginning) {
-            prevButton.style.visibility = "hidden";
-          } else {
-            prevButton.style.visibility = "visible";
-          }
-          if (swiperRef.isEnd) {
-            nextButton.style.visibility = "hidden";
-          } else {
-            nextButton.style.visibility = "visible";
-          }
-        }
-      };
-      swiperRef.on("slideChange", updateNavigationState);
-      updateNavigationState();
-
-      return () => {
-        swiperRef.off("slideChange", updateNavigationState);
-      };
-    }
-  }, [swiperRef, navigation, key]);
   const widthImg: string =
     windowWidth >= 360 && windowWidth < 768
       ? "320px"
@@ -107,6 +94,7 @@ const TrendingProducts = () => {
       : windowWidth >= 1440
       ? "306px"
       : "100%";
+
   const handleSwiper = (swiper: SwiperCore) => {
     setSwiperRef(swiper);
   };
@@ -114,15 +102,16 @@ const TrendingProducts = () => {
   const handleOnClickCard = (id: number) => {
     navigate(`/store/product/${id}`);
   };
+
   return (
     <>
       <TitleWrapper>
         <Title>Топ продажів</Title>
         <div css={arrowContainer}>
-          <button id="prevBigButton">
+          <button ref={refPrevBtn} onClick={() => handlePrev(swiperRef!)}>
             <ArrowLeft css={arrowLeft} />
           </button>
-          <button id="nextBigButton">
+          <button ref={refNextBtn} onClick={() => handleNext(swiperRef!)}>
             <ArrowRight css={arrowRight} />
           </button>
         </div>
@@ -139,7 +128,6 @@ const TrendingProducts = () => {
             1440: { slidesPerView: 4.2, spaceBetween: 10 },
           }}
           modules={[Navigation]}
-          navigation={navigation}
         >
           {popularProducts &&
             popularProducts.map((item: IPopularityProducts) => (
