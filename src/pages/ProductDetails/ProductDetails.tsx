@@ -327,12 +327,14 @@ const ProductDetails = () => {
               <Span>Безкоштовно</Span>
             </DeliveryInfoContainer>
           </DescriptionContainer>
-          <div style={{ background: "#252525" }}>
-            <CardSlider
-              renderArrayText={feedBacks}
-              stylesProps={ProductDetailsPropsText}
-            />
-          </div>
+          {feedBacks.length > 0 && (
+            <div style={{ background: "#252525" }}>
+              <CardSlider
+                renderArrayText={feedBacks}
+                stylesProps={ProductDetailsPropsText}
+              />
+            </div>
+          )}
           <ContainerTopSeller>
             <TrendingProducts />
           </ContainerTopSeller>
