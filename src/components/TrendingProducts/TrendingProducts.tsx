@@ -58,7 +58,7 @@ const TrendingProducts = () => {
         swiperRef.off("slideChange", handleSlideChange);
       };
     }
-  }, [swiperRef, key]);
+  }, [swiperRef, key, popularProducts]);
 
   useEffect(() => {
     const fetchPopularityProducts = async () => {
