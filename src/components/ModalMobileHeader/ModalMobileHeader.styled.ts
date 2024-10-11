@@ -30,7 +30,7 @@ export const Container = styled.div`
   display: flex;
   padding: 24px 20px;
   width: 360px;
-  height: 100%;
+  height: 90%;  
   margin: 0 auto;
   ${onTablet(css`
     width: 768px;
@@ -44,7 +44,6 @@ export const NavContainer = styled.div`
   width: 360px;
   height: 100%;
   flex-direction: column;
-  justify-content: space-between;
   ${onTablet(css`
     width: 340px;
     padding-right: 40px;
@@ -53,6 +52,7 @@ export const NavContainer = styled.div`
 
 export const NavWrapper = styled.nav`
   display: flex;
+  margin-bottom: auto;
   gap: 12px;
   flex-wrap: wrap;
   align-items: flex-start;
