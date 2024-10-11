@@ -54,14 +54,14 @@ const ContentBox: React.FC<ContentBoxProps> = ({
 
   useEffect(() => {
     if (swiper) {
-      swiper.on("slideChange", () =>
-        updateButtonsVisibility(swiper, refPrevBtn, refNextBtn)
-      );
+      const handleSlideChange = () =>
+        updateButtonsVisibility(swiper, refPrevBtn, refNextBtn);
+
+      swiper.on("slideChange", handleSlideChange);
       updateButtonsVisibility(swiper, refPrevBtn, refNextBtn);
+
       return () => {
-        swiper.off("slideChange", () =>
-          updateButtonsVisibility(swiper, refPrevBtn, refNextBtn)
-        );
+        swiper.off("slideChange", handleSlideChange);
       };
     }
   }, [swiper]);
