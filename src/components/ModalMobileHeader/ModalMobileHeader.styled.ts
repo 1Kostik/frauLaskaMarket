@@ -30,7 +30,7 @@ export const Container = styled.div`
   display: flex;
   padding: 24px 20px;
   width: 360px;
-  height: 90%;  
+  height: 90%;
   margin: 0 auto;
   ${onTablet(css`
     width: 768px;
