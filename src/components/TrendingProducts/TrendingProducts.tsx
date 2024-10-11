@@ -29,15 +29,11 @@ import {
   updateButtonsVisibility,
 } from "@utils/swiperUtils";
 
-interface ITrendingProductsProps {
-  type: string;
-}
-
-const TrendingProducts: React.FC<ITrendingProductsProps> = ({ type }) => {
+const TrendingProducts = () => {
   const navigate = useNavigate();
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [key, setKey] = useState(type);
+  const [key, setKey] = useState(0);
   const [swiperRef, setSwiperRef] = useState<SwiperCore | null>(null);
   const [popularProducts, setPopularProducts] = useState<IPopularityProducts[]>(
     []

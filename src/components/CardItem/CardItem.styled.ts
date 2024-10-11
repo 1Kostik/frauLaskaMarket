@@ -15,6 +15,19 @@ export const Wrapper = styled.div`
   white-space: normal;
   word-wrap: break-word;
 
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+    border-radius: 6px;
+    margin: 12px
+  }
+
   ${onDesktop(css`
     height: 456px;
   `)}

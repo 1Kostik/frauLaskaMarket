@@ -228,7 +228,6 @@ const ProductDetails = () => {
                 <CardSlider
                   renderArrayImg={imageArray}
                   stylesProps={ProductDetailsProps}
-                  type="photo"
                 />
                 {token && (
                   <ProductInterface
@@ -332,11 +331,10 @@ const ProductDetails = () => {
             <CardSlider
               renderArrayText={feedBacks}
               stylesProps={ProductDetailsPropsText}
-              type="feedback"
             />
           </div>
           <ContainerTopSeller>
-            <TrendingProducts type="trending" />
+            <TrendingProducts />
           </ContainerTopSeller>
         </Container>
       </div>

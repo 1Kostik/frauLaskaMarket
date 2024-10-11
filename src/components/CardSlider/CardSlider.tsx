@@ -40,6 +40,7 @@ import {
   handlePrev,
   updateButtonsVisibility,
 } from "@utils/swiperUtils";
+import { handleImgError } from "@utils/handleImgError";
 
 export interface Itext {
   id: number;
@@ -52,17 +53,15 @@ interface CardSliderProps {
   renderArrayImg?: ImageUrl[] | null;
   renderArrayText?: Feedback[];
   stylesProps: StyleProps;
-  type: string;
 }
 
 const CardSlider: React.FC<CardSliderProps> = ({
   renderArrayImg,
   renderArrayText,
   stylesProps,
-  type,
 }) => {
   const [swiperRef, setSwiperRef] = useState<SwiperCore | null>(null);
-  const [key, setKey] = useState(type);
+  const [key, setKey] = useState(0);
   const [hiddenButton, setHiddenButton] = useState(true);
 
   const refPrevBtn = useRef<HTMLButtonElement | null>(null);
@@ -130,11 +129,7 @@ const CardSlider: React.FC<CardSliderProps> = ({
 
           {!hiddenButton && (
             <ArrowContainer stylesProps={stylesProps}>
-              <Button
-                // id={stylesProps.prevEl?.[0]}
-                ref={refPrevBtn}
-                onClick={() => handlePrev(swiperRef!)}
-              >
+              <Button ref={refPrevBtn} onClick={() => handlePrev(swiperRef!)}>
                 {stylesProps.display?.[0] !== "none" && (
                   <ArrowLeft css={arrowBigLeft} />
                 )}
@@ -142,11 +137,7 @@ const CardSlider: React.FC<CardSliderProps> = ({
                   <ArrowShortLeft css={arrowLeft} />
                 )}
               </Button>
-              <Button
-                // id={stylesProps.nextEl?.[0]}
-                ref={refNextBtn}
-                onClick={() => handleNext(swiperRef!)}
-              >
+              <Button ref={refNextBtn} onClick={() => handleNext(swiperRef!)}>
                 {stylesProps.display?.[0] !== "none" && (
                   <ArrowRight css={arrowBigRight} />
                 )}
@@ -161,7 +152,6 @@ const CardSlider: React.FC<CardSliderProps> = ({
       {stylesProps.display?.[2] !== "none" && (
         <div css={arrowContainer(stylesProps)}>
           <button
-            // id={stylesProps.prevEl?.[0]}
             css={btnOnImg}
             ref={refPrevBtn}
             onClick={() => handlePrev(swiperRef!)}
@@ -169,7 +159,6 @@ const CardSlider: React.FC<CardSliderProps> = ({
             <LuArrowLeft css={arrowOnImg} />
           </button>
           <button
-            // id={stylesProps.nextEl?.[0]}
             css={btnOnImg}
             ref={refNextBtn}
             onClick={() => handleNext(swiperRef!)}
@@ -189,7 +178,7 @@ const CardSlider: React.FC<CardSliderProps> = ({
           ? renderArrayImg.length > 0 &&
             renderArrayImg.map((item: ImageUrl, i) => (
               <SwiperSlide className="swiper-slide image-slide" key={i}>
-                <img src={item.img_url} alt="" />
+                <img src={item.img_url} alt="" onError={handleImgError} />
               </SwiperSlide>
             ))
           : renderArrayText &&
