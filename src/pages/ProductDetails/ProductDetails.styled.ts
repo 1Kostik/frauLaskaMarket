@@ -148,6 +148,7 @@ export const P = styled.p`
   border-radius: 12px;
   background: var(--bg-light-grey);
   ${onDesktop(css`
+    width: auto;
     font-size: 14px;
   `)}
 `;
