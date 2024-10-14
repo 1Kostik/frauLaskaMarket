@@ -7,6 +7,7 @@ export const tableStyles = css`
   & th,
   td {
     text-align: left;
+    transition: transform 0.3s ease;
   }
   & th:nth-of-type(9),
   & th:last-child {
@@ -20,7 +21,6 @@ export const tableStyles = css`
   }
   & td:nth-of-type(9):hover {
     transform: scale(1.4);
-    transition: transform 0.3s ease;
   }
   & td:last-child {
     display: flex;
@@ -31,7 +31,6 @@ export const tableStyles = css`
   }
   & td:last-child:hover {
     transform: scale(1.4);
-    transition: transform 0.3s ease;
   }
   & td:nth-of-type(7),
   & td:nth-of-type(8) {
