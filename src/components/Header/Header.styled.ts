@@ -53,6 +53,7 @@ export const Button = styled.button<SectionProps>`
   padding: 8px;
   border-radius: 50%;
   background-color: inherit;
+  transition: var(--effectDuration);
 
   &:hover {
     ${burgerMenuStyles}:hover {
@@ -389,6 +390,7 @@ export const btnLogOut = (isTrue: string) => css`
 
   & svg {
     font-size: 20px;
+    transition: var(--effectDuration);
   }
   color: ${isTrue === "true" ? "var(--text-light-grey)" : "var(--text-black)"};
 
@@ -396,7 +398,6 @@ export const btnLogOut = (isTrue: string) => css`
     & svg {
       color: var(--text-active-link-milk);
       transform: scale(1.1);
-      transition: var(--effectDuration);
     }
   }
 `;

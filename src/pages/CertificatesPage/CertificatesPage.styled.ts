@@ -43,6 +43,7 @@ export const itemStyles = css`
   width: 320px;
   height: auto;
   cursor: pointer;
+  transition: transform 0.3s ease;
   & img {
     object-fit: fill;
   }
@@ -54,7 +55,6 @@ export const itemStyles = css`
   `)}
   &:hover {
     transform: scale(1.05);
-    transition: transform 0.3s ease;
   }
 `;
 export const btnBackStyles = css`

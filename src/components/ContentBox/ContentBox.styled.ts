@@ -285,7 +285,7 @@ export const linkStyle = css`
   transition: var(--effectDuration);
 
   &:hover {
-    color: var(--btn-show-more-hover);
+    transform: scale(1.03);
   }
 
   &::after {
