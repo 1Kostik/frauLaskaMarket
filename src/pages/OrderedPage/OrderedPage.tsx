@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "@redux/hooks";
 
 import { clearCart } from "@redux/cart/slice";
-
-import HeroSection from "@components/HeroSection/HeroSection";
+import { containerStyles } from "@styles/variables";
+import { linkStyle, sectionStyle } from "./OrderedPage.styled";
 
 const OrderedPage = () => {
   const [searchParams] = useSearchParams();
@@ -18,12 +18,20 @@ const OrderedPage = () => {
   }, [dispatch, order_id]);
 
   return (
-    <>
-      <HeroSection viewType={"other"} pageName="ordered">
+    <section css={sectionStyle}>
+      <div css={containerStyles}>
         <h1>Дякуємо за замовлення!</h1>
         <p>{`Всі деталі будуть відправлені вам на пошту: ${email}`} </p>
-      </HeroSection>
-    </>
+        <p>
+          Якщо ви не побачите листа у папці "Вхідні", будь ласка, перевірте
+          папки "Спам", "Промоакції" або інші папки. Іноді електронні листи
+          можуть бути помилково переміщені туди.
+        </p>
+        <Link to="/store" css={linkStyle}>
+          Продовжити покупки
+        </Link>
+      </div>
+    </section>
   );
 };
 

@@ -117,12 +117,13 @@ export const textContainer = (type: string | undefined) => css`
 export const imgThumb = (
   isHideMobileImg: boolean | undefined,
   type: string | undefined,
-  photo: string | undefined
+  photo: string | undefined,
+  boxHeight: number | undefined
 ) =>
   css`
     display: ${isHideMobileImg ? "none" : "block"};
     width: 100%;
-    height: auto;
+    height: ${boxHeight}px;
     border-radius: ${type === "myWay" ? "0" : "12px"};
     overflow: hidden;
 
