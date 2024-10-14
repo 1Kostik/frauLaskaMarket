@@ -42,6 +42,7 @@ export const sectionStyle = css`
 
   ${onDesktop(css`
     padding-top: 80px;
+    height: 60vh;
 
     & h1 {
       font-size: 100px;
