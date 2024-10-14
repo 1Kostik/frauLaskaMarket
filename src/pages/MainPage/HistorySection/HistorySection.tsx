@@ -4,7 +4,7 @@ import ContentBox from "@components/ContentBox";
 import { containerStyles } from "@styles/variables";
 
 import plugImg1 from "/src/assets/images/plug1.svg";
-import plugImg2 from "/src/assets/images/plug2.svg";
+import plugImg2 from "/src/assets/images/plug2.webp";
 
 const HistorySection = () => {
   return (

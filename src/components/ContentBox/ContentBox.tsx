@@ -47,10 +47,15 @@ const ContentBox: React.FC<ContentBoxProps> = ({
   type,
 }) => {
   const [swiper, setSwiper] = useState<SwiperCore | null>(null);
+  const [boxHeight, setBoxHeight] = useState<number | undefined>(undefined);
 
-  const textRef = useRef<HTMLDivElement | null>(null);
+  const boxRef = useRef<HTMLDivElement | null>(null);
   const refPrevBtn = useRef<HTMLButtonElement | null>(null);
   const refNextBtn = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    setBoxHeight(boxRef.current?.offsetHeight);
+  }, [boxRef]);
 
   useEffect(() => {
     if (swiper) {
@@ -67,10 +72,10 @@ const ContentBox: React.FC<ContentBoxProps> = ({
   }, [swiper]);
 
   return (
-    <div css={box(contentGap, changeDirection, type)}>
+    <div css={box(contentGap, changeDirection, type)} ref={boxRef}>
       {(type === "projects" || type === "info") && (
         <div css={textContainer(type)}>
-          {typeof children === "string" && <p ref={textRef}>{children}</p>}
+          {typeof children === "string" && <p>{children}</p>}
           {typeof children === "object" && children}
         </div>
       )}
@@ -115,7 +120,7 @@ const ContentBox: React.FC<ContentBoxProps> = ({
           </div>
         </div>
       )}
-      <div css={imgThumb(isHideMobileImg, type, photo)}></div>
+      <div css={imgThumb(isHideMobileImg, type, photo, boxHeight)} />
     </div>
   );
 };
