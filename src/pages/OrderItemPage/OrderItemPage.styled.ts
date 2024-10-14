@@ -4,9 +4,9 @@ export const btnBack = css`
   display: flex;
   color: #d7d7d7;
   font-size: 25px;
+  transition: transform 0.3s ease;
   &:hover {
     transform: scale(1.2);
-    transition: transform 0.3s ease;
   }
 `;
 export const titleContainer = css`
@@ -99,8 +99,8 @@ export const btnDelete = css`
   border-radius: 16px;
   background-color: #d7d7d7;
   padding: 5px 23px;
+  transition: transform 0.3s ease;
   &:hover {
     transform: scale(1.2);
-    transition: transform 0.3s ease;
   }
 `;
