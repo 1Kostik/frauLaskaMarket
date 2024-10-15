@@ -4,7 +4,7 @@ import { onDesktop, onTablet } from "@styles/mixins";
 
 import radioChecked from "@assets/icons/radio-btn-checked.svg";
 import radioUnchecked from "@assets/icons/radio-btn-unchecked.svg";
-import checkboxChecked from "@assets/icons/checkbox-active.svg";
+import checkboxChecked from "@assets/icons/checkbox-active.png";
 
 export const formWrapper = css`
   display: flex;
