@@ -65,6 +65,8 @@ import {
 
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 import { handleNumericInput } from "@utils/handleNumericInput";
+import { fullPriceProduct } from "@utils/fullPriceProduct";
+
 import { useCheckTokenExpiration } from "@hooks/useCheckTokenExpiration";
 
 const FILE_SIZE = 1024 * 1024 * 2;
@@ -423,10 +425,14 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     }
   };
 
+  const productWithFullPrices = product && fullPriceProduct(product);
+
   return (
     <>
       <Formik
-        initialValues={replaceNullsWithEmptyStrings(product) || initialValues}
+        initialValues={
+          replaceNullsWithEmptyStrings(productWithFullPrices) || initialValues
+        }
         validationSchema={validationSchema}
         onSubmit={(values) => {
           handleOnSubmit(values);
