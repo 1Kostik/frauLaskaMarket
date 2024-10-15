@@ -60,8 +60,7 @@ function StorePage() {
 
   const options = [
     "Від найменшої ціни до найбільшої",
-    "Від найбільшої ціни до найменшої",
-    "За ретингом",
+    "Від найбільшої ціни до найменшої",    
     "За популярністю",
   ];
 
@@ -75,10 +74,7 @@ function StorePage() {
           break;
         case `sortOrder=DESC&sortField=price`:
           setTypeOfSort("Від найбільшої ціни до найменшої");
-          break;
-        case `sortOrder=DESC&sortField=ranking`:
-          setTypeOfSort("За ретингом");
-          break;
+          break;      
         case `sortOrder=DESC&sortField=popularity`:
           setTypeOfSort("За популярністю");
           break;
@@ -114,10 +110,7 @@ function StorePage() {
         break;
       case "Від найбільшої ціни до найменшої":
         updateSearchParams({ sortOrder: "DESC", sortField: "price" });
-        break;
-      case "За ретингом":
-        updateSearchParams({ sortOrder: "DESC", sortField: "ranking" });
-        break;
+        break;     
       case "За популярністю":
         updateSearchParams({ sortOrder: "DESC", sortField: "popularity" });
         break;

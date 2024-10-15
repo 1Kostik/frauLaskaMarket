@@ -25,7 +25,6 @@ import { ILogin } from "Interfaces/ILogin";
 
 import { ReactComponent as CloseEyeIcon } from "@assets/icons/eye-close.svg";
 import { ReactComponent as OpenEyeIcon } from "@assets/icons/eye-open.svg";
-import {setAuthToken} from"@redux/auth/authActions"
 
 const initialValues = {
   email: "",
@@ -60,7 +59,6 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (token) {
-      setAuthToken(token)
       navigate("/");
     }
   }, [navigate, token]);

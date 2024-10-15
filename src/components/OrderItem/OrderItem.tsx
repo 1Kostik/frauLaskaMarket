@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -29,11 +29,16 @@ import { orderStatusStyles } from "./OrderItem.styled";
 
 interface IOrderItemProps {
   item: IOrder;
+  setIsUpsateStatusOrder: React.Dispatch<SetStateAction<boolean>>;
   onDelete: (id: number) => void;
 }
 const modalPortal = document.querySelector("#portal-root");
 
-const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
+const OrderItem: React.FC<IOrderItemProps> = ({
+  item,
+  onDelete,
+  setIsUpsateStatusOrder,
+}) => {
   const navigate = useNavigate();
 
   const [isChangeStatusModalOpen, setIsChangeStatusModalOpen] = useState(false);
@@ -110,6 +115,7 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
   const handleUpdateStatus = (id: number) => {
     if (id && isChangeStatusModalOpen) {
       setDisableOrder(true);
+      setIsUpsateStatusOrder((prev) => !prev);
       updateStatus(id, "Відхилено");
       if (variation_ids.length > 0) {
         variation_ids.forEach((item) => {
