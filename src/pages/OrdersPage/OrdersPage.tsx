@@ -33,7 +33,7 @@ const OrdersPage = () => {
 
   const [currentPage, setCurrentPage] = useState(Number(page || 1));
   const [isDeleted, setIsDeleted] = useState(false);
-
+  const [isUpsateStatusOrder, setIsUpsateStatusOrder] = useState(false);
   const countItemPages = 20;
   const lastPage = totalPage && Math.ceil(totalPage / countItemPages);
 
@@ -128,7 +128,14 @@ const OrdersPage = () => {
       }
     }
     fetchOrders();
-  }, [currentPage, sortOrder, params, updateSearchParams, isDeleted]);
+  }, [
+    currentPage,
+    sortOrder,
+    params,
+    updateSearchParams,
+    isDeleted,
+    isUpsateStatusOrder,
+  ]);
 
   const options = [
     "Дата: від новіших до старіших",
@@ -198,6 +205,7 @@ const OrdersPage = () => {
                   item={item}
                   key={nanoid()}
                   onDelete={handleDeleteOrder}
+                  setIsUpsateStatusOrder={setIsUpsateStatusOrder}
                 />
               ))}
           </tbody>
