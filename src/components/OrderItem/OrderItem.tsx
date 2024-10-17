@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -29,11 +29,16 @@ import { orderStatusStyles } from "./OrderItem.styled";
 
 interface IOrderItemProps {
   item: IOrder;
+  setIsUpsateStatusOrder: React.Dispatch<SetStateAction<boolean>>;
   onDelete: (id: number) => void;
 }
 const modalPortal = document.querySelector("#portal-root");
 
-const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
+const OrderItem: React.FC<IOrderItemProps> = ({
+  item,
+  onDelete,
+  setIsUpsateStatusOrder,
+}) => {
   const navigate = useNavigate();
 
   const [isChangeStatusModalOpen, setIsChangeStatusModalOpen] = useState(false);
@@ -98,6 +103,7 @@ const OrderItem: React.FC<IOrderItemProps> = ({ item, onDelete }) => {
       const result_varition_ids = await variation_ids();
       if (result_varition_ids.length > 0) {
         result_varition_ids.forEach((item) => {
+      setIsUpsateStatusOrder((prev) => !prev);
           IncreaseCountProduct(item.id, item.count);
         });
       }

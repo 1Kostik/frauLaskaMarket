@@ -30,6 +30,7 @@ const getAuth = () => {
 export const authenticateUser = async (email: string, password: string) => {
   try {
     const { data } = await axios.post("/login", { email, password });
+
     return data;
   } catch (error: unknown) {
     handlerAxiosError(error);

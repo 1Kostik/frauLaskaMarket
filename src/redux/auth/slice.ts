@@ -5,6 +5,7 @@ import { LoginError } from "Interfaces/IloginError";
 
 const initialState: IAuthState = {
   token: null,
+  expirationTime: null,
   username: null,
   isLoading: false,
   isAuthenticated: false,
@@ -17,9 +18,16 @@ const handelPending = (state: IAuthState) => {
 
 const handelAuthFulfilled = (
   state: IAuthState,
-  { payload }: PayloadAction<{ token: string; name: string }>
+  {
+    payload,
+  }: PayloadAction<{ token: string; name: string; expirationTime: number }>
 ) => {
+  localStorage.setItem(
+    "expirationDate",
+    (new Date().getTime() + payload.expirationTime * 1000).toString()
+  );
   state.token = payload.token;
+  state.expirationTime = payload.expirationTime;
   state.username = payload.name;
   state.isLoading = false;
   state.isAuthenticated = true;
