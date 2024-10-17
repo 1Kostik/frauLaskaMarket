@@ -45,62 +45,46 @@ const OrderItem: React.FC<IOrderItemProps> = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
-
-  const [orderProducts, setOrderProducts] = useState<Product[]>([]);
-  const [previousProductIds, setPreviousProductIds] = useState<number[]>([]);
   const [disableOrder, setDisableOrder] = useState<boolean>(false);
 
-  const variation_ids = orderProducts.flatMap((product) => {
-    const orderItem = item.order_items.find(
-      (orderItem: IOrderItem) => orderItem.product_id === product.id
-    );
-
-    if (orderItem) {
-      const variations = product.variations.filter((variation) => {
-        const sizeMatch = orderItem.size
-          ? String(variation.size) === String(orderItem.size)
-          : true;
-        const colorMatch = orderItem.color
-          ? String(variation.color).toLowerCase() ===
-            String(orderItem.color).toLowerCase()
-          : true;
-
-        return sizeMatch && colorMatch;
-      });
-
-      return variations.map((variation) => {
-        return { id: variation.id, count: orderItem.count };
-      });
-    } else {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    const product_ids = item.id
-      ? item.order_items.map((orderItem) => orderItem.product_id)
-      : [];
-    async function fetchOrderProducts() {
-      const result = await Promise.all(
-        product_ids.map((productId) => getProductById(productId))
+  const getVariation_ids = (orderProducts: Product[]) =>
+    orderProducts.flatMap((product) => {
+      const orderItem = item.order_items.find(
+        (orderItem: IOrderItem) => orderItem.product_id === product.id
       );
 
-      setOrderProducts(result);
-    }
+      if (orderItem) {
+        const variations = product.variations.filter((variation) => {
+          const sizeMatch = orderItem.size
+            ? String(variation.size) === String(orderItem.size)
+            : true;
+          const colorMatch = orderItem.color
+            ? String(variation.color).toLowerCase() ===
+              String(orderItem.color).toLowerCase()
+            : true;
 
-    if (product_ids.length > 0) {
-      const arraysAreEqual =
-        previousProductIds.length === product_ids.length &&
-        previousProductIds.every(
-          (value, index) => value === product_ids[index]
-        );
+          return sizeMatch && colorMatch;
+        });
 
-      if (!arraysAreEqual) {
-        fetchOrderProducts();
-        setPreviousProductIds(product_ids);
+        return variations.map((variation) => {
+          return { id: variation.id, count: orderItem.count };
+        });
+      } else {
+        return [];
       }
-    }
-  }, [item.id, item.order_items, previousProductIds]);
+    });
+
+  const product_ids = item.id
+    ? item.order_items.map((orderItem) => orderItem.product_id)
+    : [];
+
+  const variation_ids = async () => {
+    const result = await Promise.all(
+      product_ids.map((productId) => getProductById(productId))
+    );
+
+    return getVariation_ids(result);
+  };
 
   const IncreaseCountProduct = async (id: number, count: number) => {
     await updateProductCountIncrease(id, count);
@@ -112,13 +96,14 @@ const OrderItem: React.FC<IOrderItemProps> = ({
     }
   }, [item.status]);
 
-  const handleUpdateStatus = (id: number) => {
+  const handleUpdateStatus = async (id: number) => {
     if (id && isChangeStatusModalOpen) {
       setDisableOrder(true);
+      await updateStatus(id, "Відхилено");
+      const result_varition_ids = await variation_ids();
+      if (result_varition_ids.length > 0) {
+        result_varition_ids.forEach((item) => {
       setIsUpsateStatusOrder((prev) => !prev);
-      updateStatus(id, "Відхилено");
-      if (variation_ids.length > 0) {
-        variation_ids.forEach((item) => {
           IncreaseCountProduct(item.id, item.count);
         });
       }
