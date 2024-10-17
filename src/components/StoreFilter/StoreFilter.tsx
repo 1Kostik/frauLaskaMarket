@@ -52,7 +52,8 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const [checkedItems, setCheckedItems] = useState<CheckedItems[]>(
     getSavedFilter()
   );
-
+console.log('obopenCategoriesject :>> ', openCategories);
+console.log('checkedItems :>> ', checkedItems);
   const [categoriesProductCount, setCategoriesProductCount] =
     useState<CategoriesProductCount[]>();
 
@@ -115,7 +116,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({
     }));
     setFilteredItemsId(filteredItems);
   };
-
+ 
   return (
     <FilterWrapper>
       <Container>
@@ -126,107 +127,111 @@ const StoreFilter: React.FC<ISorteFilter> = ({
           </ButtonClose>
         </TitleContainer>
         {categoriesProductCount &&
-          categoriesProductCount.map((category: CategoriesProductCount) => (
-            <div key={category.id}>
-              <ItemContainer isOpen={openCategories[category.id]}>
-                <Wrapper>
-                  <Label htmlFor={`checkBox${category.id}`}>
-                    {checkedItems.some(
-                      (checkedItem) => checkedItem.id === category.id
-                    ) ? (
-                      <CheckBoxActive />
-                    ) : (
-                      <CheckBox css={svgCheckBox} />
-                    )}
-                  </Label>
-                  <Input
-                    type="checkbox"
-                    id={`checkBox${category.id}`}
-                    checked={checkedItems.some(
-                      (checkedItem) => checkedItem.id === category.id
-                    )}
-                    onChange={() =>
-                      handleCheckboxChange("category", {
-                        id: category.id,
-                      })
-                    }
-                  />
-                  <P1>{category.title}</P1>
-                </Wrapper>
-                <Wrapper>
-                  <P2>{category.product_count}</P2>
-                  <ButtonShow
-                    onClick={() => handleClick(category.id)}
-                    disabled={
-                      !checkedItems.some(
-                        (checkedItem) => checkedItem.id === category.id
-                      )
-                    }
-                  >
-                    {openCategories[category.id] &&
-                    checkedItems.some(
-                      (checkedItem) => checkedItem.id === category.id
-                    ) ? (
-                      <ArrowUp />
-                    ) : (
-                      <ArrowDown />
-                    )}
-                  </ButtonShow>
-                </Wrapper>
-              </ItemContainer>
-              {openCategories[category.id] &&
-              checkedItems.some(
-                (checkedItem) => checkedItem.id === category.id
-              ) ? (
-                <>
-                  {category.products.map((product: IFilterProducts) => (
-                    <SubItemContainer
-                      key={`${product.product_id}`}
-                      isOpen={openCategories[category.id]}
-                    >
-                      <Wrapper>
-                        <Label htmlFor={`checkBox${product.product_id}`}>
-                          {checkedItems
-                            .find(
-                              (checkedItem) =>
-                                checkedItem.id === product.categoryId
-                            )
-                            ?.productsId.includes(product.product_id) ? (
-                            <CheckBoxActive />
-                          ) : (
-                            <CheckBox css={svgCheckBox} />
-                          )}
-                        </Label>
-                        <Input
-                          type="checkbox"
-                          id={`checkBox${product.product_id}`}
-                          checked={
-                            checkedItems
-                              .find(
-                                (checkedItem) =>
-                                  checkedItem.id === product.categoryId
-                              )
-                              ?.productsId.includes(product.product_id) || false
-                          }
-                          onChange={() =>
-                            handleCheckboxChange("product", {
-                              id: product.product_id,
-                              category_id: product.categoryId,
-                            })
-                          }
-                        />
-                        <P1>{product.product_title}</P1>
-                      </Wrapper>
+          categoriesProductCount.map(
+            (category: CategoriesProductCount) =>
+              category.product_count > 0 && (
+                <div key={category.id}>
+                  <ItemContainer isOpen={openCategories[category.id]}>
+                    <Wrapper>
+                      <Label htmlFor={`checkBox${category.id}`}>
+                        {checkedItems.some(
+                          (checkedItem) => checkedItem.id === category.id
+                        ) ? (
+                          <CheckBoxActive />
+                        ) : (
+                          <CheckBox css={svgCheckBox} />
+                        )}
+                      </Label>
+                      <Input
+                        type="checkbox"
+                        id={`checkBox${category.id}`}
+                        checked={checkedItems.some(
+                          (checkedItem) => checkedItem.id === category.id
+                        )}
+                        onChange={() =>
+                          handleCheckboxChange("category", {
+                            id: category.id,
+                          })
+                        }
+                      />
+                      <P1>{category.title}</P1>
+                    </Wrapper>
+                    <Wrapper>
+                      <P2>{category.product_count}</P2>
+                      <ButtonShow
+                        onClick={() => handleClick(category.id)}
+                        disabled={
+                          !checkedItems.some(
+                            (checkedItem) => checkedItem.id === category.id
+                          )
+                        }
+                      >
+                        {openCategories[category.id] &&
+                        checkedItems.some(
+                          (checkedItem) => checkedItem.id === category.id
+                        ) ? (
+                          <ArrowUp />
+                        ) : (
+                          <ArrowDown />
+                        )}
+                      </ButtonShow>
+                    </Wrapper>
+                  </ItemContainer>
+                  {openCategories[category.id] &&
+                  checkedItems.some(
+                    (checkedItem) => checkedItem.id === category.id
+                  ) ? (
+                    <>
+                      {category.products.map((product: IFilterProducts) => (
+                        <SubItemContainer
+                          key={`${product.product_id}`}
+                          isOpen={openCategories[category.id]}
+                        >
+                          <Wrapper>
+                            <Label htmlFor={`checkBox${product.product_id}`}>
+                              {checkedItems
+                                .find(
+                                  (checkedItem) =>
+                                    checkedItem.id === product.categoryId
+                                )
+                                ?.productsId.includes(product.product_id) ? (
+                                <CheckBoxActive />
+                              ) : (
+                                <CheckBox css={svgCheckBox} />
+                              )}
+                            </Label>
+                            <Input
+                              type="checkbox"
+                              id={`checkBox${product.product_id}`}
+                              checked={
+                                checkedItems
+                                  .find(
+                                    (checkedItem) =>
+                                      checkedItem.id === product.categoryId
+                                  )
+                                  ?.productsId.includes(product.product_id) ||
+                                false
+                              }
+                              onChange={() =>
+                                handleCheckboxChange("product", {
+                                  id: product.product_id,
+                                  category_id: product.categoryId,
+                                })
+                              }
+                            />
+                            <P1>{product.product_title}</P1>
+                          </Wrapper>
 
-                      <Wrapper>
-                        <P2>{product.product_quantity}</P2>
-                      </Wrapper>
-                    </SubItemContainer>
-                  ))}
-                </>
-              ) : null}
-            </div>
-          ))}
+                          <Wrapper>
+                            <P2>{product.product_quantity}</P2>
+                          </Wrapper>
+                        </SubItemContainer>
+                      ))}
+                    </>
+                  ) : null}
+                </div>
+              )
+          )}
         <FilterBtn onClick={handleShowResult}>Показати</FilterBtn>
       </Container>
     </FilterWrapper>

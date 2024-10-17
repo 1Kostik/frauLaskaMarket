@@ -47,12 +47,12 @@ function App() {
       </Overlay>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
-          <Route index element={<MainPage />} />
-          <Route path="consultations" element={<HealthyPage />} />
-          <Route path="certificates" element={<CertificatesPage />} />
-          <Route path="aroma-school" element={<AromaSchool />} />
-          <Route path="store" element={<StorePage />} />
-          <Route path="store/product/:id" element={<ProductDetails />} />
+          <Route index element={<StorePage />} />
+          {/* <Route path="consultations" element={<HealthyPage />} /> */}
+          {/* <Route path="certificates" element={<CertificatesPage />} /> */}
+          {/* <Route path="aroma-school" element={<AromaSchool />} /> */}
+          {/* <Route path="store" element={<StorePage />} /> */}
+          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="order" element={<OrderPage />} />
           <Route path="ordered" element={<OrderedPage />} />
