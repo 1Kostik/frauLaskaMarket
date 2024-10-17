@@ -10,7 +10,7 @@ import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
 import { IOrderCreation } from "Interfaces/IOrderCreation";
 
-axios.defaults.baseURL = "https://helthyfun.space/api/";
+axios.defaults.baseURL = "http://localhost:8081/api/";
 
 axios.defaults.headers.common["Accept"] = "application/json";
 
