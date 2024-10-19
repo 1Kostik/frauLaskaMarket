@@ -16,13 +16,18 @@ import { ReactComponent as CheckedIcon } from "@assets/icons/radio-btn-checked.s
 import { ReactComponent as UncheckedIcon } from "@assets/icons/radio-btn-unchecked.svg";
 
 const colorArr = [
-  "#768159",
-  "#D7D7D7",
-  "#D9B8FF",
-  "#E09C4F",
-  "#ff0000",
-  "#dada11",
-  "pink",
+  "var(--red-color)",
+  "var(--orange-color)",
+  "var(--yellow-color)",
+  "var(--green-color)",
+  "var(--light-blue-color)",
+  "var(--blue-color)",
+  "var(--violet-color)",
+  "var(--pink-color)",
+  "var(--emerald-color)",
+  "var(--olive-color)",
+  "var(--gold-color)",
+  "var(--silver-color)",
 ];
 
 interface IColorPickerProps {

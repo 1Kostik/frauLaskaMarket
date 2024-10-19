@@ -73,3 +73,12 @@ export const Title = styled.h4`
     letter-spacing: 0.64px;
   `)}
 `;
+export const swiperContainer = css`
+  width: 320px;
+  ${onTablet(css`
+    width: 688px;
+  `)}
+  ${onDesktop(css`
+    width: 1284px;
+  `)}
+`;

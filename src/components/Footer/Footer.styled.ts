@@ -37,7 +37,7 @@ export const Nav = styled.nav`
   display: flex;
   flex-direction: column;
   row-gap: 4px;
-  width: 229px;
+  width: 245px;
 
   ${onDesktop(css`
     row-gap: 16px;
@@ -96,7 +96,7 @@ export const contactContainer = css`
   flex-direction: column;
 
   ${onDesktop(css`
-    width: 1015px;
+    width: 998px;
   `)}
 
   & h2 {
@@ -128,6 +128,20 @@ export const contactLink = css`
   color: var(--text-light-grey);
   margin-bottom: 16px;
 
+  transition: var(--effectDuration);
+
+  &:hover {
+    color: var(--btn-show-more-hover);
+  }
+`;
+
+export const contactLinkEmail = css`
+  font-family: Fixel;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 32px;
+  color: var(--text-light-grey);
+  margin-bottom: 16px;
   transition: var(--effectDuration);
 
   &:hover {
