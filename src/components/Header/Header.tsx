@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
-
+import { NavLink, useNavigate } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as CartIcon } from "../../assets/icons/shopping_bag.svg";
 import { ReactComponent as BurgerMenu } from "../../assets/icons/menu.svg";
@@ -45,18 +44,9 @@ const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
 const Header = () => {
   const checkExpiration = useCheckTokenExpiration();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { id } = useParams();
+
   const dispatch = useDispatch();
-  const isAromaSchool = location.pathname === "/aroma-school";
-  const isConsultations = location.pathname === "/consultations";
-  const isStore = location.pathname === "/store";
-  const isProductDetails = location.pathname === `/store/product/${id}`;
-  const isCart = location.pathname === "/cart";
-  const isOrder = location.pathname === "/order";
-  const isAdmin = location.pathname.startsWith("/admin");
-  const isOrdered = location.pathname.startsWith("/ordered");
-  const isCertificates = location.pathname === "/certificates";
+
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
@@ -70,20 +60,7 @@ const Header = () => {
     setIsOpen((prev) => !prev);
   };
 
-  const istrue =
-    isCart ||
-    isOrder ||
-    isStore ||
-    isConsultations ||
-    isAromaSchool ||
-    isOpen ||
-    isProductDetails ||
-    isAdmin ||
-    isOrdered ||
-    isScrolled ||
-    isCertificates
-      ? "true"
-      : "false";
+  const istrue = "true";
 
   const handleScroll = () => {
     const scrollY = window.scrollY;
@@ -166,28 +143,7 @@ const Header = () => {
           </LogoLink>
           <NavWrapper>
             <Nav
-              to={"/consultations"}
-              className={({ isActive }) =>
-                isActive ? "active-link" : "inactive-link"
-              }
-              istrue={istrue}
-            >
-              Консультації
-            </Nav>
-            <Nav
-              to={"/aroma-school"}
-              className={({ isActive }) =>
-                isActive ? "active-link" : "inactive-link"
-              }
-              istrue={istrue}
-            >
-              Школа ароматерапії
-            </Nav>
-            <a href="#footer" css={anchorStyles(istrue)}>
-              Контакти
-            </a>
-            <Nav
-              to={"/store"}
+              to={"/"}
               className={({ isActive }) =>
                 isActive ? "active-link" : "inactive-link"
               }
@@ -196,14 +152,38 @@ const Header = () => {
               Магазин
             </Nav>
             <Nav
-              to={"/certificates"}
+              to={"https://fl.fraulaska.com/?wpm-page=start"}
+              className={({ isActive }) =>
+                isActive ? "active-link" : "inactive-link"
+              }
+              istrue={istrue}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Навчання
+            </Nav>            
+            <a href="#footer" css={anchorStyles(istrue)}>
+              Контакти
+            </a>
+
+            {!token &&(<Nav
+              to={"/privacy-policy"}
               className={({ isActive }) =>
                 isActive ? "active-link" : "inactive-link"
               }
               istrue={istrue}
             >
-              Сертифікати
-            </Nav>
+              Договір публичної оферти
+            </Nav>)}
+            {!token && (<Nav
+              to={"/payment-delivery"}
+              className={({ isActive }) =>
+                isActive ? "active-link" : "inactive-link"
+              }
+              istrue={istrue}
+            >
+              Доставка та оплата
+            </Nav>)}
           </NavWrapper>
           {token && show && (
             <NavLink to="admin/orders" css={addProductStyle(istrue)}>
@@ -231,7 +211,12 @@ const Header = () => {
               </Cart>
             )}
             {!token && (
-              <Links to={"/aroma-school#target-section"} istrue={istrue}>
+              <Links
+                to={"https://t.me/frau_laska"}
+                istrue={istrue}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Звʼязатись зі мною
               </Links>
             )}

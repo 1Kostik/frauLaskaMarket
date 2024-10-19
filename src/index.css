@@ -80,6 +80,23 @@
   --edit-color: #dada11e0;
 
   --effectDuration: 0.3s ease;
+
+/*ALL THE COLORS OF THE RAINBOW*/
+--red-color:#FF0000;
+--orange-color:#FFA500;
+--yellow-color: #FFFF00;
+--green-color: #008000;
+--light-blue-color: #00FFFF;
+--blue-color: #0000FF;
+--violet-color: #8B00FF;
+
+/*added new colors */
+
+--pink-color: #FFC0CB;
+--emerald-color: #50C878;
+--olive-color: #808000;
+--gold-color: #FFD700;
+--silver-color: #C0C0C0;
 }
 *,
 *::after,

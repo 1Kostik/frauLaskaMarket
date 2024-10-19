@@ -15,6 +15,7 @@ import {
   contactLink,
   copyrightContainer,
   StyledLogo,
+  contactLinkEmail,
 } from "./Footer.styled";
 
 import { ReactComponent as VisaIcon } from "/src/assets/icons/visa.svg";
@@ -26,19 +27,23 @@ const Footer = () => {
       <Container css={containerStyles}>
         <StyledLogo />
         <Nav>
-          <Link to="/consultations" css={navLinkStyle}>
-            Консультації
-          </Link>
-          <Link to="/aroma-school" css={navLinkStyle}>
-            Школа ароматерапії
-          </Link>
           <Link to="/store" css={navLinkStyle}>
             Магазин
           </Link>
-          <Link to="/cart" css={navLinkStyle}>
+          <Link
+            to={"https://fl.fraulaska.com/?wpm-page=start"}
+            css={navLinkStyle}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Навчання
+          </Link>
+          <Link to="/payment-delivery" css={navLinkStyle}>
             Доставка та оплата
           </Link>
-          <p css={navLinkStyle}>Privacy Policy</p>
+          <Link to="/privacy-policy" css={navLinkStyle}>
+            Договір публичної оферти
+          </Link>
         </Nav>
         <div css={payContainer}>
           <p css={payText}>Приймаємо до оплати:</p>
@@ -47,33 +52,52 @@ const Footer = () => {
         </div>
         <div css={contactContainer}>
           <h2>Як зі мною звʼязатись?</h2>
-          <a href="tel: +380637053806" css={contactLink}>
-            +380637053806
+          <a href="tel: +380961488848" css={contactLink}>
+            +380 96 148 88 48
           </a>
-          <a href="mailto:lana@jar.com" css={contactLink}>
-            lana@jar.com
+          <a href="mailto:Frau.association@gmail.com" css={contactLinkEmail}>
+            Frau.association@gmail.com
           </a>
           <SocialContainer>
-            <SocialLink href="https://www.instagram.com/" target="_blank">
+            <SocialLink
+              href="https://www.instagram.com/_frau_laska_?igsh=dnBibGR1OGY1bmlt"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Instagram
             </SocialLink>
-            <SocialLink href="https://www.facebook.com/" target="_blank">
+            <SocialLink
+              href="https://www.facebook.com/profile.php?id=100003581632520"
+              target="_blank"
+            >
               Facebook
             </SocialLink>
-            <SocialLink href="https://https://www.tiktok.com/" target="_blank">
+            <SocialLink
+              href="https://www.tiktok.com/@frau_laska?_t=8qdqP05iYkg&_r=1"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               TikTok
             </SocialLink>
-            <SocialLink href="viber://pa?chatURI=dimside" target="_blank">
+            <SocialLink
+              href="viber://chat?number=+380971488848"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Viber
             </SocialLink>
-            <SocialLink href="tg://resolve?domain=dimside29" target="_blank">
+            <SocialLink
+              href="https://t.me/frau_laska"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               telegram
             </SocialLink>
           </SocialContainer>
         </div>
         <div css={copyrightContainer}>
           <p css={copyrightStyle}>
-            Copyright © 2023 Перуниця Всі права захищені
+            Copyright © 2024 Перуниця Всі права захищені
           </p>
         </div>
       </Container>

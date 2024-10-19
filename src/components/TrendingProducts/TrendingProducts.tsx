@@ -13,6 +13,7 @@ import {
   arrowContainer,
   arrowLeft,
   arrowRight,
+  swiperContainer,
 } from "./TrendingProducts.styled";
 
 import { getPopularityProducts } from "@services/servicesApi";
@@ -114,6 +115,7 @@ const TrendingProducts = () => {
       </TitleWrapper>
       <ProductListContainer>
         <Swiper
+          css={swiperContainer}
           key={key}
           onSwiper={handleSwiper}
           slidesPerView={4}
@@ -121,7 +123,10 @@ const TrendingProducts = () => {
           breakpoints={{
             360: { slidesPerView: 1, spaceBetween: 10 },
             768: { slidesPerView: 2.2, spaceBetween: 10 },
-            1440: { slidesPerView: 4.2, spaceBetween: 10 },
+            1440: {
+              slidesPerView: 4.2,
+              spaceBetween: 10,
+            },
           }}
           modules={[Navigation]}
         >

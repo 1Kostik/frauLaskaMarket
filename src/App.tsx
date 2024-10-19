@@ -8,17 +8,16 @@ import Overlay from "@components/Overlay";
 import { useAppSelector } from "@redux/hooks";
 import { selectIsAuthenticated } from "@redux/auth/selectors";
 
-const MainPage = lazy(() => import("@pages/MainPage/MainPage"));
-const HealthyPage = lazy(() => import("@pages/HealthyPage/HealthyPage"));
-const AromaSchool = lazy(() => import("@pages/SchoolPage/SchoolPage"));
 const StorePage = lazy(() => import("@pages/StorePage/StorePage"));
-const CertificatesPage = lazy(
-  () => import("@pages/CertificatesPage/CertificatesPage")
-);
+
 const ProductDetails = lazy(
   () => import("@pages/ProductDetails/ProductDetails")
 );
 const CartPage = lazy(() => import("@pages/CartPage/CartPage"));
+const PrivacyPolicy = lazy(() => import("@pages/PrivacyPolicy/PrivacyPolicy"));
+const PaymentAndDelivery = lazy(
+  () => import("@pages/PaymentAndDelivery/PaymentAndDelivery")
+);
 const OrderPage = lazy(() => import("@pages/OrderPage/OrderPage"));
 const CreateAdvertPage = lazy(
   () => import("@pages/CreateAdvertPage/CreateAdvertPage")
@@ -48,11 +47,9 @@ function App() {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<StorePage />} />
-          {/* <Route path="consultations" element={<HealthyPage />} /> */}
-          {/* <Route path="certificates" element={<CertificatesPage />} /> */}
-          {/* <Route path="aroma-school" element={<AromaSchool />} /> */}
-          {/* <Route path="store" element={<StorePage />} /> */}
           <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/payment-delivery" element={<PaymentAndDelivery />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="order" element={<OrderPage />} />
           <Route path="ordered" element={<OrderedPage />} />
