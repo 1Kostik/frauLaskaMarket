@@ -16,6 +16,9 @@ import { ReactComponent as CheckedIcon } from "@assets/icons/radio-btn-checked.s
 import { ReactComponent as UncheckedIcon } from "@assets/icons/radio-btn-unchecked.svg";
 
 const colorArr = [
+  "var(--text-white)",
+  "var(--black-color)",
+  "var(--grey-color)",
   "var(--red-color)",
   "var(--orange-color)",
   "var(--yellow-color)",

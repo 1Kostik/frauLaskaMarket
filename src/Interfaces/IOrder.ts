@@ -1,6 +1,9 @@
 export interface IOrderItem {
+  id?:number;
   product_id: number;
+  full_price:number;
   count: number;
+  discount: number;
   color: string | undefined | null;
   size: number | null | undefined;
   title: string;

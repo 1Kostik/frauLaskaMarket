@@ -98,9 +98,13 @@ export const btnDelete = css`
   font-size: 14px;
   border-radius: 16px;
   background-color: #d7d7d7;
-  padding: 5px 23px;
+  padding: 5px 20px;
+  margin-right: 15px;
   transition: transform 0.3s ease;
+  & + button {
+    margin-right: 0;
+  }
   &:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 `;

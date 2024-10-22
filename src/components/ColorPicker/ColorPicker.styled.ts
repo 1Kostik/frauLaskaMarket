@@ -29,7 +29,9 @@ export const colorPickerStyle = css`
 
 export const colorsWrapper = css`
   display: flex;
-  column-gap: 10px;
+  /* column-gap: 10px; */
+  flex-wrap: wrap;
+  gap: 10px;
   & path {
     fill: var(--text-black);
   }

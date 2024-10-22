@@ -29,6 +29,7 @@ const LoginPage = lazy(() => import("@pages/LoginPage/LoginPage"));
 const OrderedPage = lazy(() => import("@pages/OrderedPage/OrderedPage"));
 const OrdersPage = lazy(() => import("@pages/OrdersPage/OrdersPage"));
 const OrderItemPage = lazy(() => import("@pages/OrderItemPage/OrderItemPage"));
+const ViewpdfPage = lazy(() => import("@pages/ViewPdfPage/ViewpdfPage"));
 
 function App() {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -53,6 +54,7 @@ function App() {
           <Route path="cart" element={<CartPage />} />
           <Route path="order" element={<OrderPage />} />
           <Route path="ordered" element={<OrderedPage />} />
+
           {isAuthenticated ? (
             <>
               <Route
@@ -65,6 +67,7 @@ function App() {
               />
               <Route path="admin/orders" element={<OrdersPage />} />
               <Route path="admin/orders/:id" element={<OrderItemPage />} />
+              <Route path="view-pdf-page" element={<ViewpdfPage />} />
             </>
           ) : (
             <Route

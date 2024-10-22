@@ -23,7 +23,7 @@ const PriceItem: React.FC<IPriceItemProps> = ({
   discount,
   style_item,
   total_cost,
-}) => {
+}) => {  
   const style_props =
     style_item === "storePage"
       ? storeStyle
