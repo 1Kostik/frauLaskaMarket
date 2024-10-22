@@ -33,7 +33,7 @@ import { ReactComponent as ArrowShortRight } from "@assets/icons/arrow-short-rig
 
 import { CardItem } from "@components/CardItem";
 
-import { StyleProps } from "@pages/MainPage/CardSliderSection/CardSliderSection";
+
 import { Feedback, ImageUrl } from "Interfaces/Product";
 import {
   handleNext,
@@ -41,6 +41,7 @@ import {
   updateButtonsVisibility,
 } from "@utils/swiperUtils";
 import { handleImgError } from "@utils/handleImgError";
+import { StyleProps } from "Interfaces/IStylesProps";
 
 export interface Itext {
   id: number;

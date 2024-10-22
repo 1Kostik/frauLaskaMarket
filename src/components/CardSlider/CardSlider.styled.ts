@@ -1,7 +1,8 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { StyleProps } from "@pages/MainPage/CardSliderSection/CardSliderSection";
+
 import { onDesktop, onTablet } from "@styles/mixins";
+import { StyleProps } from "Interfaces/IStylesProps";
 
 interface Props {
   stylesProps: StyleProps;
