@@ -1,13 +1,13 @@
 import {
   deleteOrder,
-  getOrderById,
+  // getOrderById,
   getProductById,
   updateOrder,
   updateProductCountDecrease,
   updateProductCountIncrease,
 } from "@services/servicesApi";
 import { containerStyles } from "@styles/variables";
-import { IOrder } from "Interfaces/IOrder";
+// import { IOrder } from "Interfaces/IOrder";
 import { Product } from "Interfaces/Product";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -34,15 +34,22 @@ import StatusWarningModal from "@components/StatusWarningModal/StatusWarningModa
 import { createPortal } from "react-dom";
 import { formatDate } from "@utils/formatDate";
 import { useCheckTokenExpiration } from "@hooks/useCheckTokenExpiration";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import MyDocument from "@components/MyDocument/MyDocument";
+import { useAppDispatch, useAppSelector } from "@redux/hooks";
+import { fetchOrder } from "@redux/orders/operations";
+import { RootState } from "@redux/store";
 
 const modalPortal = document.querySelector("#portal-root");
 
 const OrderItemPage = () => {
+  const dispatch = useAppDispatch();
   const checkExpiration = useCheckTokenExpiration();
   const navigate = useNavigate();
   const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [data, setData] = useState<IOrder>();
+  // const [data, setData] = useState<IOrder>();
+  const { data } = useAppSelector((state: RootState) => state.order);
   const [orderProducts, setOrderProducts] = useState<Product[]>([]);
   const [previousProductIds, setPreviousProductIds] = useState<number[]>([]);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
@@ -62,15 +69,20 @@ const OrderItemPage = () => {
 
   useEffect(() => {
     checkExpiration();
-    async function fetchOrder(id: number) {
-      const result = await getOrderById(id);
-      setData(result);
-    }
+    dispatch(fetchOrder(Number(id!)));
+  }, [dispatch, id]);
 
-    if (id) {
-      fetchOrder(+id);
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   checkExpiration();
+  //   async function fetchOrder(id: number) {
+  //     const result = await getOrderById(id);
+  //     setData(result);
+  //   }
+
+  //   if (id) {
+  //     fetchOrder(+id);
+  //   }
+  // }, [id]);
 
   useEffect(() => {
     const productIdArray: number[] =
@@ -188,6 +200,7 @@ const OrderItemPage = () => {
     await deleteOrder(id);
     navigate(-1);
   };
+
   return (
     <section style={{ height: "100vh", width: "100vw", paddingTop: "100px" }}>
       <div css={containerStyles}>
@@ -331,6 +344,14 @@ const OrderItemPage = () => {
                   onClick={() => handleDelete(Number(data?.id))}
                 >
                   Видалити
+                </button>
+                <button css={btnDelete}>
+                  <PDFDownloadLink
+                    document={<MyDocument data={data} />}
+                    fileName="товарний чек.pdf"
+                  >
+                    Завантажити фаил PDF
+                  </PDFDownloadLink>
                 </button>
               </p>
             </div>

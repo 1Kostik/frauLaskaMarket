@@ -146,11 +146,18 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (product) {
+      let minSize: number | null = null;
+
       product.variations.forEach((item: Variation) => {
         if (addedColor === item.color) {
-          setProductPrice(item.price);
-          setSelectedOption(item.size);
-          setVariationItem(item);
+          if (item.size !== null) {
+            if (minSize === null || item.size < minSize) {
+              minSize = item.size;
+              setProductPrice(item.price);
+              setSelectedOption(item.size);
+              setVariationItem(item);
+            }
+          }
         }
       });
     }
@@ -190,13 +197,13 @@ const ProductDetails = () => {
         title: product.title,
         price: productPrice,
         size: selectedOption,
-        discount: product.variations[0].discount,
+        discount: variationItem!.discount,
         img: product.imageUrls[0],
         product_code: product.product_code,
         count: 1,
         color: addedColor,
         total_cost: productPrice,
-        quantity: product.variations[0].count,
+        quantity: variationItem!.count,
       };
 
       dispatch(addToCart(productToAdd));

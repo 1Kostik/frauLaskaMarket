@@ -345,6 +345,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
   };
 
   const handleOnSubmit = (values: IAdvert) => {
+   
     checkExpiration();
     const mainImg = values.imageUrls[0];
     if (mainImg instanceof File) {
@@ -367,8 +368,9 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
             )
           : item.price,
       };
+    
     });
-
+    
     const formData = new FormData();
 
     values.imageUrls.forEach((file) => {

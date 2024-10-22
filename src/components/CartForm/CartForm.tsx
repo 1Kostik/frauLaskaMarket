@@ -145,13 +145,14 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
   };
 
   const onOrderSubmit = (values: IInitialCartFormValue) => {
-    console.log("values", values);
+  
 
     const newOrder = {
       ...replaceNullsWithEmptyStrings(values),
       order_items: orderItemsConverter(addedItems),
       call_me_back: callMeBack,
     };
+    
     if (values.payment_method === "LiqPay") {
       makeOrder(newOrder).then((resp) => {
         makePayment(resp).catch(() => navigate("/"));

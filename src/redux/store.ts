@@ -17,7 +17,11 @@ import cartReducer from "./cart/slice";
 import authReducer from "./auth/slice";
 import categoriesReducer from "./categories/slice";
 import adsReducer from "./ads/slice";
-
+import ordersSlice from "./orders/slice";
+const persistOrderConfig = {
+  key: "order",
+  storage,
+};
 const persistCartConfig = {
   key: "cart",
   storage,
@@ -37,6 +41,7 @@ const persistAdsConfig = {
 const persistedCartReducer = persistReducer(persistCartConfig, cartReducer);
 const persistedAuthReducer = persistReducer(persistAuthConfig, authReducer);
 const persistedAdsReducer = persistReducer(persistAdsConfig, adsReducer);
+const persistedOrderReducer = persistReducer(persistOrderConfig, ordersSlice);
 
 export const store = configureStore({
   reducer: {
@@ -44,6 +49,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     categories: categoriesReducer,
     ads: persistedAdsReducer,
+    order:persistedOrderReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
