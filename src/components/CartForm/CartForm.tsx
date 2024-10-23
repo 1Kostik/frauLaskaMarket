@@ -21,7 +21,6 @@ import { makeOrder } from "@services/servicesApi";
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 import { orderItemsConverter } from "@utils/orderItemsConverter";
 
-
 import { inputLabel } from "@components/AdminForm/AdminForm.styled";
 import NewPostSelect from "@components/NewPostSelect";
 
@@ -144,25 +143,24 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
     }
   };
 
-  const onOrderSubmit = (values: IInitialCartFormValue) => {
-  
-
+  const onOrderSubmit = async (values: IInitialCartFormValue) => {
     const newOrder = {
       ...replaceNullsWithEmptyStrings(values),
       order_items: orderItemsConverter(addedItems),
       call_me_back: callMeBack,
     };
-    
-    if (values.payment_method === "LiqPay") {
-      makeOrder(newOrder).then((resp) => {
-        makePayment(resp).catch(() => navigate("/"));
-      });
-    } else {
-      makeOrder(newOrder)
-        .then(() => {
-          navigate(`/ordered?email=${values.email}`);
-        })
-        .catch(() => navigate("/"));
+
+    try {
+      if (values.payment_method === "LiqPay") {
+        const resp = await makeOrder(newOrder);
+        await makePayment(resp);
+        navigate("/");
+      } else {
+        await makeOrder(newOrder);
+        navigate(`/ordered?email=${values.email}`);
+      }
+    } catch (error) {
+      console.error("Error while making order:", error);
     }
   };
 
