@@ -77,35 +77,35 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
 
   const ordercColors = (color: string) => {
     switch (color) {
-      case "var(--red-color)":
+      case "#FF0000":
         return "червоний";
-      case "var(--orange-color)":
+      case "var(#FFA500)":
         return "оранжевий";
-      case "var(--yellow-color)":
+      case "var(#FFFF00)":
         return "жовтий";
-      case "var(--green-color)":
+      case "var(#008000)":
         return "зелений";
-      case "var(--light-blue-color)":
+      case "#00FFFF":
         return "блакитний";
-      case "var(--blue-color)":
+      case "#0000FF":
         return "синій";
-      case "var(--violet-color)":
+      case "#8B00FF":
         return "фіолетовий";
-      case "var(--pink-color)":
+      case "#FFC0CB":
         return "рожевий";
-      case "var(--emerald-color)":
+      case "#50C878":
         return "смарагдовий";
-      case "var(--olive-color)":
+      case "#808000":
         return "оливковий";
-      case "var(--gold-color)":
+      case "#FFD700":
         return "золотий";
-      case "var(--silver-color)":
+      case "#C0C0C0":
         return "срібний";
-      case "var(--text-white)":
+      case "#FFFF":
         return "білий";
-      case "var(--black-color)":
+      case "#000000":
         return "чорний";
-      case "var(--grey-color)":
+      case "#808080":
         return "сірий";
     }
   };
