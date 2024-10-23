@@ -41,7 +41,7 @@ import CardSlider from "@components/CardSlider/CardSlider";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cart/slice";
 import { Feedback, Product, Variation } from "Interfaces/Product";
-import { selectCart } from "@redux/cart/selectors";
+import { selectCart, selectCartTotalQuantity } from "@redux/cart/selectors";
 import ProductInterface from "@components/ProductInterface";
 import { getProductById } from "@services/servicesApi";
 import PriceItem from "@components/PriceItem/PriceItem";
@@ -87,7 +87,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const token = useSelector(selectToken);
-
+  const totalQuantity = useAppSelector(selectCartTotalQuantity);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [productPrice, setProductPrice] = useState<number | null>(null);
   const [addedColor, setAddedColor] = useState<string | null>(null);
@@ -314,7 +314,8 @@ const ProductDetails = () => {
                     </SelectWrapper>
                   </SelectContainer>
                 )}
-                <Button onClick={handleAddToCart}>Додати до кошика</Button>
+                <Button onClick={handleAddToCart} style={{marginRight:20}}>Додати до кошика</Button>
+                {totalQuantity !== 0 && <Button onClick={()=>navigate("/cart")}>Перейти до кошика</Button>}
               </TextContainer>
             </InfoContainer>
           </Wrapper>
