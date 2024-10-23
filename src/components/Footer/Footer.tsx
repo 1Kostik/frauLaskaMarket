@@ -69,6 +69,7 @@ const Footer = () => {
             <SocialLink
               href="https://www.facebook.com/profile.php?id=100003581632520"
               target="_blank"
+               rel="noopener noreferrer"
             >
               Facebook
             </SocialLink>
