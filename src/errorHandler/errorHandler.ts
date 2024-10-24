@@ -20,4 +20,5 @@ export const handlerAxiosError = (error: unknown) => {
   } else {
     console.error("Non-Axios error:", error);
   }
+  throw error;
 };
