@@ -1,0 +1,2 @@
+import{l as o,O as s,j as t,h as e}from"./index-C641oKLp.js";import{s as i,A as c}from"./CreateAdvertPage.styled-Cly3brGP.js";import"./index.esm-CjI4zg9W.js";import"./AdminForm.styled-xYOrVovV.js";import"./Modal-BUhM34K4.js";import"./index.browser-DP16PUbO.js";import"./arrow-down-select-Bh-MySUy.js";import"./index-C5iM7ZWM.js";const f=()=>{const r=o(s);return t("section",{css:i,children:t("div",{css:e,children:t(c,{product:r})})})};export{f as default};
+//# sourceMappingURL=EditAdvertPage-BynO_B-N.js.map
