@@ -1047,9 +1047,11 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                   type="button"
                                   onClick={() => {
                                     remove(i);
-                                    deleteProductFeedbackById(
-                                      Number(feedbacks[i].id)
-                                    );
+                                    product &&
+                                      feedbacks[i].id &&
+                                      deleteProductFeedbackById(
+                                        Number(feedbacks[i].id)
+                                      );
                                   }}
                                 >
                                   <FaRegTrashAlt css={trashCan} />
