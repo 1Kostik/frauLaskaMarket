@@ -3,6 +3,7 @@ import { inputFieldStyle } from "@components/AdminForm/AdminForm.styled";
 
 export const selectContainer = css`
   position: relative;
+  width: 100%;
 `;
 
 export const selectorStyle = (isShowDropdown: boolean) => css`
@@ -10,8 +11,10 @@ export const selectorStyle = (isShowDropdown: boolean) => css`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: default;
 
   & .arrow {
+    display: flex;
     transform: ${isShowDropdown ? "rotate(180deg)" : "rotate(0deg)"};
   }
 `;

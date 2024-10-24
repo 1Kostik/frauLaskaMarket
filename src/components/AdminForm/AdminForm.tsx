@@ -39,6 +39,7 @@ import {
   variationsContainer,
   variationWrapper,
   inputLabel,
+  sizeWrapper,
 } from "./AdminForm.styled";
 import { errorBorder } from "@components/CartForm/CartForm.styled";
 
@@ -65,7 +66,7 @@ import {
 
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
 import { handleNumericInput } from "@utils/handleNumericInput";
-import { fullPriceProduct } from "@utils/fullPriceProduct";
+import { modifiedProduct } from "@utils/modifiedProduct";
 
 import { useCheckTokenExpiration } from "@hooks/useCheckTokenExpiration";
 
@@ -86,12 +87,13 @@ const initialValues: IAdvert = {
   benefit: "",
   description: "",
 
-  variations: [{ size: "", price: "", count: "", color: "", discount: "" }],
+  variations: [
+    { size: "", units: "", price: "", count: "", color: "", discount: "" },
+  ],
 
   feedbacks: [{ name: "", profession: "", review: "" }],
 
   popularity: "",
-  ranking: "",
 
   newCategory: "",
 };
@@ -112,6 +114,31 @@ const validationSchema = Yup.object({
       count: Yup.mixed().required("Кількість обов'язкова"),
       colors: Yup.string(),
       size: Yup.mixed(),
+      units: Yup.string()
+        .test(
+          "is-size-field-filled",
+          "Виберіть одиницю виміру",
+          function (units, context) {
+            const { size } = context.parent;
+            const isSizeFieldFilled = size !== undefined && size !== "";
+            if (isSizeFieldFilled && (!units || units.trim() === "")) {
+              return false;
+            }
+            return true;
+          }
+        )
+        .test(
+          "units-must-match",
+          "Одиниці повинні співпадати у всіх варіаціях",
+          function (units, context) {
+            const allVariations = context.options.context?.variations;
+            const firstUnits = allVariations[0]?.units;
+            if (firstUnits && units !== firstUnits) {
+              return false;
+            }
+            return true;
+          }
+        ),
     })
   ),
 
@@ -326,9 +353,10 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     });
   };
 
-  const handleShowSize = (index: number) => {
+  const handleShowSize = (index: number, formik: FormikProps<IAdvert>) => {
     setIsShowAddSize((prev: number[]) => {
       if (prev.includes(index)) {
+        formik.values.variations[index].size = "";
         return prev.filter((item) => item !== index);
       } else {
         return [...prev, index];
@@ -345,7 +373,6 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
   };
 
   const handleOnSubmit = (values: IAdvert) => {
-   
     checkExpiration();
     const mainImg = values.imageUrls[0];
     if (mainImg instanceof File) {
@@ -356,21 +383,20 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     }
     delete values.newCategory;
     values.popularity = 1;
-    values.ranking = 1;
-
     values.variations = values.variations.map((item) => {
+      const { units, ...rest } = item;
       return {
-        ...item,
+        ...rest,
         price: item.discount
           ? Math.round(
               Number(item.price) -
                 (Number(item.discount) / 100) * Number(item.price)
             )
           : item.price,
+        size: item.size !== "" ? item.size + " " + units : item.size,
       };
-    
     });
-    
+
     const formData = new FormData();
 
     values.imageUrls.forEach((file) => {
@@ -427,7 +453,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     }
   };
 
-  const productWithFullPrices = product && fullPriceProduct(product);
+  const productWithFullPrices = product && modifiedProduct(product);
 
   return (
     <>
@@ -484,7 +510,8 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                         <div className="errorContainer">
                           <CustomSelect
                             formik={formik}
-                            selectedCategoryId={product?.category_id}
+                            selectedValueId={product?.category_id}
+                            selectType="categoryType"
                           />
                           <ErrorMessage name="category_id">
                             {(msg) => <div css={errorStyle}>{msg}</div>}
@@ -772,7 +799,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                     <Field
                                       name={`variations.${index}.count`}
                                       type="text"
-                                      placeholder="Кількість"
+                                      placeholder="Кількість товару"
                                       id={`variations${index}.count`}
                                       onFocus={() => {
                                         setFieldError(
@@ -796,7 +823,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                         !!formik.values.variations[index].count
                                       )}
                                     >
-                                      Кількість
+                                      Кількість товару
                                     </p>
                                     <ErrorMessage
                                       name={`variations.${index}.count`}
@@ -831,33 +858,68 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                   )}
 
                                   {isShowAddSize.includes(index) && (
-                                    <label
-                                      htmlFor={`variations${index}.size`}
-                                      className="errorContainer"
-                                    >
-                                      <Field
-                                        name={`variations.${index}.size`}
-                                        type="text"
-                                        placeholder="Об'єм"
-                                        id={`variations${index}.size`}
-                                        onKeyPress={handleNumericInput}
-                                        css={[inputFieldStyle]}
-                                      />
-                                      <p
-                                        css={inputLabel(
-                                          !!formik.values.variations[index].size
-                                        )}
+                                    <div css={sizeWrapper}>
+                                      <label
+                                        htmlFor={`variations${index}.size`}
+                                        className="errorContainer"
                                       >
-                                        Об'єм
-                                      </p>
-                                    </label>
+                                        <Field
+                                          name={`variations.${index}.size`}
+                                          type="text"
+                                          placeholder="Кількість одиниць виміру"
+                                          id={`variations${index}.size`}
+                                          onKeyPress={handleNumericInput}
+                                          css={[inputFieldStyle]}
+                                        />
+                                        <p
+                                          css={inputLabel(
+                                            !!formik.values.variations[index]
+                                              .size
+                                          )}
+                                        >
+                                          Кількість одиниць виміру
+                                        </p>
+                                      </label>
+
+                                      <div className="errorContainer">
+                                        <CustomSelect
+                                          formik={formik}
+                                          selectType="unitsType"
+                                          index={index}
+                                          items={[
+                                            { id: "мл", title: "мл" },
+                                            { id: "гр", title: "гр" },
+                                            { id: "шт", title: "шт" },
+                                          ]}
+                                          selectedValueId={
+                                            product?.variations[index].size
+                                          }
+                                        />
+                                        <ErrorMessage
+                                          name={`variations.${index}.units`}
+                                        >
+                                          {(msg) => (
+                                            <div css={errorStyle}>{msg}</div>
+                                          )}
+                                        </ErrorMessage>
+                                      </div>
+                                    </div>
                                   )}
                                   <button
                                     type="button"
                                     css={buttonStyle}
-                                    onClick={() => handleShowSize(index)}
+                                    onClick={() =>
+                                      handleShowSize(index, formik)
+                                    }
                                   >
-                                    <p>Додати обʼєм</p> <FiPlus />
+                                    <p>
+                                      {isShowAddSize.includes(index)
+                                        ? "Приховати"
+                                        : "Додати обʼєм / вагу / кількість"}
+                                    </p>
+                                    {!isShowAddSize.includes(index) && (
+                                      <FiPlus />
+                                    )}
                                   </button>
                                 </div>
 

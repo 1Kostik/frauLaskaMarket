@@ -218,6 +218,15 @@ export const variationWrapper = css`
   width: 100%;
 `;
 
+export const sizeWrapper =css`
+display: flex;
+column-gap: 20px;
+
+& label, div {
+  width: 100%;
+}
+`
+
 export const reviewsContainer = css`
   display: flex;
   flex-direction: column;
