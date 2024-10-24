@@ -26,13 +26,13 @@ import {
   Title,
   Description,
   DescriptionContainer,
-  DeliveryInfoContainer,
-  Span,
+  // DeliveryInfoContainer,
+  // Span,
   ContainerTopSeller,
   checkedColor,
   titleH2,
 } from "./ProductDetails.styled";
-import { LuArrowLeft } from "react-icons/lu";
+import { IoArrowBack } from "react-icons/io5";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { containerStyles } from "@styles/variables";
 import SortingItems from "@components/SortingItems/SortingItems";
@@ -48,6 +48,7 @@ import PriceItem from "@components/PriceItem/PriceItem";
 import { useSelector } from "react-redux";
 import { selectToken } from "@redux/auth/selectors";
 import TrendingProducts from "@components/TrendingProducts/TrendingProducts";
+import { extractUnitTypeTitle } from "@utils/extractUnitTypeTitle";
 
 const ProductDetailsProps = {
   container: {
@@ -106,6 +107,8 @@ const ProductDetails = () => {
     Array.from(
       new Set(product.variations.map((item: Variation) => item.color))
     );
+  const isColors = !!colors?.find((item) => item !== null);
+
   const benefit = product && product.benefit;
   const composition = product && product.composition.toLowerCase();
   const product_code = product && product.product_code;
@@ -169,6 +172,11 @@ const ProductDetails = () => {
           .map((item: Variation) => item.size)
           .filter((size): size is number => size !== null)
       : null;
+  console.log("options :>> ", options);
+  const unitType =
+    options &&
+    options.length > 0 &&
+    options[0].toString().replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "");
 
   const isOptions = options && options.length > 0 ? true : false;
 
@@ -224,7 +232,7 @@ const ProductDetails = () => {
           <Wrapper>
             <NavContainer>
               <ButtonBack onClick={handleBackClick}>
-                <LuArrowLeft css={svgArrowBack} />
+                <IoArrowBack css={svgArrowBack} />
               </ButtonBack>
               <H2>Магазин</H2>
               <MdOutlineKeyboardArrowRight css={svgArrowRight} />
@@ -258,7 +266,7 @@ const ProductDetails = () => {
                   />
                 )}
                 <P3>{description}</P3>
-                {colors && colors.length > 0 && (
+                {isColors && (
                   <ColorContainer
                     isErrorMessage={message !== null}
                     isOptions={isOptions}
@@ -273,6 +281,7 @@ const ProductDetails = () => {
                               key={i}
                               style={{ background: item }}
                               onClick={() => handleAddColor(item)}
+
                             >
                               {" "}
                               {addedColor && addedColor === item ? (
@@ -301,7 +310,7 @@ const ProductDetails = () => {
                 )}
                 {isOptions && (
                   <SelectContainer>
-                    <H4>Обʼєм</H4>
+                    <H4>{unitType ? extractUnitTypeTitle(unitType) : ""}</H4>
                     <SelectWrapper>
                       <SortingItems<number>
                         options={options}
@@ -314,8 +323,14 @@ const ProductDetails = () => {
                     </SelectWrapper>
                   </SelectContainer>
                 )}
-                <Button onClick={handleAddToCart} style={{marginRight:20}}>Додати до кошика</Button>
-                {totalQuantity !== 0 && <Button onClick={()=>navigate("/cart")}>Перейти до кошика</Button>}
+                <Button onClick={handleAddToCart} style={{ marginRight: 20 }}>
+                  Додати до кошика
+                </Button>
+                {totalQuantity !== 0 && (
+                  <Button onClick={() => navigate("/cart")}>
+                    Перейти до кошика
+                  </Button>
+                )}
               </TextContainer>
             </InfoContainer>
           </Wrapper>
@@ -327,14 +342,14 @@ const ProductDetails = () => {
             <Title>Склад</Title>
             <Description>{composition}</Description>
           </DescriptionContainer>
-          <DescriptionContainer>
+          {/* <DescriptionContainer>
             <Title>Доставка</Title>
             <DeliveryInfoContainer>
               <Span>Самовивіз</Span>
               <Span> Доставимо протягом тижня</Span>
               <Span>Безкоштовно</Span>
             </DeliveryInfoContainer>
-          </DescriptionContainer>
+          </DescriptionContainer> */}
           {feedBacks.length > 0 && (
             <div style={{ background: "#252525" }}>
               <CardSlider

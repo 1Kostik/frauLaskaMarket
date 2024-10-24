@@ -19,14 +19,12 @@ export const Container = styled.div<Props>`
       width: ${widthContainer
         ? widthContainer
         : `calc((100% - ((${show ? 1 : 3}) - 1) * 10px) / ${show ? 1 : 2})`};
-      height: 391px;
     `)}
   ${({ show, widthContainer }) =>
     onDesktop(css`
       width: ${widthContainer
         ? widthContainer
         : `calc((100% - ((${show ? 3 : 4}) - 1) * 20px) / ${show ? 3 : 4})`};
-      height: 396px;
     `)}
     
     &:hover {
@@ -87,6 +85,9 @@ export const interfaceStyle = css`
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  padding: 0 5px 5px 5px;
   gap: 4px;
 `;
 

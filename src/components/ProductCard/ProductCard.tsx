@@ -39,7 +39,7 @@ const ProductCard: React.FC<Props> = ({
 }) => {
   const { id, title } = item;
   const token = useSelector(selectToken);
-  
+
   const firstImageUrl =
     "imageUrls" in item && item.imageUrls.length > 0
       ? item.imageUrls[0].img_url
@@ -65,7 +65,7 @@ const ProductCard: React.FC<Props> = ({
         id !== undefined && handleOnClickCard && handleOnClickCard(id)
       }
     >
-      <div>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <ImageContainer>
           <img
             src={firstImageUrl}
