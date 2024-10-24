@@ -71,7 +71,7 @@ export const patchCategory = async ({
   id,
   name,
 }: {
-  id: number;
+  id: number | string;
   name: string;
 }) => {
   getAuth();
@@ -83,7 +83,7 @@ export const patchCategory = async ({
   }
 };
 
-export const deleteCategory = async (id: number) => {
+export const deleteCategory = async (id: number | string) => {
   getAuth();
   try {
     const { data } = await axios.delete(`categories/${id}`);

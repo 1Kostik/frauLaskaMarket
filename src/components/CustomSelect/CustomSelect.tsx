@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { FormikProps } from "formik";
+import { FormikErrors, FormikProps } from "formik";
 import { nanoid } from "nanoid";
 
 import { RiDeleteBin2Line } from "react-icons/ri";
@@ -20,7 +20,7 @@ import {
   selectorStyle,
 } from "./CustomSelect.styled";
 
-import { IAdvert } from "Interfaces/IAdvert";
+import { IAdvert, IVariation } from "Interfaces/IAdvert";
 import { ICategory } from "Interfaces/ICategory";
 
 import Modal from "@components/Modal";
@@ -32,7 +32,10 @@ const modalPortal = document.querySelector("#portal-root");
 
 interface ICustomSelectProps {
   formik: FormikProps<IAdvert>;
-  selectedCategoryId?: number | string;
+  selectedValueId?: number | string;
+  selectType: string;
+  items?: { id: string; title: string }[];
+  index?: number;
 }
 
 interface IEditAction {
@@ -42,17 +45,23 @@ interface IEditAction {
 
 const CustomSelect: React.FC<ICustomSelectProps> = ({
   formik,
-  selectedCategoryId,
+  selectedValueId,
+  selectType,
+  items,
+  index,
 }) => {
   const [isShowDropdown, setIsShowDropdown] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<
+  const [selectedValue, setSelectedValue] = useState<
     number | string | undefined
-  >(selectedCategoryId);
+  >(
+    typeof selectedValueId === "string"
+      ? selectedValueId.split(" ")[1]
+      : selectedValueId
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editAction, setEditAction] = useState<IEditAction | undefined>(
     undefined
   );
-
   const { setFieldError, setFieldValue, errors, touched } = formik;
 
   const dispatch = useAppDispatch();
@@ -64,22 +73,28 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
   };
 
   const categoryId = (name: string) => {
-    return categories.find((item) => item.title === name)?.id || 0;
+    return (
+      (items ? items : categories).find((item) => item.title === name)?.id || 0
+    );
   };
 
   const handleOptionClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const categoryName = (e.target as HTMLDivElement).innerText;
-    setSelectedCategory(categoryId(categoryName));
+    setSelectedValue(categoryId(categoryName));
     setTimeout(() => {
       setIsShowDropdown(false);
     }, 300);
   };
 
   const handleShowCategory = () => {
-    if (selectedCategory) {
-      return categories.find((item) => item.id === selectedCategory)?.title;
+    if (selectedValue) {
+      return (items ? items : categories).find(
+        (item) => item.id === selectedValue
+      )?.title;
     }
-    return "Оберіть категорію";
+    return selectType === "unitsType"
+      ? "Оберіть одиницю виміру"
+      : "Оберіть категорію";
   };
 
   const handleEditCategory = (category: string, type: string) => {
@@ -104,11 +119,24 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
   };
 
   useEffect(() => {
-    if (selectedCategory) {
-      setFieldValue("category_id", selectedCategory);
+    if (
+      selectType === "unitsType" &&
+      formik.values.variations[0].units !== ""
+    ) {
+      setSelectedValue(formik.values.variations[0].units);
+    }
+  }, [formik.values.variations, selectType]);
+
+  useEffect(() => {
+    if (selectedValue) {
+      if (selectType === "categoryType") {
+        setFieldValue("category_id", selectedValue);
+      } else {
+        setFieldValue(`variations.${index}.units`, selectedValue);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory]);
+  }, [selectedValue]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -137,7 +165,14 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
         data-dropdown-trigger
         css={[
           selectorStyle(isShowDropdown),
-          errorBorder(!!(errors.category_id && touched.category_id)),
+          index !== undefined && selectType !== "categoryType"
+            ? errorBorder(
+                !!(
+                  (errors.variations?.[index] as FormikErrors<IVariation>)
+                    ?.units && touched.variations?.[index]?.units
+                )
+              )
+            : errorBorder(!!(errors.category_id && touched.category_id)),
         ]}
       >
         <p>{handleShowCategory()}</p>
@@ -147,26 +182,29 @@ const CustomSelect: React.FC<ICustomSelectProps> = ({
       </div>
       {isShowDropdown && (
         <div data-options css={dropdownStyle} onClick={handleOptionClick}>
-          {categories.map((item) => (
+          {(items ? items : categories).map((item) => (
             <div key={nanoid()}>
-              {selectedCategory === item.id && (
-                <FaCheck className="checkIcon" />
-              )}
+              {selectedValue === item.id && <FaCheck className="checkIcon" />}
               <p>{item.title}</p>
-              <button
-                type="button"
-                className="editBtn"
-                onClick={() => handleEditCategory(item.title, "change")}
-              >
-                <FaRegEdit />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleEditCategory(item.title, "delete")}
-                className="deleteBtn"
-              >
-                <RiDeleteBin2Line />
-              </button>
+
+              {selectType === "categoryType" && (
+                <>
+                  <button
+                    type="button"
+                    className="editBtn"
+                    onClick={() => handleEditCategory(item.title, "change")}
+                  >
+                    <FaRegEdit />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleEditCategory(item.title, "delete")}
+                    className="deleteBtn"
+                  >
+                    <RiDeleteBin2Line />
+                  </button>
+                </>
+              )}
             </div>
           ))}
         </div>

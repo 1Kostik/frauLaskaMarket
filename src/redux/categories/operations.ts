@@ -49,7 +49,7 @@ export const createCategory = createAsyncThunk(
 
 export const removeCategory = createAsyncThunk(
   "category/delete",
-  async (id: number, thunkAPI) => {
+  async (id: number | string, thunkAPI) => {
     try {
       const categories = await deleteCategory(id);
       toast.success("Категорія видалена");
@@ -67,7 +67,7 @@ export const removeCategory = createAsyncThunk(
 
 export const editCategory = createAsyncThunk(
   "category/edit",
-  async ({ id, name }: { id: number; name: string }, thunkAPI) => {
+  async ({ id, name }: { id: number |string ; name: string }, thunkAPI) => {
     try {
       const categories = await patchCategory({ id, name });
       toast.success("Категорію змінено");

@@ -15,7 +15,6 @@ export interface IAdvert {
   feedbacks: IFeedback[];
 
   popularity: string | number;
-  ranking: string | number;
 
   newCategory?: string;
 }
@@ -23,6 +22,7 @@ export interface IAdvert {
 export interface IVariation {
   id?: number;
   size: number | string;
+  units?: string;
   price: number | string;
   count: number | string;
   color: string;
