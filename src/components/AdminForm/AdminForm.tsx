@@ -384,16 +384,14 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
     delete values.newCategory;
     values.popularity = 1;
     values.variations = values.variations.map((item) => {
-      const { units, ...rest } = item;
       return {
-        ...rest,
+        ...item,
         price: item.discount
           ? Math.round(
               Number(item.price) -
                 (Number(item.discount) / 100) * Number(item.price)
             )
           : item.price,
-        size: item.size !== "" ? item.size + " " + units : item.size,
       };
     });
 
@@ -427,10 +425,20 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                     typeof objValue === "number"
                   ) {
                     if (objKey === "img_url") continue;
-                    formData.append(
-                      `${key}[${index}][${objKey}]`,
-                      objValue.toString()
-                    );
+                    if (objKey === "units") continue;
+                    if (objKey === "size") {
+                      formData.append(
+                        `${key}[${index}][${objKey}]`,
+                        objValue.toString() +
+                          " " +
+                          values.variations[index].units
+                      );
+                    } else {
+                      formData.append(
+                        `${key}[${index}][${objKey}]`,
+                        objValue.toString()
+                      );
+                    }
                   }
                 }
               }
@@ -892,7 +900,7 @@ const AdminForm: React.FC<IAdminFormProps> = ({ product }) => {
                                             { id: "шт", title: "шт" },
                                           ]}
                                           selectedValueId={
-                                            product?.variations[index].size
+                                            product?.variations[index]?.size
                                           }
                                         />
                                         <ErrorMessage
