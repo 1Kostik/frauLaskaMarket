@@ -19,6 +19,7 @@ import {
 import { ReactComponent as Close } from "@assets/icons/close2.svg";
 
 import PriceItem from "@components/PriceItem/PriceItem";
+import { extractUnitTypeTitle } from "@utils/extractUnitTypeTitle";
 
 import { handleImgError } from "@utils/handleImgError";
 
@@ -45,6 +46,9 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
   handleRemove,
   isOrderPage,
 }) => {
+  const unitType =
+    item.size && item.size.toString().replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "");
+
   return (
     <ItemInfoContainer width={width}>
       <ImgContainer>
@@ -65,7 +69,11 @@ const CartItemCard: React.FC<ICartItemCardProps> = ({
         </InfoTitle>
         <div css={typeWrapper(item.color)}>
           {item.color && <p className="color">Колір: </p>}
-          {item.size && <p className="size">Об'єм: {item.size} мл</p>}
+          {item.size && (
+            <p className="size">
+              {unitType ? extractUnitTypeTitle(unitType) : ""}: {item.size}
+            </p>
+          )}
         </div>
         <P>Код товару: №{item.product_code}</P>
         <PriceContainer>

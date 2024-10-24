@@ -1,13 +1,11 @@
 import {
   deleteOrder,
-  // getOrderById,
   getProductById,
   updateOrder,
   updateProductCountDecrease,
   updateProductCountIncrease,
 } from "@services/servicesApi";
 import { containerStyles } from "@styles/variables";
-// import { IOrder } from "Interfaces/IOrder";
 import { Product } from "Interfaces/Product";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -48,7 +46,6 @@ const OrderItemPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [data, setData] = useState<IOrder>();
   const { data } = useAppSelector((state: RootState) => state.order);
   const [orderProducts, setOrderProducts] = useState<Product[]>([]);
   const [previousProductIds, setPreviousProductIds] = useState<number[]>([]);
@@ -71,18 +68,6 @@ const OrderItemPage = () => {
     checkExpiration();
     dispatch(fetchOrder(Number(id!)));
   }, [dispatch, id]);
-
-  // useEffect(() => {
-  //   checkExpiration();
-  //   async function fetchOrder(id: number) {
-  //     const result = await getOrderById(id);
-  //     setData(result);
-  //   }
-
-  //   if (id) {
-  //     fetchOrder(+id);
-  //   }
-  // }, [id]);
 
   useEffect(() => {
     const productIdArray: number[] =
@@ -149,6 +134,7 @@ const OrderItemPage = () => {
   const variation_ids = productsForRender.map((item) => {
     return { id: item!.variation_id, count: item!.quantity };
   });
+
   useEffect(() => {
     async function IncreaseCountProduct(id: number, count: number) {
       await updateProductCountIncrease(id, count);
@@ -189,6 +175,7 @@ const OrderItemPage = () => {
   async function updateStatus(orderId: number, status: string) {
     await updateOrder(orderId, status);
   }
+
   const handleUpdateStatus = (id: number) => {
     if (id && status === "Відхилено") {
       setDisableOrder(true);
@@ -196,6 +183,7 @@ const OrderItemPage = () => {
       navigate(-1);
     }
   };
+
   const handleDelete = async (id: number) => {
     await deleteOrder(id);
     navigate(-1);

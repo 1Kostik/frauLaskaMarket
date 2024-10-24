@@ -55,7 +55,6 @@ interface MyDocumentProps {
 }
 
 const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
-  console.log("data :>> ", data);
   const {
     order_items,
     delivery_city,
@@ -71,7 +70,6 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
     recipient_last_name,
     recipient_name,
     recipient_phone,
-    // status,
     total_amount,
   } = data!;
 
@@ -109,6 +107,12 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
         return "сірий";
     }
   };
+  const unitType =
+    data &&
+    data.order_items[0].size &&
+    data.order_items[0].size.toString().replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "");
+
+  const visibleUnitType = unitType === "шт" ? "" : "шт";
 
   const date = new Date(order_date);
   return (
@@ -244,7 +248,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
                   },
                 ]}
               >
-                <Text style={styles.tableCell}>{item.size}мл/гр</Text>
+                <Text style={styles.tableCell}>{item.size}</Text>
               </View>
               <View
                 style={[
@@ -257,7 +261,10 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
                   },
                 ]}
               >
-                <Text style={styles.tableCell}>{item.count}шт</Text>
+                <Text style={styles.tableCell}>
+                  {item.count}
+                  {visibleUnitType}
+                </Text>
               </View>
               <View
                 style={[

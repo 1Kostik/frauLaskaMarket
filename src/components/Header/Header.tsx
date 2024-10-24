@@ -161,29 +161,33 @@ const Header = () => {
               rel="noopener noreferrer"
             >
               Навчання
-            </Nav>            
+            </Nav>
             <a href="#footer" css={anchorStyles(istrue)}>
               Контакти
             </a>
 
-            {!token &&(<Nav
-              to={"/privacy-policy"}
-              className={({ isActive }) =>
-                isActive ? "active-link" : "inactive-link"
-              }
-              istrue={istrue}
-            >
-              Договір публичної оферти
-            </Nav>)}
-            {!token && (<Nav
-              to={"/payment-delivery"}
-              className={({ isActive }) =>
-                isActive ? "active-link" : "inactive-link"
-              }
-              istrue={istrue}
-            >
-              Доставка та оплата
-            </Nav>)}
+            {!token && (
+              <Nav
+                to={"/privacy-policy"}
+                className={({ isActive }) =>
+                  isActive ? "active-link" : "inactive-link"
+                }
+                istrue={istrue}
+              >
+                Договір публичної оферти
+              </Nav>
+            )}
+            {!token && (
+              <Nav
+                to={"/payment-delivery"}
+                className={({ isActive }) =>
+                  isActive ? "active-link" : "inactive-link"
+                }
+                istrue={istrue}
+              >
+                Доставка та оплата
+              </Nav>
+            )}
           </NavWrapper>
           {token && show && (
             <NavLink to="admin/orders" css={addProductStyle(istrue)}>

@@ -66,20 +66,23 @@ export const ImageContainer = styled.div`
 export const NavContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
   gap: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 50px;
 `;
 
 export const ButtonBack = styled.button`
-  width: 40px;
-  height: 40px;
-  padding: 10px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  transition: var(--effectDuration);
+  &:hover {
+    transform: scale(1.2);
+  }
 `;
 
 export const svgArrowBack = css`
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   color: var(--bg-light-grey);
 `;
 
@@ -234,13 +237,13 @@ export const H4 = styled.h4`
   width: 80px;
   color: var(--text-light-grey);
   font-family: Fixel;
-  font-size: 12px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.1px;
   ${onDesktop(css`
-    font-size: 14px;
+    font-size: 20px;
   `)}
 `;
 
@@ -266,6 +269,10 @@ export const Li = styled.li`
   height: 20px;
   padding: 10px;
   border-radius: 50%;
+  transition: var(--effectDuration);
+  &:hover {
+    transform: scale(1.1);
+  }
   cursor: pointer;
 `;
 
@@ -289,6 +296,10 @@ export const Button = styled.button`
   background: var(--bg-light-grey);
   padding: 10px 16px;
   gap: 8px;
+  transition: var(--effectDuration);
+  &:hover {
+    transform: scale(1.1);
+  }
   ${onDesktop(css`
     font-size: 14px;
   `)}
