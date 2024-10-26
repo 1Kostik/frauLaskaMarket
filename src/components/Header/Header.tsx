@@ -138,12 +138,12 @@ const Header = () => {
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
         <Wrapper>
-          <LogoLink to={"/"}>
+          <LogoLink to={"/store"}>
             <LogoIcon istrue={istrue} />
           </LogoLink>
           <NavWrapper>
             <Nav
-              to={"/"}
+              to={"/store"}
               className={({ isActive }) =>
                 isActive ? "active-link" : "inactive-link"
               }

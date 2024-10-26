@@ -20,39 +20,47 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
-import { getProductsAndSorted } from "@services/servicesApi";
-import { getSavedFilter } from "@utils/getSavedFilter";
+import { getCheckedItems, getProductsAndSorted } from "@services/servicesApi";
+import {
+  getSavedCheckedItems,
+  getSavedIsOpenFilter,
+} from "@utils/getSavedFilter";
 
 interface SavedFilter {
   id: string;
   productsId: string[];
 }
+
 function StorePage() {
   const navigate = useNavigate();
+
   const [searchParams, setSearchParams] = useSearchParams();
+
   const params = useMemo(
     () => Object.fromEntries([...searchParams]),
     [searchParams]
   );
+
   const { sortOrder = "ASC", sortField = "price", page } = params;
 
+  const savedFilteredItemsId = () => {
+    return getSavedCheckedItems().map((item: SavedFilter) => ({
+      categoryId: item.id.toString(),
+      productId: item.productsId.join(","),
+    }));
+  };
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredItemsId, setFilteredItemsId] = useState<
+    Record<string, string>[]
+  >(savedFilteredItemsId() || []);
   const [openFilter, setOpenFilter] = useState(false);
-  const [openSearch, setOpenSearch] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(Number(page || 1));
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+  const [openSearch, setOpenSearch] = useState(false);
   const [searchItem, setSearchItem] = useState<string>("");
-  const [products, setProducts] = useState<Product[]>([]);
-
-  const savedFilteredItemsId = getSavedFilter().map((item: SavedFilter) => ({
-    categoryId: item.id.toString(),
-    productId: item.productsId.join(","),
-  }));
-  const [filteredItemsId, setFilteredItemsId] =
-    useState<Record<string, string>[]>(savedFilteredItemsId);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [totalPage, setTotalPage] = useState<number>(0);
-
   const [isAdvertDeleted, setIsAdvertDeleted] = useState(false);
 
   const countItemPages = 12;
@@ -60,11 +68,53 @@ function StorePage() {
 
   const options = [
     "Від найменшої ціни до найбільшої",
-    "Від найбільшої ціни до найменшої",    
+    "Від найбільшої ціни до найменшої",
     "За популярністю",
   ];
 
   const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      setFilteredItemsId(savedFilteredItemsId());
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const checkedItemsArr: number[] = [];
+      const openedCategories: { [key: string]: boolean } = {};
+      searchParams.forEach((value, key) => {
+        if (key.includes("categoryId")) {
+          sessionStorage.setItem("savedOpenFilter", JSON.stringify(true));
+          openedCategories[value] = true;
+        }
+        if (key.includes("productId")) {
+          checkedItemsArr.push(Number(value));
+        }
+      });
+      const checkedItems =
+        checkedItemsArr.length > 0 && (await getCheckedItems(checkedItemsArr));
+
+      sessionStorage.setItem(
+        "savedFilterState",
+        JSON.stringify({
+          openCategories: openedCategories,
+          checkedItems,
+        })
+      );
+    };
+
+    fetchData();
+  }, [searchParams]);
+
+  useEffect(() => {
+    getSavedIsOpenFilter() && setOpenFilter(getSavedIsOpenFilter());
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem("savedOpenFilter", JSON.stringify(openFilter));
+  }, [openFilter]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -74,7 +124,7 @@ function StorePage() {
           break;
         case `sortOrder=DESC&sortField=price`:
           setTypeOfSort("Від найбільшої ціни до найменшої");
-          break;      
+          break;
         case `sortOrder=DESC&sortField=popularity`:
           setTypeOfSort("За популярністю");
           break;
@@ -110,7 +160,7 @@ function StorePage() {
         break;
       case "Від найбільшої ціни до найменшої":
         updateSearchParams({ sortOrder: "DESC", sortField: "price" });
-        break;     
+        break;
       case "За популярністю":
         updateSearchParams({ sortOrder: "DESC", sortField: "popularity" });
         break;
@@ -169,7 +219,7 @@ function StorePage() {
       try {
         const result = await getProductsAndSorted(
           searchParamsString.toString()
-        );        
+        );
         setTotalPage(Number(result.total_products));
         setProducts(result.productData);
       } catch (error) {
@@ -229,7 +279,7 @@ function StorePage() {
     setOpenFilter((prev) => !prev);
   };
   const handleOnClickCard = (id: number) => {
-    navigate(`product/${id}`);
+    navigate(`/product/${id}`);
   };
 
   return (
@@ -242,6 +292,7 @@ function StorePage() {
               <StoreFilter
                 closeFilter={setOpenFilter}
                 setFilteredItemsId={setFilteredItemsId}
+                setCurrentPage={setCurrentPage}
               />
             )}
             <Container>

@@ -8,8 +8,11 @@ const ClearLocalStorageOnNavigate = () => {
 
   useEffect(() => {
     checkExpiration();
-    if (location.pathname !== "/store") {
-      localStorage.removeItem("filter");
+    if (
+      !location.pathname.includes("product") &&
+      !location.pathname.includes("store")
+    ) {
+      sessionStorage.clear();
     }
   }, [location]);
 

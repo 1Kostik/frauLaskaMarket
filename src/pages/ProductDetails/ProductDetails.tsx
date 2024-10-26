@@ -172,7 +172,7 @@ const ProductDetails = () => {
           .map((item: Variation) => item.size)
           .filter((size): size is number => size !== null)
       : null;
-  console.log("options :>> ", options);
+
   const unitType =
     options &&
     options.length > 0 &&
@@ -281,7 +281,6 @@ const ProductDetails = () => {
                               key={i}
                               style={{ background: item }}
                               onClick={() => handleAddColor(item)}
-
                             >
                               {" "}
                               {addedColor && addedColor === item ? (
