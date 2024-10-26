@@ -10,7 +10,7 @@ import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
 import { IOrderCreation } from "Interfaces/IOrderCreation";
 
-axios.defaults.baseURL = "https://perunitsa.com/api/";
+axios.defaults.baseURL = "http://localhost:8081/api/";
 
 axios.defaults.headers.common["Accept"] = "application/json";
 
@@ -243,6 +243,7 @@ export const getOrders = async (queryParams: string) => {
     handlerAxiosError(error);
   }
 };
+
 export const getOrderById = async (id: number) => {
   getAuth();
   try {
@@ -263,6 +264,7 @@ export const updateOrder = async (orderId: number, status: string) => {
     handlerAxiosError(error);
   }
 };
+
 export const updateProductCountIncrease = async (id: number, count: number) => {
   const data = {
     count,
@@ -274,6 +276,7 @@ export const updateProductCountIncrease = async (id: number, count: number) => {
     handlerAxiosError(error);
   }
 };
+
 export const updateProductCountDecrease = async (id: number, count: number) => {
   const data = {
     count,
@@ -285,6 +288,7 @@ export const updateProductCountDecrease = async (id: number, count: number) => {
     handlerAxiosError(error);
   }
 };
+
 export const deleteOrder = async (id: number) => {
   getAuth();
   try {
@@ -294,6 +298,7 @@ export const deleteOrder = async (id: number) => {
     handlerAxiosError(error);
   }
 };
+
 export const updatePaymentStatus = async (id: number) => {
   getAuth();
   try {
@@ -303,6 +308,7 @@ export const updatePaymentStatus = async (id: number) => {
     handlerAxiosError(error);
   }
 };
+
 export const getNPCities = async (cityName: string) => {
   try {
     const { data } = await axios.post("/new-post/settlements", { cityName });
@@ -311,6 +317,7 @@ export const getNPCities = async (cityName: string) => {
     handlerAxiosError(error);
   }
 };
+
 export const getWarehouses = async (cityRef: string) => {
   try {
     const { data } = await axios.post("/new-post/warehouses", { cityRef });
@@ -319,6 +326,7 @@ export const getWarehouses = async (cityRef: string) => {
     handlerAxiosError(error);
   }
 };
+
 export const getPopularityProducts = async () => {
   try {
     const { data } = await axios.get("products-popularity");
@@ -344,5 +352,14 @@ export const sendCourseNotification = async (
       console.error("Non-Axios error:", error);
       throw new Error("Non-Axios error occurred");
     }
+  }
+};
+
+export const getCheckedItems = async (idsArr: number[]) => {
+  try {
+    const { data } = await axios.post(`/categories/checked-items`, { idsArr });
+    return data;
+  } catch (error: unknown) {
+    handlerAxiosError(error);
   }
 };

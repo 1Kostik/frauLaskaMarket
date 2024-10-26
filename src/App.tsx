@@ -47,10 +47,10 @@ function App() {
       </Overlay>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
-          <Route index element={<StorePage />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/payment-delivery" element={<PaymentAndDelivery />} />
+          <Route path="store" element={<StorePage />} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="payment-delivery" element={<PaymentAndDelivery />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="order" element={<OrderPage />} />
           <Route path="ordered" element={<OrderedPage />} />
@@ -71,13 +71,13 @@ function App() {
             </>
           ) : (
             <Route
-              path="/admin/*"
+              path="admin/*"
               element={<Navigate to="/admin/login" replace />}
             />
           )}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
-        <Route path="/admin/login" element={<LoginPage />} />
+        <Route path="admin/login" element={<LoginPage />} />
       </Routes>
     </Suspense>
   );

@@ -29,7 +29,10 @@ import { useAppDispatch } from "@redux/hooks";
 import { fetchCategories } from "@redux/categories/operations";
 
 import { getCategoriesProductCount } from "@services/servicesApi";
-import { getSavedFilter } from "@utils/getSavedFilter";
+import {
+  getSavedCheckedItems,
+  getSavedOpenCategories,
+} from "@utils/getSavedFilter";
 import { CheckedItems } from "Interfaces/CheckedItems";
 import { CategoriesProductCount } from "Interfaces/CategoriesProductCount";
 import { IFilterProducts } from "Interfaces/IFilterProducts";
@@ -39,21 +42,22 @@ interface ISorteFilter {
   setFilteredItemsId: React.Dispatch<
     React.SetStateAction<Record<string, string>[]>
   >;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const StoreFilter: React.FC<ISorteFilter> = ({
   closeFilter,
   setFilteredItemsId,
+  setCurrentPage,
 }) => {
   const dispatch = useAppDispatch();
+
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
-  }>({});
+  }>(getSavedOpenCategories() || {});
   const [checkedItems, setCheckedItems] = useState<CheckedItems[]>(
-    getSavedFilter()
+    getSavedCheckedItems()
   );
-console.log('obopenCategoriesject :>> ', openCategories);
-console.log('checkedItems :>> ', checkedItems);
   const [categoriesProductCount, setCategoriesProductCount] =
     useState<CategoriesProductCount[]>();
 
@@ -62,8 +66,11 @@ console.log('checkedItems :>> ', checkedItems);
   }, [dispatch]);
 
   useEffect(() => {
-    localStorage.setItem("filter", JSON.stringify(checkedItems));
-  }, [checkedItems]);
+    sessionStorage.setItem(
+      "savedFilterState",
+      JSON.stringify({ checkedItems, openCategories })
+    );
+  }, [checkedItems, openCategories]);
 
   useEffect(() => {
     async function fetchCategoriesProductCount() {
@@ -106,6 +113,7 @@ console.log('checkedItems :>> ', checkedItems);
   };
 
   const handleClose = () => {
+    sessionStorage.clear();
     closeFilter(false);
   };
 
@@ -115,8 +123,9 @@ console.log('checkedItems :>> ', checkedItems);
       productId: item.productsId.join(","),
     }));
     setFilteredItemsId(filteredItems);
+    setCurrentPage(1);
   };
- 
+
   return (
     <FilterWrapper>
       <Container>
