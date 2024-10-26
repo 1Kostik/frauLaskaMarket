@@ -76,7 +76,9 @@ function StorePage() {
 
   useEffect(() => {
     if (isInitialMount.current) {
-      setFilteredItemsId(savedFilteredItemsId());
+      setTimeout(() => {
+        setFilteredItemsId(savedFilteredItemsId());
+      }, 400);
     }
   }, []);
 

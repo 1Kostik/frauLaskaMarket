@@ -114,6 +114,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({
 
   const handleClose = () => {
     sessionStorage.clear();
+    setFilteredItemsId([]);
     closeFilter(false);
   };
 
