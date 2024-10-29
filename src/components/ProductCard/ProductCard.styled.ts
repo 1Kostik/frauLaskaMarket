@@ -14,6 +14,7 @@ export const Container = styled.div<Props>`
   box-sizing: border-box;
   cursor: pointer;
   width: 100%;
+  transition: var(--effectDuration);
   ${({ show, widthContainer }) =>
     onTablet(css`
       width: ${widthContainer
@@ -29,7 +30,6 @@ export const Container = styled.div<Props>`
     
     &:hover {
     transform: scale(1.02);
-    transition: transform 0.3s ease;
     -webkit-box-shadow: 0px 0px 15px 2px rgba(215, 215, 215, 0.2);
     -moz-box-shadow: 0px 0px 15px 2px rgba(215, 215, 215, 0.2);
     box-shadow: 0px 0px 15px 2px rgba(215, 215, 215, 0.2);
