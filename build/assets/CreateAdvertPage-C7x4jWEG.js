@@ -1,2 +1,0 @@
-import{N as e,r as o,j as t,h as s}from"./index-f3Z1tpcS.js";import{s as i,A as a}from"./CreateAdvertPage.styled-C1L4J8lF.js";import"./index.esm-C1qNprLQ.js";import"./AdminForm.styled-BVdGt0lx.js";import"./Modal-GEOCQCwk.js";import"./index.browser-DP16PUbO.js";import"./arrow-down-select-i5s9XQqm.js";import"./index-gdG87IFw.js";const x=()=>{const r=e();return o.useEffect(()=>{r()},[]),t("section",{css:i,children:t("div",{css:s,children:t(a,{})})})};export{x as default};
-//# sourceMappingURL=CreateAdvertPage-C7x4jWEG.js.map
