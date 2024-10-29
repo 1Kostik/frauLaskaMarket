@@ -42,7 +42,7 @@ function StorePage() {
     [searchParams]
   );
 
-  const { sortOrder = "ASC", sortField = "price", page } = params;
+  const { sortOrder = "ASC", sortField = "price", page, search } = params;
 
   const savedFilteredItemsId = (): {
     categoryId: string;
@@ -206,7 +206,7 @@ function StorePage() {
       productId: initialProductIds.length > 0 ? initialProductIds : [],
       page: currentPage.toString(),
       limit: countItemPages.toString(),
-      search: searchItem.trim(),
+      search: searchItem.trim() || search,
     };
 
     const nonEmptyParams = Object.entries(newSearchParams).reduce(
