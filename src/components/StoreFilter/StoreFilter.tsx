@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   ButtonClose,
@@ -52,7 +52,6 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const isMount = useRef(true);
 
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
@@ -66,18 +65,6 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (!isMount.current) {
-      setTimeout(() => {
-        sessionStorage.setItem(
-          "savedFilterState",
-          JSON.stringify({ checkedItems, openCategories })
-        );
-      }, 100);
-    }
-    isMount.current = false;
-  }, [checkedItems, openCategories]);
 
   useEffect(() => {
     async function fetchCategoriesProductCount() {
@@ -144,6 +131,10 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   };
 
   const handleShowResult = () => {
+    sessionStorage.setItem(
+      "savedFilterState",
+      JSON.stringify({ checkedItems, openCategories })
+    );
     writeUrlFromStorage();
     setCurrentPage(1);
   };
