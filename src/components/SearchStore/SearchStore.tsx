@@ -15,6 +15,7 @@ import {
 } from "./SearchStore.styled";
 
 import { Product } from "Interfaces/Product";
+import { getSavedSearchItem } from "@utils/getSavedSearchItem";
 
 interface PropsSearch {
   isOpenSearch?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,7 +34,9 @@ const SearchStore: React.FC<PropsSearch> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [searchProduct, setSearchProduct] = useState("");
+  const [searchProduct, setSearchProduct] = useState(
+    getSavedSearchItem() || ""
+  );
   const handleOpenInput = () => {
     setIsOpen((prev) => !prev);
   };
@@ -74,6 +77,10 @@ const SearchStore: React.FC<PropsSearch> = ({
   };
   const handleSearchBtn = () => {
     if (setSearchItem && setOpenFilter) {
+      sessionStorage.setItem(
+        "savedSearchItem",
+        JSON.stringify(searchProduct.toLowerCase())
+      );
       setSearchItem(searchProduct.toLowerCase());
       setOpenFilter(false);
     }
@@ -83,6 +90,7 @@ const SearchStore: React.FC<PropsSearch> = ({
       handleSearchBtn();
     }
   };
+
   return (
     <div css={container}>
       {!isOpen && (
