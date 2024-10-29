@@ -92,45 +92,54 @@ function StorePage() {
   };
 
   useEffect(() => {
+    const delay = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
     const fetchData = async () => {
-      const checkedItemsArr: number[] = [];
-      const openedCategories: { [key: string]: boolean } = {};
-      const checkedCategories: { id: string; productsId: [] }[] = [];
+      try {
+        const checkedItemsArr: number[] = [];
+        const openedCategories: { [key: string]: boolean } = {};
+        const checkedCategories: { id: string; productsId: [] }[] = [];
 
-      searchParams.forEach((value, key) => {
-        if (key.includes("categoryId")) {
-          sessionStorage.setItem("savedOpenFilter", JSON.stringify(true));
-          checkedCategories.push({ id: value, productsId: [] });
-        }
-        if (key.includes("productId")) {
-          checkedItemsArr.push(Number(value));
-        }
-      });
-
-      const checkedItems =
-        checkedItemsArr.length > 0
-          ? await getCheckedItems(checkedItemsArr)
-          : [];
-
-      checkedItems?.forEach(
-        ({ id, productsId }: { id: string; productsId: string[] }) => {
-          if (productsId.length > 0) {
-            openedCategories[id] = true;
+        searchParams.forEach((value, key) => {
+          if (key.includes("categoryId")) {
+            sessionStorage.setItem("savedOpenFilter", JSON.stringify(true));
+            checkedCategories.push({ id: value, productsId: [] });
           }
-        }
-      );
+          if (key.includes("productId")) {
+            checkedItemsArr.push(Number(value));
+          }
+        });
 
-      sessionStorage.setItem(
-        "savedFilterState",
-        JSON.stringify({
-          openCategories: openedCategories,
-          checkedItems:
-            checkedItems.length > 0 ? checkedItems : checkedCategories,
-        })
-      );
+        const checkedItems =
+          checkedItemsArr.length > 0
+            ? await getCheckedItems(checkedItemsArr)
+            : [];
+
+        checkedItems?.forEach(
+          ({ id, productsId }: { id: string; productsId: string[] }) => {
+            if (productsId.length > 0) {
+              openedCategories[id] = true;
+            }
+          }
+        );
+
+        sessionStorage.setItem(
+          "savedFilterState",
+          JSON.stringify({
+            openCategories: openedCategories,
+            checkedItems:
+              checkedItems.length > 0 ? checkedItems : checkedCategories,
+          })
+        );
+
+        await delay(100);
+      } catch (error) {
+        console.error("Ошибка при записи в sessionStorage:", error);
+      }
     };
 
-    if (isInitialMount.current) fetchData();
+    fetchData();
   }, [searchParams]);
 
   useEffect(() => {
