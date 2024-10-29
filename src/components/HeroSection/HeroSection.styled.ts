@@ -2,12 +2,13 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { HeroSectionProps } from "./HeroSection";
 import { onDesktop, onTablet } from "@styles/mixins";
+import { motion } from "framer-motion";
 
 export const Section = styled.section<HeroSectionProps>`
   height: ${({ viewType }) => (viewType === "other" ? "auto" : "640px")};
   padding-top: 72px;
   padding-bottom: ${({ viewType }) => (viewType === "other" ? "24px" : "0")};
-
+  overflow: hidden;
   background: ${({ bgImage, viewType }) => {
     switch (viewType) {
       case "main":
@@ -36,12 +37,13 @@ export const Section = styled.section<HeroSectionProps>`
         `)}
 `;
 
-export const Container = styled.div<HeroSectionProps>`
+export const Container = styled(motion.div)<HeroSectionProps>`
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
+  overflow: hidden;
 
   ${({ viewType }) =>
     viewType === "main"
