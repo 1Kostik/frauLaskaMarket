@@ -92,9 +92,6 @@ function StorePage() {
   };
 
   useEffect(() => {
-    const delay = (ms: number) =>
-      new Promise((resolve) => setTimeout(resolve, ms));
-
     const fetchData = async () => {
       try {
         const checkedItemsArr: number[] = [];
@@ -105,8 +102,7 @@ function StorePage() {
           if (key.includes("categoryId")) {
             sessionStorage.setItem("savedOpenFilter", JSON.stringify(true));
             checkedCategories.push({ id: value, productsId: [] });
-          }
-          if (key.includes("productId")) {
+          } else if (key.includes("productId")) {
             checkedItemsArr.push(Number(value));
           }
         });
@@ -132,8 +128,6 @@ function StorePage() {
               checkedItems.length > 0 ? checkedItems : checkedCategories,
           })
         );
-
-        await delay(100);
       } catch (error) {
         console.error("Ошибка при записи в sessionStorage:", error);
       }
