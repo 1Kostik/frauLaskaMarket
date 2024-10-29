@@ -26,8 +26,6 @@ import {
   Title,
   Description,
   DescriptionContainer,
-  // DeliveryInfoContainer,
-  // Span,
   ContainerTopSeller,
   checkedColor,
   titleH2,
@@ -341,14 +339,6 @@ const ProductDetails = () => {
             <Title>Склад</Title>
             <Description>{composition}</Description>
           </DescriptionContainer>
-          {/* <DescriptionContainer>
-            <Title>Доставка</Title>
-            <DeliveryInfoContainer>
-              <Span>Самовивіз</Span>
-              <Span> Доставимо протягом тижня</Span>
-              <Span>Безкоштовно</Span>
-            </DeliveryInfoContainer>
-          </DescriptionContainer> */}
           {feedBacks.length > 0 && (
             <div style={{ background: "#252525" }}>
               <CardSlider
