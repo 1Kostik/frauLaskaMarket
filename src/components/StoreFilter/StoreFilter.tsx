@@ -36,21 +36,22 @@ import {
 import { CheckedItems } from "Interfaces/CheckedItems";
 import { CategoriesProductCount } from "Interfaces/CategoriesProductCount";
 import { IFilterProducts } from "Interfaces/IFilterProducts";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface ISorteFilter {
   closeFilter: React.Dispatch<React.SetStateAction<boolean>>;
-  setFilteredItemsId: React.Dispatch<
-    React.SetStateAction<Record<string, string>[]>
-  >;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  writeUrlFromStorage: () => void;
 }
 
 const StoreFilter: React.FC<ISorteFilter> = ({
   closeFilter,
-  setFilteredItemsId,
+  writeUrlFromStorage,
   setCurrentPage,
 }) => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
@@ -85,18 +86,20 @@ const StoreFilter: React.FC<ISorteFilter> = ({
     item: { id: number; category_id?: number }
   ) => {
     if (typeKey === "category") {
-      if (!checkedItems.some((checkedItem) => checkedItem.id === item.id)) {
+      if (
+        !checkedItems.some((checkedItem) => Number(checkedItem.id) === item.id)
+      ) {
         setCheckedItems((prev) => [...prev, { id: item.id, productsId: [] }]);
       } else {
         setCheckedItems((prev) =>
-          prev.filter((checkedItem) => checkedItem.id !== item.id)
+          prev.filter((checkedItem) => Number(checkedItem.id) !== item.id)
         );
         setOpenCategories((prev) => ({ ...prev, [item.id]: false }));
       }
     } else if (typeKey === "product") {
       setCheckedItems((prev) =>
         prev.map((checkedItem) => {
-          if (checkedItem.id === item.category_id) {
+          if (Number(checkedItem.id) === item.category_id) {
             const productsId = checkedItem.productsId.includes(item.id)
               ? checkedItem.productsId.filter((id) => id !== item.id)
               : [...checkedItem.productsId, item.id];
@@ -113,17 +116,28 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   };
 
   const handleClose = () => {
-    sessionStorage.clear();
-    setFilteredItemsId([]);
     closeFilter(false);
   };
 
+  const clearUrl = () => {
+    const searchUrl = location.search.split("&");
+    const cleanedSearchParams = searchUrl
+      .filter(
+        (item) => !item.includes("categoryId") && !item.includes("productId")
+      )
+      .join("&");
+    const cleanedUrl = location.pathname + cleanedSearchParams;
+    navigate(cleanedUrl);
+  };
+
+  const handleResetFilter = () => {
+    clearUrl();
+    setCheckedItems([]);
+    sessionStorage.clear();
+  };
+
   const handleShowResult = () => {
-    const filteredItems = checkedItems.map((item) => ({
-      categoryId: item.id.toString(),
-      productId: item.productsId.join(","),
-    }));
-    setFilteredItemsId(filteredItems);
+    writeUrlFromStorage();
     setCurrentPage(1);
   };
 
@@ -142,10 +156,17 @@ const StoreFilter: React.FC<ISorteFilter> = ({
               category.product_count > 0 && (
                 <div key={category.id}>
                   <ItemContainer isOpen={openCategories[category.id]}>
-                    <Wrapper>
+                    <Wrapper
+                      onClick={() =>
+                        handleCheckboxChange("category", {
+                          id: category.id,
+                        })
+                      }
+                    >
                       <Label htmlFor={`checkBox${category.id}`}>
                         {checkedItems.some(
-                          (checkedItem) => checkedItem.id === category.id
+                          (checkedItem) =>
+                            Number(checkedItem.id) === category.id
                         ) ? (
                           <CheckBoxActive />
                         ) : (
@@ -156,29 +177,35 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                         type="checkbox"
                         id={`checkBox${category.id}`}
                         checked={checkedItems.some(
-                          (checkedItem) => checkedItem.id === category.id
+                          (checkedItem) =>
+                            Number(checkedItem.id) === category.id
                         )}
-                        onChange={() =>
-                          handleCheckboxChange("category", {
-                            id: category.id,
-                          })
-                        }
                       />
                       <P1>{category.title}</P1>
                     </Wrapper>
                     <Wrapper>
                       <P2>{category.product_count}</P2>
                       <ButtonShow
+                        style={
+                          checkedItems.some(
+                            (checkedItem) =>
+                              Number(checkedItem.id) === category.id
+                          )
+                            ? { visibility: "visible", cursor: "pointer" }
+                            : { visibility: "hidden", cursor: "default" }
+                        }
                         onClick={() => handleClick(category.id)}
                         disabled={
                           !checkedItems.some(
-                            (checkedItem) => checkedItem.id === category.id
+                            (checkedItem) =>
+                              Number(checkedItem.id) === category.id
                           )
                         }
                       >
                         {openCategories[category.id] &&
                         checkedItems.some(
-                          (checkedItem) => checkedItem.id === category.id
+                          (checkedItem) =>
+                            Number(checkedItem.id) === category.id
                         ) ? (
                           <ArrowUp />
                         ) : (
@@ -189,7 +216,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                   </ItemContainer>
                   {openCategories[category.id] &&
                   checkedItems.some(
-                    (checkedItem) => checkedItem.id === category.id
+                    (checkedItem) => Number(checkedItem.id) === category.id
                   ) ? (
                     <>
                       {category.products.map((product: IFilterProducts) => (
@@ -197,12 +224,20 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                           key={`${product.product_id}`}
                           isOpen={openCategories[category.id]}
                         >
-                          <Wrapper>
+                          <Wrapper
+                            onClick={() =>
+                              handleCheckboxChange("product", {
+                                id: product.product_id,
+                                category_id: product.categoryId,
+                              })
+                            }
+                          >
                             <Label htmlFor={`checkBox${product.product_id}`}>
                               {checkedItems
                                 .find(
                                   (checkedItem) =>
-                                    checkedItem.id === product.categoryId
+                                    Number(checkedItem.id) ===
+                                    product.categoryId
                                 )
                                 ?.productsId.includes(product.product_id) ? (
                                 <CheckBoxActive />
@@ -217,16 +252,11 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                                 checkedItems
                                   .find(
                                     (checkedItem) =>
-                                      checkedItem.id === product.categoryId
+                                      Number(checkedItem.id) ===
+                                      product.categoryId
                                   )
                                   ?.productsId.includes(product.product_id) ||
                                 false
-                              }
-                              onChange={() =>
-                                handleCheckboxChange("product", {
-                                  id: product.product_id,
-                                  category_id: product.categoryId,
-                                })
                               }
                             />
                             <P1>{product.product_title}</P1>
@@ -243,6 +273,11 @@ const StoreFilter: React.FC<ISorteFilter> = ({
               )
           )}
         <FilterBtn onClick={handleShowResult}>Показати</FilterBtn>
+        {checkedItems.length > 0 && (
+          <FilterBtn style={{ marginTop: 20 }} onClick={handleResetFilter}>
+            Скинути фільтр
+          </FilterBtn>
+        )}
       </Container>
     </FilterWrapper>
   );

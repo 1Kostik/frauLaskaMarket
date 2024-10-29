@@ -101,6 +101,7 @@ export const P1 = styled.p`
   line-height: 20px;
   letter-spacing: 0.1px;
   white-space: normal;
+  cursor: pointer;
 `;
 
 export const P2 = styled.p`
@@ -111,6 +112,7 @@ export const P2 = styled.p`
   font-weight: 400;
   line-height: 20px;
   letter-spacing: 0.1px;
+  cursor: default;
 `;
 export const Wrapper = styled.div`
   display: flex;
@@ -118,6 +120,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Label = styled.label`
+  pointer-events: none;
   width: 40px;
   height: 40px;
   padding: 8px;

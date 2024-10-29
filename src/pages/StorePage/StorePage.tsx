@@ -25,6 +25,7 @@ import {
   getSavedCheckedItems,
   getSavedIsOpenFilter,
 } from "@utils/getSavedFilter";
+import { getSavedSearchItem } from "@utils/getSavedSearchItem";
 
 interface SavedFilter {
   id: string;
@@ -43,7 +44,10 @@ function StorePage() {
 
   const { sortOrder = "ASC", sortField = "price", page } = params;
 
-  const savedFilteredItemsId = () => {
+  const savedFilteredItemsId = (): {
+    categoryId: string;
+    productId: string;
+  }[] => {
     return getSavedCheckedItems().map((item: SavedFilter) => ({
       categoryId: item.id.toString(),
       productId: item.productsId.join(","),
@@ -51,14 +55,13 @@ function StorePage() {
   };
 
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredItemsId, setFilteredItemsId] = useState<
-    Record<string, string>[]
-  >(savedFilteredItemsId() || []);
   const [openFilter, setOpenFilter] = useState(false);
   const [typeOfSort, setTypeOfSort] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(Number(page || 1));
   const [openSearch, setOpenSearch] = useState(false);
-  const [searchItem, setSearchItem] = useState<string>("");
+  const [searchItem, setSearchItem] = useState<string>(
+    getSavedSearchItem() || ""
+  );
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [isAdvertDeleted, setIsAdvertDeleted] = useState(false);
@@ -74,40 +77,60 @@ function StorePage() {
 
   const isInitialMount = useRef(true);
 
-  useEffect(() => {
-    if (isInitialMount.current) {
-      setTimeout(() => {
-        setFilteredItemsId(savedFilteredItemsId());
-      }, 400);
-    }
-  }, []);
+  const writeUrlFromStorage = () => {
+    const categoryId = savedFilteredItemsId().map((item) => item.categoryId);
+    const productId = savedFilteredItemsId().flatMap((item) =>
+      item.productId.split(",")
+    );
+    const newParams = {
+      ...params,
+      categoryId,
+      productId,
+    };
+
+    updateSearchParams(newParams);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const checkedItemsArr: number[] = [];
       const openedCategories: { [key: string]: boolean } = {};
+      const checkedCategories: { id: string; productsId: [] }[] = [];
+
       searchParams.forEach((value, key) => {
         if (key.includes("categoryId")) {
           sessionStorage.setItem("savedOpenFilter", JSON.stringify(true));
-          openedCategories[value] = true;
+          checkedCategories.push({ id: value, productsId: [] });
         }
         if (key.includes("productId")) {
           checkedItemsArr.push(Number(value));
         }
       });
+
       const checkedItems =
-        checkedItemsArr.length > 0 && (await getCheckedItems(checkedItemsArr));
+        checkedItemsArr.length > 0
+          ? await getCheckedItems(checkedItemsArr)
+          : [];
+
+      checkedItems?.forEach(
+        ({ id, productsId }: { id: string; productsId: string[] }) => {
+          if (productsId.length > 0) {
+            openedCategories[id] = true;
+          }
+        }
+      );
 
       sessionStorage.setItem(
         "savedFilterState",
         JSON.stringify({
           openCategories: openedCategories,
-          checkedItems,
+          checkedItems:
+            checkedItems.length > 0 ? checkedItems : checkedCategories,
         })
       );
     };
 
-    fetchData();
+    if (isInitialMount.current) fetchData();
   }, [searchParams]);
 
   useEffect(() => {
@@ -172,17 +195,15 @@ function StorePage() {
   }, [typeOfSort, isAdvertDeleted, updateSearchParams]);
 
   useEffect(() => {
-    const categoryIds = filteredItemsId.map((item) => item.categoryId);
-    const productIds = filteredItemsId.flatMap((item) =>
-      item.productId.split(",")
-    );
+    const initialCategoryIds = searchParams.getAll("categoryId");
+    const initialProductIds = searchParams.getAll("productId");
 
     const newSearchParams = {
       ...params,
       sortOrder: sortOrder,
       sortField: sortField,
-      categoryId: categoryIds,
-      productId: productIds,
+      categoryId: initialCategoryIds.length > 0 ? initialCategoryIds : [],
+      productId: initialProductIds.length > 0 ? initialProductIds : [],
       page: currentPage.toString(),
       limit: countItemPages.toString(),
       search: searchItem.trim(),
@@ -228,9 +249,9 @@ function StorePage() {
         console.error("Failed to fetch products:", error);
       }
     }
+
     fetchProducts();
   }, [
-    filteredItemsId,
     currentPage,
     searchItem,
     sortOrder,
@@ -238,6 +259,7 @@ function StorePage() {
     isAdvertDeleted,
     params,
     updateSearchParams,
+    searchParams,
   ]);
   useEffect(() => {
     const handleResize = () => {
@@ -293,7 +315,7 @@ function StorePage() {
             {openFilter && (
               <StoreFilter
                 closeFilter={setOpenFilter}
-                setFilteredItemsId={setFilteredItemsId}
+                writeUrlFromStorage={writeUrlFromStorage}
                 setCurrentPage={setCurrentPage}
               />
             )}
