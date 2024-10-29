@@ -47,6 +47,7 @@ function App() {
       </Overlay>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
+        <Route index element={<StorePage />} /> 
           <Route path="store" element={<StorePage />} />
           <Route path="product/:id" element={<ProductDetails />} />
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
