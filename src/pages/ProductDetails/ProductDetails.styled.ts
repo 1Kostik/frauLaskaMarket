@@ -24,6 +24,11 @@ export const H2 = styled.h2`
   font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.1px;
+  cursor: pointer;
+  transition: var(--effectDuration);
+  &:hover {
+    transform: scale(1.05);
+  }
   ${onDesktop(css`
     font-size: 14px;
   `)}

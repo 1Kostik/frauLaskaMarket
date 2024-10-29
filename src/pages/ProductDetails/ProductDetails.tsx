@@ -232,7 +232,7 @@ const ProductDetails = () => {
               <ButtonBack onClick={handleBackClick}>
                 <IoArrowBack css={svgArrowBack} />
               </ButtonBack>
-              <H2>Магазин</H2>
+              <H2 onClick={handleBackClick}>Магазин</H2>
               <MdOutlineKeyboardArrowRight css={svgArrowRight} />
               <h2 css={titleH2}>Сторінка товару</h2>
             </NavContainer>
