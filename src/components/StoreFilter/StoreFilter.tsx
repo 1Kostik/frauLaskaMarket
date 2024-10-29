@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   ButtonClose,
@@ -28,7 +28,10 @@ import { ReactComponent as CheckBoxActive } from "@assets/icons/checkbox-active.
 import { useAppDispatch } from "@redux/hooks";
 import { fetchCategories } from "@redux/categories/operations";
 
-import { getCategoriesProductCount } from "@services/servicesApi";
+import {
+  getCategoriesProductCount,
+  getCheckedItems,
+} from "@services/servicesApi";
 import {
   getSavedCheckedItems,
   getSavedOpenCategories,
@@ -36,7 +39,7 @@ import {
 import { CheckedItems } from "Interfaces/CheckedItems";
 import { CategoriesProductCount } from "Interfaces/CategoriesProductCount";
 import { IFilterProducts } from "Interfaces/IFilterProducts";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 interface ISorteFilter {
   closeFilter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,6 +55,9 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const isMount = useRef(true);
+
+  const [searchParams] = useSearchParams();
 
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
@@ -67,11 +73,59 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   }, [dispatch]);
 
   useEffect(() => {
-    sessionStorage.setItem(
-      "savedFilterState",
-      JSON.stringify({ checkedItems, openCategories })
-    );
+    if (!isMount.current) {
+      sessionStorage.setItem(
+        "savedFilterState",
+        JSON.stringify({ checkedItems, openCategories })
+      );
+    }
+    isMount.current = false;
   }, [checkedItems, openCategories]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const checkedItemsArr: number[] = [];
+        const openedCategories: { [key: string]: boolean } = {};
+        const checkedCategories: { id: string; productsId: [] }[] = [];
+
+        searchParams.forEach((value, key) => {
+          if (key.includes("categoryId")) {
+            sessionStorage.setItem("savedOpenFilter", JSON.stringify(true));
+            checkedCategories.push({ id: value, productsId: [] });
+          } else if (key.includes("productId")) {
+            checkedItemsArr.push(Number(value));
+          }
+        });
+
+        const checkedItems =
+          checkedItemsArr.length > 0
+            ? await getCheckedItems(checkedItemsArr)
+            : [];
+
+        checkedItems?.forEach(
+          ({ id, productsId }: { id: string; productsId: string[] }) => {
+            if (productsId.length > 0) {
+              openedCategories[id] = true;
+            }
+          }
+        );
+
+        sessionStorage.setItem(
+          "savedFilterState",
+          JSON.stringify({
+            openCategories: openedCategories,
+            checkedItems:
+              checkedItems.length > 0 ? checkedItems : checkedCategories,
+          })
+        );
+      } catch (error) {
+        console.error("Ошибка при записи в sessionStorage:", error);
+      }
+    };
+
+    fetchData();
+  }, [searchParams]);
 
   useEffect(() => {
     async function fetchCategoriesProductCount() {
@@ -133,6 +187,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const handleResetFilter = () => {
     clearUrl();
     setCheckedItems([]);
+    setOpenCategories({});
     sessionStorage.clear();
   };
 
@@ -180,6 +235,9 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                           (checkedItem) =>
                             Number(checkedItem.id) === category.id
                         )}
+                        onChange={() =>
+                          handleCheckboxChange("category", { id: category.id })
+                        }
                       />
                       <P1>{category.title}</P1>
                     </Wrapper>
@@ -257,6 +315,12 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                                   )
                                   ?.productsId.includes(product.product_id) ||
                                 false
+                              }
+                              onChange={() =>
+                                handleCheckboxChange("product", {
+                                  id: product.product_id,
+                                  category_id: product.categoryId,
+                                })
                               }
                             />
                             <P1>{product.product_title}</P1>
