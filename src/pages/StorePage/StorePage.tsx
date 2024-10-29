@@ -260,6 +260,7 @@ function StorePage() {
     params,
     updateSearchParams,
     searchParams,
+    search,
   ]);
   useEffect(() => {
     const handleResize = () => {
