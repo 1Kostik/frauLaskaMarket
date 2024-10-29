@@ -135,7 +135,7 @@ const ProductDetails = () => {
   useEffect(() => {
     if (selectedOption && product) {
       product.variations.forEach((item: Variation) => {
-        if (Number(selectedOption) === item.size) {
+        if (selectedOption === item.size) {
           setProductPrice(item.price);
           const color = item.color ? item.color : "";
           setAddedColor(color);

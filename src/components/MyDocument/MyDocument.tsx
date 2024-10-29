@@ -73,15 +73,17 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
     total_amount,
   } = data!;
 
+console.log('color :>> ', order_items[0].color );
+
   const ordercColors = (color: string) => {
     switch (color) {
       case "#FF0000":
         return "червоний";
-      case "var(#FFA500)":
+      case "#FFA500":
         return "оранжевий";
-      case "var(#FFFF00)":
+      case "#FFFF00":
         return "жовтий";
-      case "var(#008000)":
+      case "#008000":
         return "зелений";
       case "#00FFFF":
         return "блакитний";
@@ -113,7 +115,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
     data.order_items[0].size.toString().replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "");
 
   const visibleUnitType = unitType === "шт" ? "" : "шт";
-
+  const title = unitType === "шт" ? "Паку-\nвання" : "Один. вимір.";
   const date = new Date(order_date);
   return (
     <Document>
@@ -150,7 +152,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
               <Text style={styles.tableCell}>Найменування товару</Text>
             </View>
             <View style={[styles.tableCol, { width: "10%" }]}>
-              <Text style={styles.tableCell}>Один. вимір.</Text>
+              <Text style={styles.tableCell}>{title}</Text>
             </View>
             <View
               style={[
