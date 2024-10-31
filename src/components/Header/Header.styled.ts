@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { css, SerializedStyles } from "@emotion/react";
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ReactComponent as Logo } from "../../assets/icons/Logo.svg";
 import { onDesktop, onTablet } from "@styles/mixins";
@@ -8,44 +8,10 @@ interface SectionProps {
   istrue?: string;
 }
 
-const combineStyles = (
-  styles1: SerializedStyles,
-  styles2: SerializedStyles
-) => css`
-  ${styles1};
-  ${styles2};
-`;
-
 export const WrapperMenu = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-`;
-
-export const burgerMenuStyles = css`
-  border-radius: 50%;
-  transition: var(--effectDuration);
-  cursor: pointer;
-
-  & path {
-    fill: var(--bg-black);
-  }
-
-  &:hover {
-    & path {
-      fill: var(--fill-cart-hover);
-    }
-  }
-
-  &:active {
-    & path {
-      fill: var(--bg-black);
-    }
-  }
-
-  ${onDesktop(css`
-    display: none;
-  `)};
 `;
 
 export const Button = styled.button<SectionProps>`
@@ -53,24 +19,27 @@ export const Button = styled.button<SectionProps>`
   padding: 8px;
   border-radius: 50%;
   background-color: inherit;
-  transition: var(--effectDuration);
+
+  & path {
+    transition: var(--effectDuration);
+    stroke: var(--text-light-grey);
+    stroke-linecap: round;
+    stroke-width: 2;
+  }
 
   &:hover {
-    ${burgerMenuStyles}:hover {
-      & path {
-        fill: var(--fill-cart-hover);
-      }
+    & path {
+      stroke: var(--fill-cart-hover);
     }
   }
 
   &:active {
     background-color: ${({ istrue }) =>
       istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
-    ${burgerMenuStyles}:active {
-      & path {
-        fill: ${({ istrue }) =>
-          istrue === "true" ? "var(--bg-black)" : "var(--bg-light-grey)"};
-      }
+
+    & path {
+      stroke: ${({ istrue }) =>
+        istrue === "true" ? "var(--bg-black)" : "var(--bg-light-grey)"};
     }
   }
 
@@ -80,20 +49,15 @@ export const Button = styled.button<SectionProps>`
 `;
 
 export const burgerStyles = (istrue: string) => css`
-  ${combineStyles(
-    burgerMenuStyles,
-    css`
-      &:active {
-        background-color: ${istrue === "true"
-          ? "var(--bg-light-grey)"
-          : "var(--bg-black)"};
-      }
+  &:active {
+    background-color: ${istrue === "true"
+      ? "var(--bg-light-grey)"
+      : "var(--bg-black)"};
+  }
 
-      path {
-        fill: ${istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
-      }
-    `
-  )}
+  path {
+    stroke: ${istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
+  }
 `;
 
 export const Section = styled.header<SectionProps>`
@@ -152,7 +116,7 @@ export const Nav = styled(NavLink)<SectionProps>`
       font-size: 18px;
       font-style: normal;
       font-weight: 600;
-      line-height: 24px; /* 133.333% */
+      line-height: 24px;
       letter-spacing: 0.15px;
       text-decoration: none;
       transition: var(--effectDuration);
@@ -227,13 +191,14 @@ export const LogoLink = styled(Link)`
   text-decoration: none;
 `;
 
-export const cartStyles = css`
+export const Cart = styled(Link)<SectionProps>`
+  position: relative;
+  padding: 8px;
   border-radius: 50%;
-  transition: var(--effectDuration);
-  cursor: pointer;
+  text-decoration: none;
 
   & path {
-    fill: var(--bg-black);
+    transition: var(--effectDuration);
   }
 
   &:hover {
@@ -243,42 +208,17 @@ export const cartStyles = css`
   }
 
   &:active {
-    & path {
-      fill: var(--bg-black);
-    }
-  }
-`;
-
-export const Cart = styled(Link)<SectionProps>`
-  position: relative;
-  padding: 8px;
-  border-radius: 50%;
-  text-decoration: none;
-  transition: var(--effectDuration);
-
-  &:hover {
-    ${cartStyles}:hover {
-      & path {
-        fill: var(--fill-cart-hover);
-      }
-    }
-  }
-
-  &:active {
     background-color: ${({ istrue }) =>
       istrue === "true" ? "var(--bg-light-grey)" : "var(--bg-black)"};
-    ${cartStyles}:active {
-      & path {
-        fill: ${({ istrue }) =>
-          istrue === "true" ? "var(--bg-black)" : "var(--bg-light-grey)"};
-      }
+
+    & path {
+      fill: ${({ istrue }) =>
+        istrue === "true" ? "var(--bg-black)" : "var(--bg-light-grey)"};
     }
   }
 `;
 
 export const cartStylesWithColor = (istrue: string) => css`
-  ${cartStyles};
-
   &:active {
     background-color: ${istrue === "true"
       ? "var(--bg-light-grey)"

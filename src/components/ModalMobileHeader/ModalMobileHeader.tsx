@@ -17,13 +17,10 @@ import { Nav, NavWrapper } from "./ModalMobileHeader.styled";
 import FrauLaska from "@assets/images/fotoForModal.png";
 
 interface IModalHeader {
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: () => void;
 }
 
 const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
-  const handleCloseClick = () => {
-    setIsOpen(false);
-  };
   return (
     <>
       <Overlay />
@@ -36,7 +33,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                 className={({ isActive }) =>
                   isActive ? "active-link" : "inactive-link"
                 }
-                onClick={handleCloseClick}
+                onClick={setIsOpen}
               >
                 Магазин
               </Nav>
@@ -48,7 +45,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={handleCloseClick}
+                onClick={setIsOpen}
               >
                 Навчання
               </Nav>
@@ -57,7 +54,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                 className={({ isActive }) =>
                   isActive ? "active-link" : "inactive-link"
                 }
-                onClick={handleCloseClick}
+                onClick={setIsOpen}
               >
                 Договір публичної оферти
               </Nav>
@@ -66,7 +63,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                 className={({ isActive }) =>
                   isActive ? "active-link" : "inactive-link"
                 }
-                onClick={handleCloseClick}
+                onClick={setIsOpen}
               >
                 Доставка та оплата
               </Nav>
@@ -75,14 +72,14 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
               <a
                 href="tel: +380(96)148-88-48"
                 css={contactLink}
-                onClick={handleCloseClick}
+                onClick={setIsOpen}
               >
                 +380(96)148-88-48
               </a>
               <a
                 href="mailto:Frau.association@gmail.com"
                 css={contactLink}
-                onClick={handleCloseClick}
+                onClick={setIsOpen}
               >
                 Frau.association@gmail.com
               </a>
@@ -91,7 +88,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                   href="https://www.instagram.com/_frau_laska_?igsh=dnBibGR1OGY1bmlt"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={handleCloseClick}
+                  onClick={setIsOpen}
                 >
                   Instagram
                 </SocialLink>
@@ -99,7 +96,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                   href="https://www.facebook.com/profile.php?id=100003581632520"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={handleCloseClick}
+                  onClick={setIsOpen}
                 >
                   Facebook
                 </SocialLink>
@@ -107,7 +104,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                   href="https://www.tiktok.com/@frau_laska?_t=8qdqP05iYkg&_r=1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={handleCloseClick}
+                  onClick={setIsOpen}
                 >
                   TikTok
                 </SocialLink>
@@ -115,7 +112,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                   href="viber://chat?number=+380971488848"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={handleCloseClick}
+                  onClick={setIsOpen}
                 >
                   Viber
                 </SocialLink>
@@ -123,7 +120,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
                   href="https://t.me/frau_laska"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={handleCloseClick}
+                  onClick={setIsOpen}
                 >
                   telegram
                 </SocialLink>

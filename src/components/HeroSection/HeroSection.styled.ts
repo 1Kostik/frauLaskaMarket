@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { HeroSectionProps } from "./HeroSection";
 import { onDesktop, onTablet } from "@styles/mixins";
-import { motion } from "framer-motion";
 
 export const Section = styled.section<HeroSectionProps>`
   height: ${({ viewType }) => (viewType === "other" ? "auto" : "640px")};
@@ -37,7 +36,7 @@ export const Section = styled.section<HeroSectionProps>`
         `)}
 `;
 
-export const Container = styled(motion.div)<HeroSectionProps>`
+export const Container = styled.div<HeroSectionProps>`
   position: relative;
   display: flex;
   flex-direction: column;
