@@ -5,7 +5,7 @@ export const extractUnitTypeTitle = (unit: string): string => {
     case "гр":
       return "Вага";
     case "шт":
-      return "Кількість";
+      return "Комплект";
     default:
       return "";
   }
