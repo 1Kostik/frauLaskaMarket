@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { NavLink, useNavigate } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as CartIcon } from "../../assets/icons/shopping_bag.svg";
-import { ReactComponent as BurgerMenu } from "../../assets/icons/menu.svg";
+
 import {
   Section,
   LogoLink,
@@ -16,7 +16,6 @@ import {
   NavWrapper,
   anchorStyles,
   cartStylesWithColor,
-  burgerStyles,
   Button,
   WrapperMenu,
   cartCount,
@@ -51,13 +50,19 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
   const token = useSelector(selectToken);
-
   const show = windowWidth < 1440 ? false : true;
 
   const handleBurgerMenuClick = () => {
     setIsOpen((prev) => !prev);
+  };
+
+  const handleLogoClick = () => {
+    if (isOpen) {
+      setIsOpen(false);
+    }
   };
 
   const istrue = "true";
@@ -138,7 +143,7 @@ const Header = () => {
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
         <Wrapper>
-          <LogoLink to={"/store"}>
+          <LogoLink to={"/store"} onClick={handleLogoClick}>
             <LogoIcon istrue={istrue} />
           </LogoLink>
           <NavWrapper>
@@ -225,12 +230,26 @@ const Header = () => {
               </Links>
             )}
             <Button istrue={istrue} onClick={handleBurgerMenuClick}>
-              <BurgerMenu css={burgerStyles(istrue.toString())} />
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                {isOpen ? (
+                  <>
+                    <path d="M 3.5 19.5 L 19.5 3.5" />
+                    <path d="M 21 11.5 L 21 11.5" style={{stroke: "transparent"}}/>
+                    <path d="M 3.5 3.5 L 19.5 19.5" />
+                  </>
+                ) : (
+                  <>
+                    <path d="M 2 4.5 L 21 4.5" />
+                    <path d="M 2 11.5 L 21 11.5" />
+                    <path d="M 2 18.5 L 21 18.5" />
+                  </>
+                )}
+              </svg>
             </Button>
             {isOpen &&
               modalPortal &&
               ReactDOM.createPortal(
-                <ModalMobileHeader setIsOpen={setIsOpen} />,
+                <ModalMobileHeader setIsOpen={handleBurgerMenuClick} />,
                 modalPortal
               )}
           </WrapperMenu>
