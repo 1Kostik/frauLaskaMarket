@@ -176,7 +176,10 @@ const ProductDetails = () => {
     options.length > 0 &&
     options[0].toString().replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "");
 
-  const isOptions = options && options.length > 0 ? true : false;
+  const isOptions =
+    options && options.length > 0 && options[0].toString() !== ""
+      ? true
+      : false;
 
   const handleBackClick = () => {
     navigate(-1);
