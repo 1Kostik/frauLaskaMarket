@@ -97,7 +97,7 @@ const TrendingProducts = () => {
   };
 
   const handleOnClickCard = (id: number) => {
-    navigate(`/store/product/${id}`);
+    navigate(`/product/${id}`);
   };
 
   return (
