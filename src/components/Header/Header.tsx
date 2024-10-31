@@ -212,7 +212,7 @@ const Header = () => {
           )}
           <WrapperMenu>
             {!token && (
-              <Cart to={"/cart"} istrue={istrue}>
+              <Cart to={"/cart"} istrue={istrue} onClick={handleLogoClick}>
                 {totalQuantity > 0 && (
                   <div css={cartCount(istrue.toString())}>{totalQuantity}</div>
                 )}
@@ -234,7 +234,10 @@ const Header = () => {
                 {isOpen ? (
                   <>
                     <path d="M 3.5 19.5 L 19.5 3.5" />
-                    <path d="M 21 11.5 L 21 11.5" style={{stroke: "transparent"}}/>
+                    <path
+                      d="M 21 11.5 L 21 11.5"
+                      style={{ stroke: "transparent" }}
+                    />
                     <path d="M 3.5 3.5 L 19.5 19.5" />
                   </>
                 ) : (
