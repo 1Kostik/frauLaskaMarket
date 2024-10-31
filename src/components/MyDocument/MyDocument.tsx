@@ -73,7 +73,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
     total_amount,
   } = data!;
 
-console.log('color :>> ', order_items[0].color );
+  console.log("color :>> ", order_items[0].color);
 
   const ordercColors = (color: string) => {
     switch (color) {
@@ -115,7 +115,7 @@ console.log('color :>> ', order_items[0].color );
     data.order_items[0].size.toString().replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "");
 
   const visibleUnitType = unitType === "шт" ? "" : "шт";
-  const title = unitType === "шт" ? "Паку-\nвання" : "Один. вимір.";
+  const title = unitType === "шт" ? "Комп-\nлект" : "Один. вимір.";
   const date = new Date(order_date);
   return (
     <Document>
