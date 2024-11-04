@@ -47,6 +47,7 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isBurgerHide, setIsBurgerHide] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -56,7 +57,15 @@ const Header = () => {
   const show = windowWidth < 1440 ? false : true;
 
   const handleBurgerMenuClick = () => {
-    setIsOpen((prev) => !prev);
+    if (isOpen) {
+      setIsBurgerHide(true);
+      setTimeout(() => {
+        setIsOpen((prev) => !prev);
+      }, 800);
+    } else {
+      setIsOpen((prev) => !prev);
+      setIsBurgerHide(false);
+    }
   };
 
   const handleLogoClick = () => {
@@ -252,7 +261,10 @@ const Header = () => {
             {isOpen &&
               modalPortal &&
               ReactDOM.createPortal(
-                <ModalMobileHeader setIsOpen={handleBurgerMenuClick} />,
+                <ModalMobileHeader
+                  setIsOpen={handleBurgerMenuClick}
+                  isBurgerHide={isBurgerHide}
+                />,
                 modalPortal
               )}
           </WrapperMenu>

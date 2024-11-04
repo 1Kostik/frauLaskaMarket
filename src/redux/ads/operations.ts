@@ -18,7 +18,7 @@ export const createProduct = createAsyncThunk(
       toast.success("Оголошення створено");
       return advert;
     } catch (err) {
-      toast.error("Шось пійшло не так");
+      // toast.error("Шось пійшло не так");
       const error = err as AxiosError<KnownError>;
       if (!error.response) {
         throw err;
@@ -38,7 +38,7 @@ export const deleteProduct = createAsyncThunk(
       toast.success("Оголошення видалено");
       return data;
     } catch (err) {
-      toast.error("Шось пійшло не так");
+      // toast.error("Шось пійшло не так");
       const error = err as AxiosError<KnownError>;
       if (!error.response) {
         throw err;
@@ -77,7 +77,7 @@ export const getProduct = createAsyncThunk(
       const product = await getProductById(id);
       return product;
     } catch (err) {
-      toast.error("Шось пійшло не так");
+      // toast.error("Шось пійшло не так");
       const error = err as AxiosError<KnownError>;
       if (!error.response) {
         throw err;

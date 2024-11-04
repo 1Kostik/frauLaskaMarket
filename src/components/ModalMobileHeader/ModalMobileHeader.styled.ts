@@ -1,18 +1,18 @@
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import { onDesktop, onTablet } from "@styles/mixins";
 
-export const Wrapper = styled.div`
-  position: fixed;
-  top: 72px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 72px);
-  z-index: 200;
-  background-color: var(--bg-black);
-  pointer-events: auto;
-  overflow: auto;
+const slideIn = keyframes`
+from {top: -100%} to {
+  top: 72px
+}
+`;
+
+const slideOut = keyframes`
+from {top: 72px} to {
+  top: -100%
+}
 `;
 
 export const Overlay = styled.div`
@@ -23,7 +23,26 @@ export const Overlay = styled.div`
   height: 100%;
   background-color: rgba(0, 0, 0, 0);
   z-index: 100;
+  pointer-events: none;
+  overflow: hidden;
+`;
+
+export const wrapperStyle = (isBurgerHide: boolean) => css`
+  position: absolute;
+  width: 100%;
+  height: calc(100vh - 72px);
+  z-index: 99;
+  background-color: var(--bg-black);
   pointer-events: auto;
+  overflow: auto;
+
+  animation: ${!isBurgerHide
+    ? css`
+        ${slideIn} 0.8s forwards
+      `
+    : css`
+        ${slideOut} 0.8s forwards
+      `};
 `;
 
 export const Container = styled.div`

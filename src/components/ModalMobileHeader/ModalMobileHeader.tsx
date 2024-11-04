@@ -7,10 +7,10 @@ import {
   SocialContainer,
   SocialLink,
   Overlay,
-  Wrapper,
   NavContainer,
   ImageContainer,
   image,
+  wrapperStyle,
 } from "./ModalMobileHeader.styled";
 import { Nav, NavWrapper } from "./ModalMobileHeader.styled";
 
@@ -18,13 +18,17 @@ import FrauLaska from "@assets/images/fotoForModal.png";
 
 interface IModalHeader {
   setIsOpen: () => void;
+  isBurgerHide: boolean;
 }
 
-const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
+const ModalMobileHeader: React.FC<IModalHeader> = ({
+  setIsOpen,
+  isBurgerHide,
+}) => {
   return (
     <>
       <Overlay />
-      <Wrapper>
+      <div css={wrapperStyle(isBurgerHide)}>
         <Container>
           <NavContainer>
             <NavWrapper>
@@ -131,7 +135,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({ setIsOpen }) => {
             <img src={FrauLaska} alt="FrauLaska" css={image} />
           </ImageContainer>
         </Container>
-      </Wrapper>
+      </div>
     </>
   );
 };
