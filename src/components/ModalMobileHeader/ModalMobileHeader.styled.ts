@@ -28,7 +28,7 @@ export const Overlay = styled.div`
 `;
 
 export const wrapperStyle = (isBurgerHide: boolean) => css`
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: calc(100vh - 72px);
   z-index: 99;
