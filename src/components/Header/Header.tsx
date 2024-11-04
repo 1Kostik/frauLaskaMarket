@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as CartIcon } from "../../assets/icons/shopping_bag.svg";
 
@@ -43,11 +43,11 @@ const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
 const Header = () => {
   const checkExpiration = useCheckTokenExpiration();
   const navigate = useNavigate();
-
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isBurgerHide, setIsBurgerHide] = useState(false);
+  const [isBurgerHide, setIsBurgerHide] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [sectionColor, setSectionColor] = useState(colorsHeader[0]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -60,12 +60,23 @@ const Header = () => {
     if (isOpen) {
       setIsBurgerHide(true);
       setTimeout(() => {
-        setIsOpen((prev) => !prev);
+        setIsOpen(false);
       }, 800);
     } else {
-      setIsOpen((prev) => !prev);
+      setIsOpen(true);
       setIsBurgerHide(false);
     }
+  };
+
+  location.state = { mainPage: true };
+  const onLogoOrCartClick = () => {
+    if (location.state.mainPage) {
+      window.scrollTo({ top: 0 });
+    }
+    setIsBurgerHide(true);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 800);
   };
 
   const istrue = "true";
@@ -146,12 +157,12 @@ const Header = () => {
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
         <Wrapper>
-          <LogoLink to={"/store"} onClick={handleBurgerMenuClick}>
+          <LogoLink to={"/"} onClick={onLogoOrCartClick}>
             <LogoIcon istrue={istrue} />
           </LogoLink>
           <NavWrapper>
             <Nav
-              to={"/store"}
+              to={"/"}
               className={({ isActive }) =>
                 isActive ? "active-link" : "inactive-link"
               }
@@ -215,11 +226,7 @@ const Header = () => {
           )}
           <WrapperMenu>
             {!token && (
-              <Cart
-                to={"/cart"}
-                istrue={istrue}
-                onClick={handleBurgerMenuClick}
-              >
+              <Cart to={"/cart"} istrue={istrue} onClick={onLogoOrCartClick}>
                 {totalQuantity > 0 && (
                   <div css={cartCount(istrue.toString())}>{totalQuantity}</div>
                 )}
@@ -238,7 +245,7 @@ const Header = () => {
             )}
             <Button istrue={istrue} onClick={handleBurgerMenuClick}>
               <svg width="24" height="24" viewBox="0 0 24 24">
-                {isOpen ? (
+                {!isBurgerHide ? (
                   <>
                     <path d="M 3.5 19.5 L 19.5 3.5" />
                     <path
