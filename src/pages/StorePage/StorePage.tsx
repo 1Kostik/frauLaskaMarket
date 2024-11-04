@@ -1,6 +1,7 @@
 import HeroSection from "@components/HeroSection/HeroSection";
 import ProductCard from "@components/ProductCard/ProductCard";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import {
   Container,
   SearchContainer,
@@ -26,6 +27,8 @@ import {
   getSavedIsOpenFilter,
 } from "@utils/getSavedFilter";
 import { getSavedSearchItem } from "@utils/getSavedSearchItem";
+import { loadingProductsStatus } from "@redux/ads/slice";
+import { useAppDispatch } from "@redux/hooks";
 
 interface SavedFilter {
   id: string;
@@ -34,6 +37,7 @@ interface SavedFilter {
 
 function StorePage() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -243,13 +247,16 @@ function StorePage() {
 
     async function fetchProducts() {
       try {
+        dispatch(loadingProductsStatus(true));
         const result = await getProductsAndSorted(
           searchParamsString.toString()
         );
+        dispatch(loadingProductsStatus(false));
         setTotalPage(Number(result.total_products));
         setProducts(result.productData);
       } catch (error) {
         console.error("Failed to fetch products:", error);
+        dispatch(loadingProductsStatus(false));
       }
     }
 

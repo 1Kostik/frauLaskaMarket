@@ -65,6 +65,9 @@ const adsSlice = createSlice({
           ) || [],
       };
     },
+    loadingProductsStatus(state: IAdsState, { payload }: { payload: boolean }) {
+      state.isLoading = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -98,4 +101,4 @@ const adsSlice = createSlice({
 });
 
 export default adsSlice.reducer;
-export const { deleteImage } = adsSlice.actions;
+export const { deleteImage, loadingProductsStatus } = adsSlice.actions;
