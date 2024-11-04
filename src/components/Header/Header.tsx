@@ -68,12 +68,6 @@ const Header = () => {
     }
   };
 
-  const handleLogoClick = () => {
-    if (isOpen) {
-      setIsOpen(false);
-    }
-  };
-
   const istrue = "true";
 
   const handleScroll = () => {
@@ -152,7 +146,7 @@ const Header = () => {
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
         <Wrapper>
-          <LogoLink to={"/store"} onClick={handleLogoClick}>
+          <LogoLink to={"/store"} onClick={handleBurgerMenuClick}>
             <LogoIcon istrue={istrue} />
           </LogoLink>
           <NavWrapper>
@@ -221,7 +215,11 @@ const Header = () => {
           )}
           <WrapperMenu>
             {!token && (
-              <Cart to={"/cart"} istrue={istrue} onClick={handleLogoClick}>
+              <Cart
+                to={"/cart"}
+                istrue={istrue}
+                onClick={handleBurgerMenuClick}
+              >
                 {totalQuantity > 0 && (
                   <div css={cartCount(istrue.toString())}>{totalQuantity}</div>
                 )}
