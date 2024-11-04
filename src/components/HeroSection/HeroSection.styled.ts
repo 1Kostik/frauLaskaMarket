@@ -5,7 +5,7 @@ import { onDesktop, onTablet } from "@styles/mixins";
 
 export const Section = styled.section<HeroSectionProps>`
   height: ${({ viewType }) => (viewType === "other" ? "auto" : "640px")};
-  padding-top: 72px;
+  padding-top: ${({ paddingTop }) => (paddingTop ? paddingTop : "72px")};
   padding-bottom: ${({ viewType }) => (viewType === "other" ? "24px" : "0")};
   overflow: hidden;
   background: ${({ bgImage, viewType }) => {
@@ -25,14 +25,14 @@ export const Section = styled.section<HeroSectionProps>`
   background-position: 50%;
   background-size: auto 820px;
 
-  ${({ viewType }) =>
+  ${({ viewType, paddingTop }) =>
     viewType === "other"
       ? onDesktop(css`
-          padding-top: 80px;
+          padding-top: ${paddingTop ? paddingTop : "80px"};
         `)
       : onDesktop(css`
           height: 820px;
-          padding-top: 80px;
+          padding-top: ${paddingTop ? paddingTop : "80px"};
         `)}
 `;
 
@@ -54,14 +54,14 @@ export const Container = styled.div<HeroSectionProps>`
         `)}
 `;
 
-export const titleStyle = (viewType?: string) => css`
+export const titleStyle = (viewType?: string, paddingTop?: string) => css`
   ${viewType === "other" &&
   css`
-    padding-top: 24px;
+    padding-top: ${paddingTop || "24px"};
 
     ${onDesktop(
       css`
-        padding-top: 40px;
+        padding-top: ${paddingTop || "40px"};
       `
     )}
   `}

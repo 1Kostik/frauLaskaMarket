@@ -2,13 +2,8 @@ import { useEffect, useState } from "react";
 import {
   Container,
   ImageContainer,
-  H2,
   Wrapper,
   Section,
-  NavContainer,
-  ButtonBack,
-  svgArrowBack,
-  svgArrowRight,
   InfoContainer,
   TextContainer,
   H3,
@@ -21,17 +16,16 @@ import {
   Ul,
   Li,
   SelectContainer,
-  Button,
   SelectWrapper,
   Title,
   Description,
   DescriptionContainer,
   ContainerTopSeller,
   checkedColor,
-  titleH2,
+  ButtonAddToCart,
+  ButtonToCart,
 } from "./ProductDetails.styled";
-import { IoArrowBack } from "react-icons/io5";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+
 import { containerStyles } from "@styles/variables";
 import SortingItems from "@components/SortingItems/SortingItems";
 import { useNavigate, useParams } from "react-router-dom";
@@ -39,7 +33,7 @@ import CardSlider from "@components/CardSlider/CardSlider";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cart/slice";
 import { Feedback, Product, Variation } from "Interfaces/Product";
-import { selectCart, selectCartTotalQuantity } from "@redux/cart/selectors";
+import { selectCart } from "@redux/cart/selectors";
 import ProductInterface from "@components/ProductInterface";
 import { getProductById } from "@services/servicesApi";
 import PriceItem from "@components/PriceItem/PriceItem";
@@ -47,6 +41,7 @@ import { useSelector } from "react-redux";
 import { selectToken } from "@redux/auth/selectors";
 import TrendingProducts from "@components/TrendingProducts/TrendingProducts";
 import { extractUnitTypeTitle } from "@utils/extractUnitTypeTitle";
+import BackNavigation from "@components/BackNavigation/BackNavigation";
 
 const ProductDetailsProps = {
   container: {
@@ -86,15 +81,15 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const token = useSelector(selectToken);
-  const totalQuantity = useAppSelector(selectCartTotalQuantity);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  // const totalQuantity = useAppSelector(selectCartTotalQuantity);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [productPrice, setProductPrice] = useState<number | null>(null);
   const [addedColor, setAddedColor] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [product, setProduct] = useState<Product | null>(null);
   const [feedBacks, setFeedBacks] = useState<Feedback[]>([]);
   const [variationItem, setVariationItem] = useState<Variation>();
-
+  const [isProductInCart, setIsProductInCart] = useState<boolean>(false);
   const cart = useAppSelector(selectCart);
   const { id } = useParams();
   const imageArray = product && [...product.imageUrls];
@@ -144,16 +139,20 @@ const ProductDetails = () => {
       });
     }
   }, [product, selectedOption]);
-
+  const extractNumber = (item: string) => {
+    const match = item.match(/\d+/);
+    return match ? Number(match[0]) : 0;
+  };
   useEffect(() => {
     if (product) {
       let minSize: number | null = null;
-
+      let itemSize: number | null = null;
       product.variations.forEach((item: Variation) => {
         if (addedColor === item.color) {
-          if (item.size !== null) {
-            if (minSize === null || item.size < minSize) {
-              minSize = item.size;
+          if (item.size !== null && item.size !== "") {
+            itemSize = extractNumber(item.size);
+            if (minSize === null || itemSize < minSize) {
+              minSize = itemSize;
               setProductPrice(item.price);
               setSelectedOption(item.size);
               setVariationItem(item);
@@ -164,29 +163,23 @@ const ProductDetails = () => {
     }
   }, [addedColor, product]);
 
-  const options: number[] | null =
+  const options: string[] | null =
     product && product.variations
       ? product.variations
           .map((item: Variation) => item.size)
-          .filter((size): size is number => size !== null)
+          .filter((size): size is string => size !== null && size !== "")
       : null;
 
   const unitType =
     options &&
     options.length > 0 &&
-    options[0].toString().replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "");
+    options[0].replace(/[^a-zA-Zа-яА-ЯёЁ]/g, "");
 
   const isOptions =
-    options && options.length > 0 && options[0].toString() !== ""
-      ? true
-      : false;
+    options && options.length > 0 && options[0] !== "" ? true : false;
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
-
-  const handleAddToCart = () => {
-    const productSearch = cart.find(
+  useEffect(() => {
+    const productSearch = !!cart.find(
       (item) =>
         (item.product_id === Number(id) &&
           item.size === selectedOption &&
@@ -194,10 +187,16 @@ const ProductDetails = () => {
         (item.size === selectedOption &&
           item.size !== null &&
           item.product_id === Number(id) &&
-          item.color === addedColor)
+          item.color === addedColor) ||
+        (item.product_id === Number(id) &&
+          item.size === null &&
+          item.color === null)
     );
+    setIsProductInCart(productSearch);
+  }, [addedColor, cart, id, selectedOption]);
 
-    if (productSearch) {
+  const handleAddToCart = () => {
+    if (isProductInCart) {
       return;
     }
     if (product && id && productPrice !== null) {
@@ -214,7 +213,7 @@ const ProductDetails = () => {
         total_cost: productPrice,
         quantity: variationItem!.count,
       };
-
+      setIsProductInCart(true);
       dispatch(addToCart(productToAdd));
     } else {
       setMessage("Оберіть будь ласка колір!");
@@ -231,14 +230,10 @@ const ProductDetails = () => {
       <div css={containerStyles}>
         <Container>
           <Wrapper>
-            <NavContainer>
-              <ButtonBack onClick={handleBackClick}>
-                <IoArrowBack css={svgArrowBack} />
-              </ButtonBack>
-              <H2 onClick={handleBackClick}>Магазин</H2>
-              <MdOutlineKeyboardArrowRight css={svgArrowRight} />
-              <h2 css={titleH2}>Сторінка товару</h2>
-            </NavContainer>
+            <BackNavigation
+              previousPage="Магазин"
+              currentPage="Сторінка товару"
+            />
             <InfoContainer>
               <ImageContainer>
                 <CardSlider
@@ -312,7 +307,7 @@ const ProductDetails = () => {
                   <SelectContainer>
                     <H4>{unitType ? extractUnitTypeTitle(unitType) : ""}</H4>
                     <SelectWrapper>
-                      <SortingItems<number>
+                      <SortingItems<string>
                         options={options}
                         padding={"12px"}
                         borderRadius={"16px"}
@@ -323,13 +318,17 @@ const ProductDetails = () => {
                     </SelectWrapper>
                   </SelectContainer>
                 )}
-                <Button onClick={handleAddToCart} style={{ marginRight: 20 }}>
-                  Додати до кошика
-                </Button>
-                {totalQuantity !== 0 && (
-                  <Button onClick={() => navigate("/cart")}>
+                <ButtonAddToCart
+                  onClick={handleAddToCart}
+                  style={{ marginRight: 20 }}
+                  disabled={isProductInCart}
+                >
+                  {isProductInCart ? "Товар у кошику" : "Додати до кошика"}
+                </ButtonAddToCart>
+                {isProductInCart && (
+                  <ButtonToCart onClick={() => navigate("/cart")}>
                     Перейти до кошика
-                  </Button>
+                  </ButtonToCart>
                 )}
               </TextContainer>
             </InfoContainer>

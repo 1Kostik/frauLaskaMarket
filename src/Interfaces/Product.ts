@@ -18,7 +18,7 @@ export interface Variation {
   price: number;
   discount: number | null;
   count: number;
-  size: number | null;
+  size: string | null;
   color: string | null;
 }
 

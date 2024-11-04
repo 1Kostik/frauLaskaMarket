@@ -5,6 +5,7 @@ import { onDesktop, onTablet } from "@styles/mixins";
 interface PropsProdDet {
   isErrorMessage?: boolean;
   isOptions?: boolean;
+  disabled?: boolean;
 }
 
 export const Section = styled.section`
@@ -14,37 +15,6 @@ export const Container = styled.div`
   padding: 24px 0px 24px 0px;
   ${onDesktop(css`
     padding: 40px 0px 40px 0px;
-  `)}
-`;
-export const H2 = styled.h2`
-  color: var(--text-light-grey);
-  font-family: Fixel;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 20px;
-  letter-spacing: 0.1px;
-  cursor: pointer;
-  transition: var(--effectDuration);
-  &:hover {
-    transform: scale(1.05);
-  }
-  ${onDesktop(css`
-    font-size: 14px;
-  `)}
-`;
-
-export const titleH2 = css`
-  color: var(--text-active-link-milk);
-  font-family: Fixel;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 20px;
-  letter-spacing: 0.1px;
-  text-decoration: underline;
-  ${onDesktop(css`
-    font-size: 14px;
   `)}
 `;
 
@@ -66,35 +36,6 @@ export const ImageContainer = styled.div`
     width: 626px;
     height: 100%;
   `)}
-`;
-
-export const NavContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 50px;
-`;
-
-export const ButtonBack = styled.button`
-  width: 20px;
-  height: 20px;
-  display: flex;
-  transition: var(--effectDuration);
-  &:hover {
-    transform: scale(1.2);
-  }
-`;
-
-export const svgArrowBack = css`
-  width: 18px;
-  height: 18px;
-  color: var(--bg-light-grey);
-`;
-
-export const svgArrowRight = css`
-  width: 16px;
-  height: 16px;
-  color: var(--bg-light-grey);
 `;
 
 export const InfoContainer = styled.div`
@@ -143,7 +84,7 @@ export const H3 = styled.h3`
 `;
 
 export const P = styled.p`
-  width: auto;
+  width: 98px;
   color: var(--text-black);
   font-family: Arial;
   font-size: 12px;
@@ -289,7 +230,31 @@ export const SelectContainer = styled.div`
   margin-bottom: 32px;
   align-items: center;
 `;
-export const Button = styled.button`
+export const ButtonAddToCart = styled.button<PropsProdDet>`
+  color: ${({ disabled }) =>
+    disabled ? "var(--text-light-grey)" : " var(--text-black)"};
+  font-family: Fixel;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  border-radius: 24px;
+  background: ${({ disabled }) =>
+    disabled ? "var(--bg-disabled)" : " var(--bg-light-grey)"};
+  padding: 10px 16px;
+  gap: 8px;
+  transition: var(--effectDuration);
+  cursor: ${({ disabled }) =>
+    disabled ? "var(--text-light-grey)" : "pointer"};
+  &:hover {
+    transform: ${({ disabled }) => (disabled ? "scale(1)" : "scale(1.1)")};
+  }
+  ${onDesktop(css`
+    font-size: 14px;
+  `)}
+`;
+export const ButtonToCart = styled.button`
   color: var(--text-black);
   font-family: Fixel;
   font-size: 12px;

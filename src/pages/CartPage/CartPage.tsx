@@ -18,15 +18,14 @@ import {
   Wrapper,
 } from "./CartPage.styled";
 
-import {
-  ContainerTopSeller, 
-} from "@pages/ProductDetails/ProductDetails.styled";
+import { ContainerTopSeller } from "@pages/ProductDetails/ProductDetails.styled";
 import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import CartItemCard from "@components/CartItemCard";
 import { nanoid } from "nanoid";
 import PaymentBlock from "@components/PaymentBlock";
 import { toast } from "react-toastify";
 import TrendingProducts from "@components/TrendingProducts/TrendingProducts";
+import BackNavigation from "@components/BackNavigation/BackNavigation";
 
 const CartPage = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +64,7 @@ const CartPage = () => {
     setAddedItems(updatedItems);
   }, [cart]);
 
-  const handleAddItem = (id: number, size?: number | null) => {
+  const handleAddItem = (id: number, size?: string | null) => {
     const addedItem = addedItems.find(
       (item) => id === item.product_id && item.size === size
     );
@@ -87,7 +86,7 @@ const CartPage = () => {
     dispatch(increaseQuantity({ id, size }));
   };
 
-  const handleDeleteItem = (id: number, size?: number | null) => {
+  const handleDeleteItem = (id: number, size?: string | null) => {
     setAddedItems((prev) => {
       return prev.map((item) => {
         if (id === item.product_id && item.size === size && item.count > 1) {
@@ -104,7 +103,7 @@ const CartPage = () => {
 
   const handleRemove = (
     id: number,
-    size?: number | null,
+    size?: string | null,
     color?: string | null
   ) => {
     setAddedItems((prev) => {
@@ -124,7 +123,16 @@ const CartPage = () => {
 
   return (
     <>
-      <HeroSection viewType={"other"} isEmpty={addedItems.length === 0}>
+      <section style={{ paddingTop: 80 }}>
+        <div css={containerStyles} style={{ paddingTop: 40 }}>
+          <BackNavigation previousPage="Сторінка товару" currentPage="Кошик" />
+        </div>
+      </section>
+      <HeroSection
+        viewType={"other"}
+        isEmpty={addedItems.length === 0}
+        paddingTop={"0"}
+      >
         {title}
       </HeroSection>
       <section css={sectionCart}>
