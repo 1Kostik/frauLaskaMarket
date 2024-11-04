@@ -3,7 +3,7 @@ export interface IAddedToCartProduct {
   title: string;
   img: { img_url: string; id: number };
   product_code: number;
-  size: number | null | undefined;
+  size: string | null | undefined;
   discount: number | null;
   price: number | null;
   count: number;

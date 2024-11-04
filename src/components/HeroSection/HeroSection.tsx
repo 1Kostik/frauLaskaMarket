@@ -17,6 +17,7 @@ export interface HeroSectionProps {
   isEmpty?: boolean;
   pageName?: string;
   id?: string;
+  paddingTop?:string;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
@@ -26,27 +27,28 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   isEmpty,
   pageName,
   id,
+  paddingTop
 }) => {
   const navigate = useNavigate();
 
   return (
-    <Section bgImage={bgImage} viewType={viewType} id={id}>
+    <Section bgImage={bgImage} viewType={viewType} id={id} paddingTop={paddingTop}>
       <Container css={containerStyles} viewType={viewType}>
         {Array.isArray(children) ? (
           !pageName ? (
             <>
               <p css={paragraphStyle()}>{children[0].props.children}</p>
-              <h1 css={[titleStyle(viewType)]}>{children[1].props.children}</h1>
+              <h1 css={[titleStyle(viewType,paddingTop)]}>{children[1].props.children}</h1>
             </>
           ) : (
             <>
-              <h1 css={titleStyle(viewType)}>{children[0].props.children}</h1>
+              <h1 css={titleStyle(viewType,paddingTop)}>{children[0].props.children}</h1>
               <p css={paragraphStyle(pageName)}>{children[1].props.children}</p>
             </>
           )
         ) : (
           <>
-            <h1 css={titleStyle(viewType)}>{children}</h1>
+            <h1 css={titleStyle(viewType,paddingTop)}>{children}</h1>
             {isEmpty && (
               <button
                 css={buttonStyle}

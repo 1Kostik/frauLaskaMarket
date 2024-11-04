@@ -28,11 +28,11 @@ import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 interface ICartItemCardProps {
   item: IAddedToCartProduct;
   width?: string;
-  handleAddItem?: (id: number, size?: number | null) => void;
-  handleDeleteItem?: (id: number, size?: number | null) => void;
+  handleAddItem?: (id: number, size?: string | null) => void;
+  handleDeleteItem?: (id: number, size?: string | null) => void;
   handleRemove?: (
     id: number,
-    size?: number | null,
+    size?: string | null,
     color?: string | null
   ) => void;
   isOrderPage?: boolean;

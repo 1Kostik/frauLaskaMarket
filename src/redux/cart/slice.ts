@@ -23,7 +23,7 @@ const cartSlice = createSlice({
       state,
       action: PayloadAction<{
         id: number;
-        size?: number | null;
+        size?: string | null;
         color?: string | null;
       }>
     ) {
@@ -41,7 +41,7 @@ const cartSlice = createSlice({
     },
     increaseQuantity(
       state,
-      action: PayloadAction<{ id: number; size?: number | null }>
+      action: PayloadAction<{ id: number; size?: string | null }>
     ) {
       const item = state.cart.find(
         (item) =>
@@ -55,7 +55,7 @@ const cartSlice = createSlice({
     },
     decreaseQuantity(
       state,
-      action: PayloadAction<{ id: number; size?: number | null }>
+      action: PayloadAction<{ id: number; size?: string | null }>
     ) {
       const item = state.cart.find(
         (item) =>
