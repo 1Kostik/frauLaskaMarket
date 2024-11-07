@@ -8,7 +8,7 @@ export interface Product {
   ranking: number;
   benefit: string;
   popularity: number;
-  product_code: number;
+  product_code: string;
   composition: string;
   variations: Variation[];
   feedbacks: Feedback[];

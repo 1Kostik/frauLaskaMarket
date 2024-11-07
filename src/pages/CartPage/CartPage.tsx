@@ -26,10 +26,14 @@ import PaymentBlock from "@components/PaymentBlock";
 import { toast } from "react-toastify";
 import TrendingProducts from "@components/TrendingProducts/TrendingProducts";
 import BackNavigation from "@components/BackNavigation/BackNavigation";
+import { useLocation } from "react-router-dom";
+import { previousPageNav } from "@utils/previousPageNav";
 
 const CartPage = () => {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const cart = useAppSelector(selectCart);
+  const previousPage = location.state.from.split("/")[1] || "/";
 
   const [addedItems, setAddedItems] = useState<IAddedToCartProduct[]>([]);
 
@@ -125,7 +129,10 @@ const CartPage = () => {
     <>
       <section style={{ paddingTop: 80 }}>
         <div css={containerStyles} style={{ paddingTop: 40 }}>
-          <BackNavigation previousPage="Сторінка товару" currentPage="Кошик" />
+          <BackNavigation
+            previousPage={previousPageNav(previousPage)}
+            currentPage="Кошик"
+          />
         </div>
       </section>
       <HeroSection
