@@ -28,7 +28,7 @@ import {
 
 import { containerStyles } from "@styles/variables";
 import SortingItems from "@components/SortingItems/SortingItems";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CardSlider from "@components/CardSlider/CardSlider";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cart/slice";
@@ -78,6 +78,7 @@ const ProductDetailsPropsText = {
 };
 
 const ProductDetails = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const token = useSelector(selectToken);
@@ -326,7 +327,11 @@ const ProductDetails = () => {
                   {isProductInCart ? "Товар у кошику" : "Додати до кошика"}
                 </ButtonAddToCart>
                 {isProductInCart && (
-                  <ButtonToCart onClick={() => navigate("/cart")}>
+                  <ButtonToCart
+                    onClick={() =>
+                      navigate("/cart", { state: { from: location.pathname } })
+                    }
+                  >
                     Перейти до кошика
                   </ButtonToCart>
                 )}

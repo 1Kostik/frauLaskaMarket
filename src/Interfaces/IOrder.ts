@@ -5,10 +5,10 @@ export interface IOrderItem {
   count: number;
   discount: number;
   color: string | undefined | null;
-  size: number | null | undefined;
+  size: string | null | undefined;
   title: string;
   total_cost: number;
-  product_code: number;
+  product_code: string;
 }
 
 export interface IOrder {

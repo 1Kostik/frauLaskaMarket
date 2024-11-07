@@ -2,7 +2,7 @@ export interface IOrderCreationItem {
   product_id: number;
   count: number;
   color: string | undefined | null;
-  size: number | null | undefined;
+  size: string | null | undefined;
 }
 
 export interface IOrderCreation {

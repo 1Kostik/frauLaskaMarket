@@ -73,8 +73,6 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
     total_amount,
   } = data!;
 
-  console.log("color :>> ", order_items[0].color);
-
   const ordercColors = (color: string) => {
     switch (color) {
       case "#FF0000":

@@ -17,7 +17,7 @@ import StoreFilter from "@components/StoreFilter/StoreFilter";
 import SearchStore from "@components/SearchStore/SearchStore";
 import SortingItems from "@components/SortingItems/SortingItems";
 import Pagination from "@components/Pagination/Pagination";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
@@ -36,6 +36,7 @@ interface SavedFilter {
 }
 
 function StorePage() {
+  const location = useLocation()
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -313,8 +314,9 @@ function StorePage() {
   const handleOpenFilter = () => {
     setOpenFilter((prev) => !prev);
   };
+  
   const handleOnClickCard = (id: number) => {
-    navigate(`/product/${id}`);
+    navigate(`/product/${id}`, { state: { from: location.pathname } });
   };
 
   return (

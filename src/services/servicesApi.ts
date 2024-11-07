@@ -213,7 +213,6 @@ export const makePayment = async (orderDetails: IOrder) => {
   try {
     const { data } = await axios.post("payment", orderDetails);
     if (data.redirectUrl) {
-      console.log("data.order_id", data.order_id);
       window.location.href = data.redirectUrl;
     } else {
       toast.error("Шось пішло не так");
@@ -344,14 +343,7 @@ export const sendCourseNotification = async (
     toast.success(`Ви зареєструвалися на курс`);
     return data;
   } catch (error) {
-    toast.error("Шось пішло не так");
-    if (axios.isAxiosError(error)) {
-      console.log("Axios error:", error.message);
-      throw new Error(error.message);
-    } else {
-      console.error("Non-Axios error:", error);
-      throw new Error("Non-Axios error occurred");
-    }
+    handlerAxiosError(error);
   }
 };
 

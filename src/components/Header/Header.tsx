@@ -36,6 +36,10 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { logOut } from "@services/servicesApi";
 import { useCheckTokenExpiration } from "@hooks/useCheckTokenExpiration";
 
+// interface CustomTo extends Partial<Path> {
+//   state?: { from: string };
+// }
+
 const modalPortal = document.querySelector("#portal-root");
 
 const colorsHeader = ["transparent", "var(--bg-light-grey)", "var(--bg-black)"];
@@ -68,11 +72,9 @@ const Header = () => {
     }
   };
 
-  location.state = { mainPage: true };
+  
   const onLogoOrCartClick = () => {
-    if (location.state.mainPage) {
-      window.scrollTo({ top: 0 });
-    }
+
     setIsBurgerHide(true);
     setTimeout(() => {
       setIsOpen(false);
@@ -153,6 +155,7 @@ const Header = () => {
     }
   };
 
+
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
@@ -226,7 +229,7 @@ const Header = () => {
           )}
           <WrapperMenu>
             {!token && (
-              <Cart to={"/cart"} istrue={istrue} onClick={onLogoOrCartClick}>
+              <Cart to={'/cart'} state={{from:location.pathname}} istrue={istrue} onClick={onLogoOrCartClick}>
                 {totalQuantity > 0 && (
                   <div css={cartCount(istrue.toString())}>{totalQuantity}</div>
                 )}

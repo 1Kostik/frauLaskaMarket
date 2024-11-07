@@ -117,7 +117,7 @@ const OrderItemPage = () => {
           product_id: item.id,
           title: item.title,
           img: item.imageUrls[0],
-          product_code: orderItem.product_id,
+          product_code: orderItem.product_id.toString(),
           size: orderItem.size,
           discount: variations[0].discount ?? null,
           price: variations[0].price ?? null,

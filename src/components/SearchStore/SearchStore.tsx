@@ -41,7 +41,18 @@ const SearchStore: React.FC<PropsSearch> = ({
   const [searchProduct, setSearchProduct] = useState(
     getSavedSearchItem() || ""
   );
+  const clearSearchParams = () => {
+    const url = location.search.split("&");
+    const clearUrl =
+      location.pathname +
+      url.filter((item) => !item.includes("search")).join("&");
+    navigate(clearUrl);
+  };
   const handleOpenInput = () => {
+    clearSearchParams();
+    setSearchProduct("");
+    setSearchItem && setSearchItem("");
+    sessionStorage.removeItem("savedSearchItem");
     setIsOpen((prev) => !prev);
   };
   useEffect(() => {
@@ -72,21 +83,12 @@ const SearchStore: React.FC<PropsSearch> = ({
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchProduct(e.target.value);
   };
-  const clearSearchParams = () => {
-    const url = location.search.split("&");
-    const clearUrl =
-      location.pathname +
-      url.filter((item) => !item.includes("search")).join("&");
-    navigate(clearUrl);
-  };
+ 
   const handleInputBlur = () => {
     if (searchProduct === "" && setSearchItem) {
       clearSearchParams();
       setSearchItem("");
-      sessionStorage.setItem(
-        "savedSearchItem",
-        JSON.stringify(searchProduct.toLowerCase())
-      );
+      sessionStorage.removeItem("savedSearchItem");
       return;
     }
   };
