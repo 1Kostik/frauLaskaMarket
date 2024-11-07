@@ -52,8 +52,7 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-console.log('getSavedOpenCategories() :>> ', getSavedOpenCategories());
-console.log(' getSavedCheckedItems() :>> ',  getSavedCheckedItems());
+
   const [openCategories, setOpenCategories] = useState<{
     [key: number]: boolean;
   }>(getSavedOpenCategories() || {});
