@@ -14,13 +14,14 @@ import {
   btnClose,
 } from "./SearchStore.styled";
 
-import { Product } from "Interfaces/Product";
+// import { Product } from "Interfaces/Product";
 import { getSavedSearchItem } from "@utils/getSavedSearchItem";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface PropsSearch {
   isOpenSearch?: React.Dispatch<React.SetStateAction<boolean>>;
   setSearchItem?: React.Dispatch<React.SetStateAction<string>>;
-  setFindProduct?: React.Dispatch<React.SetStateAction<Product[]>>;
+  // setFindProduct?: React.Dispatch<React.SetStateAction<Product[]>>;
   hasFilteredProducts?: boolean;
   setOpenFilter?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -28,10 +29,13 @@ interface PropsSearch {
 const SearchStore: React.FC<PropsSearch> = ({
   isOpenSearch,
   setSearchItem,
-  setFindProduct,
+  // setFindProduct,
   hasFilteredProducts,
   setOpenFilter,
 }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchProduct, setSearchProduct] = useState(
@@ -68,10 +72,21 @@ const SearchStore: React.FC<PropsSearch> = ({
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchProduct(e.target.value);
   };
+  const clearSearchParams = () => {
+    const url = location.search.split("&");
+    const clearUrl =
+      location.pathname +
+      url.filter((item) => !item.includes("search")).join("&");
+    navigate(clearUrl);
+  };
   const handleInputBlur = () => {
-    if (searchProduct === "" && setFindProduct && setSearchItem) {
-      setFindProduct([]);
+    if (searchProduct === "" && setSearchItem) {
+      clearSearchParams();
       setSearchItem("");
+      sessionStorage.setItem(
+        "savedSearchItem",
+        JSON.stringify(searchProduct.toLowerCase())
+      );
       return;
     }
   };
@@ -83,6 +98,9 @@ const SearchStore: React.FC<PropsSearch> = ({
       );
       setSearchItem(searchProduct.toLowerCase());
       setOpenFilter(false);
+    }
+    if (searchProduct === "") {
+      clearSearchParams();
     }
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
