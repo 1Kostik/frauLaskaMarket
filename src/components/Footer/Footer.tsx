@@ -30,14 +30,6 @@ const Footer = () => {
           <Link to="/store" css={navLinkStyle}>
             Магазин
           </Link>
-          <Link
-            to={"https://fl.fraulaska.com/?wpm-page=start"}
-            css={navLinkStyle}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Навчання
-          </Link>
           <Link to="/payment-delivery" css={navLinkStyle}>
             Доставка та оплата
           </Link>
