@@ -72,9 +72,7 @@ const Header = () => {
     }
   };
 
-  
   const onLogoOrCartClick = () => {
-
     setIsBurgerHide(true);
     setTimeout(() => {
       setIsOpen(false);
@@ -155,7 +153,6 @@ const Header = () => {
     }
   };
 
-
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
@@ -173,17 +170,7 @@ const Header = () => {
             >
               Магазин
             </Nav>
-            <Nav
-              to={"https://fl.fraulaska.com/?wpm-page=start"}
-              className={({ isActive }) =>
-                isActive ? "active-link" : "inactive-link"
-              }
-              istrue={istrue}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Навчання
-            </Nav>
+
             <a href="#footer" css={anchorStyles(istrue)}>
               Контакти
             </a>
@@ -229,7 +216,12 @@ const Header = () => {
           )}
           <WrapperMenu>
             {!token && (
-              <Cart to={'/cart'} state={{from:location.pathname}} istrue={istrue} onClick={onLogoOrCartClick}>
+              <Cart
+                to={"/cart"}
+                state={{ from: location.pathname }}
+                istrue={istrue}
+                onClick={onLogoOrCartClick}
+              >
                 {totalQuantity > 0 && (
                   <div css={cartCount(istrue.toString())}>{totalQuantity}</div>
                 )}
