@@ -43,17 +43,6 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({
               </Nav>
 
               <Nav
-                to={"https://fl.fraulaska.com/?wpm-page=start"}
-                className={({ isActive }) =>
-                  isActive ? "active-link" : "inactive-link"
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={setIsOpen}
-              >
-                Навчання
-              </Nav>
-              <Nav
                 to={"/privacy-policy"}
                 className={({ isActive }) =>
                   isActive ? "active-link" : "inactive-link"
