@@ -97,7 +97,7 @@ export const P = styled.p`
   border-radius: 12px;
   background: var(--bg-light-grey);
   ${onDesktop(css`
-    width: auto;
+    width: 98px;
     font-size: 14px;
   `)}
 `;
