@@ -29,6 +29,7 @@ import {
 import { getSavedSearchItem } from "@utils/getSavedSearchItem";
 import { loadingProductsStatus } from "@redux/ads/slice";
 import { useAppDispatch } from "@redux/hooks";
+import ErrorProducts from "@components/ErrorProducts/ErrorProducts";
 
 interface SavedFilter {
   id: string;
@@ -36,7 +37,7 @@ interface SavedFilter {
 }
 
 function StorePage() {
-  const location = useLocation()
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -314,7 +315,7 @@ function StorePage() {
   const handleOpenFilter = () => {
     setOpenFilter((prev) => !prev);
   };
-  
+
   const handleOnClickCard = (id: number) => {
     navigate(`/product/${id}`, { state: { from: location.pathname } });
   };
@@ -356,7 +357,9 @@ function StorePage() {
               </SearchContainer>
 
               <ProductListContainer>
-                {products &&
+                {products.length === 0 && searchItem !== "" ? (
+                  <ErrorProducts />
+                ) : (
                   products.map((item: Product) => (
                     <ProductCard
                       key={item.id}
@@ -365,7 +368,8 @@ function StorePage() {
                       item={item}
                       setIsAdvertDeleted={setIsAdvertDeleted}
                     />
-                  ))}
+                  ))
+                )}
               </ProductListContainer>
             </Container>
           </MaineContainer>
