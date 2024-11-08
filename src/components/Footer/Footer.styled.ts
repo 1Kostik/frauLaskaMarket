@@ -184,6 +184,14 @@ export const SocialLink = styled.a`
   `)}
 `;
 
+export const legalInfoContainer = css`
+  ${onDesktop(css`
+    display: flex;
+    flex-direction: column;    
+    height: 70px;
+    width: 100%;
+  `)}
+`;
 export const copyrightContainer = css`
   ${onDesktop(css`
     display: flex;
@@ -194,6 +202,16 @@ export const copyrightContainer = css`
   `)}
 `;
 
+export const legalInfoStyle = css`
+  font-size: 16px;
+  line-height: 160%;
+  letter-spacing: 0.4px;
+  color: var(--text-light-grey);
+  ${onDesktop(css`
+    width: 515px;
+    font-size: 22px;
+  `)}
+`;
 export const copyrightStyle = css`
   font-size: 12px;
   line-height: 16px;

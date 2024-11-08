@@ -16,6 +16,8 @@ import {
   copyrightContainer,
   StyledLogo,
   contactLinkEmail,
+  legalInfoStyle,
+  legalInfoContainer,
 } from "./Footer.styled";
 
 import { ReactComponent as VisaIcon } from "/src/assets/icons/visa.svg";
@@ -88,9 +90,15 @@ const Footer = () => {
             </SocialLink>
           </SocialContainer>
         </div>
+        <div css={legalInfoContainer}>
+          <p css={legalInfoStyle}>
+            ФОП Лотоцька Лана Сергіївна Склад магазину: м. Кривий Ріг ЄДРПОУ:
+            3196409941
+          </p>
+        </div>
         <div css={copyrightContainer}>
           <p css={copyrightStyle}>
-            Copyright © 2024 Перуниця Всі права захищені
+            Copyright © 2024 Frau Laska Всі права захищені
           </p>
         </div>
       </Container>
