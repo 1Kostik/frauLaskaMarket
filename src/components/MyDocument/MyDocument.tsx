@@ -122,7 +122,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
           Дата замовлення: {date.toLocaleDateString()}
         </Text>
         <View style={{ marginBottom: 10, flexDirection: "row" }}>
-          <Image style={styles.image} src={imgLogo} />{" "}
+          <Image style={styles.image} src={imgLogo} /><Text>{" "}</Text>
           <Text style={{ fontSize: 12 }}>
             Продавець: ФОП Лотоцька Лана Сергіївна, р/р
             UA063052990000026009000403601, АТ КБ "ПРИВАТБАНК" , код за ЄДРПОУ

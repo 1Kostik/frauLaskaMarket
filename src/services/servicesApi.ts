@@ -10,8 +10,8 @@ import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
 import { IOrder } from "Interfaces/IOrder";
 import { IOrderCreation } from "Interfaces/IOrderCreation";
 
-// axios.defaults.baseURL = "https://shop.fraulaska.com/api/";
-axios.defaults.baseURL = "http://localhost:8081/api/";
+axios.defaults.baseURL = "https://shop.fraulaska.com/api/";
+// axios.defaults.baseURL = "http://localhost:8081/api/";
 
 axios.defaults.headers.common["Accept"] = "application/json";
 
@@ -265,29 +265,31 @@ export const updateOrder = async (orderId: number, status: string) => {
   }
 };
 
-export const updateProductCountIncrease = async (id: number, count: number) => {
-  const data = {
-    count,
-  };
-  try {
-    await axios.patch(`products/variations/increase/${id}`, data);
-    toast.success("Кількість продукту успішно оновлено!");
-  } catch (error: unknown) {
-    handlerAxiosError(error);
-  }
-};
+// export const updateProductCountIncrease = async (id: number, count: number) => {
+//   const data = {
+//     count,
+//   };
+//   try {
+//     console.log('count increase :>> ', count);
+//     await axios.patch(`products/variations/increase/${id}`, data);
+//     toast.success("Кількість продукту успішно оновлено!");
+//   } catch (error: unknown) {
+//     handlerAxiosError(error);
+//   }
+// };
 
-export const updateProductCountDecrease = async (id: number, count: number) => {
-  const data = {
-    count,
-  };
-  try {
-    await axios.patch(`products/variations/decrease/${id}`, data);
-    toast.success("Кількість продукту успішно оновлено!");
-  } catch (error: unknown) {
-    handlerAxiosError(error);
-  }
-};
+// export const updateProductCountDecrease = async (id: number, count: number) => {
+//   const data = {
+//     count,
+//   };
+//   try {
+//     console.log('count Decrease :>> ', count);
+//     await axios.patch(`products/variations/decrease/${id}`, data);
+//     toast.success("Кількість продукту успішно оновлено!");
+//   } catch (error: unknown) {
+//     handlerAxiosError(error);
+//   }
+// };
 
 export const deleteOrder = async (id: number) => {
   getAuth();

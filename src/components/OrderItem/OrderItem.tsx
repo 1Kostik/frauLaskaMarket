@@ -11,13 +11,13 @@ import {
   thHeadsStyles,
 } from "@pages/OrdersPage/OrdersPage.styled";
 
-import {
-  getProductById,
-  updateProductCountIncrease,
-} from "@services/servicesApi";
+// import {
+//   getProductById,
+//   // updateProductCountIncrease,
+// } from "@services/servicesApi";
 
-import { IOrder, IOrderItem } from "Interfaces/IOrder";
-import { Product } from "Interfaces/Product";
+import { IOrder } from "Interfaces/IOrder";
+// import { Product } from "Interfaces/Product";
 import { formatDate } from "@utils/formatDate";
 
 import DeleteOrderWarningModal from "@components/DeleteOrderWarningModal/DeleteOrderWarningModal";
@@ -46,49 +46,13 @@ const OrderItem: React.FC<IOrderItemProps> = ({
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [disableOrder, setDisableOrder] = useState<boolean>(false);
+  const [isOrderCompleted, setIsOrderCompleted] = useState(false);
 
-  const getVariation_ids = (orderProducts: Product[]) =>
-    orderProducts.flatMap((product) => {
-      const orderItem = item.order_items.find(
-        (orderItem: IOrderItem) => orderItem.product_id === product.id
-      );
-
-      if (orderItem) {
-        const variations = product.variations.filter((variation) => {
-          const sizeMatch = orderItem.size
-            ? String(variation.size) === String(orderItem.size)
-            : true;
-          const colorMatch = orderItem.color
-            ? String(variation.color).toLowerCase() ===
-              String(orderItem.color).toLowerCase()
-            : true;
-
-          return sizeMatch && colorMatch;
-        });
-
-        return variations.map((variation) => {
-          return { id: variation.id, count: orderItem.count };
-        });
-      } else {
-        return [];
-      }
-    });
-
-  const product_ids = item.id
-    ? item.order_items.map((orderItem) => orderItem.product_id)
-    : [];
-
-  const variation_ids = async () => {
-    const result = await Promise.all(
-      product_ids.map((productId) => getProductById(productId))
-    );
-
-    return getVariation_ids(result);
-  };
-
-  const IncreaseCountProduct = async (id: number, count: number) => {
-    await updateProductCountIncrease(id, count);
-  };
+  useEffect(() => {
+    if (status === "Відправлено" && paymentStatus === "Сплачено") {
+      setIsOrderCompleted(true);
+    }
+  }, [status, paymentStatus]);
 
   useEffect(() => {
     if (item.status === "Відхилено") {
@@ -100,13 +64,7 @@ const OrderItem: React.FC<IOrderItemProps> = ({
     if (id && isChangeStatusModalOpen) {
       setDisableOrder(true);
       await updateStatus(id, "Відхилено");
-      const result_varition_ids = await variation_ids();
-      if (result_varition_ids.length > 0) {
-        result_varition_ids.forEach((item) => {
       setIsUpsateStatusOrder((prev) => !prev);
-          IncreaseCountProduct(item.id, item.count);
-        });
-      }
     }
   };
 
@@ -130,12 +88,11 @@ const OrderItem: React.FC<IOrderItemProps> = ({
       ? ["Відхилено"]
       : ["В очікуванні", "Відправлено", "Відхилено"];
 
-  const colorStatus =
-    item.payment_status === "Сплачено" && item.status === "Відправлено"
-      ? "#154214"
-      : item.status === "Відхилено"
-      ? "#5a2323"
-      : "";
+  const colorStatus = isOrderCompleted
+    ? "#154214"
+    : item.status === "Відхилено"
+    ? "#5a2323"
+    : "";
 
   return (
     <tr key={item.id} css={orderStatusStyles(colorStatus)}>

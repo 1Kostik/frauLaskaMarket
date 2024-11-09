@@ -23,7 +23,7 @@ import { IAddedToCartProduct } from "Interfaces/IAddedToCartProduct";
 import CartItemCard from "@components/CartItemCard";
 import { nanoid } from "nanoid";
 import PaymentBlock from "@components/PaymentBlock";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import TrendingProducts from "@components/TrendingProducts/TrendingProducts";
 import BackNavigation from "@components/BackNavigation/BackNavigation";
 import { useLocation } from "react-router-dom";
@@ -69,13 +69,13 @@ const CartPage = () => {
   }, [cart]);
 
   const handleAddItem = (id: number, size?: string | null) => {
-    const addedItem = addedItems.find(
-      (item) => id === item.product_id && item.size === size
-    );
-    if (addedItem && addedItem.count >= addedItem.quantity) {
-      toast.warn("Товару на складі більше немає");
-      return;
-    }
+    // const addedItem = addedItems.find(
+    //   (item) => id === item.product_id && item.size === size
+    // );
+    // if (addedItem && addedItem.count >= addedItem.quantity) {
+    //   toast.warn("Товару на складі більше немає");
+    //   return;
+    // }
     setAddedItems((prev) => {
       return prev.map((item) => {
         if (id === item.product_id && item.size === size) {

@@ -2,8 +2,8 @@ import {
   deleteOrder,
   getProductById,
   updateOrder,
-  updateProductCountDecrease,
-  updateProductCountIncrease,
+  // updateProductCountDecrease,
+  // updateProductCountIncrease,
 } from "@services/servicesApi";
 import { containerStyles } from "@styles/variables";
 import { Product } from "Interfaces/Product";
@@ -131,34 +131,34 @@ const OrderItemPage = () => {
       return null;
     })
     .filter((product) => product !== null);
-  const variation_ids = productsForRender.map((item) => {
-    return { id: item!.variation_id, count: item!.quantity };
-  });
+  // const variation_ids = productsForRender.map((item) => {
+  //   return { id: item!.variation_id, count: item!.quantity };
+  // });
 
-  useEffect(() => {
-    async function IncreaseCountProduct(id: number, count: number) {
-      await updateProductCountIncrease(id, count);
-    }
-    if (variation_ids.length > 0 && status === "Відхилено" && isModalOpen)
-      variation_ids.forEach((item) => {
-        IncreaseCountProduct(item!.id, item!.count);
-      });
-  }, [variation_ids, status, isModalOpen]);
+  // useEffect(() => {
+  //   async function IncreaseCountProduct(id: number, count: number) {
+  //     await updateProductCountIncrease(id, count);
+  //   }
+  //   if (variation_ids.length > 0 && status === "Відхилено" && isModalOpen)
+  //     variation_ids.forEach((item) => {
+  //       IncreaseCountProduct(item!.id, item!.count);
+  //     });
+  // }, [variation_ids, status, isModalOpen]);
 
-  useEffect(() => {
-    async function DecreaseCountProduct(id: number, count: number) {
-      await updateProductCountDecrease(id, count);
-    }
-    if (
-      variation_ids.length > 0 &&
-      status === "Відправлено" &&
-      data?.status !== "Відправлено"
-    ) {
-      variation_ids.forEach((item) => {
-        DecreaseCountProduct(item.id, item.count);
-      });
-    }
-  }, [variation_ids, status, data?.status]);
+  // useEffect(() => {
+  //   async function DecreaseCountProduct(id: number, count: number) {
+  //     await updateProductCountDecrease(id, count);
+  //   }
+  //   if (
+  //     variation_ids.length > 0 &&
+  //     status === "Відправлено" &&
+  //     data?.status !== "Відправлено"
+  //   ) {
+  //     variation_ids.forEach((item) => {
+  //       DecreaseCountProduct(item.id, item.count);
+  //     });
+  //   }
+  // }, [variation_ids, status, data?.status]);
 
   useEffect(() => {
     if (data?.status === "Відхилено" || data?.status === "Відправлено") {
