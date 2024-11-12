@@ -130,10 +130,15 @@ export const Button = styled.button`
   padding: 10px 16px;
   border-radius: 24px;
   border: 1px solid var(--bg-black);
-
+  transition: var(--effectDuration);
   ${onDesktop(css`
     font-size: 14px;
   `)};
+  &:hover {
+    transform: scale(1.02);
+    color: var(--text-light-grey);
+    background: var(--bg-black);
+  }
 `;
 
 export const CheckBoxContainer = styled.div`
