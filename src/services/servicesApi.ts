@@ -7,11 +7,11 @@ import { AppDispatch } from "@redux/store";
 import { handlerAxiosError } from "../errorHandler/errorHandler";
 
 import { ICourseRegistrationData } from "Interfaces/ICourseRegistrationData";
-import { IOrder } from "Interfaces/IOrder";
+
 import { IOrderCreation } from "Interfaces/IOrderCreation";
 
-axios.defaults.baseURL = "https://shop.fraulaska.com/api/";
-// axios.defaults.baseURL = "http://localhost:8081/api/";
+// axios.defaults.baseURL = "https://shop.fraulaska.com/api/";
+axios.defaults.baseURL = "http://localhost:8081/api/";
 
 axios.defaults.headers.common["Accept"] = "application/json";
 
@@ -209,19 +209,19 @@ export const deleteProductFeedbackById = async (id: number) => {
   }
 };
 
-export const makePayment = async (orderDetails: IOrder) => {
-  getAuth();
-  try {
-    const { data } = await axios.post("payment", orderDetails);
-    if (data.redirectUrl) {
-      window.location.href = data.redirectUrl;
-    } else {
-      toast.error("Шось пішло не так");
-    }
-  } catch (error: unknown) {
-    handlerAxiosError(error);
-  }
-};
+// export const makePayment = async (orderDetails: IOrder) => {
+//   getAuth();
+//   try {
+//     const { data } = await axios.post("payment", orderDetails);
+//     if (data.redirectUrl) {
+//       window.location.href = data.redirectUrl;
+//     } else {
+//       toast.error("Шось пішло не так");
+//     }
+//   } catch (error: unknown) {
+//     handlerAxiosError(error);
+//   }
+// };
 
 export const makeOrder = async (orderInfo: IOrderCreation) => {
   getAuth();
