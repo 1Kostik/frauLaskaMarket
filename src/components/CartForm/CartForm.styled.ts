@@ -115,7 +115,7 @@ export const deliveryTypes = css`
     border-radius: 16px;
     border: 1px solid var(--border-light-grey);
     cursor: pointer;
-
+    transition: var(--effectDuration);
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 1.6px;
@@ -124,7 +124,9 @@ export const deliveryTypes = css`
       padding: 12px 24px 11px 24px;
       font-size: 16px;
     `)}
-
+    &:hover {
+      transform: scale(1.02);
+    }
     &:last-of-type {
       margin-right: -20px;
     }
@@ -178,7 +180,10 @@ export const paymentMethods = css`
     border-radius: 16px;
     border: 1px solid var(--border-light-grey);
     cursor: pointer;
-
+    transition: var(--effectDuration);
+    &:hover {
+      transform: scale(1.02);
+    }
     &::before {
       content: "";
       position: absolute;
