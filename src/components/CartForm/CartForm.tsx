@@ -162,9 +162,9 @@ const CartForm: React.FC<ICartFormProps> = ({
       if (values.payment_method === "paymentByRequisites") {
         await makeOrder(newOrder);
         setIsSubmited(false);
-        navigate(`/ordered?email=${values.email}`);
         // const resp = await makeOrder(newOrder);
         // await makePayment(resp);
+        navigate(`/ordered?email=${values.email}`);
       } else {
         await makeOrder(newOrder);
         setIsSubmited(false);
