@@ -23,9 +23,9 @@ import CartForm from "@components/CartForm";
 import CartItemCard from "@components/CartItemCard";
 import PaymentBlock from "@components/PaymentBlock";
 
-const CartPage = () => {
+const OrderPage = () => {
   const [callMeBack, setCallMeBack] = useState(false);
-
+  const [isSubmited, setIsSubmited] = useState(false);
   const cart = useAppSelector(selectCart);
 
   const totalPrice = cart.reduce((acc, item) => {
@@ -55,10 +55,11 @@ const CartPage = () => {
                 addedItems={cart}
                 total_amount={totalPrice}
                 callMeBack={callMeBack}
+                setIsSubmited={setIsSubmited}
               />
             </MainInfoContainer>
 
-            <PaymentBlock setCallMeBack={setCallMeBack} isOrderPage />
+            <PaymentBlock setCallMeBack={setCallMeBack} isOrderPage isSubmited={isSubmited} />
           </MainContainer>
         </div>
       </section>
@@ -66,4 +67,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default OrderPage;

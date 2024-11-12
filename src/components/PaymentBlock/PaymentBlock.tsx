@@ -20,11 +20,13 @@ import { selectCart, selectCartTotalQuantity } from "@redux/cart/selectors";
 interface IPaymentBlockProps {
   setCallMeBack?: React.Dispatch<React.SetStateAction<boolean>>;
   isOrderPage?: boolean;
+  isSubmited?:boolean;
 }
 
 const PaymentBlock: React.FC<IPaymentBlockProps> = ({
   setCallMeBack,
   isOrderPage,
+  isSubmited,
 }) => {
   const navigate = useNavigate();
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
@@ -68,7 +70,7 @@ const PaymentBlock: React.FC<IPaymentBlockProps> = ({
       )}
 
       {isOrderPage ? (
-        <Button type="submit" form="orderForm">
+        <Button type="submit" form="orderForm" disabled={isSubmited}>
           Оформити замовлення
         </Button>
       ) : (

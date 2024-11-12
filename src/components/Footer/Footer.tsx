@@ -32,6 +32,14 @@ const Footer = () => {
           <Link to="/store" css={navLinkStyle}>
             Магазин
           </Link>
+          <Link
+            to="https://fl.fraulaska.com/?wpm-page=start"
+            target="_blank"
+            rel="noopener noreferrer"
+            css={navLinkStyle}
+          >
+            Навчання
+          </Link>
           <Link to="/payment-delivery" css={navLinkStyle}>
             Доставка та оплата
           </Link>
@@ -92,8 +100,7 @@ const Footer = () => {
         </div>
         <div css={legalInfoContainer}>
           <p css={legalInfoStyle}>
-            ФОП Лотоцька Лана Сергіївна Склад магазину: вул. Свято-Миколаївська, 31/2 м. Кривий Ріг <br/>ЄДРПОУ:
-            3196409941
+            ФОП Лотоцька Лана Сергіївна<br/>ЄДРПОУ: 3196409941
           </p>
         </div>
         <div css={copyrightContainer}>

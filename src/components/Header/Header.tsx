@@ -152,7 +152,7 @@ const Header = () => {
       console.error("Error during logout process:", error);
     }
   };
-
+  //https://fl.fraulaska.com/?wpm-page=start
   return (
     <Section istrue={istrue} style={{ backgroundColor: sectionColor }}>
       <div css={containerStyles}>
@@ -169,6 +169,17 @@ const Header = () => {
               istrue={istrue}
             >
               Магазин
+            </Nav>
+            <Nav
+              to={"https://fl.fraulaska.com/?wpm-page=start"}
+              className={({ isActive }) =>
+                isActive ? "active-link" : "inactive-link"
+              }
+              istrue={istrue}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Навчання
             </Nav>
 
             <a href="#footer" css={anchorStyles(istrue)}>

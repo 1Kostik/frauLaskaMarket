@@ -15,7 +15,6 @@ import {
   recipientStyle,
 } from "./CartForm.styled";
 
-import { makePayment } from "@services/servicesApi";
 import { makeOrder } from "@services/servicesApi";
 
 import { replaceNullsWithEmptyStrings } from "@utils/replaceNullsWithEmptyStrings ";
@@ -105,7 +104,10 @@ const validationSchema = (isOtherRecipient: boolean) =>
         }
       ),
 
-    payment_method: Yup.string().oneOf(["LiqPay", "Накладний платіж"]),
+    payment_method: Yup.string().oneOf([
+      "paymentByRequisites",
+      "Накладний платіж",
+    ]),
   });
 
 const initialValue: IInitialCartFormValue = {
@@ -119,16 +121,21 @@ const initialValue: IInitialCartFormValue = {
   recipient_name: "",
   recipient_last_name: "",
   recipient_phone: "",
-  payment_method: "LiqPay",
+  payment_method: "paymentByRequisites",
 };
 
 interface ICartFormProps {
   addedItems: IAddedToCartProduct[];
   total_amount: number;
   callMeBack: boolean;
+  setIsSubmited: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
+const CartForm: React.FC<ICartFormProps> = ({
+  addedItems,
+  callMeBack,
+  setIsSubmited,
+}) => {
   const [isOtherRecipient, setIsOtherRecipient] = useState(false);
 
   const navigate = useNavigate();
@@ -151,12 +158,16 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
     };
 
     try {
-      if (values.payment_method === "LiqPay") {
-        const resp = await makeOrder(newOrder);
-        await makePayment(resp);
-        navigate("/");
+      setIsSubmited(true);
+      if (values.payment_method === "paymentByRequisites") {
+        await makeOrder(newOrder);
+        setIsSubmited(false);
+        navigate(`/ordered?email=${values.email}`);
+        // const resp = await makeOrder(newOrder);
+        // await makePayment(resp);
       } else {
         await makeOrder(newOrder);
+        setIsSubmited(false);
         navigate(`/ordered?email=${values.email}`);
       }
     } catch (error) {
@@ -425,11 +436,11 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
                 <Field
                   type="radio"
                   name="payment_method"
-                  value="LiqPay"
-                  id="LiqPay"
+                  value="paymentByRequisites"
+                  id="paymentByRequisites"
                 />
-                <label htmlFor="LiqPay">
-                  LiqPay - моментальні платежі по всьому світу
+                <label htmlFor="paymentByRequisites">
+                  Переказ на банківський рахунок
                 </label>
                 <Field
                   type="radio"
@@ -437,9 +448,7 @@ const CartForm: React.FC<ICartFormProps> = ({ addedItems, callMeBack }) => {
                   value="Накладний платіж"
                   id="deliveryPayment"
                 />
-                <label htmlFor="deliveryPayment">
-                  Оплата при отриманні замовлення
-                </label>
+                <label htmlFor="deliveryPayment">Накладний платіж</label>
               </div>
             </div>
           </Form>
