@@ -188,7 +188,10 @@ const OrderItemPage = () => {
     await deleteOrder(id);
     navigate(-1);
   };
-
+  const type_payment =
+    data?.payment_method === "paymentByRequisites"
+      ? "Переказ на банківський рахунок"
+      : data?.payment_method;
   return (
     <section style={{ height: "100vh", width: "100vw", paddingTop: "100px" }}>
       <div css={containerStyles}>
@@ -216,7 +219,7 @@ const OrderItemPage = () => {
                 </div>
                 <div css={infoWrapper}>
                   <h2 css={titleH2}>Спосіб оплати:</h2>
-                  <p css={description}>{data.payment_method}</p>
+                  <p css={description}>{type_payment}</p>
                 </div>
                 <div css={infoWrapper}>
                   <h2 css={titleH2}>Спосіб доставки:</h2>

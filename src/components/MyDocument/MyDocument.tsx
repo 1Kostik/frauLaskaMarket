@@ -72,7 +72,10 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
     recipient_phone,
     total_amount,
   } = data!;
-
+  const type_payment =
+  payment_method === "paymentByRequisites"
+    ? "Переказ на банківський рахунок"
+    : payment_method;
   const ordercColors = (color: string) => {
     switch (color) {
       case "#FF0000":
@@ -385,7 +388,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ data }) => {
         </Text>
         <Text style={{ fontSize: 12, marginBottom: 20 }}>Телефон: {phone}</Text>
         <Text style={{ fontSize: 12, marginBottom: 20 }}>
-          Оплата: {payment_method}
+          Оплата: {type_payment}
         </Text>
         <Text style={{ fontSize: 12, marginBottom: 20 }}>
           Статус оплати: {payment_status}
