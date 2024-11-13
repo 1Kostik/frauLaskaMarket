@@ -137,6 +137,12 @@ const ProductDetails = () => {
           setAddedColor(color);
           setVariationItem(item);
         }
+        // if (addedColor === item.color) {
+        //   setProductPrice(item.price);
+        //   const size = item.size ? item.size : "";
+        //   setSelectedOption(size);
+        //   setVariationItem(item);
+        // }
       });
     }
   }, [product, selectedOption]);
@@ -158,6 +164,9 @@ const ProductDetails = () => {
               setSelectedOption(item.size);
               setVariationItem(item);
             }
+          } else {
+            setProductPrice(item.price);
+            setVariationItem(item);
           }
         }
       });
@@ -180,19 +189,30 @@ const ProductDetails = () => {
     options && options.length > 0 && options[0] !== "" ? true : false;
 
   useEffect(() => {
-    const productSearch = !!cart.find(
-      (item) =>
-        (item.product_id === Number(id) &&
-          item.size === selectedOption &&
-          item.size !== null) ||
-        (item.size === selectedOption &&
-          item.size !== null &&
-          item.product_id === Number(id) &&
-          item.color === addedColor) ||
-        (item.product_id === Number(id) &&
-          item.size === null &&
-          item.color === null)
-    );
+    const productSearch = cart.some((item) => {
+      const isSameProduct = item.product_id === Number(id);
+      const isSameSize = item.size === selectedOption && item.size !== null;
+      const isSameColor = item.color === addedColor && item.color !== null;
+      if (
+        isSameProduct &&
+        !isSameSize &&
+        !isSameColor &&
+        item.size === null &&
+        item.color === null
+      ) {
+        return true;
+      }
+      if (isSameProduct && isSameSize && isSameColor) {
+        return true;
+      }
+      if (isSameProduct && isSameSize && item.color === null) {
+        return true;
+      }
+      if (isSameProduct && isSameColor && item.size === null) {
+        return true;
+      }
+    });
+
     setIsProductInCart(productSearch);
   }, [addedColor, cart, id, selectedOption]);
 
