@@ -2,8 +2,8 @@ import { css } from "@emotion/react";
 
 import { onDesktop, onTablet } from "@styles/mixins";
 
-import radioChecked from "@assets/icons/radio-btn-checked.svg";
-import radioUnchecked from "@assets/icons/radio-btn-unchecked.svg";
+import radioChecked from "@assets/icons/radio-btn-checked.png";
+import radioUnchecked from "@assets/icons/radio-btn-unchecked.png";
 import checkboxChecked from "@assets/icons/checkbox-active.png";
 
 export const formWrapper = css`
