@@ -62,7 +62,7 @@ const Footer = () => {
           </a>
           <SocialContainer>
             <SocialLink
-              href="https://www.instagram.com/_frau_laska_?igsh=dnBibGR1OGY1bmlt"
+              href="https://www.instagram.com/frau_division"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -105,7 +105,7 @@ const Footer = () => {
         </div>
         <div css={copyrightContainer}>
           <p css={copyrightStyle}>
-            Copyright © 2024 Frau Laska Всі права захищені
+            Copyright © 2025 Frau Laska Всі права захищені
           </p>
         </div>
       </Container>
