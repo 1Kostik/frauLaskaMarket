@@ -76,6 +76,12 @@ const SortingItems = <T extends number | string>({
   const isInitialMount = useRef(true);
 
   useEffect(() => {
+    if (isOpenFilter) {
+      setIsOpen(false);
+    }
+  }, [isOpenFilter]);
+
+  useEffect(() => {
     if (isInitialMount.current) {
       if (setSelectedOption && options && options.length > 0) {
         setSelectedOption(options[0]);

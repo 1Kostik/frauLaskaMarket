@@ -9,7 +9,10 @@ interface Props {
 export const FilterWrapper = styled.div`
   position: fixed;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   top: 72px;
   left: 0px;
   background: var(--bg-black);
@@ -156,8 +159,11 @@ export const FilterBtn = styled.button`
 `;
 
 export const Container = styled.div`
-  width: 100%;
-
+  width: 100%; 
+  flex-grow: 1; 
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 80px;
   ${onTablet(css`
     width: 272px;
   `)};
