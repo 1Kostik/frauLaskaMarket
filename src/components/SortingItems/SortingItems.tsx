@@ -76,10 +76,10 @@ const SortingItems = <T extends number | string>({
   const isInitialMount = useRef(true);
 
   useEffect(() => {
-    if (isOpenFilter) {
+    if (isOpenFilter || isOpenSearch) {
       setIsOpen(false);
     }
-  }, [isOpenFilter]);
+  }, [isOpenFilter,isOpenSearch]);
 
   useEffect(() => {
     if (isInitialMount.current) {
