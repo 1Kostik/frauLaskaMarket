@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { onDesktop, onTablet } from "@styles/mixins";
+import { onTablet } from "@styles/mixins";
 
 interface Props {
   isOpen: boolean;
@@ -24,14 +24,12 @@ export const FilterWrapper = styled.div`
     position: relative;
     top: unset;
     left: unset;
-    /* width: 312px; */
+    width: 312px;
+    min-width: 312px;
     height: 100%;
     border: 1px solid #d7d7d7;
     border-radius: 16px;
   `)};
-  ${onDesktop(css`
-    width: 412px;
-  `)}
 `;
 
 export const H2 = styled.h2`

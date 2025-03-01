@@ -29,6 +29,7 @@ export const ItemInfoContainer = styled.div<Props>`
 
 export const ImgContainer = styled.div`
   display: block;
+  width: 96px;
   min-width: 96px;
   height: 96px;
   border-radius: 12px;
