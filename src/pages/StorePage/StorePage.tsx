@@ -339,6 +339,7 @@ function StorePage() {
                   isOpenSearch={setOpenSearch}
                   setSearchItem={setSearchItem}
                   setOpenFilter={setOpenFilter}
+                  isOpenFilter={openFilter}
                 />
                 <Wrapper>
                   <Button onClick={handleOpenFilter}>
