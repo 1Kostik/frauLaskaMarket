@@ -88,7 +88,7 @@ const ModalMobileHeader: React.FC<IModalHeader> = ({
               </a>
               <SocialContainer>
                 <SocialLink
-                  href="https://www.instagram.com/_frau_laska_?igsh=dnBibGR1OGY1bmlt"
+                  href="https://www.instagram.com/frau_division"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={setIsOpen}
