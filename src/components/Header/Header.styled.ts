@@ -61,7 +61,7 @@ export const burgerStyles = (istrue: string) => css`
 `;
 
 export const Section = styled.header<SectionProps>`
-  z-index: 100;
+  z-index: 150;
   position: fixed;
   width: 100vw;
   height: 72px;

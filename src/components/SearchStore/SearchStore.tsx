@@ -24,6 +24,7 @@ interface PropsSearch {
   // setFindProduct?: React.Dispatch<React.SetStateAction<Product[]>>;
   hasFilteredProducts?: boolean;
   setOpenFilter?: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpenFilter?: boolean;
 }
 
 const SearchStore: React.FC<PropsSearch> = ({
@@ -32,6 +33,7 @@ const SearchStore: React.FC<PropsSearch> = ({
   // setFindProduct,
   hasFilteredProducts,
   setOpenFilter,
+  isOpenFilter,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -62,6 +64,12 @@ const SearchStore: React.FC<PropsSearch> = ({
   }, [hasFilteredProducts]);
 
   useEffect(() => {
+    if (isOpenFilter) {
+      setIsOpen(false);
+    }
+  }, [isOpenFilter]);
+
+  useEffect(() => {
     if (windowWidth >= 1440 && isOpenSearch) {
       setIsOpen(true);
       isOpenSearch(true);
@@ -83,7 +91,7 @@ const SearchStore: React.FC<PropsSearch> = ({
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchProduct(e.target.value);
   };
- 
+
   const handleInputBlur = () => {
     if (searchProduct === "" && setSearchItem) {
       clearSearchParams();
