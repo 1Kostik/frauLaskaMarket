@@ -53,6 +53,7 @@ export const Section = styled.section`
 `;
 export const MaineContainer = styled.div`
   display: flex;
+  overflow: hidden;
   margin-left: auto;
   margin-right: auto;
   ${onTablet(css`

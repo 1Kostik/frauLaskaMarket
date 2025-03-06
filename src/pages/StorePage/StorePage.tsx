@@ -21,15 +21,18 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { containerStyles } from "@styles/variables";
 import { ReactComponent as FilterSm } from "@assets/icons/filterDim.svg";
 import { Product } from "Interfaces/Product";
-import { getCheckedItems, getProductsAndSorted } from "@services/servicesApi";
+import { CategoriesProductCount } from "Interfaces/CategoriesProductCount";
+import { getCategoriesProductCount, getCheckedItems, getProductsAndSorted } from "@services/servicesApi";
 import {
   getSavedCheckedItems,
   getSavedIsOpenFilter,
 } from "@utils/getSavedFilter";
 import { getSavedSearchItem } from "@utils/getSavedSearchItem";
+import { fetchCategories } from "@redux/categories/operations";
 import { loadingProductsStatus } from "@redux/ads/slice";
 import { useAppDispatch } from "@redux/hooks";
 import ErrorProducts from "@components/ErrorProducts/ErrorProducts";
+
 
 interface SavedFilter {
   id: string;
@@ -71,6 +74,9 @@ function StorePage() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [isAdvertDeleted, setIsAdvertDeleted] = useState(false);
+
+    const [categoriesProductCount, setCategoriesProductCount] =
+      useState<CategoriesProductCount[]>();
 
   const countItemPages = 12;
   const lastPage = totalPage && Math.ceil(totalPage / countItemPages);
@@ -168,6 +174,18 @@ function StorePage() {
       isInitialMount.current = false;
     }
   }, [sortOrder, sortField]);
+
+  useEffect(() => {
+      dispatch(fetchCategories());
+    }, [dispatch]);
+
+    useEffect(() => {
+        async function fetchCategoriesProductCount() {
+          const result = await getCategoriesProductCount();
+          setCategoriesProductCount(result);
+        }
+        fetchCategoriesProductCount();
+      }, []);
 
   const updateSearchParams = useCallback(
     (newParams: Record<string, string | string[]>) => {
@@ -274,6 +292,7 @@ function StorePage() {
     searchParams,
     search,
   ]);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -331,6 +350,7 @@ function StorePage() {
                 closeFilter={setOpenFilter}
                 writeUrlFromStorage={writeUrlFromStorage}
                 setCurrentPage={setCurrentPage}
+                categoriesProductCount={categoriesProductCount}
               />
             )}
             <Container>
