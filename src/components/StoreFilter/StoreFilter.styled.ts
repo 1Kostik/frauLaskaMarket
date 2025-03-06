@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { onTablet } from "@styles/mixins";
 
@@ -6,10 +6,31 @@ interface Props {
   isOpen: boolean;
 }
 
+const slideInTablet = keyframes`
+  from {
+    transform: translateX(-312px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+`;
+
+const slideInMobile = keyframes`
+from {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+to {
+   transform: translateY(0px);
+  opacity: 1;
+}`;
+
 export const FilterWrapper = styled.div`
-  position: fixed;
+  position: absolute;
   width: 100%;
-  height: 100dvh;  
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   top: 72px;
@@ -18,6 +39,7 @@ export const FilterWrapper = styled.div`
   z-index: 100;
   pointer-events: auto;
   padding: 26px 20px;
+  overflow: hidden;
 
   ${onTablet(css`
     position: relative;
@@ -28,6 +50,22 @@ export const FilterWrapper = styled.div`
     height: 100%;
     border: 1px solid #d7d7d7;
     border-radius: 16px;
+    animation: ${slideInTablet} 0.5s ease-in-out;
+  `)};
+`;
+
+export const Container = styled.div`
+  width: 100%;
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 80px;
+  animation: ${slideInMobile} 0.5s ease-in-out;
+
+  ${onTablet(css`
+    width: 272px;
+    padding-bottom: unset;
+    animation: none;
   `)};
 `;
 
@@ -156,16 +194,4 @@ export const FilterBtn = styled.button`
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0.15px;
-`;
-
-export const Container = styled.div`
-  width: 100%;
-  flex-grow: 1;
-  overflow-y: auto;
-  min-height: 0;
-  padding-bottom: 80px;
-  ${onTablet(css`
-    width: 272px;
-    padding-bottom: unset;
-  `)};
 `;

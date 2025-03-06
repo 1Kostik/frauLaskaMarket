@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 
 import {
   ButtonClose,
@@ -25,10 +25,10 @@ import { ReactComponent as ArrowDown } from "@assets/icons/arrow-down-select.svg
 import { ReactComponent as CheckBox } from "@assets/icons/checkbox.svg";
 import { ReactComponent as CheckBoxActive } from "@assets/icons/checkbox-active.svg";
 
-import { useAppDispatch } from "@redux/hooks";
-import { fetchCategories } from "@redux/categories/operations";
+// import { useAppDispatch } from "@redux/hooks";
+// import { fetchCategories } from "@redux/categories/operations";
 
-import { getCategoriesProductCount } from "@services/servicesApi";
+// import { getCategoriesProductCount } from "@services/servicesApi";
 import {
   getSavedCheckedItems,
   getSavedOpenCategories,
@@ -42,14 +42,16 @@ interface ISorteFilter {
   closeFilter: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   writeUrlFromStorage: () => void;
+  categoriesProductCount: CategoriesProductCount[] | undefined;
 }
 
 const StoreFilter: React.FC<ISorteFilter> = ({
   closeFilter,
   writeUrlFromStorage,
   setCurrentPage,
+  categoriesProductCount,
 }) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -59,20 +61,20 @@ const StoreFilter: React.FC<ISorteFilter> = ({
   const [checkedItems, setCheckedItems] = useState<CheckedItems[]>(
     getSavedCheckedItems()
   );
-  const [categoriesProductCount, setCategoriesProductCount] =
-    useState<CategoriesProductCount[]>();
+  // const [categoriesProductCount, setCategoriesProductCount] =
+  //   useState<CategoriesProductCount[]>();
 
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchCategories());
+  // }, [dispatch]);
 
-  useEffect(() => {
-    async function fetchCategoriesProductCount() {
-      const result = await getCategoriesProductCount();
-      setCategoriesProductCount(result);
-    }
-    fetchCategoriesProductCount();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchCategoriesProductCount() {
+  //     const result = await getCategoriesProductCount();
+  //     setCategoriesProductCount(result);
+  //   }
+  //   fetchCategoriesProductCount();
+  // }, []);
 
   const handleCheckboxChange = (
     typeKey: string,
@@ -179,7 +181,9 @@ const StoreFilter: React.FC<ISorteFilter> = ({
                             Number(checkedItem.id) === category.id
                         )}
                         onChange={() =>
-                          handleCheckboxChange("category", { id: category.id })
+                          handleCheckboxChange("category", {
+                            id: category.id,
+                          })
                         }
                       />
                       <P1>{category.title}</P1>
